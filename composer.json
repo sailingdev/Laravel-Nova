@@ -9,12 +9,14 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "fb-reporting/type-daily-perf": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
+        "laravel/nova": "*",
         "laravel/tinker": "^2.5",
-        "laravel/nova": "*"
+        "optimistdigital/nova-tailwind": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -64,6 +66,14 @@
         {
             "type": "path",
             "url": "./nova"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TypeDailyPerf"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TypeDailyPerf"
         }
     ]
 }

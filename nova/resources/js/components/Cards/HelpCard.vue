@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-centers">
     <div class="w-full max-w-xl">
-      <heading class="flex mb-3">Get Started</heading>
+      <heading class="flex mb-3">
       <p class="text-90 leading-tight mb-8">
         Welcome to Nova! Get familiar with Nova and explore its features in the
         documentation:

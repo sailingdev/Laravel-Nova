@@ -67,7 +67,7 @@ class TrendResult implements JsonSerializable
      */
     public function result($value = null)
     {
-        $this->value = $value;
+        $this->value = $value; 
 
         return $this;
     }
@@ -96,7 +96,7 @@ class TrendResult implements JsonSerializable
         if (is_array($this->trend)) {
             return $this->result(array_sum(array_values($this->trend)));
         }
-
+         
         return $this;
     }
 
@@ -109,7 +109,7 @@ class TrendResult implements JsonSerializable
     public function trend(array $trend)
     {
         $this->trend = $trend;
-
+       
         return $this;
     }
 

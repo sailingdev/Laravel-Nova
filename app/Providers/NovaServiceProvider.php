@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Nova\Metrics\FbReporting\TagsDailyTotalProfit;
+use App\Nova\Metrics\FbReporting\TagsDailyTotalRevenue;
+use App\Nova\Metrics\FbReporting\TagsDailyTotalRoi;
+use App\Nova\Metrics\FbReporting\TagsDailyTotalSpend;
+use FbReporting\TypeDailyPerf\TypeDailyPerf;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -56,7 +61,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function cards()
     {
         return [
-            new Help,
+            
+            (new TagsDailyTotalSpend())->width('1/4'),
+            (new TagsDailyTotalRevenue())->width('1/4'),
+            (new TagsDailyTotalProfit())->width('1/4'),
+            (new TagsDailyTotalRoi())->width('1/4'),
+            new TypeDailyPerf,
+            // new Help,
         ];
     }
 
