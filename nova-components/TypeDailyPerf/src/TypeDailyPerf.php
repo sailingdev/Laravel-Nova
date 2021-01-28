@@ -14,10 +14,10 @@ class TypeDailyPerf extends Card
     public $width = 'full';
     
 
-    public function tableSummary()
+    public function dailyTotalsByTag()
     {
         return $this->withMeta([
-            
+            'metricWidth' => ['1/4']
         ]);
     }
 

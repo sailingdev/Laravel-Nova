@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FbReporting;
 
 use App\Http\Controllers\Controller;
+use App\Labs\StringManipulator;
 use App\Services\TypeDailyPerfService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,13 +11,53 @@ use Illuminate\Support\Facades\DB;
 class TypeDailyPerfsController extends Controller
 {
 
-    public function dailySummary(Request $request, TypeDailyPerfService $typeDailyPerfService)
-    {    
-        $request->session()->forget('daily_summary');
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Services\TypeDailyPerfService $typeDailyPerfService
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function dailySummaryByTypeTags(Request $request, TypeDailyPerfService $typeDailyPerfService, 
+        StringManipulator $stringManipulator)
+    {     
+        $typeTags = $request->type_tag;
+        $request->session()->forget(['daily_summary_by_tags', 'website_break_down', 'campaign_break_down']);
+       
+
+        $dailySummaryByTags = $request->session()->get('daily_summary_by_tags', function() use ($typeDailyPerfService, 
+            $request, $typeTags) { 
+            return $typeDailyPerfService->loadDailySummaryByTags($typeTags, $request->start_date, $request->end_date);
+        }); 
+
+        $websiteBreakDown =  $request->session()->get('website_break_down', function() use ($typeDailyPerfService, $request, 
+            $typeTags) { 
+            return $typeDailyPerfService->loadWebsiteDailySummary($typeTags, $request->start_date, $request->end_date);
+        });
+
+        $campaignBreakDown = $request->session()->get('campaign_break_down', function() use ($typeDailyPerfService, $request, 
+            $typeTags) { 
+            return $typeDailyPerfService->loadCampaignDailySummary($typeTags, $request->start_date, $request->end_date);
+        });
+        
         return $this->successResponse('Daily summary returned successfully', [
-            'daily_summary' => $request->session()->get('daily_summary', function () use ($typeDailyPerfService) {
-                return $typeDailyPerfService->getDailySummary();
-            })
+            'daily_summary' => [
+                'list' => $typeDailyPerfService->prepareData($dailySummaryByTags),
+                'metrics' => [
+                    'tot_spend' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags,'tot_spend'),
+                    'tot_revenue' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags, 'tot_revenue'),
+                    'tot_profit' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags, 'tot_profit'),
+                    'tot_roi' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags, 'tot_roi', 'percentage'),
+                ],
+                'website_break_down' => $websiteBreakDown,
+                'campaign_break_down' => $campaignBreakDown, 
+            ]
+        ]);
+    }
+
+    public function typeTags(Request $request, TypeDailyPerfService $typeDailyPerfService)
+    {
+        return $this->successResponse('Type tags returned successfully', [
+            'type_tags' => $typeDailyPerfService->getAllTypeTags()
         ]);
     }
 }

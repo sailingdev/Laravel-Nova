@@ -15,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('daily-summary', [TypeDailyPerfsController::class, 'dailySummary']);
+Route::get('daily-summary-by-type-tags', [TypeDailyPerfsController::class, 'dailySummaryByTypeTags']);
+Route::get('type-tags', [TypeDailyPerfsController::class, 'typeTags']);

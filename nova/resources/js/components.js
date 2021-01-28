@@ -1,6 +1,17 @@
 import Vue from 'vue'
 Vue.config.ignoredElements = ['trix-editor']
 
+// import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
+// Import Bootstrap an BootstrapVue CSS files (order is important)
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+// Make BootstrapVue available throughout your project
+// Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+// Vue.use(IconsPlugin)
+
 import Add from '@/components/Icons/Add'
 import ActionSelector from '@/components/ActionSelector'
 import BasePartitionMetric from '@/components/Metrics/Base/PartitionMetric'
@@ -100,7 +111,10 @@ import DateFilter from '@/components/Filters/DateFilter'
 
 import SelectControl from '@/components/Controls/SelectControl'
 import DateTimePicker from '@/components/DateTimePicker'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
+Vue.component('v-select', vSelect)
 Vue.component('action-selector', ActionSelector)
 Vue.component('boolean-icon', BooleanIcon)
 Vue.component('base-partition-metric', BasePartitionMetric)

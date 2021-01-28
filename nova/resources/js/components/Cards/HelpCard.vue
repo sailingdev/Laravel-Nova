@@ -6,7 +6,7 @@
         Welcome to Nova! Get familiar with Nova and explore its features in the
         documentation:
       </p>
-
+      </heading>
       <card>
         <table class="w-full" cellpadding="0" cellspacing="0">
           <tr>

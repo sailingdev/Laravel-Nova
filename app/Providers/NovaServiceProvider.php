@@ -62,11 +62,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             
-            (new TagsDailyTotalSpend())->width('1/4'),
-            (new TagsDailyTotalRevenue())->width('1/4'),
-            (new TagsDailyTotalProfit())->width('1/4'),
-            (new TagsDailyTotalRoi())->width('1/4'),
-            new TypeDailyPerf,
+            // (new TagsDailyTotalSpend())->width('1/4'),
+            // (new TagsDailyTotalRevenue())->width('1/4'),
+            // (new TagsDailyTotalProfit())->width('1/4'),
+            // (new TagsDailyTotalRoi())->width('1/4'),
+            (new TypeDailyPerf())->dailyTotalsByTag(),
             // new Help,
         ];
     }

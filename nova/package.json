@@ -28,13 +28,15 @@
     "laravel-mix": "^1.0",
     "lodash": "^4.17.0",
     "tailwindcss": "^0.6.0",
-    "vue": "^2.5.0",
     "vue-jest": "^2.6.0",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.16"
   },
   "dependencies": {
+    "@popperjs/core": "^2.6.0",
     "autosize": "^4.0.2",
+    "bootstrap": "^5.0.0-beta1",
+    "bootstrap-vue": "^2.21.2",
     "chartist": "^0.11.0",
     "chartist-plugin-tooltips": "^0.0.17",
     "codemirror": "^5.36.0",
@@ -54,9 +56,14 @@
     "slugify": "^1.4.5",
     "trix": "^1.0.0",
     "v-tooltip": "^2.0.2",
+    "v-wow": "git+https://github.com/guisoares2011/vue-wow.git",
+    "vue": "^2.6.12",
     "vue-async-computed": "^3.3.1",
     "vue-clickaway": "^2.2.2",
+    "vue-html2pdf": "^1.8.0",
     "vue-meta": "^2.4.0",
+    "vue-select": "^3.11.2",
+    "vue-table-dynamic": "^0.4.3",
     "vue-toasted": "^1.1.24",
     "vuex": "^3.1.1"
   }

@@ -32,7 +32,7 @@ class TagsDailyTotalRoi extends Trend
         $trendQuery = $this->sumRoi($request, TypeDailyPerf::where('site', 'all'), 'tot_revenue');
         
         $sumQuery = DB::select("SELECT SUM(tot_profit)/SUM(tot_spend) AS tot_roi FROM fb_reporting.type_daily_perf
-        WHERE (DATE(date) BETWEEN '2021-01-1 00:00:00' AND '2021-01-21 11:59:59')
+        WHERE (DATE(date) BETWEEN '2021-01-1 00:00:00' AND '2021-01-23 11:59:59')
             AND site = 'all'
         "); 
 
@@ -146,7 +146,7 @@ class TagsDailyTotalRoi extends Trend
      */
     public function cacheFor()
     {
-        // return now()->addMinutes(30);
+        return now()->addMinutes(30);
     }
 
     /**

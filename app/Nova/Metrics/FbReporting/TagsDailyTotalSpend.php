@@ -19,7 +19,7 @@ class TagsDailyTotalSpend extends Trend
      * @return mixed
      */
     public function calculate(NovaRequest $request)
-    { 
+    {  
         return $this->sumByDays($request, TypeDailyPerf::where('site', 'all'), 'tot_spend')
         ->showSumValue()
         ->dollars();
