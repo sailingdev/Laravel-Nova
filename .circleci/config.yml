@@ -26,8 +26,8 @@ jobs:
       - run: sudo apt-get install -y libpng-dev
 
       - run:
-        name: Install PHP Extensions
-        command: sudo -E docker-php-ext-install gd
+          name: Install PHP Extensions
+          command: sudo -E docker-php-ext-install gd
 
       # Download and cache dependencies
       - restore_cache:
