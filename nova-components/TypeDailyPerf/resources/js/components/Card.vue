@@ -1,96 +1,39 @@
 <template>
     <card class="flex flex-col items-center justify-center" style="min-height: 200px">
         
-        <div class="w-full flex flex-wrap px-5 py-5">
-        
-            <div class="w-3/4">
-                <h1 class="text-left p-4">
-                    <span v-if="loading" class="">Daily Totals</span>
-                    <span v-else>Dashboard Metrics</span>
-                </h1>
-            </div>
-             
-            <div class="relative h-16 w-1/4 mt-2 mb-2 text-right"> 
-                    
-                <button 
-                    @click="toggleFilter"
-                    type="button" class="rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline">
-                    <div class="dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded">
-                        <icon
-                            type="filter"
-                            viewBox="0 0 17 17"
-                            height="25"
-                            width="25"
-                            class="cursor-pointer text-60 -mb-1"
-                        /> 
-                    </div>
-                </button>  
-                <CardQueryFilter 
-                    :filterOpen="filterOpen"
-                    :columnChecker="columnChecker" :columnData="columnData" 
-                    :filterEndpoint="cardDataEndpoint" 
-                    @reloadData="reloadData"></CardQueryFilter> 
-            </div>
-             
+        <div class="relative h-16 w-full mt-2 mb-2 text-right pt-4 pr-5">         
+            <button 
+                @click="toggleFilter"
+                type="button" class="rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline">
+                <div class="dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded">
+                    <icon
+                        type="filter"
+                        viewBox="0 0 17 17"
+                        height="25"
+                        width="25"
+                        class="cursor-pointer text-60 -mb-1"
+                    /> 
+                </div>
+            </button>  
+            <CardQueryFilter 
+                :filterOpen="filterOpen"
+                :columnChecker="columnChecker" :columnData="columnData" 
+                :filterEndpoint="cardDataEndpoint" 
+                @reloadData="reloadData"></CardQueryFilter> 
         </div>
         
-        <div class="px-5 py-5 my-2">
-            <div
-                v-if="loading"
-                class="rounded-lg flex items-center justify-center relative"
-            >
-            
-                <loader class="text-60" />
-            </div> 
-            <div v-else class="ds-section min-w-full max-w-full w-full" >
-                
-                <div class="flex flex-wrap -mx-3 mb-5">
-                    <CardTrendMetric :card="dailyTotalSpendTrendMetric" :size="metricWidth[0]" :title="'Total Spend'"/>
-                    <CardTrendMetric :card="dailyTotalRevenueTrendMetric" :loading="loading" :size="metricWidth[0]" :title="'Total Revenue'"/>
-                    <CardTrendMetric :card="dailyTotalProfitTrendMetric" :loading="loading" :size="metricWidth[0]" :title="'Total Profit'"/>
-                    <CardTrendMetric :card="dailyTotalRoiTrendMetric" :loading="loading" :size="metricWidth[0]" :title="'Total ROI'"/>
-                </div>
-               
-              
-                <h1 class="text-center p-4">Daily Totals</h1>
+        <div class="w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border" >
 
-                <div v-if="Object.entries(errorResponse).length > 0">
-                    <div class="px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg" role="alert">
-                        <p> {{ errorResponse.message }} </p>
-                    </div>
-                </div>
-              
-                <div v-else class="max-w-full w-full box-border"> 
+            <FeedTotals :metricWidth="metricWidth" :typeTag="typeTag" :startDate="startDate" :endDate="endDate"
+                :card="card" :triggerReload="triggerReload"/>
 
-                    <!-- Summary by totals and feed -->
-                    <div class="table-card shadow-lg">
-                        <div v-if="data.length < 1">
-                            <div class="px-4 py-3 text-center leading-normal text-red-100 bg-red-700 rounded-lg" role="alert">
-                                <p> No data available for the selected range  </p>
-                            </div>
-                        </div>
-                        <DynamicTable v-else :data="data" :extractDataValues="true" :headerRows="dailyTotalsTableHeader" 
-                            :enableSearch="false"></DynamicTable>
-                    </div> 
+            <WebsiteBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
+                :card="card" :triggerReload="triggerReload"/>
 
+            <CampaignBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
+                :card="card" :triggerReload="triggerReload"/>
 
-                    <!-- Summary by website -->
-                    <div class="website-summary-wrapper">
-                        <h1 class="text-center p-4">Break Down by Website</h1>
-                        <div class="box-border clearfix w-full"> 
-                            <WebsiteBreakDown v-for="(websiteData, index) in websiteBreakDown" :key="index" 
-                                :websiteData="websiteData" :headerRows="websiteBreakDownTableHeader"/>
-                        </div>
-                    </div>
-
-                    <!-- Summary by campaign -->
-                    <h1 class="text-center p-4">Break Down by Campaign</h1>
-                    <div class="box-border clearfix w-full"> 
-                        <CampaignBreakDown :campaignData="campaignBreakDown" :headerRows="campaignBreakDownTableHeader"/>
-                    </div>
-
-                </div>
-
+            <!-- <div v-else class=" w-full" > 
                 <div> 
                     <table class="table table-fixed table-striped table-bordered" style="display:none">
                         <thead>
@@ -130,16 +73,15 @@
                     </table>  
                 </div>
                 
-            </div>
+            </div> -->
         </div>
        
     </card>
 </template>
 
 <script>
-import CardTrendMetric from '../../../../../nova/resources/js/components/RevenueDriver/CardTrendMetric'
 import CardQueryFilter from '../../../../../nova/resources/js/components/RevenueDriver/CardQueryFilter'
-import DynamicTable from '../../../../../nova/resources/js/components/RevenueDriver/DynamicTable'
+import FeedTotals from './FeedTotals'
 import WebsiteBreakDown from './WebsiteBreakDown'
 import CampaignBreakDown from './CampaignBreakDown'  
 export default {
@@ -147,94 +89,34 @@ export default {
         return {
             loading: false,
             filterOpen: false,
-            errorResponse: {},
+            triggerReload: false,
             rowsList: {},
             metricWidth: this.card.metricWidth,
-            dailyTotalSpendTrendMetric: {},
-            dailyTotalRevenueTrendMetric: {},
-            dailyTotalProfitTrendMetric: {},
-            dailyTotalRoiTrendMetric: {},
+           
             cardDataEndpoint: this.card.component + '/daily-summary-by-type-tags',
             columnData: ['All'],
             typeTag: [],
             startDate: '',
             endDate: '', 
             data: [],
-            websiteBreakDown: [],
-            campaignBreakDown: []
         }
     },
     props: [
         'card', 
     ],
     components: {
-        CardTrendMetric,
         CardQueryFilter,
-        DynamicTable,
         WebsiteBreakDown,
-        CampaignBreakDown
+        CampaignBreakDown,
+        FeedTotals
     },
 
     mounted() {  
-        this.loadDailySummary()
-        this.loadTypeTags() 
-        
+        // this.loadDailySummary()
+        this.loadTypeTags()
     },
 
     methods: {
-        loadDailySummary() {
-            this.loading = true
-            axios.get('/nova-vendor/'+this.cardDataEndpoint + 
-                '?type_tag=' + this.typeTag + 
-                '&start_date=' + this.startDate + 
-                '&end_date=' + this.endDate)
-            .then(response => { 
-                this.rowsList = response.data.data.daily_summary.list
-                this.data=this.rowsList
-                this.dailyTotalSpendTrendMetric = 
-                    this.prepareMetricTrendChartData('tot_spend', response.data.data.daily_summary.metrics.tot_spend)
-                
-                this.dailyTotalRevenueTrendMetric = 
-                    this.prepareMetricTrendChartData('tot_revenue', response.data.data.daily_summary.metrics.tot_revenue)
-
-                this.dailyTotalProfitTrendMetric = 
-                    this.prepareMetricTrendChartData('tot_profit', response.data.data.daily_summary.metrics.tot_profit)
-
-                this.dailyTotalRoiTrendMetric = 
-                    this.prepareMetricTrendChartData('tot_roi', response.data.data.daily_summary.metrics.tot_roi)
-                this.websiteBreakDown = response.data.data.daily_summary.website_break_down
- 
-                
-                this.campaignBreakDown = response.data.data.daily_summary.campaign_break_down
-                console.timeEnd('starting')
-                this.loading = false
-            }).catch(error => {   
-                this.loading = false
-                this.errorResponse = error.response.data
-            }) 
-        },
-
-        prepareMetricTrendChartData(type, responseData) {
-            
-            if (typeof responseData === 'object' && responseData !== null) { 
-                responseData['chartData'] = {
-                    labels: Object.keys(responseData.trend),
-                    series: [
-                        _.map(responseData.trend, (value, label) => { 
-                            return {
-                                meta: label,
-                                value: value,
-                            }
-
-                        }),
-                    ]
-                } 
-                // responseData['helpText'] = 'In case we wish to display help texts for the metrics in the future'
-                // responseData['helpWidth'] = '200'
-                return responseData
-            }
-            return {}
-        },
         toggleFilter() {
             this.filterOpen = this.filterOpen == true ? false :  true 
         },
@@ -251,7 +133,7 @@ export default {
             this.startDate = param.startDate
             this.endDate = param.endDate
             this.filterOpen = false 
-            this.loadDailySummary()
+            this.triggerReload = true
         }
     },
     computed: {
@@ -262,31 +144,12 @@ export default {
                 }
             ]
         },
-        dailyTotalsTableHeader() {
-            return [
-                'DATE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
-                'YAHOO SPEND', 'YAHOO REVENUE',	'YAHOO PROFIT',	'YAHOO ROI', 
-                'MEDIA SPEND',	'MEDIA REVENUE', 'MEDIA PROFIT', 'MEDIA ROI'
-            ]
-        },
-        websiteBreakDownTableHeader() {
-            return [
-                'DATE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
-            ]
-        },
-        campaignBreakDownTableHeader() {
-            return [
-                'TYPE TAG', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
-                'TOTAL CLICKS', 'TOTAL RPC', 'TOTAL CPA'
-            ]
-        }
     }
 }
 </script>
 <style> 
     .ds-section { 
         position: relative;
-        width: 100% !important;
     }
     .table {
         display: table; 

@@ -6032,7 +6032,7 @@ exports = module.exports = __webpack_require__(10)(false);
 
 
 // module
-exports.push([module.i, "\n.ds-section { \n        position: relative;\n        width: 100% !important;\n}\n.table {\n        display: table; \n        width: 100%;\n        max-width: 100%;\n        margin-bottom: 20px;\n}\n.table-striped > tbody > tr:nth-of-type(odd) {\n      background-color: #f9f9f9;\n}\n.table-bordered th,\n    .table-bordered td {\n        border: 1px solid #ddd !important;\n}\n.table > thead > tr > th,\n.table > tbody > tr > th,\n.table > tfoot > tr > th,\n.table > thead > tr > td,\n.table > tbody > tr > td,\n.table > tfoot > tr > td {\n  padding: 8px;\n  line-height: 1.42857143;\n  vertical-align: top;\n  border-top: 1px solid #ddd;\n}\n.table tr td {\n    font-size: 12px;\n  font-weight: bolder;\n  text-align: center;\n}\n.table > thead > tr > th {\n  vertical-align: bottom;\n  border-bottom: 2px solid #ddd;\n}\nthead tr th {\n        background-color: #2d3748 !important; \n        color: #ffffff !important\n}\n.bg-gray-800 { background-color: #2d3748;\n}\n.bg-gray-200 { background-color: #edf2f7;\n}\n.bg-white { background-color: #fff;\n}\n.border-4 { border-width: 4px;\n}\n.border-gray-200 { border-color: #edf2f7;\n}\n    /* .bg-gray-900 { background-color: #1a202c !important; border: 2px solid yellow; } */\n.table-auto { table-layout: auto;\n}\n.table-fixed { table-layout: fixed;\n}\n.min-w-full { min-width: 100%;\n}\n.max-w-full { max-width: 100%;\n}\n.w-full { width: 100%;\n}\n.text-center { text-align: center;\n}\n.p-4 { padding: 1rem;\n}\n.form-control {\n  display: block;\n  width: 100%;\n  height: 34px;\n  padding: 6px 12px;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #555;\n  background-color: #fff;\n  background-image: none;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;\n       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n}\n.form-control:focus {\n  border-color: #66afe9;\n  outline: 0;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n}\n.form-control::-moz-placeholder {\n  color: #999;\n  opacity: 1;\n}\n.form-control:-ms-input-placeholder {\n  color: #999;\n}\n.form-control::-webkit-input-placeholder {\n  color: #999;\n}\n.form-control::-ms-expand {\n  background-color: transparent;\n  border: 0;\n}\n.form-control[disabled],\n.form-control[readonly],\nfieldset[disabled] .form-control {\n  background-color: #eee;\n  opacity: 1;\n}\n.form-control[disabled],\nfieldset[disabled] .form-control {\n  cursor: not-allowed;\n}\ntextarea.form-control {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: none;\n}\n", ""]);
+exports.push([module.i, "\n.ds-section { \n        position: relative;\n}\n.table {\n        display: table; \n        width: 100%;\n        max-width: 100%;\n        margin-bottom: 20px;\n}\n.table-striped > tbody > tr:nth-of-type(odd) {\n      background-color: #f9f9f9;\n}\n.table-bordered th,\n    .table-bordered td {\n        border: 1px solid #ddd !important;\n}\n.table > thead > tr > th,\n.table > tbody > tr > th,\n.table > tfoot > tr > th,\n.table > thead > tr > td,\n.table > tbody > tr > td,\n.table > tfoot > tr > td {\n  padding: 8px;\n  line-height: 1.42857143;\n  vertical-align: top;\n  border-top: 1px solid #ddd;\n}\n.table tr td {\n    font-size: 12px;\n  font-weight: bolder;\n  text-align: center;\n}\n.table > thead > tr > th {\n  vertical-align: bottom;\n  border-bottom: 2px solid #ddd;\n}\nthead tr th {\n        background-color: #2d3748 !important; \n        color: #ffffff !important\n}\n.bg-gray-800 { background-color: #2d3748;\n}\n.bg-gray-200 { background-color: #edf2f7;\n}\n.bg-white { background-color: #fff;\n}\n.border-4 { border-width: 4px;\n}\n.border-gray-200 { border-color: #edf2f7;\n}\n    /* .bg-gray-900 { background-color: #1a202c !important; border: 2px solid yellow; } */\n.table-auto { table-layout: auto;\n}\n.table-fixed { table-layout: fixed;\n}\n.min-w-full { min-width: 100%;\n}\n.max-w-full { max-width: 100%;\n}\n.w-full { width: 100%;\n}\n.text-center { text-align: center;\n}\n.p-4 { padding: 1rem;\n}\n.form-control {\n  display: block;\n  width: 100%;\n  height: 34px;\n  padding: 6px 12px;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #555;\n  background-color: #fff;\n  background-image: none;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;\n       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n}\n.form-control:focus {\n  border-color: #66afe9;\n  outline: 0;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n}\n.form-control::-moz-placeholder {\n  color: #999;\n  opacity: 1;\n}\n.form-control:-ms-input-placeholder {\n  color: #999;\n}\n.form-control::-webkit-input-placeholder {\n  color: #999;\n}\n.form-control::-ms-expand {\n  background-color: transparent;\n  border: 0;\n}\n.form-control[disabled],\n.form-control[readonly],\nfieldset[disabled] .form-control {\n  background-color: #eee;\n  opacity: 1;\n}\n.form-control[disabled],\nfieldset[disabled] .form-control {\n  cursor: not-allowed;\n}\ntextarea.form-control {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: none;\n}\n", ""]);
 
 // exports
 
@@ -6304,18 +6304,14 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardTrendMetric__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardTrendMetric___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardTrendMetric__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardQueryFilter__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardQueryFilter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardQueryFilter__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__nova_resources_js_components_RevenueDriver_DynamicTable__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__nova_resources_js_components_RevenueDriver_DynamicTable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__nova_resources_js_components_RevenueDriver_DynamicTable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__WebsiteBreakDown__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__WebsiteBreakDown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__WebsiteBreakDown__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__CampaignBreakDown__ = __webpack_require__(111);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__CampaignBreakDown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__CampaignBreakDown__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardQueryFilter__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardQueryFilter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardQueryFilter__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__FeedTotals__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__FeedTotals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__FeedTotals__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__WebsiteBreakDown__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__WebsiteBreakDown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__WebsiteBreakDown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__CampaignBreakDown__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__CampaignBreakDown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__CampaignBreakDown__);
 //
 //
 //
@@ -6397,64 +6393,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
@@ -6465,91 +6403,44 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return {
             loading: false,
             filterOpen: false,
-            errorResponse: {},
+            triggerReload: false,
             rowsList: {},
             metricWidth: this.card.metricWidth,
-            dailyTotalSpendTrendMetric: {},
-            dailyTotalRevenueTrendMetric: {},
-            dailyTotalProfitTrendMetric: {},
-            dailyTotalRoiTrendMetric: {},
+
             cardDataEndpoint: this.card.component + '/daily-summary-by-type-tags',
             columnData: ['All'],
             typeTag: [],
             startDate: '',
             endDate: '',
-            data: [],
-            websiteBreakDown: [],
-            campaignBreakDown: []
+            data: []
         };
     },
 
     props: ['card'],
     components: {
-        CardTrendMetric: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardTrendMetric___default.a,
-        CardQueryFilter: __WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardQueryFilter___default.a,
-        DynamicTable: __WEBPACK_IMPORTED_MODULE_2__nova_resources_js_components_RevenueDriver_DynamicTable___default.a,
-        WebsiteBreakDown: __WEBPACK_IMPORTED_MODULE_3__WebsiteBreakDown___default.a,
-        CampaignBreakDown: __WEBPACK_IMPORTED_MODULE_4__CampaignBreakDown___default.a
+        CardQueryFilter: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_CardQueryFilter___default.a,
+        WebsiteBreakDown: __WEBPACK_IMPORTED_MODULE_2__WebsiteBreakDown___default.a,
+        CampaignBreakDown: __WEBPACK_IMPORTED_MODULE_3__CampaignBreakDown___default.a,
+        FeedTotals: __WEBPACK_IMPORTED_MODULE_1__FeedTotals___default.a
     },
 
     mounted: function mounted() {
-        this.loadDailySummary();
+        // this.loadDailySummary()
         this.loadTypeTags();
     },
 
 
     methods: {
-        loadDailySummary: function loadDailySummary() {
-            var _this = this;
-
-            this.loading = true;
-            axios.get('/nova-vendor/' + this.cardDataEndpoint + '?type_tag=' + this.typeTag + '&start_date=' + this.startDate + '&end_date=' + this.endDate).then(function (response) {
-                _this.rowsList = response.data.data.daily_summary.list;
-                _this.data = _this.rowsList;
-                _this.dailyTotalSpendTrendMetric = _this.prepareMetricTrendChartData('tot_spend', response.data.data.daily_summary.metrics.tot_spend);
-
-                _this.dailyTotalRevenueTrendMetric = _this.prepareMetricTrendChartData('tot_revenue', response.data.data.daily_summary.metrics.tot_revenue);
-
-                _this.dailyTotalProfitTrendMetric = _this.prepareMetricTrendChartData('tot_profit', response.data.data.daily_summary.metrics.tot_profit);
-
-                _this.dailyTotalRoiTrendMetric = _this.prepareMetricTrendChartData('tot_roi', response.data.data.daily_summary.metrics.tot_roi);
-                _this.websiteBreakDown = response.data.data.daily_summary.website_break_down;
-
-                _this.campaignBreakDown = response.data.data.daily_summary.campaign_break_down;
-                console.timeEnd('starting');
-                _this.loading = false;
-            }).catch(function (error) {
-                _this.loading = false;
-                _this.errorResponse = error.response.data;
-            });
-        },
-        prepareMetricTrendChartData: function prepareMetricTrendChartData(type, responseData) {
-
-            if ((typeof responseData === 'undefined' ? 'undefined' : _typeof(responseData)) === 'object' && responseData !== null) {
-                responseData['chartData'] = {
-                    labels: Object.keys(responseData.trend),
-                    series: [_.map(responseData.trend, function (value, label) {
-                        return {
-                            meta: label,
-                            value: value
-                        };
-                    })]
-                    // responseData['helpText'] = 'In case we wish to display help texts for the metrics in the future'
-                    // responseData['helpWidth'] = '200'
-                };return responseData;
-            }
-            return {};
-        },
         toggleFilter: function toggleFilter() {
             this.filterOpen = this.filterOpen == true ? false : true;
         },
         loadTypeTags: function loadTypeTags() {
-            var _this2 = this;
+            var _this = this;
 
             axios.get('/nova-vendor/' + this.card.component + '/type-tags').then(function (response) {
-                _this2.columnData = response.data.data.type_tags;
+                _this.columnData = response.data.data.type_tags;
             }).catch(function (error) {
-                _this2.queryError = error.response.data.message;
+                _this.queryError = error.response.data.message;
             });
         },
         reloadData: function reloadData(param) {
@@ -6557,7 +6448,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             this.startDate = param.startDate;
             this.endDate = param.endDate;
             this.filterOpen = false;
-            this.loadDailySummary();
+            this.triggerReload = true;
         }
     },
     computed: {
@@ -6565,15 +6456,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return [{
                 title: 'Type Tags'
             }];
-        },
-        dailyTotalsTableHeader: function dailyTotalsTableHeader() {
-            return ['DATE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI', 'YAHOO SPEND', 'YAHOO REVENUE', 'YAHOO PROFIT', 'YAHOO ROI', 'MEDIA SPEND', 'MEDIA REVENUE', 'MEDIA PROFIT', 'MEDIA ROI'];
-        },
-        websiteBreakDownTableHeader: function websiteBreakDownTableHeader() {
-            return ['DATE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI'];
-        },
-        campaignBreakDownTableHeader: function campaignBreakDownTableHeader() {
-            return ['TYPE TAG', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI', 'TOTAL CLICKS', 'TOTAL RPC', 'TOTAL CPA'];
         }
     }
 });
@@ -62483,26 +62365,88 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "WebsiteBreakDown",
+    data: function data() {
+        return {
+            websiteData: {},
+            extractDataValues: true,
+            websiteBreakDown: [],
+            loading: false
+        };
+    },
+
     props: {
-        websiteData: {
-            type: Object,
-            required: true
-        },
-        extractDataValues: {
-            type: Boolean,
-            default: true
-        },
-        headerRows: {
+        typeTag: {
             type: Array,
             required: true
+        },
+        startDate: {
+            type: String,
+            required: true
+        },
+        endDate: {
+            type: String,
+            required: true
+        },
+        card: {
+            required: true
+        },
+        triggerReload: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
         DynamicTable: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default.a
+    },
+    computed: {
+        websiteBreakDownTableHeader: function websiteBreakDownTableHeader() {
+            return ['DATE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI'];
+        }
+    },
+    watch: {
+        triggerReload: function triggerReload(newVal, oldVal) {
+            if (newVal) {
+                this.loadWebsiteBreakDown();
+            }
+        }
+    },
+    mounted: function mounted() {
+        this.loadWebsiteBreakDown();
+    },
+
+    methods: {
+        loadWebsiteBreakDown: function loadWebsiteBreakDown() {
+            var _this = this;
+
+            this.loading = true;
+            axios.get('/nova-vendor/' + this.card.component + '/daily-summary-by-type-tags/website-break-down' + '?type_tag=' + this.typeTag + '&start_date=' + this.startDate + '&end_date=' + this.endDate).then(function (response) {
+                _this.websiteBreakDown = response.data.data.daily_summary.website_break_down;
+                _this.loading = false;
+            }).catch(function (error) {
+                _this.loading = false;
+                _this.errorResponse = error.response.data;
+            });
+        }
     }
 });
 
@@ -62514,31 +62458,79 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "w-6/12 mt-10 box-border float-left p-5" }, [
-    _c("div", { staticClass: "pt-5 pb-1 pl-6 pr-6 rounded-lg shadow-lg" }, [
-      _c("h4", { staticClass: "text-center mb-2" }, [
-        _vm._v(" " + _vm._s(_vm.websiteData.website) + " ")
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {},
-        [
-          _c("DynamicTable", {
-            attrs: {
-              data: _vm.websiteData.totals,
-              extractDataValues: true,
-              headerRows: _vm.headerRows,
-              enableSearch: false
-            }
-          })
-        ],
-        1
-      )
-    ])
+  return _c("div", { staticClass: "website-summary-wrapper  pt-5 pb-5" }, [
+    _c("h1", { staticClass: "text-center p-2" }, [
+      _vm._v("Break Down by Website")
+    ]),
+    _vm._v(" "),
+    _vm.loading
+      ? _c(
+          "div",
+          {
+            staticClass: "rounded-lg flex items-center justify-center relative"
+          },
+          [_c("loader", { staticClass: "text-60" })],
+          1
+        )
+      : _c("div", { staticClass: "box-border clearfix w-full" }, [
+          _vm.websiteBreakDown.length < 1
+            ? _c("div", [_vm._m(0)])
+            : _c(
+                "div",
+                _vm._l(_vm.websiteBreakDown, function(websiteData, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: index,
+                      staticClass: "w-6/12 mt-10 box-border float-left p-5"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "pt-5 pb-1 pl-6 pr-6 rounded-lg shadow-lg"
+                        },
+                        [
+                          _c("h4", { staticClass: "text-center mb-2" }, [
+                            _vm._v(" " + _vm._s(websiteData.website) + " ")
+                          ]),
+                          _vm._v(" "),
+                          _c("DynamicTable", {
+                            attrs: {
+                              data: websiteData.totals,
+                              extractDataValues: true,
+                              headerRows: _vm.websiteBreakDownTableHeader,
+                              enableSearch: false
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                }),
+                0
+              )
+        ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center",
+        attrs: { role: "alert" }
+      },
+      [_c("p", [_vm._v(" No data ")])]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -62611,26 +62603,83 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "CampaignBreakDown",
+    data: function data() {
+        return {
+            campaignBreakDown: [],
+            loading: false
+        };
+    },
+
     props: {
-        campaignData: {
+        typeTag: {
             type: Array,
             required: true
         },
-        extractDataValues: {
+        startDate: {
+            type: String,
+            required: true
+        },
+        endDate: {
+            type: String,
+            required: true
+        },
+        card: {
+            required: true
+        },
+        triggerReload: {
             type: Boolean,
-            default: true
-        },
-        headerRows: {
-            type: Array,
-            required: true
+            default: false
         }
     },
     components: {
         DynamicTable: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default.a
+    },
+    computed: {
+        campaignBreakDownTableHeader: function campaignBreakDownTableHeader() {
+            return ['TYPE TAG', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI', 'TOTAL CLICKS', 'TOTAL RPC', 'TOTAL CPA'];
+        }
+    },
+    watch: {
+        triggerReload: function triggerReload(newVal, oldVal) {
+            if (newVal) {
+                this.loadCampaignBreakDown();
+            }
+        }
+    },
+    mounted: function mounted() {
+        this.loadCampaignBreakDown();
+    },
+
+    methods: {
+        loadCampaignBreakDown: function loadCampaignBreakDown() {
+            var _this = this;
+
+            this.loading = true;
+            axios.get('/nova-vendor/' + this.card.component + '/daily-summary-by-type-tags/campaign-break-down' + '?type_tag=' + this.typeTag + '&start_date=' + this.startDate + '&end_date=' + this.endDate).then(function (response) {
+                _this.campaignBreakDown = response.data.data.daily_summary.campaign_break_down;
+                _this.loading = false;
+            }).catch(function (error) {
+                _this.loading = false;
+                _this.errorResponse = error.response.data;
+            });
+        }
     }
 });
 
@@ -62642,25 +62691,55 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "w-full box-border" }, [
-    _c(
-      "div",
-      { staticClass: "pb-1 pl-6 pr-6 rounded-lg shadow-lg" },
-      [
-        _c("DynamicTable", {
-          attrs: {
-            data: _vm.campaignData,
-            extractDataValues: true,
-            headerRows: _vm.headerRows,
-            enableSearch: true
-          }
-        })
-      ],
-      1
-    )
+  return _c("div", { staticClass: "w-full box-border pt-5 pb-5" }, [
+    _c("h1", { staticClass: "text-center p-4" }, [
+      _vm._v("Break Down by Campaign")
+    ]),
+    _vm._v(" "),
+    _vm.loading
+      ? _c(
+          "div",
+          {
+            staticClass: "rounded-lg flex items-center justify-center relative"
+          },
+          [_c("loader", { staticClass: "text-60" })],
+          1
+        )
+      : _c(
+          "div",
+          { staticClass: "pb-1 pl-6 pr-6 rounded-lg shadow-lg" },
+          [
+            _vm.campaignBreakDown.length < 1
+              ? _c("div", [_vm._m(0)])
+              : _c("DynamicTable", {
+                  attrs: {
+                    data: _vm.campaignBreakDown,
+                    extractDataValues: true,
+                    headerRows: _vm.campaignBreakDownTableHeader,
+                    enableSearch: true
+                  }
+                })
+          ],
+          1
+        )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "px-4 py-3 leading-normal text-gray-100 bg-gray-500 rounded-lg text-center",
+        attrs: { role: "alert" }
+      },
+      [_c("p", [_vm._v(" No data ")])]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -62685,315 +62764,94 @@ var render = function() {
       staticStyle: { "min-height": "200px" }
     },
     [
-      _c("div", { staticClass: "w-full flex flex-wrap px-5 py-5" }, [
-        _c("div", { staticClass: "w-3/4" }, [
-          _c("h1", { staticClass: "text-left p-4" }, [
-            _vm.loading
-              ? _c("span", {}, [_vm._v("Daily Totals")])
-              : _c("span", [_vm._v("Dashboard Metrics")])
-          ])
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "relative h-16 w-1/4 mt-2 mb-2 text-right" },
-          [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline",
-                attrs: { type: "button" },
-                on: { click: _vm.toggleFilter }
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded"
-                  },
-                  [
-                    _c("icon", {
-                      staticClass: "cursor-pointer text-60 -mb-1",
-                      attrs: {
-                        type: "filter",
-                        viewBox: "0 0 17 17",
-                        height: "25",
-                        width: "25"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("CardQueryFilter", {
-              attrs: {
-                filterOpen: _vm.filterOpen,
-                columnChecker: _vm.columnChecker,
-                columnData: _vm.columnData,
-                filterEndpoint: _vm.cardDataEndpoint
-              },
-              on: { reloadData: _vm.reloadData }
-            })
-          ],
-          1
-        )
-      ]),
+      _c(
+        "div",
+        { staticClass: "relative h-16 w-full mt-2 mb-2 text-right pt-4 pr-5" },
+        [
+          _c(
+            "button",
+            {
+              staticClass:
+                "rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline",
+              attrs: { type: "button" },
+              on: { click: _vm.toggleFilter }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded"
+                },
+                [
+                  _c("icon", {
+                    staticClass: "cursor-pointer text-60 -mb-1",
+                    attrs: {
+                      type: "filter",
+                      viewBox: "0 0 17 17",
+                      height: "25",
+                      width: "25"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("CardQueryFilter", {
+            attrs: {
+              filterOpen: _vm.filterOpen,
+              columnChecker: _vm.columnChecker,
+              columnData: _vm.columnData,
+              filterEndpoint: _vm.cardDataEndpoint
+            },
+            on: { reloadData: _vm.reloadData }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "px-5 py-5 my-2" }, [
-        _vm.loading
-          ? _c(
-              "div",
-              {
-                staticClass:
-                  "rounded-lg flex items-center justify-center relative"
-              },
-              [_c("loader", { staticClass: "text-60" })],
-              1
-            )
-          : _c(
-              "div",
-              { staticClass: "ds-section min-w-full max-w-full w-full" },
-              [
-                _c(
-                  "div",
-                  { staticClass: "flex flex-wrap -mx-3 mb-5" },
-                  [
-                    _c("CardTrendMetric", {
-                      attrs: {
-                        card: _vm.dailyTotalSpendTrendMetric,
-                        size: _vm.metricWidth[0],
-                        title: "Total Spend"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("CardTrendMetric", {
-                      attrs: {
-                        card: _vm.dailyTotalRevenueTrendMetric,
-                        loading: _vm.loading,
-                        size: _vm.metricWidth[0],
-                        title: "Total Revenue"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("CardTrendMetric", {
-                      attrs: {
-                        card: _vm.dailyTotalProfitTrendMetric,
-                        loading: _vm.loading,
-                        size: _vm.metricWidth[0],
-                        title: "Total Profit"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("CardTrendMetric", {
-                      attrs: {
-                        card: _vm.dailyTotalRoiTrendMetric,
-                        loading: _vm.loading,
-                        size: _vm.metricWidth[0],
-                        title: "Total ROI"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("h1", { staticClass: "text-center p-4" }, [
-                  _vm._v("Daily Totals")
-                ]),
-                _vm._v(" "),
-                Object.entries(_vm.errorResponse).length > 0
-                  ? _c("div", [
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
-                          attrs: { role: "alert" }
-                        },
-                        [
-                          _c("p", [
-                            _vm._v(
-                              " " + _vm._s(_vm.errorResponse.message) + " "
-                            )
-                          ])
-                        ]
-                      )
-                    ])
-                  : _c("div", { staticClass: "max-w-full w-full box-border" }, [
-                      _c(
-                        "div",
-                        { staticClass: "table-card shadow-lg" },
-                        [
-                          _vm.data.length < 1
-                            ? _c("div", [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "px-4 py-3 text-center leading-normal text-red-100 bg-red-700 rounded-lg",
-                                    attrs: { role: "alert" }
-                                  },
-                                  [
-                                    _c("p", [
-                                      _vm._v(
-                                        " No data available for the selected range  "
-                                      )
-                                    ])
-                                  ]
-                                )
-                              ])
-                            : _c("DynamicTable", {
-                                attrs: {
-                                  data: _vm.data,
-                                  extractDataValues: true,
-                                  headerRows: _vm.dailyTotalsTableHeader,
-                                  enableSearch: false
-                                }
-                              })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "website-summary-wrapper" }, [
-                        _c("h1", { staticClass: "text-center p-4" }, [
-                          _vm._v("Break Down by Website")
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "box-border clearfix w-full" },
-                          _vm._l(_vm.websiteBreakDown, function(
-                            websiteData,
-                            index
-                          ) {
-                            return _c("WebsiteBreakDown", {
-                              key: index,
-                              attrs: {
-                                websiteData: websiteData,
-                                headerRows: _vm.websiteBreakDownTableHeader
-                              }
-                            })
-                          }),
-                          1
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("h1", { staticClass: "text-center p-4" }, [
-                        _vm._v("Break Down by Campaign")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "box-border clearfix w-full" },
-                        [
-                          _c("CampaignBreakDown", {
-                            attrs: {
-                              campaignData: _vm.campaignBreakDown,
-                              headerRows: _vm.campaignBreakDownTableHeader
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "table",
-                    {
-                      staticClass:
-                        "table table-fixed table-striped table-bordered",
-                      staticStyle: { display: "none" }
-                    },
-                    [
-                      _c("thead", [
-                        _c("tr", [
-                          _c("th", [_vm._v("Date")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Total Spend")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Total Revenue")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Total Profit")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Total ROI")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Yahoo Spend")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Yahoo Revenue")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Yahoo Profit")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Yahoo ROI")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Media Spend")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Media Revenue")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Media Profit")]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Media ROI")])
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        { staticClass: "bg-gray-200" },
-                        _vm._l(_vm.rowsList, function(row, key) {
-                          return _c(
-                            "tr",
-                            {
-                              key: key,
-                              staticClass: "bg-white border-4 border-gray-200"
-                            },
-                            [
-                              _c("td", [_vm._v(_vm._s(row.date))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("$" + _vm._s(row.tot_spend))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("$" + _vm._s(row.tot_revenue))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("$" + _vm._s(row.tot_profit))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(row.tot_roi) + "%")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("$" + _vm._s(row.yahoo_spend))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v("$" + _vm._s(row.yahoo_revenue))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v("$" + _vm._s(row.yahoo_profit))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(row.yahoo_roi) + "%")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("$" + _vm._s(row.media_spend))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v("$" + _vm._s(row.media_revenue))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v("$" + _vm._s(row.media_profit))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(row.media_roi) + "%")])
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    ]
-                  )
-                ])
-              ]
-            )
-      ])
+      _c(
+        "div",
+        {
+          staticClass:
+            "w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border"
+        },
+        [
+          _c("FeedTotals", {
+            attrs: {
+              metricWidth: _vm.metricWidth,
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          }),
+          _vm._v(" "),
+          _c("WebsiteBreakDown", {
+            attrs: {
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          }),
+          _vm._v(" "),
+          _c("CampaignBreakDown", {
+            attrs: {
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          })
+        ],
+        1
+      )
     ]
   )
 }
@@ -63004,6 +62862,359 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-b9bc2c0a", module.exports)
+  }
+}
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(116)
+/* template */
+var __vue_template__ = __webpack_require__(117)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/FeedTotals.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-23ef9f18", Component.options)
+  } else {
+    hotAPI.reload("data-v-23ef9f18", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 116 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardTrendMetric__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardTrendMetric___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardTrendMetric__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "FeedTotals",
+    data: function data() {
+        return {
+            loading: false,
+            data: [],
+            dailyTotalSpendTrendMetric: {},
+            dailyTotalRevenueTrendMetric: {},
+            dailyTotalProfitTrendMetric: {},
+            dailyTotalRoiTrendMetric: {},
+            errorResponse: {}
+        };
+    },
+
+    components: {
+        CardTrendMetric: __WEBPACK_IMPORTED_MODULE_1__nova_resources_js_components_RevenueDriver_CardTrendMetric___default.a,
+        DynamicTable: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default.a
+    },
+    props: {
+        metricWidth: {
+            type: Array,
+            required: true
+        },
+        typeTag: {
+            type: Array,
+            required: true
+        },
+        startDate: {
+            type: String,
+            required: true
+        },
+        endDate: {
+            type: String,
+            required: true
+        },
+        card: {
+            required: true
+        },
+        triggerReload: {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        triggerReload: function triggerReload(newVal, oldVal) {
+            if (newVal) {
+                this.loadFeedTotals();
+            }
+        }
+    },
+    computed: {
+        dailyTotalsTableHeader: function dailyTotalsTableHeader() {
+            return ['DATE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI', 'YAHOO SPEND', 'YAHOO REVENUE', 'YAHOO PROFIT', 'YAHOO ROI', 'MEDIA SPEND', 'MEDIA REVENUE', 'MEDIA PROFIT', 'MEDIA ROI'];
+        }
+    },
+    mounted: function mounted() {
+        this.loadFeedTotals();
+    },
+
+    methods: {
+        loadFeedTotals: function loadFeedTotals() {
+            var _this = this;
+
+            this.loading = true;
+            axios.get('/nova-vendor/' + this.card.component + '/daily-summary-by-type-tags/feed-totals' + '?type_tag=' + this.typeTag + '&start_date=' + this.startDate + '&end_date=' + this.endDate).then(function (response) {
+                _this.data = response.data.data.daily_summary.list;
+
+                _this.dailyTotalSpendTrendMetric = _this.prepareMetricTrendChartData('tot_spend', response.data.data.daily_summary.metrics.tot_spend);
+
+                _this.dailyTotalRevenueTrendMetric = _this.prepareMetricTrendChartData('tot_revenue', response.data.data.daily_summary.metrics.tot_revenue);
+
+                _this.dailyTotalProfitTrendMetric = _this.prepareMetricTrendChartData('tot_profit', response.data.data.daily_summary.metrics.tot_profit);
+
+                _this.dailyTotalRoiTrendMetric = _this.prepareMetricTrendChartData('tot_roi', response.data.data.daily_summary.metrics.tot_roi);
+            }).catch(function (error) {
+                _this.errorResponse = error.response.data;
+            }).finally(function () {
+                _this.loading = false;
+            });
+        },
+        prepareMetricTrendChartData: function prepareMetricTrendChartData(type, responseData) {
+
+            if ((typeof responseData === 'undefined' ? 'undefined' : _typeof(responseData)) === 'object' && responseData !== null) {
+                responseData['chartData'] = {
+                    labels: Object.keys(responseData.trend),
+                    series: [_.map(responseData.trend, function (value, label) {
+                        return {
+                            meta: label,
+                            value: value
+                        };
+                    })]
+                    // responseData['helpText'] = 'In case we wish to display help texts for the metrics in the future'
+                    // responseData['helpWidth'] = '200'
+                };return responseData;
+            }
+            return {};
+        }
+    }
+
+});
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "w-full pt-5 pb-5" }, [
+    _c("div", { staticClass: "w-full px-5 py-0" }, [
+      _c(
+        "h1",
+        {
+          staticClass: "p-4",
+          class: _vm.loading ? "text-center" : "text-left"
+        },
+        [
+          _vm.loading
+            ? _c("span", {}, [_vm._v("Daily Totals")])
+            : _c("span", [_vm._v("Dashboard Metrics")])
+        ]
+      )
+    ]),
+    _vm._v(" "),
+    _vm.loading
+      ? _c(
+          "div",
+          {
+            staticClass: "rounded-lg flex items-center justify-center relative"
+          },
+          [_c("loader", { staticClass: "text-60" })],
+          1
+        )
+      : _c("div", [
+          _c(
+            "div",
+            { staticClass: "flex flex-wrap -mx-3 mb-5" },
+            [
+              _c("CardTrendMetric", {
+                attrs: {
+                  card: _vm.dailyTotalSpendTrendMetric,
+                  size: _vm.metricWidth[0],
+                  title: "Total Spend"
+                }
+              }),
+              _vm._v(" "),
+              _c("CardTrendMetric", {
+                attrs: {
+                  card: _vm.dailyTotalRevenueTrendMetric,
+                  loading: _vm.loading,
+                  size: _vm.metricWidth[0],
+                  title: "Total Revenue"
+                }
+              }),
+              _vm._v(" "),
+              _c("CardTrendMetric", {
+                attrs: {
+                  card: _vm.dailyTotalProfitTrendMetric,
+                  loading: _vm.loading,
+                  size: _vm.metricWidth[0],
+                  title: "Total Profit"
+                }
+              }),
+              _vm._v(" "),
+              _c("CardTrendMetric", {
+                attrs: {
+                  card: _vm.dailyTotalRoiTrendMetric,
+                  loading: _vm.loading,
+                  size: _vm.metricWidth[0],
+                  title: "Total ROI"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("h1", { staticClass: "text-center p-4" }, [
+            _vm._v("Daily Totals")
+          ]),
+          _vm._v(" "),
+          Object.entries(_vm.errorResponse).length > 0
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.errorResponse.message) + " ")
+                    ])
+                  ]
+                )
+              ])
+            : _c("div", { staticClass: "max-w-full w-full box-border" }, [
+                _c(
+                  "div",
+                  { staticClass: "table-card shadow-lg" },
+                  [
+                    _vm.data.length < 1
+                      ? _c("div", [_vm._m(0)])
+                      : _c("DynamicTable", {
+                          attrs: {
+                            data: _vm.data,
+                            extractDataValues: true,
+                            headerRows: _vm.dailyTotalsTableHeader,
+                            enableSearch: false
+                          }
+                        })
+                  ],
+                  1
+                )
+              ])
+        ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "px-4 py-3 text-center leading-normal text-red-100 bg-red-700 rounded-lg",
+        attrs: { role: "alert" }
+      },
+      [_c("p", [_vm._v(" No data available for the selected range  ")])]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-23ef9f18", module.exports)
   }
 }
 
