@@ -9,11 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class TypeDailyPerfService
 {
-    /**
-     * @var array 
-     */
-    protected $rows = [];
-
+   
     /**
      * @var array
      */
@@ -50,7 +46,7 @@ class TypeDailyPerfService
         
         $this->setDates($startDate, $endDate); 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
-
+        
         $query = DB::select(
             
             "SELECT DATE_FORMAT(results_all.date, '%Y-%m-%d') AS `date`,
@@ -111,19 +107,16 @@ class TypeDailyPerfService
 
         );
         
-         
         // $query = $this->loadMock();
 
-        array_map(function($row) {
-            $row->date = Carbon::parse($row->date)->toFormattedDateString();
-            return $row;
-        }, $query);
+        // array_map(function($row) {
+        //     $row->date = Carbon::parse($row->date)->toFormattedDateString();
+        //     return $row;
+        // }, $query);
        
-        session(['daily_summary_by_tags' => $query]);
-        
-        $this->rows = $query;
-
-        return $this->rows;
+        // session(['daily_summary_by_tags' => $query]);
+         
+        return $query;
     }
 
 
@@ -157,10 +150,10 @@ class TypeDailyPerfService
         // and calculates from it 
         $this->totalSumCollector[$type] = $totalSum;
         
-       
+        $sm = new StringManipulator;
         $trend = new \stdClass;
         foreach ($cpRows as $row) {
-            $trend->{$row->date} = (float) $row->{$type};
+            $trend->{$sm->formatDateToString($row->date)} = (float) $row->{$type};
         } 
 
         $metricObj = new \stdClass;
@@ -260,7 +253,7 @@ class TypeDailyPerfService
             $this->startDate = date('d') === 1 ? $endDate : 
                 date('Y-m-d', strtotime('-' . $dateSp . ' days', strtotime(date('Y-m-d')) ) );
         }
-         
+        
         return $this;
     }
 
@@ -345,19 +338,13 @@ class TypeDailyPerfService
                     GROUP BY date ORDER BY date DESC
                 ");
                 
-                array_map(function($row) {
-                    $row->date = Carbon::parse($row->date)->toFormattedDateString();
-                return $row;
-                }, $query);
+                
             $websiteBreakdown[] = [
                 'website' => $row->site,
                 'totals' => $this->prepareData($query)
             ];
         }
-        
-
-        session(['website_break_down' => $websiteBreakdown]);
-
+         
         return $websiteBreakdown;
     }
 

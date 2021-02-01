@@ -2,6 +2,8 @@
 
 namespace App\Labs;
 
+use Carbon\Carbon;
+
 class StringManipulator
 {
 
@@ -19,5 +21,13 @@ class StringManipulator
         return [];
     }
 
-   
+    /**
+     * @param string $date
+     * 
+     * @return string
+     */
+    public function formatDateToString(string $date): string
+    {
+        return Carbon::parse($date)->toFormattedDateString();
+    }
 }

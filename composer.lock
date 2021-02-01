@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48e30f7c73c76d032d1241a02a6250ab",
+    "content-hash": "a22d3ff39b7d258b2ea86d805c30cb6e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3002,6 +3002,58 @@
             "time": "2020-10-29T18:22:10+00:00"
         },
         {
+            "name": "stechstudio/laravel-ssh-tunnel",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stechstudio/laravel-ssh-tunnel.git",
+                "reference": "1c0b8ec74eb1dfafdb39f67514f1b23fecd611cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stechstudio/laravel-ssh-tunnel/zipball/1c0b8ec74eb1dfafdb39f67514f1b23fecd611cb",
+                "reference": "1c0b8ec74eb1dfafdb39f67514f1b23fecd611cb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.5|^6.0|^7.0|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "STS\\Tunneler\\TunnelerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "classmap": [],
+                "psr-4": {
+                    "STS\\Tunneler\\": "src"
+                },
+                "files": []
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bubba Hines",
+                    "email": "rob@stechstudio.com"
+                }
+            ],
+            "description": "Easy creation & maintenance of an SSH Tunnel for Laravel/Lumen",
+            "keywords": [
+                "laravel",
+                "lumen",
+                "mysql",
+                "ssh",
+                "tunnel"
+            ],
+            "time": "2020-09-10T13:19:47+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.2.5",
             "source": {
@@ -5081,12 +5133,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },

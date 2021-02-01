@@ -203,8 +203,10 @@ export default {
                 this.dailyTotalRoiTrendMetric = 
                     this.prepareMetricTrendChartData('tot_roi', response.data.data.daily_summary.metrics.tot_roi)
                 this.websiteBreakDown = response.data.data.daily_summary.website_break_down
+ 
+                
                 this.campaignBreakDown = response.data.data.daily_summary.campaign_break_down
-
+                console.timeEnd('starting')
                 this.loading = false
             }).catch(error => {   
                 this.loading = false

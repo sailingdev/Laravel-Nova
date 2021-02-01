@@ -16,7 +16,8 @@
         "laravel/framework": "^8.12",
         "laravel/nova": "*",
         "laravel/tinker": "^2.5",
-        "optimistdigital/nova-tailwind": "^1.0"
+        "optimistdigital/nova-tailwind": "^1.0",
+        "stechstudio/laravel-ssh-tunnel": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
