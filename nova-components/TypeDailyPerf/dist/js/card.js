@@ -51664,6 +51664,7 @@ exports.default = {
         unselectAll: function unselectAll() {
             this.columnDataSelected = [];
             this.showSelectAllButton = false;
+            this.search = 'ol.';
         },
         searching: function searching(query) {
             var _this2 = this;
@@ -51674,7 +51675,8 @@ exports.default = {
             });
             if (f.length > 0) {
                 this.showSelectAllButton = true;
-            } else {
+            }
+            if (query.length < 1 || f.length < 1) {
                 this.showSelectAllButton = false;
             }
         }

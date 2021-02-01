@@ -92,21 +92,22 @@ export default {
             if (h.length > 0) {
                 this.columnDataSelected = h
             }
-             this.showSelectAllButton = false
+            this.showSelectAllButton = false
         },
         unselectAll() {
             this.columnDataSelected = []
             this.showSelectAllButton = false
+            this.search = 'ol.'
         },
         searching(query) {
             this.search = query
             const f =  this.columnData.filter(country => country.includes(this.search))
             if (f.length > 0) {
                 this.showSelectAllButton = true
-            }
-            else {
+            } 
+            if (query.length < 1 || f.length < 1) {
                 this.showSelectAllButton = false
-            }
+            } 
         }
     },
     computed: {
