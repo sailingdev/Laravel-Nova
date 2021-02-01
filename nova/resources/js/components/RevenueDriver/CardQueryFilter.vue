@@ -1,10 +1,19 @@
 <template>
     <div v-if="filterOpen" class="rd__card-query-filter filter-wrapper p-4 w-60  text-left shadow-lg rounded-lg">
         
-        <div v-if="columnChecker.length > 0">
-            <h4 class="p-2"> {{ columnChecker[0].title }} </h4>
+        <div v-if="columnChecker.length > 0" class="v-select-container">
+            <div class="flex">
+                <h4 class="p-2"> {{ columnChecker[0].title }} </h4> 
+                <div class="selector-btn-holder" v-if="showSelectAllButton" > <button class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
+                    @click="selectAll" >Select all</button> 
+                </div>
+                <div class="unselector-btn-holder" v-if="columnDataSelected.length > 0"> <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
+                    @click="unselectAll" > Unselect all</button> 
+                </div>
+            </div>
+            
             <v-select class="rd__column-selector" v-model="columnDataSelected" multiple 
-                :options="paginated" @search="query => search = query" :filterable="true">
+                :options="paginated" @search="searching" :filterable="true">
                     <li slot="list-footer" class="pagination text-grey-600">
                         <button @click="offset -= 10" :disabled="!hasPrevPage">Prev</button>
                         <button @click="offset += 10" :disabled="!hasNextPage">Next</button>
@@ -48,6 +57,7 @@ export default {
             search: '',
             offset: 0,
             limit: 10,
+            showSelectAllButton: false
         }
     },
     props: {
@@ -76,6 +86,26 @@ export default {
         },
         endDateChanged(data) {
             this.endDate = data
+        }, 
+        selectAll() { 
+            const h = this.columnData.filter(country => country.includes(this.search))
+            if (h.length > 0) {
+                this.columnDataSelected = h
+            }
+        },
+        unselectAll() {
+            this.columnDataSelected = []
+            this.showSelectAllButton = false
+        },
+        searching(query) {
+            this.search = query
+            const f =  this.columnData.filter(country => country.includes(this.search))
+            if (f.length > 0) {
+                this.showSelectAllButton = true
+            }
+            else {
+                this.showSelectAllButton = false
+            }
         }
     },
     computed: {
@@ -92,7 +122,7 @@ export default {
         hasPrevPage () {
             const prevOffset = this.offset - 10;
             return Boolean(this.filtered.slice(prevOffset, this.limit + prevOffset).length);
-        }
+        },
     },
 }
 </script>
@@ -129,4 +159,14 @@ export default {
   .pagination button:hover {
     cursor: pointer; 
   }
+  .v-select-container {
+    position: relative;
+  }
+  .selector-btn-holder {
+    margin-bottom: 12px;
+   }
+   .unselector-btn-holder {
+       margin-bottom: 12px;
+       margin-left: 10px;
+   }
 </style>

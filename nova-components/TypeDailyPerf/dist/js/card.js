@@ -51545,7 +51545,7 @@ exports = module.exports = __webpack_require__(11)(false);
 
 
 // module
-exports.push([module.i, "\n.rd__card-query-filter[data-v-0bd84813] {\n     position: absolute;\n     z-index: 9900;\n     min-width: 500px;\n     max-width: 100%; \n     right: 10%;\n     background: #fff;\n}\n.rd__column-selector > input[data-v-0bd84813]  {\n      padding: 6px 10px !important;\n}\n.pagination[data-v-0bd84813] {\n      display: flex;\n      margin: 1.25rem 1.25rem 0; \n      border-top: 1px solid #cccccc;\n      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n      -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;\n     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n      font-size: 16px;\n}\n.pagination button[data-v-0bd84813] {\n      flex-grow: 1;  \n      padding: 12px 14px;\n}\n.pagination button[data-v-0bd84813]:first-child {\n      border-right: 1px solid #ccc;\n}\n.pagination button[data-v-0bd84813]:hover {\n  cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.rd__card-query-filter[data-v-0bd84813] {\n     position: absolute;\n     z-index: 9900;\n     min-width: 500px;\n     max-width: 100%; \n     right: 10%;\n     background: #fff;\n}\n.rd__column-selector > input[data-v-0bd84813]  {\n      padding: 6px 10px !important;\n}\n.pagination[data-v-0bd84813] {\n      display: flex;\n      margin: 1.25rem 1.25rem 0; \n      border-top: 1px solid #cccccc;\n      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n      -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;\n     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n      font-size: 16px;\n}\n.pagination button[data-v-0bd84813] {\n      flex-grow: 1;  \n      padding: 12px 14px;\n}\n.pagination button[data-v-0bd84813]:first-child {\n      border-right: 1px solid #ccc;\n}\n.pagination button[data-v-0bd84813]:hover {\n  cursor: pointer;\n}\n.v-select-container[data-v-0bd84813] {\n  position: relative;\n}\n.selector-btn-holder[data-v-0bd84813] {\n  margin-bottom: 12px;\n}\n.unselector-btn-holder[data-v-0bd84813] {\n     margin-bottom: 12px;\n     margin-left: 10px;\n}\n", ""]);
 
 // exports
 
@@ -51598,6 +51598,15 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     name: 'CardQueryFilter',
@@ -51609,7 +51618,8 @@ exports.default = {
             endDate: '',
             search: '',
             offset: 0,
-            limit: 10
+            limit: 10,
+            showSelectAllButton: false
         };
     },
 
@@ -51639,14 +51649,41 @@ exports.default = {
         },
         endDateChanged: function endDateChanged(data) {
             this.endDate = data;
+        },
+        selectAll: function selectAll() {
+            var _this = this;
+
+            var h = this.columnData.filter(function (country) {
+                return country.includes(_this.search);
+            });
+            if (h.length > 0) {
+                this.columnDataSelected = h;
+            }
+        },
+        unselectAll: function unselectAll() {
+            this.columnDataSelected = [];
+            this.showSelectAllButton = false;
+        },
+        searching: function searching(query) {
+            var _this2 = this;
+
+            this.search = query;
+            var f = this.columnData.filter(function (country) {
+                return country.includes(_this2.search);
+            });
+            if (f.length > 0) {
+                this.showSelectAllButton = true;
+            } else {
+                this.showSelectAllButton = false;
+            }
         }
     },
     computed: {
         filtered: function filtered() {
-            var _this = this;
+            var _this3 = this;
 
             return this.columnData.filter(function (country) {
-                return country.includes(_this.search);
+                return country.includes(_this3.search);
             });
         },
         paginated: function paginated() {
@@ -51682,9 +51719,40 @@ var render = function() {
           _vm.columnChecker.length > 0
             ? _c(
                 "div",
+                { staticClass: "v-select-container" },
                 [
-                  _c("h4", { staticClass: "p-2" }, [
-                    _vm._v(" " + _vm._s(_vm.columnChecker[0].title) + " ")
+                  _c("div", { staticClass: "flex" }, [
+                    _c("h4", { staticClass: "p-2" }, [
+                      _vm._v(" " + _vm._s(_vm.columnChecker[0].title) + " ")
+                    ]),
+                    _vm._v(" "),
+                    _vm.showSelectAllButton
+                      ? _c("div", { staticClass: "selector-btn-holder" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm",
+                              on: { click: _vm.selectAll }
+                            },
+                            [_vm._v("Select all")]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.columnDataSelected.length > 0
+                      ? _c("div", { staticClass: "unselector-btn-holder" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm",
+                              on: { click: _vm.unselectAll }
+                            },
+                            [_vm._v(" Unselect all")]
+                          )
+                        ])
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
                   _c(
@@ -51696,11 +51764,7 @@ var render = function() {
                         options: _vm.paginated,
                         filterable: true
                       },
-                      on: {
-                        search: function(query) {
-                          return (_vm.search = query)
-                        }
-                      },
+                      on: { search: _vm.searching },
                       model: {
                         value: _vm.columnDataSelected,
                         callback: function($$v) {
@@ -62812,46 +62876,10 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border"
-        },
-        [
-          _c("FeedTotals", {
-            attrs: {
-              metricWidth: _vm.metricWidth,
-              typeTag: _vm.typeTag,
-              startDate: _vm.startDate,
-              endDate: _vm.endDate,
-              card: _vm.card,
-              triggerReload: _vm.triggerReload
-            }
-          }),
-          _vm._v(" "),
-          _c("WebsiteBreakDown", {
-            attrs: {
-              typeTag: _vm.typeTag,
-              startDate: _vm.startDate,
-              endDate: _vm.endDate,
-              card: _vm.card,
-              triggerReload: _vm.triggerReload
-            }
-          }),
-          _vm._v(" "),
-          _c("CampaignBreakDown", {
-            attrs: {
-              typeTag: _vm.typeTag,
-              startDate: _vm.startDate,
-              endDate: _vm.endDate,
-              card: _vm.card,
-              triggerReload: _vm.triggerReload
-            }
-          })
-        ],
-        1
-      )
+      _c("div", {
+        staticClass:
+          "w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border"
+      })
     ]
   )
 }
