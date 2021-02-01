@@ -92,6 +92,7 @@ export default {
             if (h.length > 0) {
                 this.columnDataSelected = h
             }
+             this.showSelectAllButton = false
         },
         unselectAll() {
             this.columnDataSelected = []

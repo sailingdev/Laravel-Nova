@@ -51659,6 +51659,7 @@ exports.default = {
             if (h.length > 0) {
                 this.columnDataSelected = h;
             }
+            this.showSelectAllButton = false;
         },
         unselectAll: function unselectAll() {
             this.columnDataSelected = [];
@@ -62876,10 +62877,46 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("div", {
-        staticClass:
-          "w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border"
-      })
+      _c(
+        "div",
+        {
+          staticClass:
+            "w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border"
+        },
+        [
+          _c("FeedTotals", {
+            attrs: {
+              metricWidth: _vm.metricWidth,
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          }),
+          _vm._v(" "),
+          _c("WebsiteBreakDown", {
+            attrs: {
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          }),
+          _vm._v(" "),
+          _c("CampaignBreakDown", {
+            attrs: {
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          })
+        ],
+        1
+      )
     ]
   )
 }
