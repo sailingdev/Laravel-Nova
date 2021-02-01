@@ -26,7 +26,7 @@ class TypeDailyPerfsController extends Controller
 
         $dailySummaryByTags = $typeDailyPerfService->loadDailySummaryByTags($typeTags, $request->start_date, $request->end_date);
 
-        // $websiteBreakDown = $typeDailyPerfService->loadWebsiteDailySummary($typeTags, $request->start_date, $request->end_date);
+        $websiteBreakDown = $typeDailyPerfService->loadWebsiteDailySummary($typeTags, $request->start_date, $request->end_date);
 
         // $campaignBreakDown = $typeDailyPerfService->loadCampaignDailySummary($typeTags, $request->start_date, $request->end_date);
         
@@ -39,7 +39,7 @@ class TypeDailyPerfsController extends Controller
                     'tot_profit' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags, 'tot_profit'),
                     'tot_roi' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags, 'tot_roi', 'percentage'),
                 ],
-                // 'website_break_down' => $websiteBreakDown,
+                'website_break_down' => $websiteBreakDown,
                 // 'campaign_break_down' => $campaignBreakDown, 
             ]
         ]);
