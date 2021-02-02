@@ -674,7 +674,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             loading: false,
             filterOpen: false,
-            triggerReload: false,
+            triggerReload: 0,
             rowsList: {},
             metricWidth: this.card.metricWidth,
 
@@ -716,7 +716,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.startDate = param.startDate;
             this.endDate = param.endDate;
             this.filterOpen = false;
-            this.triggerReload = true;
+            this.triggerReload++;
         }
     },
     computed: {
@@ -12747,7 +12747,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             required: true
         },
         triggerReload: {
-            type: Boolean,
+            type: Number,
             default: false
         }
     },
@@ -12761,7 +12761,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     watch: {
         triggerReload: function triggerReload(newVal, oldVal) {
-            if (newVal) {
+            if (newVal > oldVal) {
                 this.loadWebsiteBreakDown();
             }
         }

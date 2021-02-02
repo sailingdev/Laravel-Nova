@@ -31,7 +31,7 @@
                 :card="card" :triggerReload="triggerReload"/>
 
             <CampaignBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
-                :card="card" :triggerReload="triggerReload"/>
+                :card="card" :triggerReload="triggerReload"/> <!-- -->
 
         </div>
        
@@ -48,7 +48,7 @@ export default {
         return {
             loading: false,
             filterOpen: false,
-            triggerReload: false,
+            triggerReload: 0,
             rowsList: {},
             metricWidth: this.card.metricWidth,
            
@@ -92,7 +92,7 @@ export default {
             this.startDate = param.startDate
             this.endDate = param.endDate
             this.filterOpen = false 
-            this.triggerReload = true
+            this.triggerReload++
         }
     },
     computed: {

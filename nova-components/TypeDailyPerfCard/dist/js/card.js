@@ -6363,7 +6363,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             loading: false,
             filterOpen: false,
-            triggerReload: false,
+            triggerReload: 0,
             rowsList: {},
             metricWidth: this.card.metricWidth,
 
@@ -6408,7 +6408,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.startDate = param.startDate;
             this.endDate = param.endDate;
             this.filterOpen = false;
-            this.triggerReload = true;
+            this.triggerReload++;
         }
     },
     computed: {
@@ -7039,13 +7039,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             required: true
         },
         triggerReload: {
-            type: Boolean,
+            type: Number,
             default: false
         }
     },
     watch: {
         triggerReload: function triggerReload(newVal, oldVal) {
-            if (newVal) {
+            if (newVal > oldVal) {
                 this.loadFeedTotals();
             }
         }
@@ -62796,7 +62796,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             required: true
         },
         triggerReload: {
-            type: Boolean,
+            type: Number,
             default: false
         }
     },
@@ -62810,7 +62810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     watch: {
         triggerReload: function triggerReload(newVal, oldVal) {
-            if (newVal) {
+            if (newVal > oldVal) {
                 this.loadWebsiteBreakDown();
             }
         }
@@ -62826,7 +62826,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.loading = true;
             axios.get('/nova-vendor/' + this.card.component + '/daily-summary-by-type-tags/website-break-down' + '?type_tag=' + this.typeTag + '&start_date=' + this.startDate + '&end_date=' + this.endDate).then(function (response) {
                 _this.websiteBreakDown = response.data.data.daily_summary.website_break_down;
-                console.log(response.data.data.daily_summary.website_break_down);
                 _this.loading = false;
             }).catch(function (error) {
                 _this.loading = false;
@@ -63008,7 +63007,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             required: true
         },
         triggerReload: {
-            type: Boolean,
+            type: Number,
             default: false
         }
     },
@@ -63022,7 +63021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     watch: {
         triggerReload: function triggerReload(newVal, oldVal) {
-            if (newVal) {
+            if (newVal > oldVal) {
                 this.loadCampaignBreakDown();
             }
         }

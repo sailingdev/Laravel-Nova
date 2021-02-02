@@ -46,7 +46,7 @@ export default {
             required: true
         },
         triggerReload: {
-            type: Boolean,
+            type: Number,
             default: false,
         }
     },
@@ -63,7 +63,7 @@ export default {
     },
     watch: {
         triggerReload(newVal, oldVal) {
-            if (newVal) {
+            if (newVal > oldVal) {
                 this.loadCampaignBreakDown()
             }
         }

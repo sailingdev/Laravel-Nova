@@ -59,7 +59,7 @@ export default {
             required: true
         },
         triggerReload: {
-            type: Boolean,
+            type: Number,
             default: false,
         }
     },
@@ -75,7 +75,7 @@ export default {
     },
      watch: {
         triggerReload(newVal, oldVal) {
-            if (newVal) {
+            if (newVal > oldVal) {
                 this.loadWebsiteBreakDown()
             }
         }
@@ -91,8 +91,7 @@ export default {
                 '&start_date=' + this.startDate + 
                 '&end_date=' + this.endDate)
             .then(response => {  
-                this.websiteBreakDown = response.data.data.daily_summary.website_break_down
-                console.log(response.data.data.daily_summary.website_break_down)           
+                this.websiteBreakDown = response.data.data.daily_summary.website_break_down         
                 this.loading = false
             }).catch(error => {   
                 this.loading = false
