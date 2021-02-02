@@ -49925,167 +49925,6 @@ if (GlobalVue) {
 
 /***/ }),
 
-/***/ "./node_modules/v-wow/index.js":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var utils = __webpack_require__("./node_modules/v-wow/utils.js");
-
-
-var WowListener = new utils.WowListener();
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    /**
-     * install function
-     * @param  {Vue} Vue
-     * @param  {object} options  lazyload options
-     */
-    install(Vue, options = {}) {
-        Vue.directive("wow", {
-            bind(el, binding) {
-                let animateConfig = binding.value || {};
-                
-                //WOW Parameters
-                //Note: "data-wow-animation" is not parameter from WOW.js (It was implement only to adapt for this interface) 
-                if(('animation-name' in animateConfig) === false){
-                    animateConfig['animation-name'] = utils.getAnimationName(el)//el.style['animation-name'];
-                }
-                
-                if(('animation-delay' in animateConfig) === false && el.hasAttribute('data-wow-delay')){
-                    animateConfig['animation-delay'] = el.getAttribute('data-wow-delay')
-                }
-
-                if(('animation-duration' in animateConfig) === false && el.hasAttribute('data-wow-duration')){
-                    animateConfig['animation-duration'] = el.getAttribute('data-wow-duration')
-                }
-
-                //Class form Animate.css (this should be an options)
-                el.classList.add('animated');
-                el.style.visibility = "hidden";
-                el.style["animation-name"] = "none";
-                
-                WowListener.register(el, animateConfig);
-            }
-        });
-    }
-});
-
-/***/ }),
-
-/***/ "./node_modules/v-wow/utils.js":
-/***/ (function(module, exports) {
-
-const vendors = ["moz", "webkit"];
-
-/* Register one scroll listener  */
-class WowListener {
-    
-    constructor(){
-        this.listener = null;
-        this.items = [];
-        this.lastTick = null;
-        this.rate = 100;
-    }
-
-    register(el, animationConfig){
-        //setTimeout(() => {
-            if(!showElement(el, animationConfig)){
-                this.items.push({ 
-                    el: el, 
-                    animationConfig: animationConfig 
-                });
-                if(this.listener == null)
-                    this.registerListener();
-            }
-        //}, 1);
-    }
-
-    registerListener() {
-        this.listener = this.handleScroll.bind(this);
-        window.addEventListener("scroll", this.listener);
-    }
-
-    unregisterListener(){
-        window.removeEventListener("scroll", this.listener);
-        this.listener = null;
-    }
-
-    handleScroll(){
-        let item = null, currentDate = Date.now();
-
-        if (currentDate - this.lastTick >= this.rate) {
-            this.lastTick = currentDate;
-            for(var i = this.items.length - 1; i >=0; i--){
-                item = this.items[i];
-                if(showElement(item.el, item.animationConfig))
-                    this.items.splice(i, 1);
-            }
-            if(this.items.length == 0)
-                this.unregisterListener();
-        }
-    }
-}
-
-const getCssVendor = function(element, propertyName){
-    let style = getComputedStyle(element);
-    let result = style.getPropertyValue(propertyName);
-    if(!result){
-        for(var i = 0; i < vendors.length; i++){
-            if(result = style.getPropertyValue(`-${vendors[i]}-${propertyName}`))
-                return result;
-        }
-    }
-    return result;
-}
-
-/**
- * Check if the element is visible
- *
- * @param {DOMElementNode} el
- * @return Boolean
-*/
-const getAnimationName = function(element) {
-    return getCssVendor(element, 'animation-name');
-}
-
-function isVisible(el){
-    var rect = el.getBoundingClientRect();
-    return (
-      (rect.top + rect.height) >= 0 &&
-      (rect.left + rect.width) >= 0 &&
-      (rect.bottom - rect.height) <= ( (window.innerHeight || document.documentElement.clientHeight)) &&
-      (rect.right - rect.width) <= ( (window.innerWidth || document.documentElement.clientWidth))
-    );
-}
-
-/**
- * Trigger the animation to show the element whether is visible
- *
- * @param {DOMElementNode} el
- * @param {object} animationConfig
- * @return Boolean
-*/
-const showElement = function(el, animationConfig) {
-    if (isVisible(el)) {
-        for (name in animationConfig) {
-            el.style[name] = animationConfig[name];
-        }
-        el.style.visibility = "visible";
-        return true;
-    }
-    return false;
-};
-
-module.exports = {
-    WowListener: WowListener,
-    getAnimationName: getAnimationName,
-	isVisible: isVisible,
-	showElement: showElement
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/component-normalizer.js":
 /***/ (function(module, exports) {
 
@@ -72157,10 +71996,6 @@ var _vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _vWow = __webpack_require__("./node_modules/v-wow/index.js");
-
-var _vWow2 = _interopRequireDefault(_vWow);
-
 var _Add = __webpack_require__("./resources/js/components/Icons/Add.vue");
 
 var _Add2 = _interopRequireDefault(_Add);
@@ -72560,8 +72395,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _vue2.default.config.ignoredElements = ['trix-editor'];
 
 // import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-
-_vue2.default.use(_vWow2.default);
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 // import 'bootstrap/dist/css/bootstrap.css'

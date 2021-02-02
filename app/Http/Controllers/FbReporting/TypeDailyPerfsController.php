@@ -82,4 +82,23 @@ class TypeDailyPerfsController extends Controller
             'type_tags' => $typeDailyPerfService->getAllTypeTags()
         ]);
     }
+
+     /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Services\TypeDailyPerfService $typeDailyPerfService
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function dailySummaryByTypeTagsAllWebsiteBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService)
+    {      
+        $typeTags = $request->type_tag; 
+
+        $websiteBreakDown = $typeDailyPerfService->loadAllWebsiteDailySummary($typeTags, $request->start_date, $request->end_date);
+ 
+        return $this->successResponse('Daily summary returned successfully', [
+            'daily_summary' => [ 
+                'website_break_down' => $websiteBreakDown
+            ]
+        ]);
+    }
 }

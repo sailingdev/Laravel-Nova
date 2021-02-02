@@ -17,7 +17,9 @@
         "laravel/nova": "*",
         "laravel/tinker": "^2.5",
         "optimistdigital/nova-tailwind": "^1.0",
-        "stechstudio/laravel-ssh-tunnel": "^3.0"
+        "stechstudio/laravel-ssh-tunnel": "^3.0",
+        "fb-reporting/type-daily-perf-card": "*",
+        "fb-reporting/type-daily-perf-website-break-down-card": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -75,6 +77,18 @@
         {
             "type": "path",
             "url": "./nova-components/TypeDailyPerf"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TypeDailyPerfCard"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TypeDailyPerfWebsiteBreakDownTool"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TypeDailyPerfWebsiteBreakDownCard"
         }
     ]
 }

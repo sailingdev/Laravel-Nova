@@ -1,14 +1,10 @@
 <?php
 
 namespace App\Providers;
-
-use App\Nova\Metrics\FbReporting\TagsDailyTotalProfit;
-use App\Nova\Metrics\FbReporting\TagsDailyTotalRevenue;
-use App\Nova\Metrics\FbReporting\TagsDailyTotalRoi;
-use App\Nova\Metrics\FbReporting\TagsDailyTotalSpend;
-use FbReporting\TypeDailyPerf\TypeDailyPerf;
+ 
+use App\Nova\Dashboards\FbReporting\WebsiteBreakDownDashboard;
+use FbReporting\TypeDailyPerfCard\TypeDailyPerfCard; 
 use Illuminate\Support\Facades\Gate;
-use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
@@ -66,7 +62,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             // (new TagsDailyTotalRevenue())->width('1/4'),
             // (new TagsDailyTotalProfit())->width('1/4'),
             // (new TagsDailyTotalRoi())->width('1/4'),
-            (new TypeDailyPerf())->dailyTotalsByTag(),
+            (new TypeDailyPerfCard())->dailyTotalsByTag(),
             // new Help,
         ];
     }
@@ -78,7 +74,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function dashboards()
     {
-        return [];
+        return [
+            new WebsiteBreakDownDashboard(),
+        ];
     }
 
     /**

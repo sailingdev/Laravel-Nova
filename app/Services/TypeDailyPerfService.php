@@ -317,6 +317,76 @@ class TypeDailyPerfService
         $typeTagClause = $this->formatTypeTagClause($typeTag);
         $websiteBreakdown = [];
         
+        // $websites = DB::select("SELECT site
+        //     FROM fb_reporting.type_daily_perf 
+        //     WHERE site != 'all' 
+        //     AND (date >= '$this->startDate' AND date <= '$this->endDate')
+        //     $typeTagClause
+        //     GROUP BY site ORDER BY site DESC
+        // ");
+        
+        // foreach ($websites as $key => $row) {
+        //     $query = DB::select("SELECT date, 
+        //         SUM(tot_spend) AS tot_spend, 
+        //         SUM(tot_revenue) AS tot_revenue, 
+        //         SUM(tot_profit) AS tot_profit, 
+        //         ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100,2) AS tot_roi
+        //             FROM fb_reporting.type_daily_perf 
+        //             WHERE site = '$row->site' 
+        //             AND (date >= '$this->startDate' AND date <= '$this->endDate')
+        //             $typeTagClause
+        //             GROUP BY date ORDER BY date DESC
+        //         ");
+                
+                
+        //     $websiteBreakdown[] = [
+        //         'website' => $row->site,
+        //         'totals' => $this->prepareData($query)
+        //     ];
+        // }
+
+        $query = DB::select("SELECT site AS 'site',
+            SUM(tot_spend) AS tot_spend,
+            SUM(tot_revenue) AS tot_revenue,
+            SUM(tot_profit) AS tot_profit, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi
+            FROM fb_reporting.type_daily_perf
+            WHERE
+            (date >= '$this->startDate' AND date <= '$this->endDate')
+                AND site != 'all'
+                $typeTagClause
+                GROUP BY site
+            "
+        ); 
+
+        // foreach (TypeDailyPerf::select(DB::raw("SELECT site, SUM(tot_spend) AS tot_spend, SUM(tot_revenue) AS tot_revenue,
+        //    SUM(tot_profit) AS tot_profit,  
+        //    ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi");
+        //     // ->SUM()
+        //     // ->groupBy('type_tag')->cursor() as $query) {
+        //     // $websiteBreakdown[] = $query->type_tag;
+        // }
+         
+        $data =  $this->prepareData($query);
+
+        return $data;
+    }
+
+    /**
+     * @TODO:: I need to rewrite this code
+     * 
+     * @param array $typeTag=[]
+     * @param mixed $startDate
+     * @param mixed $endDate
+     * 
+     * @return [type]
+     */
+    public function loadAllWebsiteDailySummary(?string $typeTag, $startDate, $endDate)
+    {
+        $this->setDates($startDate, $endDate);
+        $typeTagClause = $this->formatTypeTagClause($typeTag);
+        $websiteBreakdown = [];
+        
         $websites = DB::select("SELECT site
             FROM fb_reporting.type_daily_perf 
             WHERE site != 'all' 
@@ -343,8 +413,10 @@ class TypeDailyPerfService
                 'website' => $row->site,
                 'totals' => $this->prepareData($query)
             ];
-        }
+        }        
          
+        
+
         return $websiteBreakdown;
     }
 
@@ -378,7 +450,6 @@ class TypeDailyPerfService
         ); 
         
         $data =  $this->prepareData($query);
-        session(['campaign_break_down' => $data ]);
 
         return $data;
     }
