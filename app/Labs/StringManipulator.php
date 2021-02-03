@@ -22,6 +22,20 @@ class StringManipulator
     }
 
     /**
+     * @param array|null $array
+     * @param string $delimeter
+     * 
+     * @return string
+     */
+    public function generateStringFromArray(?array $array, string $delimeter): ?string
+    {
+        if (gettype($array) === 'array' && count($array) > 0) {
+            return implode($delimeter, $array);
+        }
+        return null;
+    }
+
+    /**
      * @param string $date
      * 
      * @return string

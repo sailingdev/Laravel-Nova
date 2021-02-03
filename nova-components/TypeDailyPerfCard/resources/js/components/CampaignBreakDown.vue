@@ -73,11 +73,12 @@ export default {
     }, 
     methods: {
         loadCampaignBreakDown() {
-            this.loading = true
-            axios.get('/nova-vendor/'+ this.card.component + '/daily-summary-by-type-tags/campaign-break-down' +  
-                '?type_tag=' + this.typeTag + 
-                '&start_date=' + this.startDate + 
-                '&end_date=' + this.endDate)
+            this.loading = true 
+            axios.post('/nova-vendor/'+this.card.component + '/daily-summary-by-type-tags/campaign-break-down', {
+                type_tag: this.typeTag,
+                start_date: this.startDate,
+                end_date: this.endDate
+            }) 
             .then(response => {
                 this.campaignBreakDown = response.data.data.daily_summary.campaign_break_down                
                 this.loading = false

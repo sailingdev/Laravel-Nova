@@ -81,11 +81,11 @@ export default {
     methods: {
         loadWebsiteBreakDown() {
             this.loading = true
-            axios.get('/nova-vendor/'+ this.card.component + '/daily-summary-by-type-tags/all-website-break-down' +  
-                '?type_tag=' + this.typeTag + 
-                '&start_date=' + this.startDate + 
-                '&end_date=' + this.endDate
-            )
+            axios.post('/nova-vendor/'+this.card.component + '/daily-summary-by-type-tags/all-website-break-down', {
+                type_tag: this.typeTag,
+                start_date: this.startDate,
+                end_date: this.endDate
+            })
             .then(response => {  
                 this.websiteBreakDown = response.data.data.daily_summary.website_break_down          
                 this.loading = false

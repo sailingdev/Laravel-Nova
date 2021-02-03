@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('daily-summary-by-type-tags/all-website-break-down', [TypeDailyPerfsController::class, 'dailySummaryByTypeTagsAllWebsiteBreakDown']);
+Route::post('daily-summary-by-type-tags/all-website-break-down', [TypeDailyPerfsController::class, 'dailySummaryByTypeTagsAllWebsiteBreakDown']);
 Route::get('type-tags', [TypeDailyPerfsController::class, 'typeTags']);

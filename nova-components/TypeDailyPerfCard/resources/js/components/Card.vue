@@ -31,7 +31,7 @@
                 :card="card" :triggerReload="triggerReload"/>
 
             <CampaignBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
-                :card="card" :triggerReload="triggerReload"/> <!-- -->
+                :card="card" :triggerReload="triggerReload"/> 
 
         </div>
        

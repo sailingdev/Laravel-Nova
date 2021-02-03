@@ -17,10 +17,11 @@ class TypeDailyPerfsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function dailySummaryByTypeTagsFeedTotals(Request $request, TypeDailyPerfService $typeDailyPerfService)
+    public function dailySummaryByTypeTagsFeedTotals(Request $request, TypeDailyPerfService $typeDailyPerfService, 
+        StringManipulator $sm)
     {     
-        $typeTags = $request->type_tag; 
-
+        $typeTags = $sm->generateStringFromArray($request->type_tag, ','); 
+       
         $dailySummaryByTags = $typeDailyPerfService->loadDailySummaryByTags($typeTags, $request->start_date, $request->end_date);
         
         return $this->successResponse('Daily summary returned successfully', [
@@ -42,9 +43,10 @@ class TypeDailyPerfsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function dailySummaryByTypeTagsWebsiteBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService)
+    public function dailySummaryByTypeTagsWebsiteBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService, 
+        StringManipulator $sm)
     {      
-        $typeTags = $request->type_tag; 
+        $typeTags = $sm->generateStringFromArray($request->type_tag, ','); 
 
         $websiteBreakDown = $typeDailyPerfService->loadWebsiteDailySummary($typeTags, $request->start_date, $request->end_date);
  
@@ -62,9 +64,10 @@ class TypeDailyPerfsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function dailySummaryByTypeTagsCampaignBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService)
+    public function dailySummaryByTypeTagsCampaignBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService, 
+        StringManipulator $sm)
     {      
-        $typeTags = $request->type_tag; 
+        $typeTags = $sm->generateStringFromArray($request->type_tag, ','); 
 
        $campaignBreakDown = $typeDailyPerfService->loadCampaignDailySummary($typeTags, $request->start_date, $request->end_date);
  
@@ -89,9 +92,10 @@ class TypeDailyPerfsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function dailySummaryByTypeTagsAllWebsiteBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService)
+    public function dailySummaryByTypeTagsAllWebsiteBreakDown(Request $request, TypeDailyPerfService $typeDailyPerfService, 
+        StringManipulator $sm)
     {      
-        $typeTags = $request->type_tag; 
+        $typeTags = $sm->generateStringFromArray($request->type_tag, ','); 
 
         $websiteBreakDown = $typeDailyPerfService->loadAllWebsiteDailySummary($typeTags, $request->start_date, $request->end_date);
  

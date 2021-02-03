@@ -12775,7 +12775,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             this.loading = true;
-            axios.get('/nova-vendor/' + this.card.component + '/daily-summary-by-type-tags/all-website-break-down' + '?type_tag=' + this.typeTag + '&start_date=' + this.startDate + '&end_date=' + this.endDate).then(function (response) {
+            axios.post('/nova-vendor/' + this.card.component + '/daily-summary-by-type-tags/all-website-break-down', {
+                type_tag: this.typeTag,
+                start_date: this.startDate,
+                end_date: this.endDate
+            }).then(function (response) {
                 _this.websiteBreakDown = response.data.data.daily_summary.website_break_down;
                 _this.loading = false;
             }).catch(function (error) {
