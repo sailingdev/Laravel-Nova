@@ -997,3 +997,5 @@ trix-editor.disabled {
 /* Tailwind Utilities
 ---------------------------------------------------------------------------- */
 @tailwind utilities;
+
+@import url('global.css');
