@@ -18,4 +18,3 @@ use Illuminate\Support\Facades\Route;
 Route::post('daily-summary-by-type-tags/feed-totals', [TypeDailyPerfsController::class, 'dailySummaryByTypeTagsFeedTotals']);
 Route::post('daily-summary-by-type-tags/website-break-down', [TypeDailyPerfsController::class, 'dailySummaryByTypeTagsWebsiteBreakDown']);
 Route::post('daily-summary-by-type-tags/campaign-break-down', [TypeDailyPerfsController::class, 'dailySummaryByTypeTagsCampaignBreakDown']);
-Route::get('type-tags', [TypeDailyPerfsController::class, 'typeTags']);

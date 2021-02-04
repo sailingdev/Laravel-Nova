@@ -1,20 +1,20 @@
 <?php
 
 namespace App\Nova\Dashboards\FbReporting;
- 
-use FbReporting\TypeDailyPerfWebsiteBreakDownCard\TypeDailyPerfWebsiteBreakDownCard;
+
+use FbReporting\TypeDailyPerfCampaignDetailsCard\TypeDailyPerfCampaignDetailsCard;
 use Laravel\Nova\Dashboard;
 
-class WebsiteBreakDownDashboard extends Dashboard
+class CampaignDetailsDashboard extends Dashboard
 {
-    /**
+     /**
      * Get the displayable name of the dashboard.
      *
      * @return string
      */
     public static function label()
     {
-        return 'Website Break Down';
+        return 'Campaign Details';
     }
 
     /**
@@ -24,8 +24,8 @@ class WebsiteBreakDownDashboard extends Dashboard
      */
     public function cards()
     {
-        return [ 
-            new TypeDailyPerfWebsiteBreakDownCard()
+        return [
+            (new TypeDailyPerfCampaignDetailsCard())->dailyTotalsByTag()
         ];
     }
 
@@ -36,6 +36,6 @@ class WebsiteBreakDownDashboard extends Dashboard
      */
     public static function uriKey()
     {
-        return 'fb-reporting-website-break-down';
+        return 'fb-reporting-campaign-details';
     }
 }

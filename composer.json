@@ -19,7 +19,8 @@
         "optimistdigital/nova-tailwind": "^1.0",
         "stechstudio/laravel-ssh-tunnel": "^3.0",
         "fb-reporting/type-daily-perf-card": "*",
-        "fb-reporting/type-daily-perf-website-break-down-card": "*"
+        "fb-reporting/type-daily-perf-website-break-down-card": "*",
+        "fb-reporting/type-daily-perf-campaign-details-card": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -89,6 +90,10 @@
         {
             "type": "path",
             "url": "./nova-components/TypeDailyPerfWebsiteBreakDownCard"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TypeDailyPerfCampaignDetailsCard"
         }
     ]
 }

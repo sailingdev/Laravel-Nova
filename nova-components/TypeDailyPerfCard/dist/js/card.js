@@ -6032,22 +6032,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -6061,8 +6045,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             triggerReload: 0,
             rowsList: {},
             metricWidth: this.card.metricWidth,
-
-            cardDataEndpoint: this.card.component + '/daily-summary-by-type-tags',
             columnData: ['All'],
             typeTag: [],
             startDate: '',
@@ -6079,25 +6061,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         FeedTotals: __WEBPACK_IMPORTED_MODULE_1__FeedTotals___default.a
     },
 
-    mounted: function mounted() {
-        // this.loadDailySummary()
-        this.loadTypeTags();
-    },
-
-
     methods: {
-        toggleFilter: function toggleFilter() {
-            this.filterOpen = this.filterOpen == true ? false : true;
-        },
-        loadTypeTags: function loadTypeTags() {
-            var _this = this;
-
-            axios.get('/nova-vendor/' + this.card.component + '/type-tags').then(function (response) {
-                _this.columnData = response.data.data.type_tags;
-            }).catch(function (error) {
-                _this.queryError = error.response.data.message;
-            });
-        },
         reloadData: function reloadData(param) {
             this.typeTag = param.columnDataSelected;
             this.startDate = param.startDate;
@@ -6109,7 +6073,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         columnChecker: function columnChecker() {
             return [{
-                title: 'Type Tags'
+                title: 'Type Tags',
+                load_from: '/api/v1/type-tags'
             }];
         }
     }
@@ -6296,6 +6261,22 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     name: 'CardQueryFilter',
@@ -6308,7 +6289,10 @@ exports.default = {
             search: '',
             offset: 0,
             limit: 10,
-            showSelectAllButton: false
+            showSelectAllButton: false,
+            filterOpen: false,
+            columnData: [],
+            queryError: {}
         };
     },
 
@@ -6316,17 +6300,33 @@ exports.default = {
         columnChecker: {
             type: Array
         },
-        filterOpen: {
+        selectMultiple: {
             type: Boolean,
-            default: false
-        },
-        columnData: {
-            type: Array,
-            required: true
-        }
+            default: true
+            // columnData: {
+            //     type: Array,
+            //     required: true
+            // }
+        } },
+    mounted: function mounted() {
+        this.loadData();
     },
+
     methods: {
+        loadData: function loadData() {
+            var _this = this;
+
+            axios.get(this.columnChecker[0].load_from).then(function (response) {
+                _this.columnData = response.data.data.type_tags;
+            }).catch(function (error) {
+                _this.queryError = error.response.data.message;
+            });
+        },
+        toggleFilter: function toggleFilter() {
+            this.filterOpen = this.filterOpen == true ? false : true;
+        },
         reloadData: function reloadData() {
+            this.filterOpen = false;
             this.$emit("reloadData", {
                 columnDataSelected: this.columnDataSelected,
                 startDate: this.startDate,
@@ -6340,10 +6340,10 @@ exports.default = {
             this.endDate = data;
         },
         selectAll: function selectAll() {
-            var _this = this;
+            var _this2 = this;
 
             var h = this.columnData.filter(function (country) {
-                return country.includes(_this.search);
+                return country.includes(_this2.search);
             });
             if (h.length > 0) {
                 this.columnDataSelected = h;
@@ -6356,11 +6356,11 @@ exports.default = {
             this.search = 'ol.';
         },
         searching: function searching(query) {
-            var _this2 = this;
+            var _this3 = this;
 
             this.search = query;
             var f = this.columnData.filter(function (country) {
-                return country.includes(_this2.search);
+                return country.includes(_this3.search);
             });
             if (f.length > 0) {
                 this.showSelectAllButton = true;
@@ -6372,10 +6372,10 @@ exports.default = {
     },
     computed: {
         filtered: function filtered() {
-            var _this3 = this;
+            var _this4 = this;
 
             return this.columnData.filter(function (country) {
-                return country.includes(_this3.search);
+                return country.includes(_this4.search);
             });
         },
         paginated: function paginated() {
@@ -6400,181 +6400,241 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.filterOpen
-    ? _c(
-        "div",
+  return _c(
+    "div",
+    { staticClass: "relative h-16 w-full mt-2 mb-2 text-right pt-4 pr-5" },
+    [
+      _c(
+        "button",
         {
           staticClass:
-            "rd__card-query-filter filter-wrapper p-4 w-60  text-left shadow-lg rounded-lg"
+            "rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline",
+          attrs: { type: "button" },
+          on: { click: _vm.toggleFilter }
         },
         [
-          _vm.columnChecker.length > 0
-            ? _c(
-                "div",
-                { staticClass: "v-select-container" },
-                [
-                  _c("div", { staticClass: "flex" }, [
-                    _c("h4", { staticClass: "p-2" }, [
-                      _vm._v(" " + _vm._s(_vm.columnChecker[0].title) + " ")
-                    ]),
-                    _vm._v(" "),
-                    _vm.showSelectAllButton
-                      ? _c("div", { staticClass: "selector-btn-holder" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm",
-                              on: { click: _vm.selectAll }
-                            },
-                            [_vm._v("Select all")]
-                          )
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.columnDataSelected.length > 0
-                      ? _c("div", { staticClass: "unselector-btn-holder" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm",
-                              on: { click: _vm.unselectAll }
-                            },
-                            [_vm._v(" Unselect all")]
-                          )
-                        ])
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-select",
-                    {
-                      staticClass: "rd__column-selector",
-                      attrs: {
-                        multiple: "",
-                        options: _vm.paginated,
-                        filterable: true
-                      },
-                      on: { search: _vm.searching },
-                      model: {
-                        value: _vm.columnDataSelected,
-                        callback: function($$v) {
-                          _vm.columnDataSelected = $$v
-                        },
-                        expression: "columnDataSelected"
-                      }
-                    },
-                    [
-                      _c(
-                        "li",
-                        {
-                          staticClass: "pagination text-grey-600",
-                          attrs: { slot: "list-footer" },
-                          slot: "list-footer"
-                        },
+          _c(
+            "div",
+            {
+              staticClass:
+                "dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded"
+            },
+            [
+              _c("icon", {
+                staticClass: "cursor-pointer text-60 -mb-1",
+                attrs: {
+                  type: "filter",
+                  viewBox: "0 0 17 17",
+                  height: "25",
+                  width: "25"
+                }
+              })
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _vm.filterOpen
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "rd__card-query-filter filter-wrapper p-4 w-60  text-left shadow-lg rounded-lg"
+            },
+            [
+              _vm.columnChecker.length > 0
+                ? _c(
+                    "div",
+                    { staticClass: "v-select-container" },
+                    _vm._l(_vm.columnChecker, function(column, index) {
+                      return _c(
+                        "div",
+                        { key: index },
                         [
-                          _c(
-                            "button",
-                            {
-                              attrs: { disabled: !_vm.hasPrevPage },
-                              on: {
-                                click: function($event) {
-                                  _vm.offset -= 10
-                                }
-                              }
-                            },
-                            [_vm._v("Prev")]
-                          ),
+                          _c("div", { staticClass: "flex" }, [
+                            _c("h4", { staticClass: "p-2" }, [
+                              _vm._v(
+                                " " +
+                                  _vm._s(_vm.columnChecker[index].title) +
+                                  " "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _vm.showSelectAllButton
+                              ? _c(
+                                  "div",
+                                  { staticClass: "selector-btn-holder" },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm",
+                                        on: { click: _vm.selectAll }
+                                      },
+                                      [_vm._v("Select all")]
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.columnDataSelected.length > 0
+                              ? _c(
+                                  "div",
+                                  { staticClass: "unselector-btn-holder" },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm",
+                                        on: { click: _vm.unselectAll }
+                                      },
+                                      [_vm._v(" Unselect all")]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
                           _vm._v(" "),
                           _c(
-                            "button",
+                            "v-select",
                             {
-                              attrs: { disabled: !_vm.hasNextPage },
-                              on: {
-                                click: function($event) {
-                                  _vm.offset += 10
-                                }
+                              staticClass: "rd__column-selector",
+                              attrs: {
+                                multiple: _vm.selectMultiple ? true : false,
+                                options: _vm.paginated,
+                                filterable: true
+                              },
+                              on: { search: _vm.searching },
+                              model: {
+                                value: _vm.columnDataSelected,
+                                callback: function($$v) {
+                                  _vm.columnDataSelected = $$v
+                                },
+                                expression: "columnDataSelected"
                               }
                             },
-                            [_vm._v("Next")]
+                            [
+                              _c(
+                                "li",
+                                {
+                                  staticClass: "pagination text-grey-600",
+                                  attrs: { slot: "list-footer" },
+                                  slot: "list-footer"
+                                },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      attrs: { disabled: !_vm.hasPrevPage },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.offset -= 10
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Prev")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      attrs: { disabled: !_vm.hasNextPage },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.offset += 10
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Next")]
+                                  )
+                                ]
+                              )
+                            ]
                           )
-                        ]
+                        ],
+                        1
                       )
-                    ]
+                    }),
+                    0
                   )
-                ],
-                1
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex mt-4" }, [
-            _c(
-              "div",
-              { staticClass: "mb-5 flex-grow mr-2" },
-              [
-                _c("h4", { staticClass: "p-2 text-base text-80 font-bold" }, [
-                  _vm._v("Start Date")
-                ]),
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex mt-4" }, [
+                _c(
+                  "div",
+                  { staticClass: "mb-5 flex-grow mr-2" },
+                  [
+                    _c(
+                      "h4",
+                      { staticClass: "p-2 text-base text-80 font-bold" },
+                      [_vm._v("Start Date")]
+                    ),
+                    _vm._v(" "),
+                    _c("date-time-picker", {
+                      attrs: {
+                        placeholder: new Date().toDateString(),
+                        value: _vm.startDate,
+                        dateFormat: "Y-m-d",
+                        enableTime: false,
+                        altFormat: "Y-m-d"
+                      },
+                      on: { change: _vm.startDateChanged }
+                    })
+                  ],
+                  1
+                ),
                 _vm._v(" "),
-                _c("date-time-picker", {
-                  attrs: {
-                    placeholder: new Date().toDateString(),
-                    value: _vm.startDate,
-                    dateFormat: "Y-m-d",
-                    enableTime: false,
-                    altFormat: "Y-m-d"
+                _c(
+                  "div",
+                  { staticClass: "mb-5 flex-grow ml-2" },
+                  [
+                    _c(
+                      "h4",
+                      { staticClass: "p-2 text-base text-80 font-bold" },
+                      [_vm._v("End Date")]
+                    ),
+                    _vm._v(" "),
+                    _c("date-time-picker", {
+                      attrs: {
+                        placeholder: new Date().toDateString(),
+                        value: _vm.endDate,
+                        dateFormat: "Y-m-d",
+                        enableTime: false,
+                        altFormat: "Y-m-d"
+                      },
+                      on: { change: _vm.endDateChanged }
+                    })
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex items-center justify-between" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-sm",
+                    attrs: { type: "button" },
+                    on: { click: _vm.reloadData }
                   },
-                  on: { change: _vm.startDateChanged }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "mb-5 flex-grow ml-2" },
-              [
-                _c("h4", { staticClass: "p-2 text-base text-80 font-bold" }, [
-                  _vm._v("End Date")
-                ]),
+                  [_vm._v("\n                Load\n            ")]
+                ),
                 _vm._v(" "),
-                _c("date-time-picker", {
-                  attrs: {
-                    placeholder: new Date().toDateString(),
-                    value: _vm.endDate,
-                    dateFormat: "Y-m-d",
-                    enableTime: false,
-                    altFormat: "Y-m-d"
-                  },
-                  on: { change: _vm.endDateChanged }
+                _c("p", {
+                  staticClass:
+                    "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker",
+                  attrs: { href: "#" }
                 })
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex items-center justify-between" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-sm",
-                attrs: { type: "button" },
-                on: { click: _vm.reloadData }
-              },
-              [_vm._v("\n            Load\n        ")]
-            ),
-            _vm._v(" "),
-            _c("p", {
-              staticClass:
-                "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker",
-              attrs: { href: "#" }
-            })
-          ])
-        ]
-      )
-    : _vm._e()
+              ])
+            ]
+          )
+        : _vm._e()
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -62830,57 +62890,14 @@ var render = function() {
   return _c(
     "card",
     {
-      staticClass: "flex flex-col items-center justify-center ok",
+      staticClass: "flex flex-col items-center justify-center",
       staticStyle: { "min-height": "200px" }
     },
     [
-      _c(
-        "div",
-        { staticClass: "relative h-16 w-full mt-2 mb-2 text-right pt-4 pr-5" },
-        [
-          _c(
-            "button",
-            {
-              staticClass:
-                "rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline",
-              attrs: { type: "button" },
-              on: { click: _vm.toggleFilter }
-            },
-            [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded"
-                },
-                [
-                  _c("icon", {
-                    staticClass: "cursor-pointer text-60 -mb-1",
-                    attrs: {
-                      type: "filter",
-                      viewBox: "0 0 17 17",
-                      height: "25",
-                      width: "25"
-                    }
-                  })
-                ],
-                1
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("CardQueryFilter", {
-            attrs: {
-              filterOpen: _vm.filterOpen,
-              columnChecker: _vm.columnChecker,
-              columnData: _vm.columnData,
-              filterEndpoint: _vm.cardDataEndpoint
-            },
-            on: { reloadData: _vm.reloadData }
-          })
-        ],
-        1
-      ),
+      _c("CardQueryFilter", {
+        attrs: { columnChecker: _vm.columnChecker },
+        on: { reloadData: _vm.reloadData }
+      }),
       _vm._v(" "),
       _c(
         "div",
@@ -62922,7 +62939,8 @@ var render = function() {
         ],
         1
       )
-    ]
+    ],
+    1
   )
 }
 var staticRenderFns = []

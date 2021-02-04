@@ -1,48 +1,64 @@
 <template>
-    <div v-if="filterOpen" class="rd__card-query-filter filter-wrapper p-4 w-60  text-left shadow-lg rounded-lg">
+    <div class="relative h-16 w-full mt-2 mb-2 text-right pt-4 pr-5">
+        <button 
+            @click="toggleFilter"
+            type="button" class="rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline">
+            <div class="dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none bg-30 px-3 border-2 border-30 rounded">
+                <icon
+                    type="filter"
+                    viewBox="0 0 17 17"
+                    height="25"
+                    width="25"
+                    class="cursor-pointer text-60 -mb-1"
+                /> 
+            </div>
+        </button>
+        <div v-if="filterOpen" class="rd__card-query-filter filter-wrapper p-4 w-60  text-left shadow-lg rounded-lg">
         
-        <div v-if="columnChecker.length > 0" class="v-select-container">
-            <div class="flex">
-                <h4 class="p-2"> {{ columnChecker[0].title }} </h4> 
-                <div class="selector-btn-holder" v-if="showSelectAllButton" > <button class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
-                    @click="selectAll" >Select all</button> 
-                </div>
-                <div class="unselector-btn-holder" v-if="columnDataSelected.length > 0"> <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
-                    @click="unselectAll" > Unselect all</button> 
-                </div>
+           <div v-if="columnChecker.length > 0" class="v-select-container">
+               <div v-for="(column, index) in columnChecker" :key="index">
+                    <div class="flex">
+                        <h4 class="p-2"> {{ columnChecker[index].title }} </h4> 
+                        <div class="selector-btn-holder" v-if="showSelectAllButton" > <button class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
+                            @click="selectAll" >Select all</button> 
+                        </div>
+                        <div class="unselector-btn-holder" v-if="columnDataSelected.length > 0"> <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
+                            @click="unselectAll" > Unselect all</button> 
+                        </div>
+                    </div>
+                
+                    <v-select class="rd__column-selector" v-model="columnDataSelected" :multiple="selectMultiple ? true :  false" 
+                        :options="paginated" @search="searching" :filterable="true">
+                        <li slot="list-footer" class="pagination text-grey-600">
+                            <button @click="offset -= 10" :disabled="!hasPrevPage">Prev</button>
+                            <button @click="offset += 10" :disabled="!hasNextPage">Next</button>
+                        </li>
+                    </v-select> 
+               </div>
             </div>
-            
-            <v-select class="rd__column-selector" v-model="columnDataSelected" multiple 
-                :options="paginated" @search="searching" :filterable="true">
-                    <li slot="list-footer" class="pagination text-grey-600">
-                        <button @click="offset -= 10" :disabled="!hasPrevPage">Prev</button>
-                        <button @click="offset += 10" :disabled="!hasNextPage">Next</button>
-                    </li>
-                </v-select>
-          
-        </div>
-       
-        <div class="flex mt-4">
-            <div class="mb-5 flex-grow mr-2">
-                 <h4 class="p-2 text-base text-80 font-bold">Start Date</h4>
-                <date-time-picker :placeholder="new Date().toDateString()" @change="startDateChanged"
-                    :value="startDate" :dateFormat="'Y-m-d'" :enableTime="false" :altFormat="'Y-m-d'"></date-time-picker>
+        
+            <div class="flex mt-4">
+                <div class="mb-5 flex-grow mr-2">
+                    <h4 class="p-2 text-base text-80 font-bold">Start Date</h4>
+                    <date-time-picker :placeholder="new Date().toDateString()" @change="startDateChanged"
+                        :value="startDate" :dateFormat="'Y-m-d'" :enableTime="false" :altFormat="'Y-m-d'"></date-time-picker>
+                </div>
+
+                <div class="mb-5 flex-grow ml-2">
+                    <h4 class="p-2 text-base text-80 font-bold">End Date</h4>
+                    <date-time-picker :placeholder="new Date().toDateString()" @change="endDateChanged"
+                        :value="endDate" :dateFormat="'Y-m-d'" :enableTime="false" :altFormat="'Y-m-d'"></date-time-picker>
+                </div>
             </div>
 
-            <div class="mb-5 flex-grow ml-2">
-                <h4 class="p-2 text-base text-80 font-bold">End Date</h4>
-                <date-time-picker :placeholder="new Date().toDateString()" @change="endDateChanged"
-                    :value="endDate" :dateFormat="'Y-m-d'" :enableTime="false" :altFormat="'Y-m-d'"></date-time-picker>
+            <div class="flex items-center justify-between">
+                <button @click="reloadData" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-sm" type="button">
+                    Load
+                </button>
+                <p class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#"></p>
             </div>
+        
         </div>
-
-        <div class="flex items-center justify-between">
-            <button @click="reloadData" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-sm" type="button">
-                Load
-            </button>
-            <p class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#"></p>
-        </div>
-       
     </div> 
 </template>
 <script>
@@ -57,24 +73,42 @@ export default {
             search: '',
             offset: 0,
             limit: 10,
-            showSelectAllButton: false
+            showSelectAllButton: false,
+            filterOpen: false,
+            columnData: [],
+            queryError: {}
         }
     },
     props: {
         columnChecker: {
             type: Array
         },
-        filterOpen: {
+        selectMultiple: {
             type: Boolean,
-            default: false
-        },
-        columnData: {
-            type: Array,
-            required: true
+            default: true
         }
-    }, 
+        // columnData: {
+        //     type: Array,
+        //     required: true
+        // }
+    },
+    mounted() {
+        this.loadData()
+    },
     methods: {
+        loadData() { 
+            axios.get(this.columnChecker[0].load_from)
+            .then(response => { 
+                this.columnData = response.data.data.type_tags
+            }).catch(error => {    
+                this.queryError = error.response.data.message
+            }) 
+        },
+        toggleFilter() {
+            this.filterOpen = this.filterOpen == true ? false :  true 
+        },
         reloadData() {
+            this.filterOpen = false
             this.$emit("reloadData", {
                 columnDataSelected: this.columnDataSelected,
                 startDate: this.startDate,

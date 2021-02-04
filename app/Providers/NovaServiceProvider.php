@@ -3,6 +3,7 @@
 namespace App\Providers;
  
 use App\Nova\Dashboards\FbReporting\WebsiteBreakDownDashboard;
+use App\Nova\Dashboards\FbReporting\CampaignDetailsDashboard;
 use FbReporting\TypeDailyPerfCard\TypeDailyPerfCard; 
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
@@ -76,6 +77,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             new WebsiteBreakDownDashboard(),
+            new CampaignDetailsDashboard()
         ];
     }
 
