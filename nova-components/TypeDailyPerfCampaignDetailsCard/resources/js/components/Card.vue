@@ -1,7 +1,7 @@
 <template>
     <card class="flex flex-col items-center justify-center">
-        <div class="flex w-full" style="border: 2px solid red">
-            <nav class="bg-grey-light p-3 rounded font-sans w-full m-4 flex-grow"  style="border: 2px solid blue">
+        <div class="flex w-full">
+            <nav class="bg-grey-light p-3 rounded font-sans w-full m-4 flex-grow">
                 <!-- <ul class="breadcrumb">
                     <li><a href="#">Tag: {{ typeTag }} </a></li>
                     <li><a href="#">start: {{ startDate }} </a></li>

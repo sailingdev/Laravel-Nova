@@ -62742,35 +62742,27 @@ var render = function() {
     "card",
     { staticClass: "flex flex-col items-center justify-center" },
     [
-      _c(
-        "div",
-        {
-          staticClass: "flex w-full",
-          staticStyle: { border: "2px solid red" }
-        },
-        [
-          _c("nav", {
-            staticClass:
-              "bg-grey-light p-3 rounded font-sans w-full m-4 flex-grow",
-            staticStyle: { border: "2px solid blue" }
-          }),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "flex-grow-0" },
-            [
-              _c("CardQueryFilter", {
-                attrs: {
-                  columnChecker: _vm.columnChecker,
-                  selectMultiple: false
-                },
-                on: { reloadData: _vm.reloadData }
-              })
-            ],
-            1
-          )
-        ]
-      ),
+      _c("div", { staticClass: "flex w-full" }, [
+        _c("nav", {
+          staticClass:
+            "bg-grey-light p-3 rounded font-sans w-full m-4 flex-grow"
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "flex-grow-0" },
+          [
+            _c("CardQueryFilter", {
+              attrs: {
+                columnChecker: _vm.columnChecker,
+                selectMultiple: false
+              },
+              on: { reloadData: _vm.reloadData }
+            })
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
       _c("h1", { staticClass: "textcenter" }, [
         _vm._v(" WORK IN PROGRESS (WIP)  ")
