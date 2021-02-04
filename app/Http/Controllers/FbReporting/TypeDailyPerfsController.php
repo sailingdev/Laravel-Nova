@@ -22,7 +22,7 @@ class TypeDailyPerfsController extends Controller
     {     
         $typeTags = $sm->generateStringFromArray($request->type_tag, ','); 
        
-        $dailySummaryByTags = $typeDailyPerfService->loadDailySummaryByTags($typeTags, $request->start_date, $request->end_date);
+        $dailySummaryByTags = $typeDailyPerfService->loadHomepageDailySummaryByTags($typeTags, $request->start_date, $request->end_date);
         
         return $this->successResponse('Daily summary returned successfully', [
             'daily_summary' => [

@@ -17,12 +17,13 @@
         
            <div v-if="columnChecker.length > 0" class="v-select-container">
                <div v-for="(column, index) in columnChecker" :key="index">
+
                     <div class="flex">
                         <h4 class="p-2"> {{ columnChecker[index].title }} </h4> 
-                        <div class="selector-btn-holder" v-if="showSelectAllButton" > <button class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
+                        <div class="selector-btn-holder" v-if="selectMultiple && showSelectAllButton" > <button class="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
                             @click="selectAll" >Select all</button> 
                         </div>
-                        <div class="unselector-btn-holder" v-if="columnDataSelected.length > 0"> <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
+                        <div class="unselector-btn-holder" v-if="selectMultiple && columnDataSelected.length > 0"> <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow-sm" 
                             @click="unselectAll" > Unselect all</button> 
                         </div>
                     </div>

@@ -30,21 +30,13 @@ class TypeDailyPerfService
      */
     public $suffixInflection = false;
 
-    /**
-     * @var string
-     */
-    protected $startDate;
-
-    /**
-     * @var string
-     */
-    protected $endDate;
-
    
-    public function loadDailySummaryByTags(?string $typeTag, $startDate=null, $endDate=null)
+    public function loadHomepageDailySummaryByTags(?string $typeTag, $startDate=null, $endDate=null)
     {
         
-        $this->setDates($startDate, $endDate); 
+        $dates = $this->setDates($startDate, $endDate); 
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date']; 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
         
         $query = DB::select(
@@ -71,7 +63,7 @@ class TypeDailyPerfService
             ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100,2) AS 'tot_roi' 
             FROM fb_reporting.type_daily_perf
             WHERE feed = 'all'
-            AND (date >= '$this->startDate' AND date <= '$this->endDate')
+            AND (date >= '$startDate' AND date <= '$endDate')
             $typeTagClause
             GROUP BY date ORDER BY date DESC) as results_all 
 
@@ -83,7 +75,7 @@ class TypeDailyPerfService
             ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100 ,2) AS yahoo_roi 
             FROM fb_reporting.type_daily_perf
             WHERE feed = 'yahoo'
-            AND (date >= '$this->startDate' AND date <= '$this->endDate')
+            AND (date >= '$startDate' AND date <= '$endDate')
             $typeTagClause 
             
             GROUP BY date ORDER BY date DESC) as results_yahoo 
@@ -97,7 +89,7 @@ class TypeDailyPerfService
             ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100, 2) AS media_roi 
             FROM fb_reporting.type_daily_perf
             WHERE feed = 'media'
-            AND (date >= '$this->startDate' AND date <= '$this->endDate')
+            AND (date >= '$startDate' AND date <= '$endDate')
             $typeTagClause
             GROUP BY date ORDER BY date DESC) as results_media
             ON results_all.date = results_media.date
@@ -224,11 +216,11 @@ class TypeDailyPerfService
      * @param mixed $startDate
      * @param mixed $endDate
      * 
-     * @return this
+     * @return array
      */
-    protected function setDates($startDate, $endDate)
+    protected function setDates($startDate, $endDate): array
     {
-        $this->endDate = $endDate === null ? date('Y-m-d') : $endDate;
+        $setEndDate = $endDate === null ? date('Y-m-d') : $endDate;
 
         if ($endDate !== null) {
             try {
@@ -241,7 +233,7 @@ class TypeDailyPerfService
         if ($startDate !== null) {
             try {
                 Carbon::parse($endDate);
-                $this->startDate = $startDate;
+                $setStartDate = $startDate;
             } catch (\Exception $e) {
                abort(422, 'Start date is not a valid date');
             }
@@ -250,11 +242,14 @@ class TypeDailyPerfService
             $dateSp = date('d') - 1;
             // if today happens to be first day of the month, it means end date should also be today since by default,
             // we are only loading the data for all the days of the current month
-            $this->startDate = date('d') === 1 ? $endDate : 
+            $setStartDate = date('d') === 1 ? $endDate : 
                 date('Y-m-d', strtotime('-' . $dateSp . ' days', strtotime(date('Y-m-d')) ) );
         }
         
-        return $this;
+        return [
+            'start_date' => $setStartDate,
+            'end_date' => $setEndDate
+        ];
     }
 
     /** 
@@ -313,37 +308,13 @@ class TypeDailyPerfService
      */
     public function loadWebsiteDailySummary(?string $typeTag, $startDate, $endDate)
     {
-        $this->setDates($startDate, $endDate);
+        $dates = $this->setDates($startDate, $endDate); 
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date']; 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
         $websiteBreakdown = [];
         
-        // $websites = DB::select("SELECT site
-        //     FROM fb_reporting.type_daily_perf 
-        //     WHERE site != 'all' 
-        //     AND (date >= '$this->startDate' AND date <= '$this->endDate')
-        //     $typeTagClause
-        //     GROUP BY site ORDER BY site DESC
-        // ");
-        
-        // foreach ($websites as $key => $row) {
-        //     $query = DB::select("SELECT date, 
-        //         SUM(tot_spend) AS tot_spend, 
-        //         SUM(tot_revenue) AS tot_revenue, 
-        //         SUM(tot_profit) AS tot_profit, 
-        //         ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100,2) AS tot_roi
-        //             FROM fb_reporting.type_daily_perf 
-        //             WHERE site = '$row->site' 
-        //             AND (date >= '$this->startDate' AND date <= '$this->endDate')
-        //             $typeTagClause
-        //             GROUP BY date ORDER BY date DESC
-        //         ");
-                
-                
-        //     $websiteBreakdown[] = [
-        //         'website' => $row->site,
-        //         'totals' => $this->prepareData($query)
-        //     ];
-        // }
+       
 
         $query = DB::select("SELECT site AS 'site',
             SUM(tot_spend) AS tot_spend,
@@ -352,7 +323,7 @@ class TypeDailyPerfService
             ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi
             FROM fb_reporting.type_daily_perf
             WHERE
-            (date >= '$this->startDate' AND date <= '$this->endDate')
+            (date >= '$startDate' AND date <= '$endDate')
                 AND site != 'all'
                 $typeTagClause
                 GROUP BY site
@@ -383,14 +354,16 @@ class TypeDailyPerfService
      */
     public function loadAllWebsiteDailySummary(?string $typeTag, $startDate, $endDate)
     {
-        $this->setDates($startDate, $endDate);
+        $dates = $this->setDates($startDate, $endDate); 
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date']; 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
         $websiteBreakdown = [];
         
         $websites = DB::select("SELECT site
             FROM fb_reporting.type_daily_perf 
             WHERE site != 'all' 
-            AND (date >= '$this->startDate' AND date <= '$this->endDate')
+            AND (date >= '$startDate' AND date <= '$endDate')
             $typeTagClause
             GROUP BY site ORDER BY site DESC
         ");
@@ -403,7 +376,7 @@ class TypeDailyPerfService
                 ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100,2) AS tot_roi
                     FROM fb_reporting.type_daily_perf 
                     WHERE site = '$row->site' 
-                    AND (date >= '$this->startDate' AND date <= '$this->endDate')
+                    AND (date >= '$startDate' AND date <= '$endDate')
                     $typeTagClause
                     GROUP BY date ORDER BY date DESC
                 ");
@@ -429,7 +402,9 @@ class TypeDailyPerfService
      */
     public function loadCampaignDailySummary(?string $typeTag, $startDate, $endDate)
     {
-        $this->setDates($startDate, $endDate);
+        $dates = $this->setDates($startDate, $endDate); 
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date']; 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
             
         $query = DB::select("SELECT type_tag AS 'Type Tag',
@@ -442,7 +417,7 @@ class TypeDailyPerfService
             ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS cpa
             FROM fb_reporting.type_daily_perf
             WHERE
-            (date >= '$this->startDate' AND date <= '$this->endDate')
+            (date >= '$startDate' AND date <= '$endDate')
                 AND site = 'all'
                 $typeTagClause
                 GROUP BY type_tag
@@ -457,64 +432,61 @@ class TypeDailyPerfService
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * to be deleted. Only used when unable to get data from the Database
+     * Campaign detials feed totals
+     * 
+     * @param string $typeTag
+     * @param mixed $startDate=null
+     * @param mixed $endDate=null
+     * 
+     * @return array
      */
-    public function loadMock()
+    public function loadCampaignDetailsFeedTotals(string $typeTag, $startDate=null, $endDate=null): array
     {
-        $query = []; 
-    
-        for($i = 1; $i <= 23; $i++)
-        {
-            $newObj = new \stdClass;
-            $newObj->date = date('Y-m-d', strtotime('-'.$i.' days', strtotime(date('Y-m-d'))));
-            $newObj->tot_spend = mt_rand(5000, 8000);
-            $newObj->tot_revenue = mt_rand(16000, 21000);
-            $newObj->tot_profit = mt_rand(6000, 14000);
-            $newObj->tot_roi =  round($this->randFloat() * 100, 2);
-
-            $newObj->yahoo_spend = mt_rand(2000, 3000);
-            $newObj->yahoo_revenue = mt_rand(4000, 9000);
-            $newObj->yahoo_profit = mt_rand(3000, 7000);
-            $newObj->yahoo_roi =  round($this->randFloat() * 100, 2);
-
-            $newObj->media_spend = mt_rand(2000, 4000);
-            $newObj->media_revenue = mt_rand(3000, 8000);
-            $newObj->media_profit = mt_rand(4000, 8000);
-            $newObj->media_roi =  round($this->randFloat() * 100, 2);
-            $query[] = $newObj;
-        }
+        
+        $dates = $this->setDates($startDate, $endDate);
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date'];
+        
+        $query = DB::select("SELECT feed,
+            SUM(tot_spend) AS tot_spend,
+            SUM(tot_revenue) AS tot_revenue,
+            SUM(tot_profit) AS tot_profit, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
+            SUM(tot_clicks) AS tot_clicks, 
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS cpa
+            FROM fb_reporting.type_daily_perf
+            WHERE
+            (date >= '$startDate' AND date <= '$endDate')
+                AND type_tag = '$typeTag'
+                AND feed != 'all'
+                GROUP BY feed
+                ORDER BY feed ASC
+            "
+        );  
+        
         return $query;
     }
 
-    /**
-     * to be deleted. Only used when unable to get data from the Database
-     */
-    function randFloat($st_num=0,$end_num=1,$mul=1000000)
-    {
-        if ($st_num>$end_num) return false;
-        return mt_rand($st_num*$mul,$end_num*$mul)/$mul;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 }
