@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('campaign-details-by-type-tags/feed-totals', [CampaignDetailsController::class, 'feedTotals']);
+Route::get('campaign-details-by-type-tags/daily-totals', [CampaignDetailsController::class, 'dailyTotals']);
+Route::get('campaign-details-by-type-tags/website-totals', [CampaignDetailsController::class, 'websiteTotals']);

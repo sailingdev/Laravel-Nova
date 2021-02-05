@@ -6,6 +6,7 @@ use App\Labs\StringManipulator;
 use App\Models\FbReporting\TypeDailyPerf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class TypeDailyPerfService
 {
@@ -98,15 +99,6 @@ class TypeDailyPerfService
 
 
         );
-        
-        // $query = $this->loadMock();
-
-        // array_map(function($row) {
-        //     $row->date = Carbon::parse($row->date)->toFormattedDateString();
-        //     return $row;
-        // }, $query);
-       
-        // session(['daily_summary_by_tags' => $query]);
          
         return $query;
     }
@@ -125,11 +117,12 @@ class TypeDailyPerfService
     {
       
         $cpRows = $data;
-        
+      
         if ($type !== "tot_roi") {
             $totalSum = (float) array_reduce($cpRows, function ($agg, $val) use ($type) {
                 return $agg + $val->{$type}; 
-            }, 0);
+            }, 0); 
+          
         }
         else { 
             $totalSum = $this->totalSumCollector['tot_profit'] !== 0 && 
@@ -150,7 +143,7 @@ class TypeDailyPerfService
 
         $metricObj = new \stdClass;
         $metricObj->value = $type != 'tot_roi' ?  $totalSum : round($totalSum * 100, 2);
-        $metricObj->prefix = $valueType == "sum" ? $this->prefix : '';
+        $metricObj->prefix = $valueType == "sum" && $type != 'tot_clicks' ? $this->prefix : '';
         $metricObj->suffix = $valueType === "percentage" ? '%' : '';
         $metricObj->suffixInflection = $this->suffixInflection; 
         $metricObj->trend = $trend;
@@ -181,8 +174,8 @@ class TypeDailyPerfService
             'media_profit' => $this->prefix,
             'media_revenue' => $this->prefix,
             'media_roi' => $this->suffix,
-            'cpa' => $this->prefix,
-            'rpc' => $this->prefix
+            'tot_cpa' => $this->prefix,
+            'tot_rpc' => $this->prefix
         ]; 
       
         if (count($lData) > 0) {
@@ -202,8 +195,17 @@ class TypeDailyPerfService
                 foreach ($rows as $column => $value) {
                     if (array_key_exists($column, $appendables)) {
                        $prepVal = $value === null ? 0 : $value;
-                       $lData[$key]->{$column} = $appendables[$column] === $this->prefix ? 
-                            $appendables[$column] . $prepVal : $prepVal . $this->suffix; 
+                    //    $lData[$key]->{$column} = $appendables[$column] === $this->prefix ? 
+                    //         $appendables[$column] . $prepVal : $prepVal . $this->suffix; 
+                        if ($appendables[$column] === $this->prefix) {
+                            $lData[$key]->{$column} =  $appendables[$column] . $prepVal;
+                        }
+                        else if ($appendables[$column] === $this->suffix) {
+                            $lData[$key]->{$column} =  $prepVal . $this->suffix;
+                        }
+                        else {
+                            $lData[$key]->{$column} = $prepVal;
+                        }
                     }
                 }
             } 
@@ -276,25 +278,16 @@ class TypeDailyPerfService
 
     public function getAllTypeTags()
     {
-        $typeTags = [];
-        // TypeDailyPerf::select('type_tag')->distinct('type_tag')->chunk(5000000, function($query) {
-        //     foreach ($query as $value) {
-        //         $typeTags[] = $query->type_tag;
-        //     }
-        // });
-
-        foreach (TypeDailyPerf::select('type_tag')->groupBy('type_tag')->cursor() as $query) {
-            $typeTags[] = $query->type_tag;
-        }
-
-        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        // for ($i = 0; $i < 1000; $i++) {
-        //     $characters = str_shuffle($characters);
-        //     // $typeTags[] = ucfirst(substr($characters, 0, 10));
-        //     array_push($typeTags, ucfirst(substr($characters, 0, 10)));
-        // }
        
-        return $typeTags;
+        return session('type_tags', function () {
+            $typeTags = [];
+            foreach (TypeDailyPerf::select('type_tag')->groupBy('type_tag')->cursor() as $query) {
+                $typeTags[] = $query->type_tag;
+            }
+            return $typeTags;
+            session(['type_tags' => $typeTags]);
+        });
+        
     }
 
     /**
@@ -312,10 +305,6 @@ class TypeDailyPerfService
         $startDate = $dates['start_date'];
         $endDate = $dates['end_date']; 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
-        $websiteBreakdown = [];
-        
-       
-
         $query = DB::select("SELECT site AS 'site',
             SUM(tot_spend) AS tot_spend,
             SUM(tot_revenue) AS tot_revenue,
@@ -329,14 +318,6 @@ class TypeDailyPerfService
                 GROUP BY site
             "
         ); 
-
-        // foreach (TypeDailyPerf::select(DB::raw("SELECT site, SUM(tot_spend) AS tot_spend, SUM(tot_revenue) AS tot_revenue,
-        //    SUM(tot_profit) AS tot_profit,  
-        //    ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi");
-        //     // ->SUM()
-        //     // ->groupBy('type_tag')->cursor() as $query) {
-        //     // $websiteBreakdown[] = $query->type_tag;
-        // }
          
         $data =  $this->prepareData($query);
 
@@ -413,8 +394,8 @@ class TypeDailyPerfService
             SUM(tot_profit) AS tot_profit, 
             ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
-            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS rpc, 
-            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS cpa
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS tot_rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS tot_cpa
             FROM fb_reporting.type_daily_perf
             WHERE
             (date >= '$startDate' AND date <= '$endDate')
@@ -441,7 +422,7 @@ class TypeDailyPerfService
      * 
      * @return array
      */
-    public function loadCampaignDetailsFeedTotals(string $typeTag, $startDate=null, $endDate=null): array
+    public function loadCampaignDetailsFeedTotals($typeTag, $startDate=null, $endDate=null): array
     {
         
         $dates = $this->setDates($startDate, $endDate);
@@ -469,6 +450,112 @@ class TypeDailyPerfService
         return $query;
     }
 
+
+    /**
+     * Campaign detalis metric daily totals
+     * 
+     * @param string $typeTag
+     * @param mixed $startDate=null
+     * @param mixed $endDate=null
+     * 
+     * @return array
+     */
+    public function loadCampaignDetailsDailyTotals(string $typeTag, $startDate=null, $endDate=null) 
+    {
+        $dates = $this->setDates($startDate, $endDate); 
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date'];
+        
+        $query = DB::select(
+            
+            "SELECT DATE_FORMAT(results_all.date, '%Y-%m-%d') AS `date`,
+            results_all.tot_spend,
+            results_all.tot_revenue,
+            results_all.tot_profit,
+            results_all.tot_clicks,
+            results_all.tot_roi,
+            results_all.tot_rpc,
+            results_all.tot_cpa
+
+            FROM 
+
+            (SELECT date, 
+            SUM(tot_spend) AS tot_spend, 
+            SUM(tot_revenue)AS tot_revenue, 
+            SUM(tot_profit) AS tot_profit, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100,2) AS 'tot_roi',
+            SUM(tot_clicks) AS tot_clicks, 
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS tot_rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS tot_cpa
+            FROM fb_reporting.type_daily_perf
+            WHERE (date >= '$startDate' AND date <= '$endDate')
+            AND type_tag = '$typeTag'
+            GROUP BY date ORDER BY date ASC) as results_all 
+            "
+        ); 
+
+        
+        return $query;
+    }
+
+
+
+    /**
+     * @param string $typeTag
+     * 
+     * @return array
+     */
+    public function loadCampaignDetailsTargetCpaTotals(string $typeTag)
+    { 
+        $query = DB::select("SELECT COUNT(*) AS 'days_available', 
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS 'target_cpa'
+            FROM fb_reporting.type_daily_perf
+            WHERE
+            date BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND NOW() 
+            AND type_tag = '$typeTag'
+            AND feed = 'all'
+        ");
+
+        return $query;
+    }
+
+
+     /**
+     * Campaign details by website totals
+     * 
+     * @param string $typeTag
+     * @param mixed $startDate=null
+     * @param mixed $endDate=null
+     * 
+     * @return array
+     */
+    public function loadCampaignDetailsWesbiteTotals($typeTag, $startDate=null, $endDate=null): array
+    {
+        
+        $dates = $this->setDates($startDate, $endDate);
+        $startDate = $dates['start_date'];
+        $endDate = $dates['end_date'];
+        
+        $query = DB::select("SELECT site,
+            SUM(tot_spend) AS tot_spend,
+            SUM(tot_revenue) AS tot_revenue,
+            SUM(tot_profit) AS tot_profit, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
+            SUM(tot_clicks) AS tot_clicks, 
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS cpa
+            FROM fb_reporting.type_daily_perf
+            WHERE
+            (date >= '$startDate' AND date <= '$endDate')
+                AND type_tag = '$typeTag'
+                AND site != 'all'
+                GROUP BY site
+                ORDER BY site ASC
+            "
+        );  
+        
+        return $query;
+    }
 
 
 

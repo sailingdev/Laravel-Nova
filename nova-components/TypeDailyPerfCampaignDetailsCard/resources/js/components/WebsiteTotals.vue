@@ -1,8 +1,8 @@
 <template>
     <div class="w-full pt-5 pb-5">
-
-        <h1 class="text-center p-4">Break Down By Feed</h1>
-                 
+        
+        <h1 class="text-center p-4">Break Down By Website</h1>
+        
         <div v-if="loading" class="rounded-lg flex items-center justify-center relative">
             <loader class="text-60" />
         </div>
@@ -10,7 +10,7 @@
         <div v-else >
 
             <div v-if="typeTag == ''">
-                <div class="px-4 py-3 text-center leading-normal text-gray-100 bg-gray-500 rounded-lg" role="alert">
+                <div class="px-4 py-3 text-center leading-normal text-gray-100 bg-gray-400 rounded-lg" role="alert">
                     Please select a type tag
                 </div>
             </div>
@@ -43,7 +43,7 @@
 <script>
 import DynamicTable from '../../../../../nova/resources/js/components/RevenueDriver/DynamicTable'
 export default {
-    name: "FeedTotals",
+    name: "WebsiteTotals",
     data() {
         return {
             loading: false,
@@ -78,68 +78,34 @@ export default {
     watch: {
         triggerReload(newVal, oldVal) {
             if (newVal > oldVal && this.typeTag != '') {
-                this.loadFeedTotals()
+                this.loadWebsiteTotals()
             }
         }
     },
     computed: {
         dailyTotalsTableHeader() {
             return [
-                'FEED', 'SPEND', 'REVENUE', 'PROFIT', 'ROI', 'CLICKS', 'RPC', 'CPA'
+                'WEBSITE', 'SPEND', 'REVENUE', 'PROFIT', 'ROI', 'CLICKS', 'RPC', 'CPA'
             ]
         },
     },
     methods: {
 
-        loadFeedTotals() {
+        loadWebsiteTotals() {
             this.loading = true
-            axios.get('/nova-vendor/' + this.card.component + '/campaign-details-by-type-tags/feed-totals?' + 
+            axios.get('/nova-vendor/' + this.card.component + '/campaign-details-by-type-tags/website-totals?' + 
                 'type_tag=' +  this.typeTag + '&' + 
                 'start_date=' + this.startDate + '&' + 
                 'end_date=' + this.endDate
             )
             .then(response => {  
-                this.data = response.data.data.feed_totals
-
-                // this.dailyTotalSpendTrendMetric = 
-                //     this.prepareMetricTrendChartData('tot_spend', response.data.data.daily_summary.metrics.tot_spend)
-                
-                // this.dailyTotalRevenueTrendMetric = 
-                //     this.prepareMetricTrendChartData('tot_revenue', response.data.data.daily_summary.metrics.tot_revenue)
-
-                // this.dailyTotalProfitTrendMetric = 
-                //     this.prepareMetricTrendChartData('tot_profit', response.data.data.daily_summary.metrics.tot_profit)
-
-                // this.dailyTotalRoiTrendMetric = 
-                //     this.prepareMetricTrendChartData('tot_roi', response.data.data.daily_summary.metrics.tot_roi)
-            }).catch(error => {   
+                this.data = response.data.data.website_totals
+            }).catch(error => {  
                 this.errorResponse = error.response.data
             }).finally(() => {
                 this.loading = false
             })
-        },
-
-         prepareMetricTrendChartData(type, responseData) {
-            
-            if (typeof responseData === 'object' && responseData !== null) { 
-                responseData['chartData'] = {
-                    labels: Object.keys(responseData.trend),
-                    series: [
-                        _.map(responseData.trend, (value, label) => { 
-                            return {
-                                meta: label,
-                                value: value,
-                            }
-
-                        }),
-                    ]
-                } 
-                // responseData['helpText'] = 'In case we wish to display help texts for the metrics in the future'
-                // responseData['helpWidth'] = '200'
-                return responseData
-            }
-            return {}
-        },
+        }
     }
 
 }
