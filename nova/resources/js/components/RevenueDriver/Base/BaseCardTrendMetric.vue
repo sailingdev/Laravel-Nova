@@ -89,13 +89,14 @@ export default {
     
     format: {
       type: String,
-      default: '0[.]00a',
+      required: true
     },
 
   },
  
   mounted() { 
     this.renderChart() 
+    console.log(this.format)
   },
 
   methods: {

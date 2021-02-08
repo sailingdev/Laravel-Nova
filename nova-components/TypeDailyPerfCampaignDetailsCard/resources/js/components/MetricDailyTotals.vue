@@ -6,6 +6,7 @@
         </div>
         <div v-else>
             <div v-if="typeTag != ''" class="flex flex-wrap">
+                 <!-- :format="'0,0.00'"  -->
                 <CardTrendMetric :card="dailyTotalSpendTrendMetric" :size="metricWidth[0]" :title="'Total Spend'"/>
                 <CardTrendMetric :card="dailyTotalRevenueTrendMetric" :loading="dailyTotalsIsLoading" :size="metricWidth[0]" :title="'Total Revenue'"/>
                 <CardTrendMetric :card="dailyTotalProfitTrendMetric" :loading="dailyTotalsIsLoading" :size="metricWidth[0]" :title="'Total Profit'"/>
@@ -114,7 +115,7 @@ export default {
                 this.prepareMetricTrendChartData('tot_roi', this.metrics.tot_roi)
 
             this.dailyTotalRpcTrendMetric = 
-                this.prepareMetricTrendChartData('tot_rpc', this.metrics.tot_roi)
+                this.prepareMetricTrendChartData('tot_rpc', this.metrics.tot_rpc)
 
             this.dailyTotalCpaTrendMetric = 
                 this.prepareMetricTrendChartData('tot_cpa', this.metrics.tot_cpa)

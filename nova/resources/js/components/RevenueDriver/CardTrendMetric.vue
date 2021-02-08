@@ -42,11 +42,15 @@ export default {
     title: {
       type: String,
       required: true
+    },
+     
+    format: {
+      type: String,
+      default: '0[.]00a' 
     }
   },
 
   data: () => ({ 
-    format: '(0[.]00a)',
     renderCard: false
   }),
   

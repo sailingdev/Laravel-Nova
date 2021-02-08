@@ -472,8 +472,8 @@ class TypeDailyPerfService
             results_all.tot_spend,
             results_all.tot_revenue,
             results_all.tot_profit,
-            results_all.tot_clicks,
             results_all.tot_roi,
+            results_all.tot_clicks,
             results_all.tot_rpc,
             results_all.tot_cpa
 
@@ -490,6 +490,7 @@ class TypeDailyPerfService
             FROM fb_reporting.type_daily_perf
             WHERE (date >= '$startDate' AND date <= '$endDate')
             AND type_tag = '$typeTag'
+            AND feed = 'all'
             GROUP BY date ORDER BY date ASC) as results_all 
             "
         ); 
