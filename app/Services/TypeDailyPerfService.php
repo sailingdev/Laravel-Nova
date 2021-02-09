@@ -194,17 +194,15 @@ class TypeDailyPerfService
                 
                 foreach ($rows as $column => $value) {
                     if (array_key_exists($column, $appendables)) {
-                       $prepVal = $value === null ? 0 : $value;
-                    //    $lData[$key]->{$column} = $appendables[$column] === $this->prefix ? 
-                    //         $appendables[$column] . $prepVal : $prepVal . $this->suffix; 
+                       $prepVal = $value === null ? 0 : $value; 
                         if ($appendables[$column] === $this->prefix) {
-                            $lData[$key]->{$column} =  $appendables[$column] . $prepVal;
+                            $lData[$key]->{$column} =  $appendables[$column] . (int) $prepVal;
                         }
                         else if ($appendables[$column] === $this->suffix) {
-                            $lData[$key]->{$column} =  $prepVal . $this->suffix;
+                            $lData[$key]->{$column} =  (int) $prepVal . $this->suffix;
                         }
                         else {
-                            $lData[$key]->{$column} = $prepVal;
+                            $lData[$key]->{$column} = (int) $prepVal;
                         }
                     }
                 }
@@ -402,6 +400,7 @@ class TypeDailyPerfService
                 AND site = 'all'
                 $typeTagClause
                 GROUP BY type_tag
+                LIMIT 100,150
             "
         ); 
         

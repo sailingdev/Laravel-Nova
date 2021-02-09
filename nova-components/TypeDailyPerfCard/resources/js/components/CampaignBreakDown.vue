@@ -55,9 +55,49 @@ export default {
     }, 
     computed: {
         campaignBreakDownTableHeader() {
+            // return [
+            //     'TYPE TAG', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
+            //     'TOTAL CLICKS', 'TOTAL RPC', 'TOTAL CPA'
+            // ]
             return [
-                'TYPE TAG', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
-                'TOTAL CLICKS', 'TOTAL RPC', 'TOTAL CPA'
+                {
+                    title:"Type Tag",
+                },
+                {
+                    title:"tot_spend",
+                    visible: true,
+                    editable: true,
+                },
+                {
+                    title:"tot_revenue",
+                    visible: true,
+                    editable: true,
+                },
+                {
+                    title:"tot_profit",
+                    visible: true,
+                    editable: true,
+                },
+                {
+                    title:"tot_roi",
+                    visible: true,
+                    editable: true,
+                },
+                 {
+                    title:"tot_clicks",
+                    visible: true,
+                    editable: true,
+                },
+                 {
+                    title:"tot_rpc",
+                    visible: true,
+                    editable: true,
+                },
+                {
+                    title:"tot_cpa",
+                    visible: true,
+                    editable: true,
+                },
             ]
         }
     },

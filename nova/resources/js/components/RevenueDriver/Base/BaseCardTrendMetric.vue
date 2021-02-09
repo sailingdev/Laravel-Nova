@@ -95,8 +95,7 @@ export default {
   },
  
   mounted() { 
-    this.renderChart() 
-    console.log(this.format)
+    this.renderChart()
   },
 
   methods: {
