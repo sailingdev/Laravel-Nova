@@ -317,9 +317,9 @@ class TypeDailyPerfService
             "
         ); 
          
-        $data =  $this->prepareData($query);
+        // $data =  $this->prepareData($query);
 
-        return $data;
+        return $query;
     }
 
     /**
@@ -386,27 +386,24 @@ class TypeDailyPerfService
         $endDate = $dates['end_date']; 
         $typeTagClause = $this->formatTypeTagClause($typeTag);
             
-        $query = DB::select("SELECT type_tag AS 'Type Tag',
-            SUM(tot_spend) AS tot_spend,
+        $query = DB::select("SELECT type_tag,
+             ROUND(SUM(tot_spend), 2) AS tot_spend,
             SUM(tot_revenue) AS tot_revenue,
             SUM(tot_profit) AS tot_profit, 
             ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
-            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS tot_rpc, 
-            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS tot_cpa
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS tot_rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS tot_cpa
             FROM fb_reporting.type_daily_perf
             WHERE
             (date >= '$startDate' AND date <= '$endDate')
                 AND site = 'all'
                 $typeTagClause
-                GROUP BY type_tag
-                LIMIT 100,150
+                GROUP BY type_tag 
             "
         ); 
-        
-        $data =  $this->prepareData($query);
-
-        return $data;
+         
+        return $query;
     }
 
 
@@ -434,8 +431,8 @@ class TypeDailyPerfService
             SUM(tot_profit) AS tot_profit, 
             ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
-            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS rpc, 
-            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS cpa
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS cpa
             FROM fb_reporting.type_daily_perf
             WHERE
             (date >= '$startDate' AND date <= '$endDate')
@@ -484,8 +481,8 @@ class TypeDailyPerfService
             SUM(tot_profit) AS tot_profit, 
             ROUND( (SUM(tot_profit)/SUM(tot_spend)) * 100,2) AS 'tot_roi',
             SUM(tot_clicks) AS tot_clicks, 
-            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS tot_rpc, 
-            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS tot_cpa
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS tot_rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS tot_cpa
             FROM fb_reporting.type_daily_perf
             WHERE (date >= '$startDate' AND date <= '$endDate')
             AND type_tag = '$typeTag'
@@ -542,8 +539,8 @@ class TypeDailyPerfService
             SUM(tot_profit) AS tot_profit, 
             ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
-            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 1) AS rpc, 
-            ROUND(SUM(tot_spend)/SUM(tot_clicks), 1) AS cpa
+            ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS rpc, 
+            ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS cpa
             FROM fb_reporting.type_daily_perf
             WHERE
             (date >= '$startDate' AND date <= '$endDate')

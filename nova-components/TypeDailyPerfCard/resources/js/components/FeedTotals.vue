@@ -36,8 +36,8 @@
                             <p> No data available for the selected range  </p>
                         </div>
                     </div>
-                    <DynamicTable v-else :data="data" :extractDataValues="true" :headerRows="dailyTotalsTableHeader" 
-                        :enableSearch="false"></DynamicTable>
+                    <DynamicTable v-else :values="values" :columns="tableHeaders" 
+                        :showFilter="false"></DynamicTable>
                 </div> 
 
             </div>
@@ -105,6 +105,51 @@ export default {
                 'MEDIA SPEND',	'MEDIA REVENUE', 'MEDIA PROFIT', 'MEDIA ROI'
             ]
         },
+         tableHeaders() { 
+            return [
+                { title:"Date" },
+                { title:"Total Spend($)" },
+                { title:"Total Revenue($)" },
+                { title:"Total Profit($)" },
+                { title:"Total ROI($)" },
+
+                { title:"Yahoo Spend($)" },
+                { title:"Yahoo Revenue($)" },
+                { title:"Yahoo Profit($)" },
+                { title:"Yahoo ROI($)" },
+
+                { title:"Media Spend($)" },
+                { title:"Media Revenue($)" },
+                { title:"Media Profit($)" },
+                { title:"Media ROI($)" }
+            ]
+        },
+        values() {
+            let values = []
+            if (this.data.length > 0) {
+                this.data.forEach((record, index) => {
+                    const row = {
+                        "Date": record.date,
+                        "Total Spend($)": record.tot_spend != null ? parseFloat(record.tot_spend) : 0,
+                        'Total Revenue($)': record.tot_revenue != null ? parseFloat(record.tot_revenue) : 0,
+                        'Total Profit($)': record.tot_profit != null ? parseFloat(record.tot_profit) : 0,
+                        'Total ROI($)': record.tot_roi != null ? parseFloat(record.tot_roi) : 0,
+
+                        "Yahoo Spend($)": record.yahoo_spend != null ? parseFloat(record.yahoo_spend) : 0,
+                        'Yahoo Revenue($)': record.yahoo_revenue != null ? parseFloat(record.yahoo_revenue) : 0,
+                        'Yahoo Profit($)': record.yahoo_profit != null ? parseFloat(record.yahoo_profit) : 0,
+                        'Yahoo ROI($)': record.yahoo_roi != null ? parseFloat(record.yahoo_roi) : 0,
+
+                        "Media Spend($)": record.media_spend != null ? parseFloat(record.media_spend) : 0,
+                        'Media Revenue($)': record.media_revenue != null ? parseFloat(record.media_revenue) : 0,
+                        'Media Profit($)': record.media_profit != null ? parseFloat(record.media_profit) : 0,
+                        'Media ROI($)': record.media_roi != null ? parseFloat(record.media_roi) : 0
+                    };
+                    values.push(row)
+                }); 
+            }
+            return values
+        }
     },
     mounted() {  
         this.loadFeedTotals()

@@ -8,14 +8,13 @@
 
         <div v-else class="pb-1 pl-6 pr-6 rounded-lg shadow-lg"> 
 
-            <div v-if="campaignBreakDown.length < 1"> 
+            <div v-if="campaignBreakDownData.length < 1"> 
                 <div class="px-4 py-3 leading-normal text-gray-100 bg-gray-500 rounded-lg text-center" role="alert">
                     <p> No data </p>
                 </div> 
             </div>
 
-          <DynamicTable v-else :data="campaignBreakDown" :extractDataValues="true" :headerRows="campaignBreakDownTableHeader" 
-                :enableSearch="true"></DynamicTable> 
+          <DynamicTable v-else :values="values" :columns="tableHeaders" ></DynamicTable> 
         </div>  
     </div>
 </template>
@@ -25,7 +24,7 @@ export default {
     name: "CampaignBreakDown",
     data() {
         return {
-            campaignBreakDown: [],
+            campaignBreakDownData: [],
             loading: false
         }
     },
@@ -54,51 +53,36 @@ export default {
         DynamicTable
     }, 
     computed: {
-        campaignBreakDownTableHeader() {
-            // return [
-            //     'TYPE TAG', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
-            //     'TOTAL CLICKS', 'TOTAL RPC', 'TOTAL CPA'
-            // ]
+        tableHeaders() { 
             return [
-                {
-                    title:"Type Tag",
-                },
-                {
-                    title:"tot_spend",
-                    visible: true,
-                    editable: true,
-                },
-                {
-                    title:"tot_revenue",
-                    visible: true,
-                    editable: true,
-                },
-                {
-                    title:"tot_profit",
-                    visible: true,
-                    editable: true,
-                },
-                {
-                    title:"tot_roi",
-                    visible: true,
-                    editable: true,
-                },
-                 {
-                    title:"tot_clicks",
-                    visible: true,
-                    editable: true,
-                },
-                 {
-                    title:"tot_rpc",
-                    visible: true,
-                    editable: true,
-                },
-                {
-                    title:"tot_cpa",
-                    visible: true,
-                    editable: true,
-                },
+                { title:"Type Tag" },
+                { title:"Total Spend($)" },
+                { title:"Total Revenue($)" },
+                { title:"Total Profit($)" },
+                { title:"Total ROI($)" },
+                { title:"Total Clicks($)" },
+                { title:"Total RPC($)" },
+                { title:"Total CPA($)" },
             ]
+        },
+        values() {
+            let values = []
+            if (this.campaignBreakDownData.length > 0) {
+                this.campaignBreakDownData.forEach((record, index) => {
+                    const row = {
+                        "Type Tag": record.type_tag,
+                        "Total Spend($)": record.tot_spend != null ? parseFloat(record.tot_spend) : 0,
+                        'Total Revenue($)': record.tot_revenue != null ? parseFloat(record.tot_revenue) : 0,
+                        'Total Profit($)': record.tot_revenue != null ? parseFloat(record.tot_revenue) : 0,
+                        'Total ROI($)': record.tot_roi != null ? parseFloat(record.tot_roi) : 0 ,
+                        'Total Clicks($)': record.tot_clicks != null ? parseFloat(record.tot_clicks) : 0,
+                        'Total RPC($)': record.tot_rpc != null ? parseFloat(record.tot_rpc) : 0,
+                        'Total CPA($)': record.tot_cpa != null ? parseFloat(record.tot_cpa) : 0
+                    };
+                    values.push(row)
+                }); 
+            }
+            return values
         }
     },
     watch: {
@@ -120,7 +104,7 @@ export default {
                 end_date: this.endDate
             }) 
             .then(response => {
-                this.campaignBreakDown = response.data.data.daily_summary.campaign_break_down                
+                this.campaignBreakDownData = response.data.data.daily_summary.campaign_break_down                
                 this.loading = false
             }).catch(error => {   
                 this.loading = false

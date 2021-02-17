@@ -26,7 +26,7 @@ class TypeDailyPerfsController extends Controller
         
         return $this->successResponse('Daily summary returned successfully', [
             'daily_summary' => [
-                'list' => $typeDailyPerfService->prepareData($dailySummaryByTags),
+                'list' => $dailySummaryByTags,
                 'metrics' => [
                     'tot_spend' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags,'tot_spend'),
                     'tot_revenue' => $typeDailyPerfService->aggregateTrendMetricData($dailySummaryByTags, 'tot_revenue'),

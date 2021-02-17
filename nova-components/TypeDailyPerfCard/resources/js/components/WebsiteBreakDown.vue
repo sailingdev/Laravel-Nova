@@ -7,24 +7,14 @@
         </div>
 
         <div v-else class="box-border clearfix w-full"> 
-            <div v-if="websiteBreakDown.length < 1"> 
+            <div v-if="websiteBreakDownData.length < 1"> 
                 <div class="px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center" role="alert">
                     <p> No data </p>
                 </div> 
-            </div>
-            <!-- <div v-else>
-                <div class="w-6/12 mt-10 box-border float-left p-5" v-for="(websiteData, index) in websiteBreakDown" :key="index" >
-                    <div class="pt-5 pb-1 pl-6 pr-6 rounded-lg shadow-lg">
-                        <h4 class="text-center mb-2"> {{ websiteData.website }} </h4>
-                            <DynamicTable :data="websiteData.totals" :extractDataValues="true" :headerRows="websiteBreakDownTableHeader" 
-                            :enableSearch="false"></DynamicTable>
-                    </div>  
-                </div>
-            </div> -->
+            </div> 
 
               <div v-else class=" mt-10 box-border p-5 rounded-lg shadow-lg"> 
-                    <DynamicTable :data="websiteBreakDown" :extractDataValues="true" :headerRows="websiteBreakDownTableHeader" 
-                        :enableSearch="false"></DynamicTable>
+                    <DynamicTable :values="values" :columns="tableHeaders" :showFilter="false"></DynamicTable>
             </div>
         </div>
     </div>
@@ -35,10 +25,8 @@ import DynamicTable from '../../../../../nova/resources/js/components/RevenueDri
 export default {
     name: "WebsiteBreakDown",
     data() {
-        return {
-            websiteData: {},
-            extractDataValues: true,
-            websiteBreakDown: [],
+        return { 
+            websiteBreakDownData: [],
             loading: false
         }
     },
@@ -67,11 +55,31 @@ export default {
         DynamicTable
     }, 
     computed: {
-        websiteBreakDownTableHeader() {
+        tableHeaders() { 
             return [
-                'WEBSITE', 'TOTAL SPEND', 'TOTAL REVENUE', 'TOTAL PROFIT', 'TOTAL ROI',
+                { title:"Website" },
+                { title:"Total Spend($)" },
+                { title:"Total Revenue($)" },
+                { title:"Total Profit($)" },
+                { title:"Total ROI($)" }
             ]
         },
+        values() {
+            let values = []
+            if (this.websiteBreakDownData.length > 0) {
+                this.websiteBreakDownData.forEach((record, index) => {
+                    const row = {
+                        "Website": record.site,
+                        "Total Spend($)": record.tot_spend != null ? parseFloat(record.tot_spend) : 0,
+                        'Total Revenue($)': record.tot_revenue != null ? parseFloat(record.tot_revenue) : 0,
+                        'Total Profit($)': record.tot_revenue != null ? parseFloat(record.tot_revenue) : 0,
+                        'Total ROI($)': record.tot_roi != null ? parseFloat(record.tot_roi) : 0
+                    };
+                    values.push(row)
+                }); 
+            }
+            return values
+        }
     },
      watch: {
         triggerReload(newVal, oldVal) {
@@ -92,7 +100,7 @@ export default {
                 end_date: this.endDate
             }) 
             .then(response => {  
-                this.websiteBreakDown = response.data.data.daily_summary.website_break_down         
+                this.websiteBreakDownData = response.data.data.daily_summary.website_break_down         
                 this.loading = false
             }).catch(error => {   
                 this.loading = false

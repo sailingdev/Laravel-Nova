@@ -8,11 +8,11 @@
       
         <div class="w-full px-5 py-3 my-2 min-w-full max-w-full ds-section box-border" >
 
-            <!-- <FeedTotals :metricWidth="metricWidth" :typeTag="typeTag" :startDate="startDate" :endDate="endDate"
+            <FeedTotals :metricWidth="metricWidth" :typeTag="typeTag" :startDate="startDate" :endDate="endDate"
                 :card="card" :triggerReload="triggerReload"/>
 
             <WebsiteBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
-                :card="card" :triggerReload="triggerReload"/> -->
+                :card="card" :triggerReload="triggerReload"/>
 
             <CampaignBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
                 :card="card" :triggerReload="triggerReload"/> 
