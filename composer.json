@@ -9,7 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "fb-reporting/type-daily-perf": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -20,7 +19,8 @@
         "stechstudio/laravel-ssh-tunnel": "^3.0",
         "fb-reporting/type-daily-perf-card": "*",
         "fb-reporting/type-daily-perf-website-break-down-card": "*",
-        "fb-reporting/type-daily-perf-campaign-details-card": "*"
+        "fb-reporting/type-daily-perf-campaign-details-card": "*",
+        "fb-reporting/submit-keywords": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -73,19 +73,7 @@
         },
         {
             "type": "path",
-            "url": "./nova-components/TypeDailyPerf"
-        },
-        {
-            "type": "path",
-            "url": "./nova-components/TypeDailyPerf"
-        },
-        {
-            "type": "path",
             "url": "./nova-components/TypeDailyPerfCard"
-        },
-        {
-            "type": "path",
-            "url": "./nova-components/TypeDailyPerfWebsiteBreakDownTool"
         },
         {
             "type": "path",
@@ -94,6 +82,10 @@
         {
             "type": "path",
             "url": "./nova-components/TypeDailyPerfCampaignDetailsCard"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/SubmitKeywords"
         }
     ]
 }

@@ -1,5 +1,5 @@
 {
-    "name": "fb-reporting/type-daily-perf",
+    "name": "fb-reporting/submit-keywords",
     "description": "A Laravel Nova card.",
     "keywords": [
         "laravel",
@@ -11,13 +11,13 @@
     },
     "autoload": {
         "psr-4": {
-            "FbReporting\\TypeDailyPerf\\": "src/"
+            "FbReporting\\SubmitKeywords\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "FbReporting\\TypeDailyPerf\\CardServiceProvider"
+                "FbReporting\\SubmitKeywords\\CardServiceProvider"
             ]
         }
     },
