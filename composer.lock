@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19af6d54b33c0bc3abfda2e05fa27a57",
+    "content-hash": "647fb45a8b11101de415721af5950d3b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -881,12 +881,12 @@
             "time": "2020-12-29T14:50:06+00:00"
         },
         {
-            "name": "fb-reporting/submit-keywords",
+            "name": "fb-reporting/submit-keywords-card",
             "version": "dev-fb_marketing_api",
             "dist": {
                 "type": "path",
-                "url": "./nova-components/SubmitKeywords",
-                "reference": "a250a476d729e8485b9134d6690a46b85a9a71eb"
+                "url": "./nova-components/SubmitKeywordsCard",
+                "reference": "516609eca2b237c7ba57b87568c4d2f7054323b4"
             },
             "require": {
                 "php": ">=7.1.0"
@@ -895,13 +895,13 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "FbReporting\\SubmitKeywords\\CardServiceProvider"
+                        "FbReporting\\SubmitKeywordsCard\\CardServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "FbReporting\\SubmitKeywords\\": "src/"
+                    "FbReporting\\SubmitKeywordsCard\\": "src/"
                 }
             },
             "license": [
