@@ -19,7 +19,9 @@
         "build-type-daily-perf-campaign-details-card": "cd nova-components/TypeDailyPerfCampaignDetailsCard && npm run dev",
         "build-type-daily-perf-campaign-details-card-prod": "cd nova-components/TypeDailyPerfCampaignDetailsCard && npm run prod",
         "build-submit-keywords": "cd nova-components/SubmitKeywords && npm run dev",
-        "build-submit-keywords-prod": "cd nova-components/SubmitKeywords && npm run prod"
+        "build-submit-keywords-prod": "cd nova-components/SubmitKeywords && npm run prod",
+        "build-submit-keywords-card": "cd nova-components/SubmitKeywordsCard && npm run dev",
+        "build-submit-keywords-card-prod": "cd nova-components/SubmitKeywordsCard && npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",

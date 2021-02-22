@@ -1,6 +1,6 @@
 <?php
 
-namespace FbReporting\SubmitKeywords;
+namespace FbReporting\SubmitKeywordsCard;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -21,8 +21,8 @@ class CardServiceProvider extends ServiceProvider
         });
 
         Nova::serving(function (ServingNova $event) {
-            Nova::script('submit-keywords', __DIR__.'/../dist/js/card.js');
-            Nova::style('submit-keywords', __DIR__.'/../dist/css/card.css');
+            Nova::script('submit-keywords-card', __DIR__.'/../dist/js/card.js');
+            Nova::style('submit-keywords-card', __DIR__.'/../dist/css/card.css');
         });
     }
 
@@ -38,7 +38,7 @@ class CardServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova'])
-                ->prefix('nova-vendor/submit-keywords')
+                ->prefix('nova-vendor/submit-keywords-card')
                 ->group(__DIR__.'/../routes/api.php');
     }
 

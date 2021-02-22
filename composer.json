@@ -20,7 +20,7 @@
         "fb-reporting/type-daily-perf-card": "*",
         "fb-reporting/type-daily-perf-website-break-down-card": "*",
         "fb-reporting/type-daily-perf-campaign-details-card": "*",
-        "fb-reporting/submit-keywords": "*"
+        "fb-reporting/submit-keywords-card": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -85,7 +85,7 @@
         },
         {
             "type": "path",
-            "url": "./nova-components/SubmitKeywords"
+            "url": "./nova-components/SubmitKeywordsCard"
         }
     ]
 }

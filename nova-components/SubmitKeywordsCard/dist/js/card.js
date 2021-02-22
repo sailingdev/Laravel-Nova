@@ -76,7 +76,7 @@ module.exports = __webpack_require__(6);
 /***/ (function(module, exports, __webpack_require__) {
 
 Nova.booting(function (Vue, router, store) {
-  Vue.component('submit-keywords', __webpack_require__(2));
+  Vue.component('submit-keywords-card', __webpack_require__(2));
 });
 
 /***/ }),
@@ -272,7 +272,7 @@ var render = function() {
     [
       _c("div", { staticClass: "px-3 py-3" }, [
         _c("h1", { staticClass: "text-center text-3xl text-80 font-light" }, [
-          _vm._v("Submit Keywords")
+          _vm._v("Submit Keywords Card")
         ])
       ])
     ]
