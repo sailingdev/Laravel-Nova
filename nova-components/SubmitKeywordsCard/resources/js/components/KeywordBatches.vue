@@ -37,7 +37,7 @@
                                 </button>
                             </p>
                         </label>
-                        <div class="tab-content overflow-hidden border-l-2 bg-gray-100 border-indigo-500 leading-normal">
+                        <div class="tab-content w-full overflow-hidden border-l-2 bg-gray-100 border-indigo-500 leading-normal">
                           
                             <table class="text-left m-4" style="border-collapse:collapse">
                                 <thead>
@@ -114,7 +114,8 @@ export default {
         max-height: 0;
         -webkit-transition: max-height .35s;
         -o-transition: max-height .35s;
-        transition: max-height .35s;
+        transition: max-height .35s; 
+        width: 100% !important;
     }
     /* :checked - resize to full height */
     .tab input:checked ~ .tab-content {
