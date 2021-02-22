@@ -132,16 +132,13 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style>
     .submit-keywords-form-wrapper textarea {
         min-height: 150px;
         border: 1px solid #ccc;
         padding: 10px 15px;
         white-space: pre-line;
-    }
-    .submit-keywords-form-wrapper textarea:focus {
-        border: 1px solid indigo !important;
-    }
+    } 
     .submit-keywords-form-wrapper label {
         font-size: 22px;
         margin-bottom: 5px;

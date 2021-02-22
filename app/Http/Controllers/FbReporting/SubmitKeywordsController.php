@@ -21,6 +21,18 @@ class SubmitKeywordsController extends Controller
             return $this->errorResponse('An error occured. Please try again');
         }
         return $this->successResponse('Keywords submitted successfully. Batch processing in progress', $process);
+    }
 
+    /**
+     * Load keyword batches
+     *
+     * @param Request $request
+     * @param SubmittedKeywordService $sks
+     * 
+     * @return Response
+     */
+    public function loadKeywordBatches(Request $request, SubmittedKeywordService $sks)
+    {
+        return $this->successResponse('Data returned successfully', $sks->loadKeywordBatches());
     }
 }

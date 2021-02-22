@@ -16,3 +16,4 @@ use App\Http\Controllers\FbReporting\SubmitKeywordsController;
 */
 
 Route::post('/submit-keywords', [SubmitKeywordsController::class, 'submit']);
+Route::get('/load-keyword-batches', [SubmitKeywordsController::class, 'loadKeywordBatches']);
