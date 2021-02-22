@@ -57,6 +57,7 @@
     "trix": "^1.0.0",
     "v-tooltip": "^2.0.2",
     "v-wow": "git+https://github.com/guisoares2011/vue-wow.git",
+    "vee-validate": "^3.4.5",
     "vue": "^2.6.12",
     "vue-async-computed": "^3.3.1",
     "vue-clickaway": "^2.2.2",

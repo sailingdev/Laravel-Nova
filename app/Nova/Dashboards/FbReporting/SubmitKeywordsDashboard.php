@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Nova\Dashboards\FbReporting;
+use FbReporting\SubmitKeywordsCard\SubmitKeywordsCard;
 
 use Laravel\Nova\Dashboard;
 

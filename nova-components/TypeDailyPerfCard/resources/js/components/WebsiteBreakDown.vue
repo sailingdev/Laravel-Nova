@@ -39,7 +39,8 @@ export default {
             websiteData: {},
             extractDataValues: true,
             websiteBreakDown: [],
-            loading: false
+            loading: false,
+            errorResponse: {}
         }
     },
     props: {

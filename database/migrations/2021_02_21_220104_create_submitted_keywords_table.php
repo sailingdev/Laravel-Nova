@@ -15,8 +15,9 @@ class CreateSubmittedKeywordsTable extends Migration
     {
         Schema::create('submitted_keywords', function (Blueprint $table) {
             $table->id();
-            $table->string('batch_id');
+            $table->uuid('batch_id');
             $table->string('keyword');
+            $table->string('market');
             $table->enum('status', ['processing', 'processed'])->default('processing');
             $table->timestamps();
         });
