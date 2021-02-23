@@ -2,43 +2,35 @@
 
 namespace App\Services;
 
-use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywords;
+use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\FbReporting\SubmittedKeyword;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Redis;
+use App\Revenuedriver\FacebookCampaign;
 
 class SubmittedKeywordService
 {
     public function submit(array $keywords, string $market)
     {
         $batchId = $this->createBatchId();
-
-        // try{
-        //     $redis=Redis::connect('127.0.0.1',6379);
-        //     dd('redis working');
-        // }catch(\Predis\Connection\ConnectionException $e){
-        //     dd('error connection redis');
-        // }
-        ProcessCampaignsFromSubmittedKeywords::dispatch([]);
-
-        return $batchId;
-        // $data = [];
-        // foreach ($keywords as $keyword) {
-        //     array_push($data, [
-        //         'batch_id' => $batchId,
-        //         'keyword' => $keyword,
-        //         'market' => $market,
-        //         'created_at' => DB::raw('now()'),
-        //         'updated_at' => DB::raw('now()')
-        //     ]);
-        // }
+ 
+        $data = [];
+        foreach ($keywords as $keyword) {
+            array_push($data, [
+                'batch_id' => $batchId,
+                'keyword' => $keyword,
+                'market' => $market,
+                'created_at' => DB::raw('now()'),
+                'updated_at' => DB::raw('now()')
+            ]);
+        }
         // DB::beginTransaction();
 
         // SubmittedKeyword::insert($data);
 
         // DB::commit();
+
+        ProcessCampaignsFromSubmittedKeywordsJob::dispatch($data);
 
         return $batchId;
     }
@@ -82,6 +74,12 @@ class SubmittedKeywordService
     protected function createBatchId(): string
     {
         return (string) Str::orderedUuid();
+    }
+
+    public function processSubmittedKeywords($data)
+    { 
+        $facebookCampaign = new FacebookCampaign;
+        $account3Campaigns = $facebookCampaign->loadCampaign('370837070102255');
     }
 
 }

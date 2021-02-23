@@ -1,17 +1,16 @@
 <?php
 
 namespace App\Jobs\FbReporting;
-
-use App\Mail\TestMail;
+ 
+use App\Services\SubmittedKeywordService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
-
-class ProcessCampaignsFromSubmittedKeywords implements ShouldQueue
+use Illuminate\Queue\SerializesModels; 
+// implements ShouldQueue
+class ProcessCampaignsFromSubmittedKeywordsJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,7 +28,7 @@ class ProcessCampaignsFromSubmittedKeywords implements ShouldQueue
      * @return void
      */
     public function __construct($data)
-    {
+    { 
         $this->data = $data;
     }
 
@@ -40,6 +39,7 @@ class ProcessCampaignsFromSubmittedKeywords implements ShouldQueue
      */
     public function handle()
     {
-        return Mail::to('mona@revenuedriver.com')->send(new TestMail());
+        $sks = new SubmittedKeywordService;
+        return $sks->processSubmittedKeywords($this->data);
     }
 }

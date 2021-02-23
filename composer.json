@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "facebook/php-business-sdk": "^9.0",
         "fb-reporting/submit-keywords-card": "*",
         "fb-reporting/type-daily-perf-campaign-details-card": "*",
         "fb-reporting/type-daily-perf-card": "*",
@@ -35,7 +36,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "ext-pcntl": "7.3",
+            "ext-posix": "7.3"
+        }
     },
     "extra": {
         "laravel": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7384e8910d600979b0cdd91575e4dbd4",
+    "content-hash": "1ea4579742bf187f78ed8bf704283467",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -881,12 +881,56 @@
             "time": "2020-12-29T14:50:06+00:00"
         },
         {
+            "name": "facebook/php-business-sdk",
+            "version": "9.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/facebook-php-business-sdk.git",
+                "reference": "c29498ee7f180583cb16873e5047eeeada834067"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facebook/facebook-php-business-sdk/zipball/c29498ee7f180583cb16873e5047eeeada834067",
+                "reference": "c29498ee7f180583cb16873e5047eeeada834067",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5 || ^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "1.3.3",
+                "phpunit/phpunit": "~8",
+                "symfony/finder": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FacebookAds\\": "src/FacebookAds/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "PHP SDK for Facebook Business",
+            "homepage": "https://developers.facebook.com/",
+            "keywords": [
+                "ads",
+                "business",
+                "facebook",
+                "instagram",
+                "page",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/facebook/facebook-php-business-sdk/tree/9.0.4"
+            },
+            "time": "2021-02-16T22:35:02+00:00"
+        },
+        {
             "name": "fb-reporting/submit-keywords-card",
-            "version": "dev-fb_marketing_api",
+            "version": "dev-fb_marketing",
             "dist": {
                 "type": "path",
                 "url": "./nova-components/SubmitKeywordsCard",
-                "reference": "516609eca2b237c7ba57b87568c4d2f7054323b4"
+                "reference": "df5a3aaf7e62e2190ca3f937d4b1285b58d2563a"
             },
             "require": {
                 "php": ">=7.1.0"
@@ -918,7 +962,7 @@
         },
         {
             "name": "fb-reporting/type-daily-perf-campaign-details-card",
-            "version": "dev-fb_marketing_api",
+            "version": "dev-fb_marketing",
             "dist": {
                 "type": "path",
                 "url": "./nova-components/TypeDailyPerfCampaignDetailsCard",
@@ -954,7 +998,7 @@
         },
         {
             "name": "fb-reporting/type-daily-perf-card",
-            "version": "dev-fb_marketing_api",
+            "version": "dev-fb_marketing",
             "dist": {
                 "type": "path",
                 "url": "./nova-components/TypeDailyPerfCard",
@@ -990,7 +1034,7 @@
         },
         {
             "name": "fb-reporting/type-daily-perf-website-break-down-card",
-            "version": "dev-fb_marketing_api",
+            "version": "dev-fb_marketing",
             "dist": {
                 "type": "path",
                 "url": "./nova-components/TypeDailyPerfWebsiteBreakDownCard",
@@ -1459,16 +1503,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.28.1",
+            "version": "v8.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "73dd43d92fcde6c6abc00658ae33391397ca119d"
+                "reference": "d2eba352b3b3a3c515b18c5726b373fe5026733e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/73dd43d92fcde6c6abc00658ae33391397ca119d",
-                "reference": "73dd43d92fcde6c6abc00658ae33391397ca119d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d2eba352b3b3a3c515b18c5726b373fe5026733e",
+                "reference": "d2eba352b3b3a3c515b18c5726b373fe5026733e",
                 "shasum": ""
             },
             "require": {
@@ -1576,7 +1620,7 @@
                 "phpunit/phpunit": "Required to use assertions and run tests (^8.5.8|^9.3.3).",
                 "predis/predis": "Required to use the predis connector (^1.1.2).",
                 "psr/http-message": "Required to allow Storage::put to accept a StreamInterface (^1.0).",
-                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^4.0).",
+                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^4.0|^5.0).",
                 "symfony/cache": "Required to PSR-6 cache bridge (^5.1.4).",
                 "symfony/filesystem": "Required to enable support for relative symbolic links (^5.1.4).",
                 "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0).",
@@ -1623,7 +1667,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-02-16T18:07:44+00:00"
+            "time": "2021-02-23T14:27:41+00:00"
         },
         {
             "name": "laravel/horizon",
@@ -7207,16 +7251,16 @@
         },
         {
             "name": "phar-io/version",
-            "version": "3.0.4",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "e4782611070e50613683d2b9a57730e9a3ba5451"
+                "reference": "bae7c545bef187884426f042434e561ab1ddb182"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/e4782611070e50613683d2b9a57730e9a3ba5451",
-                "reference": "e4782611070e50613683d2b9a57730e9a3ba5451",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/bae7c545bef187884426f042434e561ab1ddb182",
+                "reference": "bae7c545bef187884426f042434e561ab1ddb182",
                 "shasum": ""
             },
             "require": {
@@ -7252,9 +7296,9 @@
             "description": "Library for handling version information and constraints",
             "support": {
                 "issues": "https://github.com/phar-io/version/issues",
-                "source": "https://github.com/phar-io/version/tree/3.0.4"
+                "source": "https://github.com/phar-io/version/tree/3.1.0"
             },
-            "time": "2020-12-13T23:18:30+00:00"
+            "time": "2021-02-23T14:00:09+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -8926,5 +8970,9 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "ext-pcntl": "7.3",
+        "ext-posix": "7.3"
+    },
     "plugin-api-version": "2.0.0"
 }
