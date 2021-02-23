@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Services;
+
+use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywords;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\FbReporting\SubmittedKeyword;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Redis;
 
 class SubmittedKeywordService
 {
@@ -11,19 +15,30 @@ class SubmittedKeywordService
     {
         $batchId = $this->createBatchId();
 
-        $data = [];
-        foreach ($keywords as $keyword) {
-            array_push($data, [
-                'batch_id' => $batchId,
-                'keyword' => $keyword,
-                'market' => $market
-            ]);
+        try{
+            $redis=Redis::connect('127.0.0.1',6379);
+            dd('redis working');
+        }catch(\Predis\Connection\ConnectionException $e){
+            dd('error connection redis');
         }
-        DB::beginTransaction();
+        // ProcessCampaignsFromSubmittedKeywords::dispatch([]);
 
-        SubmittedKeyword::insert($data);
+        return $batchId;
+        // $data = [];
+        // foreach ($keywords as $keyword) {
+        //     array_push($data, [
+        //         'batch_id' => $batchId,
+        //         'keyword' => $keyword,
+        //         'market' => $market,
+        //         'created_at' => DB::raw('now()'),
+        //         'updated_at' => DB::raw('now()')
+        //     ]);
+        // }
+        // DB::beginTransaction();
 
-        DB::commit();
+        // SubmittedKeyword::insert($data);
+
+        // DB::commit();
 
         return $batchId;
     }
