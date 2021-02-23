@@ -15,13 +15,13 @@ class SubmittedKeywordService
     {
         $batchId = $this->createBatchId();
 
-        try{
-            $redis=Redis::connect('127.0.0.1',6379);
-            dd('redis working');
-        }catch(\Predis\Connection\ConnectionException $e){
-            dd('error connection redis');
-        }
-        // ProcessCampaignsFromSubmittedKeywords::dispatch([]);
+        // try{
+        //     $redis=Redis::connect('127.0.0.1',6379);
+        //     dd('redis working');
+        // }catch(\Predis\Connection\ConnectionException $e){
+        //     dd('error connection redis');
+        // }
+        ProcessCampaignsFromSubmittedKeywords::dispatch([]);
 
         return $batchId;
         // $data = [];
