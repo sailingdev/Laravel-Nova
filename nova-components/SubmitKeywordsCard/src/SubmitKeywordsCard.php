@@ -1,0 +1,25 @@
+<?php
+
+namespace FbReporting\SubmitKeywordsCard;
+
+use Laravel\Nova\Card;
+
+class SubmitKeywordsCard extends Card
+{
+    /**
+     * The width of the card (1/3, 1/2, or full).
+     *
+     * @var string
+     */
+    public $width = 'full';
+
+    /**
+     * Get the component name for the element.
+     *
+     * @return string
+     */
+    public function component()
+    {
+        return 'submit-keywords-card';
+    }
+}

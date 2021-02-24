@@ -25,9 +25,12 @@ import DynamicTable from '../../../../../nova/resources/js/components/RevenueDri
 export default {
     name: "WebsiteBreakDown",
     data() {
-        return { 
-            websiteBreakDownData: [],
-            loading: false
+        return {
+            websiteData: {},
+            extractDataValues: true,
+            websiteBreakDown: [],
+            loading: false,
+            errorResponse: {}
         }
     },
     props: {

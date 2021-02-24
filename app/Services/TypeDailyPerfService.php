@@ -307,7 +307,7 @@ class TypeDailyPerfService
             SUM(tot_spend) AS tot_spend,
             SUM(tot_revenue) AS tot_revenue,
             SUM(tot_profit) AS tot_profit, 
-            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 2) AS tot_roi
             FROM fb_reporting.type_daily_perf
             WHERE
             (date >= '$startDate' AND date <= '$endDate')
@@ -390,7 +390,7 @@ class TypeDailyPerfService
              ROUND(SUM(tot_spend), 2) AS tot_spend,
             SUM(tot_revenue) AS tot_revenue,
             SUM(tot_profit) AS tot_profit, 
-            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 2) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
             ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS tot_rpc, 
             ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS tot_cpa
@@ -429,7 +429,7 @@ class TypeDailyPerfService
             SUM(tot_spend) AS tot_spend,
             SUM(tot_revenue) AS tot_revenue,
             SUM(tot_profit) AS tot_profit, 
-            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 2) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
             ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS rpc, 
             ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS cpa
@@ -537,7 +537,7 @@ class TypeDailyPerfService
             SUM(tot_spend) AS tot_spend,
             SUM(tot_revenue) AS tot_revenue,
             SUM(tot_profit) AS tot_profit, 
-            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 1) AS tot_roi, 
+            ROUND( (SUM(tot_profit)/SUM(tot_spend) * 100), 2) AS tot_roi, 
             SUM(tot_clicks) AS tot_clicks, 
             ROUND(SUM(tot_revenue)/SUM(tot_clicks), 2) AS rpc, 
             ROUND(SUM(tot_spend)/SUM(tot_clicks), 2) AS cpa

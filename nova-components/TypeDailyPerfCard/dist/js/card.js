@@ -72055,8 +72055,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     name: "WebsiteBreakDown",
     data: function data() {
         return {
-            websiteBreakDownData: [],
-            loading: false
+            websiteData: {},
+            extractDataValues: true,
+            websiteBreakDown: [],
+            loading: false,
+            errorResponse: {}
         };
     },
 

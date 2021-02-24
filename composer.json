@@ -9,18 +9,21 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "fb-reporting/type-daily-perf": "*",
+        "facebook/php-business-sdk": "^9.0",
+        "fb-reporting/submit-keywords-card": "*",
+        "fb-reporting/type-daily-perf-campaign-details-card": "*",
+        "fb-reporting/type-daily-perf-card": "*",
+        "fb-reporting/type-daily-perf-website-break-down-card": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
+        "laravel/horizon": "^5.7",
         "laravel/nova": "*",
         "laravel/tinker": "^2.5",
         "optimistdigital/nova-tailwind": "^1.0",
-        "stechstudio/laravel-ssh-tunnel": "^3.0",
-        "fb-reporting/type-daily-perf-card": "*",
-        "fb-reporting/type-daily-perf-website-break-down-card": "*",
-        "fb-reporting/type-daily-perf-campaign-details-card": "*"
+        "predis/predis": "^1.1",
+        "stechstudio/laravel-ssh-tunnel": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -33,7 +36,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "ext-pcntl": "7.3",
+            "ext-posix": "7.3"
+        }
     },
     "extra": {
         "laravel": {
@@ -73,19 +80,7 @@
         },
         {
             "type": "path",
-            "url": "./nova-components/TypeDailyPerf"
-        },
-        {
-            "type": "path",
-            "url": "./nova-components/TypeDailyPerf"
-        },
-        {
-            "type": "path",
             "url": "./nova-components/TypeDailyPerfCard"
-        },
-        {
-            "type": "path",
-            "url": "./nova-components/TypeDailyPerfWebsiteBreakDownTool"
         },
         {
             "type": "path",
@@ -94,6 +89,10 @@
         {
             "type": "path",
             "url": "./nova-components/TypeDailyPerfCampaignDetailsCard"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/SubmitKeywordsCard"
         }
     ]
 }
