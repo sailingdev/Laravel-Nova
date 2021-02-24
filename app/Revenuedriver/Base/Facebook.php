@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Revenuedriver\Base;
+
+use App\Labs\StringManipulator;
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
 
@@ -32,5 +34,21 @@ abstract class Facebook
         // The Api object is now available through singleton
         $this->api = Api::instance(); 
         $this->api->setLogger(new CurlLogger());
+    }
+
+    public function extractDataFromCampaignName(string $campaignName)
+    {
+        $startPos = strpos($campaignName, '{') + 1; $endPos = strpos($campaignName, '}');
+        $preped = substr($campaignName, $startPos, $endPos - $startPos);
+        if (strlen($preped) > 0) {
+            $sm = new StringManipulator;
+            $extracts = $sm->generateArrayFromString($preped, ',');
+        }
+        return [
+            'site' => $extracts[0],
+            'type_tag' => $extracts[1],
+            'keyword' => preg_replace('#[^a-z0-9 ]#i', " ", $extracts[2]),
+            'market' => $extracts[3]
+        ];
     }
 }

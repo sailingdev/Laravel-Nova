@@ -79,7 +79,32 @@ class SubmittedKeywordService
     public function processSubmittedKeywords($data)
     { 
         $facebookCampaign = new FacebookCampaign;
-        $account3Campaigns = $facebookCampaign->loadCampaign('370837070102255');
+
+        $accounts = ['370837070102255', '426462675029843']; // 3 & 21
+        $campaignCombo = [];
+        foreach ($accounts as $account) {
+            $accountCampaigns = $facebookCampaign->loadCampaign($account, [
+                'name', 'status'
+            ]);
+            if ($accountCampaigns[0] !== false) {
+                foreach ($accountCampaigns[1] as $campaign) {
+                    $n = [
+                        'campaign_name' => $campaign->name,
+                        'campaign_status' => $campaign->status,
+                        'campaign_id' => $campaign->id,
+                        'account_id' => $account
+                    ];
+                    array_push($campaignCombo, $n);
+                }
+            }
+        } 
+        $rpcService = new RpcService;
+        foreach ($campaignCombo as $campaign) {
+           $campaignExtracts = $facebookCampaign->extractDataFromCampaignName($campaign['campaign_name']);
+           $campaignKeyword = $campaignExtracts['keyword'];
+           dd($rpcService->countKeyword($campaignKeyword));
+        }    
+        dd($campaignCombo);
     }
 
 }
