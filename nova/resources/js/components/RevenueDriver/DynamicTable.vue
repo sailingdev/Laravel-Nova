@@ -14,13 +14,11 @@
         />
   </div>
 </template>
-<script>
-import VueTableDynamic from './DynamicTable/components/VueTableDynamic'
+<script> 
 import VueBootstrapTable from 'vue2-bootstrap-table2'
 export default {
     name: 'DynamicTable',
     components: {
-        VueTableDynamic,
         VueBootstrapTable
     },
     props: {
@@ -90,31 +88,25 @@ export default {
     .vue-table {
         box-sizing: border-box; 
     }
-    .vue-table .icon.active.asc:before,
-    .vue-table .icon.active.dsc:before  { 
-        color: green !important;
-    }
     .vue-table thead tr, .vue-table tbody tr {
         display: flex !important;
         width: 100% !important;
         box-sizing:border-box;
         max-width: 100% !important; 
         height: auto !important;
-    }
-
-    
+    }    
     .vue-table tbody tr td,
     .vue-table thead tr th {
-        flex: 1 1 100% !important;
-        text-align: center;
-        vertical-align: middle; 
-        -ms-flex: 1 1 100% !important;
-        width:auto;
-        max-width:100%;
-        justify-content: center !important; 
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important; 
-        text-overflow: clip !important;
+      flex: 1 1 100% !important;
+      text-align: center;
+      vertical-align: middle; 
+      -ms-flex: 1 1 100% !important;
+      width:auto;
+      max-width:100%;
+      justify-content: center !important; 
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important; 
+      text-overflow: clip !important;
         
     }
     table.vue-table thead > tr > th {
@@ -128,43 +120,63 @@ export default {
         font-weight: bolder;
         line-height: 1.42857143 !important;
         letter-spacing: .05em !important; 
-    }
+    } 
 
-    /* .vue-table .arrow.asc:before {
-        border-left: 4px solid transparent;
-        border-right: 4px solid transparent;
-        border-bottom: 4px solid orange !important;
-        color: orange;
-    } */
+   .vue-table .arrow.asc:before {
+      content: "\f0de";
+    }
 
     .vue-table .arrow {
-        opacity: 1;
-        position: relative;
+      opacity: 1;
+      position: relative;
+    }
+    
+     .vue-table tr th.arrow:before {
+      position: absolute;
+      top: 0px !important;
+      left: 0px !important;
+      width: 100%;
+      display: none !important;
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      font-size: 16px;
+      content: "\f0de" !important;
+      background: green;
+      height: 10px !important;
     }
 
-    .vue-table .arrow:before {
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
-        display: block;
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        font-size: 14px;
-        content: "\f0dc";
+    .vue-table tr th.arrow:after {
+      position: absolute;
+      bottom: 0px !important;
+      left: 0 !important;
+      width: 100%;
+      display: none !important; 
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      font-size: 16px;
+      content: "\f0dd";
+      background: green;
+      height: 10px !important;
+      margin-bottom: 5px !important;
     }
-
-    .vue-table .arrow.asc:before {
-        content: "\f0de";
-        border-left: 4px solid transparent;
-        border-right: 4px solid transparent;
-        border-bottom: 4px solid #000;
+    .vue-table tr th:hover.arrow:before,
+    .vue-table tr th:hover.arrow:after {
+       display: block !important;
+    }
+    
+    .vue-table tr th.arrow.active.asc:before,
+    .vue-table tr th.arrow.active.dsc:after  { 
+      color: #fff !important;
+      display: block !important;
     } 
-    .vue-table .arrow.dsc:before {
-        content: "\f0dd";
-    }
 
-   
+    .vue-table .arrow.dsc:before {
+        /* content: "\f0dd"; */
+    }  
  
+
+
+
  .row {
   display: -ms-flexbox;
   display: flex;

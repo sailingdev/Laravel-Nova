@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Labs\StringManipulator;
 use App\Models\FbReporting\TypeDailyPerf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -274,16 +275,19 @@ class TypeDailyPerfService
     }
 
 
+    /**
+     * Get all the type tags
+     * 
+     * @return \App\Models\FbReporting\TypeDailyPerf
+     */
     public function getAllTypeTags()
     {
-       
-        return session('type_tags', function () {
+        return Cache::remember('type_tags', 86400, function () {
             $typeTags = [];
             foreach (TypeDailyPerf::select('type_tag')->groupBy('type_tag')->cursor() as $query) {
                 $typeTags[] = $query->type_tag;
             }
             return $typeTags;
-            session(['type_tags' => $typeTags]);
         });
         
     }
