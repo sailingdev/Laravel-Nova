@@ -11,11 +11,11 @@
             <FeedTotals :metricWidth="metricWidth" :typeTag="typeTag" :startDate="startDate" :endDate="endDate"
                 :card="card" :triggerReload="triggerReload"/>
 
-            <!-- <WebsiteBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
+            <WebsiteBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
                 :card="card" :triggerReload="triggerReload"/>
 
             <CampaignBreakDown :typeTag="typeTag" :startDate="startDate" :endDate="endDate"  
-                :card="card" :triggerReload="triggerReload"/>  -->
+                :card="card" :triggerReload="triggerReload"/> 
 
         </div>
        

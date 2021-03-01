@@ -64981,6 +64981,26 @@ var render = function() {
               card: _vm.card,
               triggerReload: _vm.triggerReload
             }
+          }),
+          _vm._v(" "),
+          _c("WebsiteBreakDown", {
+            attrs: {
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
+          }),
+          _vm._v(" "),
+          _c("CampaignBreakDown", {
+            attrs: {
+              typeTag: _vm.typeTag,
+              startDate: _vm.startDate,
+              endDate: _vm.endDate,
+              card: _vm.card,
+              triggerReload: _vm.triggerReload
+            }
           })
         ],
         1
