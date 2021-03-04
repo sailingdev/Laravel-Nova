@@ -19,6 +19,8 @@ class CreateSubmittedKeywordsTable extends Migration
             $table->string('keyword');
             $table->string('market');
             $table->enum('status', ['processing', 'processed'])->default('processing');
+            $table->enum('action_taken', ['skipped', 'new'])->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

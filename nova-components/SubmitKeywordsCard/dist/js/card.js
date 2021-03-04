@@ -568,13 +568,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            reloadBatch: false
+        };
+    },
+
     props: ['card'],
     components: {
         SubmitForm: __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default.a,
         KeywordBatches: __WEBPACK_IMPORTED_MODULE_1__KeywordBatches___default.a
     },
-    mounted: function mounted() {
-        //
+    methods: {
+        formSubmitted: function formSubmitted() {
+            this.$refs.keywordBatch.loadKeywordBatches();
+        }
     }
 });
 
@@ -827,6 +835,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.batchId = response.data.data;
                     _this.keywords = '';
                     _this.market = 'US';
+                    _this.$emit('formSubmitted');
                 }).catch(function (error) {
                     _this.errorResponse = error.response.data;
                 }).finally(function () {
@@ -1633,9 +1642,15 @@ var render = function() {
         "div",
         { staticClass: "px-3 py-3" },
         [
-          _c("SubmitForm", { attrs: { card: _vm.card } }),
+          _c("SubmitForm", {
+            attrs: { card: _vm.card },
+            on: { formSubmitted: _vm.formSubmitted }
+          }),
           _vm._v(" "),
-          _c("KeywordBatches", { attrs: { card: _vm.card } })
+          _c("KeywordBatches", {
+            ref: "keywordBatch",
+            attrs: { card: _vm.card }
+          })
         ],
         1
       )
