@@ -119,6 +119,7 @@ abstract class Facebook
      */
     public function getTargetAccount(): string
     {
+        return $this->account30;
         if (App::environment('production')) {
             return $this->account21;
         }
@@ -132,6 +133,7 @@ abstract class Facebook
      */
     public function determineStatus(string $status): string
     {
+        return 'PAUSED';
         if (App::environment('production')) {
             return $this->status;
         }
