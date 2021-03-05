@@ -15,4 +15,8 @@ class Rpc extends Model
      * @var string
     */
     protected $table = 'rpc';  
+
+    const CREATED_AT = 'date';
+
+    const UPDATED_AT = 'date';
 }

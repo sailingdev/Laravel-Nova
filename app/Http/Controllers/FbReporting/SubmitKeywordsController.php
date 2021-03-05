@@ -16,11 +16,11 @@ class SubmitKeywordsController extends Controller
         $prepKeywords = $sm->generateArrayFromString(str_replace("\n", '<br />',  $rawKeywords), '<br />');
 
         $process = $sks->submit($prepKeywords, $request->market);
-
-        if (!$process) {
-            return $this->errorResponse('An error occured. Please try again');
+        
+        if ($process[0] == false) {
+            return $this->errorResponse('An error occured. Please try again', $process[1]);
         }
-        return $this->successResponse('Keywords submitted successfully. Batch processing in progress', $process);
+        return $this->successResponse('Keywords submitted successfully. Batch processing in progress', $process[1]);
     }
 
     /**

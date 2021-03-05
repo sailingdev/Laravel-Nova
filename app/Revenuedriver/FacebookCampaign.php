@@ -37,7 +37,7 @@ class FacebookCampaign extends Facebook
      * @return array
      */
     public function loadCampaign($accountId, $fields=[]): array
-    { 
+    {  
         $accountExtension = new AdAccountExtension($accountId);
         try {
             $cursor = $accountExtension->getCampaigns($fields);

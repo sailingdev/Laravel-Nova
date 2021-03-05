@@ -45,7 +45,7 @@ abstract class Facebook
         $this->clientSecret = config('facebook.marketing.client_secret');
         $this->clientToken = config('facebook.marketing.client_token');
          
-        Api::init($this->appId, $this->clientSecret, $this->clientToken);
+        Api::init($this->appId, $this->clientSecret, $this->clientToken, false);
 
         // The Api object is now available through singleton
         $this->api = Api::instance(); 

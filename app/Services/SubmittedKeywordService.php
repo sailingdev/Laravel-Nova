@@ -73,8 +73,8 @@ class SubmittedKeywordService
                 'batch_id' => $batchId,
                 'keyword' => $keyword,
                 'market' => $market,
-                'created_at' => DB::raw('now()'),
-                'updated_at' => DB::raw('now()')
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
         }
         DB::beginTransaction();
@@ -111,7 +111,7 @@ class SubmittedKeywordService
         // end
         ProcessCampaignsFromSubmittedKeywordsJob::dispatch($data);
 
-        return $batchId;
+        return [true, $batchId];
     }
 
     /**
@@ -248,7 +248,6 @@ class SubmittedKeywordService
     { 
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
-         
         $newCampaignName = $this->facebookCampaign->formatCampaignName(
             $campaignNameExtracts['keyword'],
             $submission['market'],
@@ -431,7 +430,7 @@ class SubmittedKeywordService
             return [false, 'Process was not completed. Please check the log for the affected processes'];
         }
         else {
-            return $this->updateRow($submission['batch_id'], $submission['keyword'], [
+            $this->updateRow($submission['batch_id'], $submission['keyword'], [
                 'action_taken' => 'skipped',
                 'note' => 'campaign restarted',
                 'status' => 'processed'
