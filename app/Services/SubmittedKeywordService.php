@@ -189,10 +189,8 @@ class SubmittedKeywordService
                     'status' => 'processed'
                 ]);
             } 
-            else {
-                // foreach ($matches as $match) { 
-                    return $this->duplicateCampaign($matches[0], $submission);
-                // }
+            else { 
+                return $this->duplicateCampaign(current($matches), $submission);
             }
         }
         return [false, 'incomplete'];

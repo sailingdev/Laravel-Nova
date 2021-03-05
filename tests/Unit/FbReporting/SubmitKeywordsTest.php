@@ -47,8 +47,7 @@ class SubmitedKeywordsTest extends TestCase
             ->json('POST', '/nova-vendor/submit-keywords-card/submit-keywords', [
                 'keywords' =>  'garage door opener', //$this->faker->domainWord. ' ' . $this->faker->domainWord,
                 'market' => $this->faker->randomElement(['DE', 'US', 'UK'])
-            ]);
-        
+            ]); 
         $response->assertStatus(200);
 
         // Queue::assertPushed(ProcessCampaignsFromSubmittedKeywordsJob::class);
