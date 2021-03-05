@@ -4,7 +4,9 @@
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>  
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p> -->
- 
+
+#### Build Status 
+[![CircleCI](https://circleci.com/gh/revenuedriver/dashboard.svg?style=svg&circle-token=578184bc33f9732f3b019976f79638fc55bb9012)](https://circleci.com/gh/revenuedriver/dashboard)
 
 ## Revenue Driver
 

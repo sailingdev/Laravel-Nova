@@ -190,9 +190,9 @@ class SubmittedKeywordService
                 ]);
             } 
             else {
-                foreach ($matches as $match) { 
-                    return $this->duplicateCampaign($match, $submission);
-                }
+                // foreach ($matches as $match) { 
+                    return $this->duplicateCampaign($matches[0], $submission);
+                // }
             }
         }
         return [false, 'incomplete'];
