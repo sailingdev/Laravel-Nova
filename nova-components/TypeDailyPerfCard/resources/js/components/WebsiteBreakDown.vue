@@ -28,7 +28,7 @@ export default {
         return {
             websiteData: {},
             extractDataValues: true,
-            websiteBreakDown: [],
+            websiteBreakDownData: [],
             loading: false,
             errorResponse: {}
         }
