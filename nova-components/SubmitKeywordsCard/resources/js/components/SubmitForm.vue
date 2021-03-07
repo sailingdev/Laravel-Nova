@@ -115,6 +115,7 @@ export default {
                     this.batchId = response.data.data
                     this.keywords = ''
                     this.market = 'US'
+                    this.$emit('formSubmitted')
                 }).catch(error => {
                     this.errorResponse = error.response.data
                 })
