@@ -21,7 +21,9 @@
         "build-submit-keywords": "cd nova-components/SubmitKeywords && npm run dev",
         "build-submit-keywords-prod": "cd nova-components/SubmitKeywords && npm run prod",
         "build-submit-keywords-card": "cd nova-components/SubmitKeywordsCard && npm run dev",
-        "build-submit-keywords-card-prod": "cd nova-components/SubmitKeywordsCard && npm run prod"
+        "build-submit-keywords-card-prod": "cd nova-components/SubmitKeywordsCard && npm run prod",
+        "build-create-campaigns-from-related-card": "cd nova-components/CreateCampaignsFromRelatedCard && npm run dev",
+        "build-create-campaigns-from-related-card-prod": "cd nova-components/CreateCampaignsFromRelatedCard && npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",

@@ -1,0 +1,25 @@
+<template>
+    <card class="flex flex-col items-center justify-center">
+        <div class="px-3 py-5 w-full">
+            <h3 class="text-center text-2xl text-80 font-dark mt-3 mb-3">Create Campaigns From Related Card</h3>
+            <BatchesToProcess :card="card" />
+            <ProcessedHistory :card="card" />
+        </div>
+    </card>
+</template>
+<script>
+import BatchesToProcess from './BatchesToProcess'
+import ProcessedHistory from './ProcessedHistory'
+export default {
+    props: [
+        'card',
+    ],
+    components: {
+        BatchesToProcess,
+        ProcessedHistory
+    },
+    mounted() {
+        //
+    },
+}
+</script>

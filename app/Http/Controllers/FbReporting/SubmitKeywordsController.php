@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 
 class SubmitKeywordsController extends Controller
 {
+    /**
+     * @param SubmitKeywordsRequest $request
+     * @param StringManipulator $sm
+     * @param SubmittedKeywordService $sks
+     * 
+     * @return Illuminate\Http\Response
+     */
     public function submit(SubmitKeywordsRequest $request, StringManipulator $sm, SubmittedKeywordService $sks)
     {
         $rawKeywords = $request->keywords; 
@@ -29,10 +36,11 @@ class SubmitKeywordsController extends Controller
      * @param Request $request
      * @param SubmittedKeywordService $sks
      * 
-     * @return Response
+     * @return Illuminate\Http\Response
      */
     public function loadKeywordBatches(Request $request, SubmittedKeywordService $sks)
     {
         return $this->successResponse('Data returned successfully', $sks->loadKeywordBatches());
     }
+    
 }
