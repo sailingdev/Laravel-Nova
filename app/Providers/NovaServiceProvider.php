@@ -60,13 +60,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function cards()
     {
         return [
-            
-            // (new TagsDailyTotalSpend())->width('1/4'),
-            // (new TagsDailyTotalRevenue())->width('1/4'),
-            // (new TagsDailyTotalProfit())->width('1/4'),
-            // (new TagsDailyTotalRoi())->width('1/4'),
-            (new TypeDailyPerfCard())->dailyTotalsByTag(),
-            // new Help,
+            (new TypeDailyPerfCard())->dailyTotalsByTag(), 
         ];
     }
 

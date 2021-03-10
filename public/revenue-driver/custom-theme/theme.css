@@ -1,0 +1,15 @@
+.bg-grad-sidebar {
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    from(rgb(1, 26, 254)),
+    to(#3c4655)
+  );
+
+  background-image: linear-gradient(
+    0deg,
+    rgb(254, 1, 129, 1),
+    rgb(100, 5, 113)
+  );
+}

@@ -1,0 +1,9 @@
+.bg-grad-sidebar {
+    background-image: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      from(rgb(254, 1, 129, 1)),
+      to(#3c4655)
+    );
+}

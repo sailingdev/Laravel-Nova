@@ -98,6 +98,10 @@
         {
             "type": "path",
             "url": "./nova-components/CreateCampaignsFromRelatedCard"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/CustomTheme"
         }
     ]
 }
