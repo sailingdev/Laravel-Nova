@@ -36,7 +36,12 @@
                             <div>{{ batch.batch_id }}</div>
                             <div>{{ batch.date }}</div>
                             <div>{{ batch.to_create }}</div>
-                            <div> {{ batch.status }} </div>
+                            <div> 
+                                <span class="mr-2 text-white p-1 rounded leading-none" 
+                                    :class="batch.status == 'processing' ? 'bg-orange-600' : 'bg-green-600'"> 
+                                    {{ batch.status }} 
+                                </span> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,4 +88,5 @@ export default {
     .header-box div, .content-box div {
         width: 25%;
     }
+    .bg-orange-600 { background-color: #dd6b20; }
 </style>

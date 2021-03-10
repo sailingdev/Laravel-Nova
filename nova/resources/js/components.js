@@ -112,14 +112,9 @@ import DateFilter from '@/components/Filters/DateFilter'
 import SelectControl from '@/components/Controls/SelectControl'
 import DateTimePicker from '@/components/DateTimePicker'
 import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
-import { Field, Form, ErrorMessage } from 'vee-validate';
+import 'vue-select/dist/vue-select.css' 
 
 Vue.component('v-select', vSelect)
-
-Vue.component('vee-form', Form)
-Vue.component('vee-field', Field)
-Vue.component('vee-error-message', ErrorMessage)
 
 Vue.component('action-selector', ActionSelector)
 Vue.component('boolean-icon', BooleanIcon)

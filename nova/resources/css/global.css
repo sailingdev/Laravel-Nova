@@ -99,3 +99,9 @@
   input[type="search"] {
     -webkit-appearance: none;
   }
+  .notify-submit-success svg {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: auto;
+}

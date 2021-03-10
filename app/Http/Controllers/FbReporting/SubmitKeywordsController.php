@@ -6,6 +6,7 @@ use App\Labs\StringManipulator;
 use App\Services\SubmittedKeywordService;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 use Illuminate\Http\Request;
 
 class SubmitKeywordsController extends Controller
@@ -27,6 +28,8 @@ class SubmitKeywordsController extends Controller
         if ($process[0] == false) {
             return $this->errorResponse('An error occured. Please try again', $process[1]);
         }
+        ProcessCampaignsFromSubmittedKeywordsJob::dispatch($process[2]);
+        
         return $this->successResponse('Keywords submitted successfully. Batch processing in progress', $process[1]);
     }
 

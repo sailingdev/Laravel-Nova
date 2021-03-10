@@ -17,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/load-batches-to-process', [CreateCampaignsFromRelatedController::class, 'toProcess']);
 Route::get('/processed-batch-history', [CreateCampaignsFromRelatedController::class, 'history']);
+Route::post('/create-campaign', [CreateCampaignsFromRelatedController::class, 'processPendingBatches']);
