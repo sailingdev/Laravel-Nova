@@ -259,7 +259,7 @@ class Nova
      * @return \Laravel\Nova\ResourceCollection
      */
     private static function resourceCollection()
-    {
+    { 
         return ResourceCollection::make(static::$resources);
     }
 
