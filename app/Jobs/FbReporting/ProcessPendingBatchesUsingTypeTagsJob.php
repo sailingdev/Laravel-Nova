@@ -40,6 +40,6 @@ class ProcessPendingBatchesUsingTypeTagsJob implements ShouldQueue
     public function handle()
     {
         $sks = new SubmittedKeywordService;
-        return $sks->ProcessPendingBatchesUsingTypeTags($this->data);
+        return $sks->processPendingBatchesUsingTypeTags($this->data);
     }
 }

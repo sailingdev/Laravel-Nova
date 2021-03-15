@@ -224,12 +224,13 @@ class SubmittedKeywordService
     {  
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
+       
         $newCampaignName = $this->facebookCampaign->formatCampaignName(
             $submission['keyword'],
             $submission['market'],
             $campaignNameExtracts['feed'],
             $campaignNameExtracts['site'],
-            $campaignNameExtracts['type_tag']
+            isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag']
         );
         
         $newCampaignData = [
@@ -274,10 +275,11 @@ class SubmittedKeywordService
         }  
 
         $loggedErrors = [];
+        
         foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
             $newAdsetData = [
-                'name' => $existingAdSet->name,
+                'name' =>   ucfirst($submission['keyword']), //$existingAdSet->name,
                 'targeting' => $existingAdSet->targeting,
                 'bid_amount' => $existingAdSet->bid_amount,
                 'billing_event' => $existingAdSet->billing_event,
@@ -359,14 +361,25 @@ class SubmittedKeywordService
                             }
 
                             $existingAdSetFeedSpec['images'] = $newAdImages;
+                           
+
+                            $newWebsiteUrl = $this->facebookCampaign->generateAdCreativeWebsiteUrl( 
+                                $this->facebookCampaign->getTargetAccount(),
+                                ucfirst($submission['keyword']),
+                                isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
+                                $submission->market 
+                            );
+
+                            $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
+
                             $newAdCreativeData = [
-                                'name' => $existingAdCreative[1]->name,
+                                'name' =>  ucfirst($submission['keyword']), // $existingAdCreative[1]->name,
                                 'account_id' => $this->facebookCampaign->getTargetAccount(),
                                 'asset_feed_spec' => $existingAdSetFeedSpec,
                                 'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
                                 'object_story_spec' => $existingAdCreative[1]->object_story_spec, 
                             ]; 
-
+ 
                             $newAdCreative = $this->facebookAdCreative->create($this->facebookCampaign->getTargetAccount(), $newAdCreativeData);
                           
                             if ($newAdCreative[0] == false) {
@@ -473,22 +486,29 @@ class SubmittedKeywordService
        return $data;
     }
 
-    public function ProcessPendingBatchesUsingTypeTags(array $batches)
+    /**
+     * @param array $batches
+     * 
+     * @return bool
+     */
+    public function processPendingBatchesUsingTypeTags(array $batches)
     {
+        
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
         
         foreach ($batches as $batch) {
             $matches = array_filter($campaignCombo, function ($campaign) use ($batch) {
                 $campaignTypeTag = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['type_tag'];
-                return $campaignTypeTag == $batch->type_tag;
+                return $campaignTypeTag == trim($batch->type_tag);
             });
-
+           
             if (count($matches) > 0) {
                 // load all keywords to be processed for this batch
                 $keywords = SubmittedKeyword::where('batch_id', $batch->batch_id)->where('status', 'pending')
                 ->where('action_taken', 'new')->get();
-                 
+                
                 foreach($keywords as $submission) {
+                    $submission['type_tag'] = $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related');
                     $process = $this->duplicateCampaign(current($matches), $submission);
                     if ($process[0] == true) {
                         $this->updateRow($batch->batch_id, $submission->keyword, [
@@ -500,208 +520,4 @@ class SubmittedKeywordService
         }
         return true;
     }
-
-
-    
-    /**
-     * @param mixed $campaign
-     * @param mixed $submission
-     * 
-     * @return array
-     */
-    protected function duplicateCampaignUsingTypeTag($campaign, $submission)
-    { 
-        $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
-        
-        $newCampaignName = $this->facebookCampaign->formatCampaignName(
-            $campaignNameExtracts['keyword'],
-            $submission['market'],
-            $campaignNameExtracts['feed'],
-            $campaignNameExtracts['site'],
-            $campaignNameExtracts['type_tag']
-        );
-        
-        $newCampaignData = [
-            'name' => $newCampaignName,
-            'objective' => $campaign['objective'],
-            'bid_strategy' => $campaign['bid_strategy'],
-            'buying_type' => $campaign['buying_type'],
-            'daily_budget' => 300,
-            'status' => $this->facebookCampaign->determineStatus($campaign['status']), //$campaign['status'],
-            'special_ad_categories' => $campaign['special_ad_categories']
-        ];
-
-        // create the campaign
-        $newCampaign = $this->facebookCampaign->createCampaign($this->facebookCampaign->getTargetAccount(), $newCampaignData);
-       
-        if ($newCampaign[0] === false) {
-            Log::info('A campaign was not created', [
-                'message' => $newCampaign[1]->getMessage(),
-                'errors' => $newCampaign[1],
-                'data' => $newCampaignData
-            ]);
-            return [false, 'Campaign not created: '.$newCampaign[1]->getMessage()];
-        }
-        
-        $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
-       
-        if ($existingCampaignAdsets[0] === false) {
-            Log::info('No existing campaign adsets were loaded', [
-                'message' => $existingCampaignAdsets[1]->getMessage(),
-                'errors' => $existingCampaignAdsets[1],
-                'data' => []
-            ]);
-            return [false, 'No existing campaign adsets were loaded: '. $existingCampaignAdsets[1]->getMessage()];
-        }
-        else if ($existingCampaignAdsets[1]->count() < 1) {
-            Log::info('No existing campaign adsets available', [
-                'message' => 'No existing campaign adsets available',
-                'errors' => [],
-                'data' => []
-            ]);
-            return [false, 'No existing campaign adsets available'];
-        }  
-
-        $loggedErrors = [];
-        foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
-            
-            $newAdsetData = [
-                'name' => $existingAdSet->name,
-                'targeting' => $existingAdSet->targeting,
-                'bid_amount' => $existingAdSet->bid_amount,
-                'billing_event' => $existingAdSet->billing_event,
-                'promoted_object' => $existingAdSet->promoted_object,
-                'start_time' => $this->facebookAdset->determineStartTime(),
-                'campaign_id' => $newCampaign[1]['id'],
-                'is_dynamic_creative' => true
-            ];
-            // create new adset
-            $newAdSet = $this->facebookAdset->create($this->facebookCampaign->getTargetAccount(), $newAdsetData);
-            
-            if ($newAdSet[0] == false) {
-                array_push($loggedErrors, [
-                    'message' => 'An adset not created',
-                    'errors' => $newAdSet[1],
-                    'data' => $newAdsetData
-                ]);
-            }
-            else {
-
-                // get ads for existing adset
-                $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
-                if ($existingAds[0] == false) {
-                    array_push($loggedErrors, [
-                        'message' => 'An error occured while loading existing ads in adset with ID: ' . $existingAdSet->id,
-                        'errors' => $existingAds[1],
-                        'data' => []
-                    ]);
-                }
-                else if ($existingAds[1]->count() < 1) {
-                    array_push($loggedErrors, [
-                        'message' => 'No existing ads for the adset with ID: ' . $existingAdSet->id,
-                        'errors' => [],
-                        'data' => []
-                    ]);
-                }
-                else {  
-                    foreach ($existingAds[1] as $existingAd) {
-
-                        // load adcreative for that ad
-                        $existingAdCreative = $this->facebookAdCreative->show($existingAd->creative['id'], [
-                            'account_id', 'name', 'object_story_spec', 'asset_feed_spec', 'call_to_action_type',
-                            'link_url', 'image_hash', 'image_url'
-                        ]);
-                       
-                        if ($existingAdCreative[0] == false) {
-                            array_push($loggedErrors, [
-                                'message' => 'An error occured while loading the adcreative for the ad with ID: ' . $existingAd->id,
-                                'errors' => $existingAdCreative[1],
-                                'data' => []
-                            ]);
-                        }
-                        else {
-                            // copy adcreative into new account  
-                            $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
-                            $newAdImages = [];
-                            foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
-                                // copy from old account to new account
-                                $copyFrom = new \stdclass;
-                                $copyFrom->source_account_id = preg_replace("#[^0-9]#i", "", $campaign['account_id']);
-                                $copyFrom->hash = $existingImage['hash'];
-                                $newAdImage = $this->facebookAdImage->create($this->facebookCampaign->getTargetAccount(), [
-                                    'copy_from' => $copyFrom
-                                ]);
-                                
-                                if ($newAdImage[0] == false) {
-                                    array_push($loggedErrors, [
-                                        'message' => 'An error occured while duplicating an image from source to target account. Existing ad Id: ' . $existingAd->id,
-                                        'errors' => $newAdImage[1],
-                                        'data' => (array) $copyFrom
-                                    ]);
-                                }
-                                else {
-                                    $arrK = array_keys($newAdImage[1]->exportAllData()['images']);
-                                    array_push($newAdImages, [
-                                        'hash' => $arrK[0]
-                                    ]);
-                                }
-                            }
-
-                            $existingAdSetFeedSpec['images'] = $newAdImages;
-                            $newAdCreativeData = [
-                                'name' => $existingAdCreative[1]->name,
-                                'account_id' => $this->facebookCampaign->getTargetAccount(),
-                                'asset_feed_spec' => $existingAdSetFeedSpec,
-                                'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
-                                'object_story_spec' => $existingAdCreative[1]->object_story_spec, 
-                            ]; 
-
-                            $newAdCreative = $this->facebookAdCreative->create($this->facebookCampaign->getTargetAccount(), $newAdCreativeData);
-                          
-                            if ($newAdCreative[0] == false) {
-                                array_push($loggedErrors, [
-                                    'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
-                                    'errors' => $newAdCreative[1],
-                                    'data' => $newAdCreativeData
-                                ]);
-                            }
-                            else {
-                                $newAdData = [
-                                    'name' => $existingAd->name,
-                                    'adset_id' => $newAdSet[1]->id,
-                                    'creative' => $this->facebookAdCreative->show($newAdCreative[1]->creative_id)[1],
-                                    'status' => $this->facebookCampaign->determineStatus($existingAd->status)
-                                ];
-                                
-                                $newAd = $this->facebookAd->create($this->facebookCampaign->getTargetAccount(), $newAdData);
-                               
-                                if ($newAd[0] == false) {
-                                    array_push($loggedErrors, [
-                                        'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
-                                        'errors' => $newAd[1],
-                                        'data' => $newAdData
-                                    ]);
-                                }
-                            } 
-                        }
-                    }
-                }
-            }
-        } 
-
-        if (count($loggedErrors) > 0) {
-            // log output
-            Log::info('An error occured while processing some of the submitted keywords', $loggedErrors);
-            return [false, 'Process was not completed. Please check the log for the affected processes'];
-        }
-        else {
-            $this->updateRow($submission['batch_id'], $submission['keyword'], [
-                'action_taken' => 'skipped',
-                'note' => 'campaign restarted',
-                'status' => 'processed'
-            ]);
-            return [true, 'Ad was successfully created'];
-        }
-    }
- 
 }
