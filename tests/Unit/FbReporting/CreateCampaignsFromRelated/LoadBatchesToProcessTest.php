@@ -1,11 +1,8 @@
 <?php
 
 namespace Tests\Unit;
-
-use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
+ 
 use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Support\Facades\Queue;
 
 class LoadBatchesToProcessTest extends TestCase
 {
