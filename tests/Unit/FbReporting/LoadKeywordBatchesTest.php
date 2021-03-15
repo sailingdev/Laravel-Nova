@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\FbReporting;
  
 use Tests\TestCase; 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\FbReporting\CreateCampaignsFromRelated;
  
 use Tests\TestCase;
 
