@@ -666,7 +666,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\ncolor: #212529;\nbackground-color: rgba(0, 0, 0, 0.075);\n}\n.batch-container {\n    border-bottom: 1px solid #ccc !important;\n    padding: 20px 0;\n}\n", ""]);
+exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n.batch-container {\n    border-bottom: 1px solid #ccc !important;\n    padding: 40px 0;\n}\n.batch-container h4 {\n    background-color: rgba(0, 0, 0, 0.08) !important;\n    border-top: 1px solid #2b6cb0 !important;\n}\n", ""]);
 
 // exports
 
@@ -13811,16 +13811,10 @@ var render = function() {
                             [
                               _c(
                                 "h4",
-                                {
-                                  staticClass:
-                                    "px-4 py-4 leading-normal text-indigo-100 bg-indigo-700"
-                                },
+                                { staticClass: "px-4 py-4 leading-normal" },
                                 [
-                                  _vm._v(
-                                    " \n                        Batch ID: " +
-                                      _vm._s(batch.batch_id) +
-                                      " "
-                                  ),
+                                  _c("small", [_vm._v(" Batch ID:")]),
+                                  _vm._v(" " + _vm._s(batch.batch_id) + "  "),
                                   _c("br"),
                                   _vm._v(" "),
                                   _c("small", [

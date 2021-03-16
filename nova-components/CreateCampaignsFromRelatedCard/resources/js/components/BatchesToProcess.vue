@@ -34,8 +34,8 @@
                 
                 <div v-else class="px-4 py-3"> 
                     <div v-for="(batch, key) in batches" :key="key" class="batch-container">
-                        <h4 class="px-4 py-4 leading-normal text-indigo-100 bg-indigo-700"> 
-                            Batch ID: {{ batch.batch_id }} <br/>
+                        <h4 class="px-4 py-4 leading-normal"> 
+                            <small> Batch ID:</small> {{ batch.batch_id }}  <br/>
                             <small> Market: {{ batch.market  }}</small> <br/>
                             <small> Date: {{ batch.date  }}</small>
                         </h4>
@@ -206,11 +206,15 @@ export default {
     }
 
     .content-box:hover {
-    color: #212529;
-    background-color: rgba(0, 0, 0, 0.075);
+        color: #212529;
+        background-color: rgba(0, 0, 0, 0.075);
     }
     .batch-container {
         border-bottom: 1px solid #ccc !important;
-        padding: 20px 0;
+        padding: 40px 0;
+    }
+    .batch-container h4 {
+        background-color: rgba(0, 0, 0, 0.08) !important;
+        border-top: 1px solid #2b6cb0 !important;
     }
 </style>
