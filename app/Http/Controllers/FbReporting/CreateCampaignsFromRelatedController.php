@@ -29,7 +29,7 @@ class CreateCampaignsFromRelatedController extends Controller
      */
     public function history(Request $request, SubmittedKeywordService $sks)
     {
-        return $this->successResponse('Data returned successfully', $sks->loadBatchSummaries('recent', 10));
+        return $this->successResponse('Data returned successfully', $sks->loadBatchHistory());
     }
 
     public function processPendingBatches(CreateCampaignFromRelatedRequest $request)

@@ -438,6 +438,19 @@ class SubmittedKeywordService
         ->update($data);
     }
 
+    public function loadKeywordsToProcess()
+    {
+        $batches = SubmittedKeyword::select('batch_id', 'created_at')->where('status', 'pending')
+        ->where('action_taken', 'new')->distinct()->latest()->get();
+        
+        $data = [];
+        $new = $skipped = [];
+        $processingCount = 0;
+        
+        foreach ($batches as $batch) {
+            $rows = SubmittedKeyword::where('batch_id', $batch->batch_id)->get(); 
+        }
+    }
 
     /**
      * @param mixed $summaryType=null
@@ -445,25 +458,26 @@ class SubmittedKeywordService
      * 
      * @return array
      */
-    public function loadBatchSummaries($summaryType=null, $limit=null): array
+    public function loadBatchSummaries(): array
     {
-        $batches = $summaryType === null ? SubmittedKeyword::select('batch_id', 'created_at')->where('status', 'pending')
-            ->where('action_taken', 'new')->distinct()->latest()->get() : 
-
-            SubmittedKeyword::select('batch_id', 'created_at')
-            ->where('status', '!=', 'pending')
-            ->where('action_taken', 'new')->distinct()->latest()->limit($limit)->get();
+        $batches =  SubmittedKeyword::select('batch_id', 'created_at', 'market')->where('status', 'pending')
+            ->where('action_taken', 'new')->distinct()->latest()->get();
             
         $data = [];
         $sm = new StringManipulator;
         foreach($batches as $batch) {
-            $rows = SubmittedKeyword::where('batch_id', $batch->batch_id)->get(); 
+            $rows =  SubmittedKeyword::where('batch_id', $batch->batch_id)
+                ->where('status', 'pending')->get(); 
 
             $new = $skipped = [];
             $processingCount = 0;
             foreach($rows as $row) {
                 if ($row->action_taken === 'new') {
-                    array_push($new, $row->keyword);
+                    array_push($new, [
+                        'keyword' => $this->facebookCampaign->formatKeyword($row->keyword, '+'),
+                        'type_tag' => '',
+                        'id' => $row->id
+                    ]);
                 }
                 else {
                     array_push($skipped, $row->keyword);
@@ -476,14 +490,58 @@ class SubmittedKeywordService
             $obj = new \stdClass;
             $obj->batch_id = $batch->batch_id;
             $obj->date = Carbon::parse($batch->created_at)->toDateString();
-            $obj->to_create = preg_replace("#[^a-z0-9_,]#i", "+", $sm->generateStringFromArray($new, ','));
-            if ($summaryType == null) {
-                $obj->skipped = $sm->generateStringFromArray($skipped, ',');
-            }
+            $obj->market = $batch->market;
+            
+            $obj->skipped = $sm->generateStringFromArray($skipped, ',');
+            $obj->to_create = $new;
+            
             $obj->status = $processingCount > 0 ? 'processing' : 'processed';
             array_push($data, $obj);
         }
        return $data;
+    }
+
+    public function loadBatchHistory(): array
+    { 
+        $data = [];
+        $sm = new StringManipulator;
+      
+        $rows = SubmittedKeyword::select('*')
+            ->where('status', '!=', 'pending')->limit(10)->latest()->get(); 
+            
+            foreach($rows as $row) {
+                $new = $skipped = [];
+                $processingCount = 0;
+                if ($row->action_taken === 'new') {
+                    array_push($new, [
+                        'keyword' => preg_replace("#[^a-z0-9_]#i", "+", $row->keyword),
+                        'type_tag' => '',
+                        'id' => $row->id
+                    ]);
+                }
+                else {
+                    array_push($skipped, $row->keyword);
+                }
+
+                if ($row->status == 'pending' || $row->status == 'processing') {
+                    $processingCount++;
+                }
+
+                $obj = new \stdClass;
+                $obj->batch_id = $row->batch_id;
+                $obj->date = Carbon::parse($row->created_at)->toDateString();
+                
+                $collec = [];
+                foreach ($new as $keywordAssoc) {
+                    array_push($collec, $keywordAssoc['keyword']);
+                }
+                $obj->to_create = $sm->generateStringFromArray($collec, ',');
+                
+                $obj->status = $processingCount > 0 ? 'processing' : 'processed';
+                array_push($data, $obj);
+            }
+            
+        return $data;
     }
 
     /**
@@ -491,31 +549,31 @@ class SubmittedKeywordService
      * 
      * @return bool
      */
-    public function processPendingBatchesUsingTypeTags(array $batches)
+    public function processPendingBatchesUsingTypeTags(array $keywords)
     {
-        
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
-        
-        foreach ($batches as $batch) {
-            $matches = array_filter($campaignCombo, function ($campaign) use ($batch) {
+       
+        foreach ($keywords as $keyword) {
+            $matches = array_filter($campaignCombo, function ($campaign) use ($keyword) {
                 $campaignTypeTag = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['type_tag'];
-                return $campaignTypeTag == trim($batch->type_tag);
+                return $campaignTypeTag == trim($keyword->type_tag);
             });
            
             if (count($matches) > 0) {
-                // load all keywords to be processed for this batch
-                $keywords = SubmittedKeyword::where('batch_id', $batch->batch_id)->where('status', 'pending')
-                ->where('action_taken', 'new')->get();
-                
-                foreach($keywords as $submission) {
-                    $submission['type_tag'] = $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related');
+                // load the batch id of this keyword
+                $submission = SubmittedKeyword::where('id', $keyword->id)->first();
+                if ($submission !== null) {
+                    $batchId = $submission->batch_id;
+                    
+                    $submission->type_tag = $this->facebookCampaign->generateTypeTag($submission->keyword, $submission->market, 'related');
                     $process = $this->duplicateCampaign(current($matches), $submission);
                     if ($process[0] == true) {
-                        $this->updateRow($batch->batch_id, $submission->keyword, [
+                        $this->updateRow($batchId, $submission->keyword, [
                             'status' => 'processed'
                         ]);
-                    }
+                    } 
                 }
+              
             }
         }
         return true;

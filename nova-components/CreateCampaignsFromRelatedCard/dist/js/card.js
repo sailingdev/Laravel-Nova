@@ -573,8 +573,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         BatchesToProcess: __WEBPACK_IMPORTED_MODULE_0__BatchesToProcess___default.a,
         ProcessedHistory: __WEBPACK_IMPORTED_MODULE_1__ProcessedHistory___default.a
     },
-    mounted: function mounted() {
-        //
+    methods: {
+        formSubmitted: function formSubmitted() {
+            this.$refs.history.processHistory();
+        }
     }
 });
 
@@ -664,7 +666,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    width: 20%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\ncolor: #212529;\nbackground-color: rgba(0, 0, 0, 0.075);\n}\n", ""]);
+exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\ncolor: #212529;\nbackground-color: rgba(0, 0, 0, 0.075);\n}\n.batch-container {\n    border-bottom: 1px solid #ccc !important;\n    padding: 20px 0;\n}\n", ""]);
 
 // exports
 
@@ -773,6 +775,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -808,10 +815,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.loading = true;
             axios.get('/nova-vendor/' + this.card.component + '/load-batches-to-process').then(function (response) {
                 var data = response.data.data;
-                data.forEach(function (record, index) {
-                    record.type_tag = '';
-                });
                 _this.batches = data;
+                if (_this.displaySubmitSuccess) {
+                    _this.displaySubmitSuccess = false;
+                }
             }).catch(function (error) {
                 _this.errorResponse = error.response.data;
             }).finally(function () {
@@ -819,42 +826,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         prepareForDispatch: function prepareForDispatch() {
-            this.validateError = null;
-            var valErrCount = 0;
-            this.batches.forEach(function (record, index) {
-                if (record.type_tag == '') {
-                    valErrCount++;
+            var loader = [];
+            this.batches.forEach(function (batch) {
+                if (batch.to_create.length > 0) {
+                    var keywords = batch.to_create;
+                    keywords.forEach(function (keyword) {
+                        if (keyword.type_tag != '') {
+                            loader.push(keyword);
+                        }
+                    });
                 }
             });
-            if (valErrCount > 0) {
-                this.validateError = 'Please enter a type tag for each of the batches';
+
+            if (loader.length < 1) {
+                this.validateError = 'Please enter a type tag for at lease one of the keywords';
                 return false;
             }
-            return this.createCampaigns(this.preparePayload());
-        },
-        preparePayload: function preparePayload() {
-            return this.batches.map(function (record) {
-                return {
-                    batch_id: record.batch_id,
-                    type_tag: record.type_tag
-                };
-            });
+            return this.createCampaigns(loader);
         },
         createCampaigns: function createCampaigns(payload) {
             var _this2 = this;
 
             this.processing = true;
+            this.validateError = null;
             axios.post('/nova-vendor/' + this.card.component + '/create-campaign', {
                 data: JSON.stringify(payload)
             }).then(function (response) {
                 var data = response.data.data;
-                _this2.displayForm = false;
                 _this2.displaySubmitSuccess = true;
+                _this2.loadBatchesToProcess();
+                _this2.$emit('formSubmitted');
             }).catch(function (error) {
                 _this2.errorResponse = error.response.data;
             }).finally(function () {
                 _this2.processing = false;
             });
+        },
+        pressed: function pressed() {
+            // console.log(this.batches)
         }
     },
     computed: {
@@ -13681,6 +13690,64 @@ var render = function() {
       _vm._v("Batch Status")
     ]),
     _vm._v(" "),
+    _vm.displaySubmitSuccess
+      ? _c("div", [
+          _c(
+            "div",
+            {
+              staticClass:
+                "mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success"
+            },
+            [
+              _c(
+                "svg",
+                {
+                  staticStyle: {
+                    "-ms-transform": "rotate(360deg)",
+                    "-webkit-transform": "rotate(360deg)",
+                    transform: "rotate(360deg)"
+                  },
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                    "aria-hidden": "true",
+                    focusable: "false",
+                    width: "1em",
+                    height: "1em",
+                    preserveAspectRatio: "xMidYMid meet",
+                    viewBox: "0 0 24 24"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414",
+                      fill: "#3da35a"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "h4",
+                {
+                  staticClass:
+                    "text-2xl text-center text-3xl text-80 font-dark px-4 py-4"
+                },
+                [_vm._v(" Thank you! ")]
+              ),
+              _vm._v(" "),
+              _c("p", { staticClass: "mt-2 mb-2 text-center" }, [
+                _vm._v(
+                  " Batch processing in progress. Please check back in few minutes time"
+                )
+              ])
+            ]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _vm.loading
       ? _c(
           "div",
@@ -13733,159 +13800,159 @@ var render = function() {
                 _vm._v(" "),
                 _vm.batches.length < 1
                   ? _c("div", [_vm._m(0)])
-                  : _c("div", [
-                      _vm._m(1),
-                      _vm._v(" "),
-                      _c(
-                        "div",
+                  : _c(
+                      "div",
+                      { staticClass: "px-4 py-3" },
+                      [
                         _vm._l(_vm.batches, function(batch, key) {
                           return _c(
                             "div",
-                            {
-                              key: key,
-                              staticClass: "content-box flex w-full"
-                            },
+                            { key: key, staticClass: "batch-container" },
                             [
-                              _c("div", [_vm._v(_vm._s(batch.batch_id))]),
+                              _c(
+                                "h4",
+                                {
+                                  staticClass:
+                                    "px-4 py-4 leading-normal text-indigo-100 bg-indigo-700"
+                                },
+                                [
+                                  _vm._v(
+                                    " \n                        Batch ID: " +
+                                      _vm._s(batch.batch_id) +
+                                      " "
+                                  ),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("small", [
+                                    _vm._v(" Market: " + _vm._s(batch.market))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("small", [
+                                    _vm._v(" Date: " + _vm._s(batch.date))
+                                  ])
+                                ]
+                              ),
                               _vm._v(" "),
-                              _c("div", [_vm._v(_vm._s(batch.date))]),
+                              _c("p", { staticClass: "mt-4 mb-4" }, [
+                                _c("b", [_vm._v("Keywords to skip:")]),
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(
+                                      batch.skipped == "" ||
+                                        batch.skipped == null
+                                        ? "NULL"
+                                        : batch.skipped
+                                    ) +
+                                    "\n                    "
+                                )
+                              ]),
                               _vm._v(" "),
-                              _c("div", [_vm._v(_vm._s(batch.to_create))]),
+                              _vm._m(1, true),
                               _vm._v(" "),
-                              _c("div", [_vm._v(_vm._s(batch.skipped))]),
+                              _vm._m(2, true),
                               _vm._v(" "),
-                              _c("div", [
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.batches[key]["type_tag"],
-                                      expression: "batches[key]['type_tag']"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  attrs: { type: "text" },
-                                  domProps: {
-                                    value: _vm.batches[key]["type_tag"]
+                              _vm._l(batch.to_create, function(keyword, key2) {
+                                return _c(
+                                  "div",
+                                  {
+                                    key: key2,
+                                    staticClass: "content-box flex w-full"
                                   },
-                                  on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.batches[key],
-                                        "type_tag",
-                                        $event.target.value
-                                      )
-                                    }
-                                  }
-                                })
-                              ])
-                            ]
+                                  [
+                                    _c("div", [
+                                      _vm._v(_vm._s(keyword.keyword))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value:
+                                              _vm.batches[key]["to_create"][
+                                                key2
+                                              ]["type_tag"],
+                                            expression:
+                                              "batches[key]['to_create'][key2]['type_tag']"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: { type: "text" },
+                                        domProps: {
+                                          value:
+                                            _vm.batches[key]["to_create"][key2][
+                                              "type_tag"
+                                            ]
+                                        },
+                                        on: {
+                                          keyup: _vm.pressed,
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.batches[key]["to_create"][
+                                                key2
+                                              ],
+                                              "type_tag",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ])
+                                  ]
+                                )
+                              })
+                            ],
+                            2
                           )
                         }),
-                        0
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2"
-                        },
-                        [
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-                              attrs: { disabled: _vm.processing },
-                              on: { click: _vm.prepareForDispatch }
-                            },
-                            [
-                              _vm.processing
-                                ? _c(
-                                    "span",
-                                    [
-                                      _c("loader", {
-                                        staticClass: "text-60",
-                                        attrs: { fillColor: "#ffffff" }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                : _c("span", [_vm._v("Create Campaigns")])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            { staticClass: "ml-2 text-red-600 text-sm" },
-                            [_vm._v(" " + _vm._s(_vm.validateError) + " ")]
-                          )
-                        ]
-                      )
-                    ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.displaySubmitSuccess
-            ? _c("div", [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "mt-1 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success"
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        staticStyle: {
-                          "-ms-transform": "rotate(360deg)",
-                          "-webkit-transform": "rotate(360deg)",
-                          transform: "rotate(360deg)"
-                        },
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          "xmlns:xlink": "http://www.w3.org/1999/xlink",
-                          "aria-hidden": "true",
-                          focusable: "false",
-                          width: "1em",
-                          height: "1em",
-                          preserveAspectRatio: "xMidYMid meet",
-                          viewBox: "0 0 24 24"
-                        }
-                      },
-                      [
-                        _c("path", {
-                          attrs: {
-                            d:
-                              "M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414",
-                            fill: "#3da35a"
-                          }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "h4",
-                      {
-                        staticClass:
-                          "text-2xl text-center text-3xl text-80 font-dark px-4 py-4"
-                      },
-                      [_vm._v(" Thank you! ")]
-                    ),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "mt-2 mb-2 text-center" }, [
-                      _vm._v(
-                        " Batch processing in progress. Please check back in few minutes time"
-                      )
-                    ])
-                  ]
-                )
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2"
+                          },
+                          [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                                attrs: { disabled: _vm.processing },
+                                on: { click: _vm.prepareForDispatch }
+                              },
+                              [
+                                _vm.processing
+                                  ? _c(
+                                      "span",
+                                      [
+                                        _c("loader", {
+                                          staticClass: "text-60",
+                                          attrs: { fillColor: "#ffffff" }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  : _c("span", [_vm._v("Create Campaigns")])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              { staticClass: "ml-2 text-red-600 text-sm" },
+                              [_vm._v(" " + _vm._s(_vm.validateError) + " ")]
+                            )
+                          ]
+                        )
+                      ],
+                      2
+                    )
               ])
             : _vm._e()
         ])
@@ -13910,14 +13977,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mt-4 mb-4" }, [
+      _c("b", [_vm._v(" Keywords to create ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "header-box flex" }, [
-      _c("div", {}, [_vm._v("Batch ID")]),
-      _vm._v(" "),
-      _c("div", [_vm._v("Date")]),
-      _vm._v(" "),
-      _c("div", [_vm._v("Keywords to create")]),
-      _vm._v(" "),
-      _c("div", [_vm._v("Keywords to skip")]),
+      _c("div", [_vm._v("Keyword")]),
       _vm._v(" "),
       _c("div", [_vm._v("Typetag to Duplicate")])
     ])
@@ -14279,9 +14348,12 @@ var render = function() {
             [_vm._v("Create Campaigns From Related Card")]
           ),
           _vm._v(" "),
-          _c("BatchesToProcess", { attrs: { card: _vm.card } }),
+          _c("BatchesToProcess", {
+            attrs: { card: _vm.card },
+            on: { formSubmitted: _vm.formSubmitted }
+          }),
           _vm._v(" "),
-          _c("ProcessedHistory", { attrs: { card: _vm.card } })
+          _c("ProcessedHistory", { ref: "history", attrs: { card: _vm.card } })
         ],
         1
       )
