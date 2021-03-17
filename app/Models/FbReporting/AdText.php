@@ -5,12 +5,12 @@ namespace App\Models\FbReporting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Market extends Model
+class AdText extends Model
 {
     use HasFactory;
 
-    public function adText()
+    public function market()
     {
-        return $this->hasMany(AdText::class);
+        return $this->belongsTo(Market::class);
     }
 }

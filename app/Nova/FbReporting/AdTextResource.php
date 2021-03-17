@@ -4,21 +4,21 @@ namespace App\Nova\FbReporting;
 
 use App\Nova\Resource;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class MarketResource extends Resource
+class AdTextResource extends Resource
 {
-
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\FbReporting\Market::class;
+    public static $model = \App\Models\FbReporting\AdText::class;
 
-
+    
     /**
      * Get the displayable label of the resource.
      *
@@ -26,7 +26,7 @@ class MarketResource extends Resource
      */
     public static function label()
     {
-        return 'Markets';
+        return 'Ad Texts';
     }
 
     /**
@@ -36,20 +36,16 @@ class MarketResource extends Resource
      */
     public static function singularLabel()
     {
-        return 'Market';
+        return 'Ad Text';
     }
 
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        return $query->where('name', '!=', '')->orderBy('name', 'asc');
-    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -57,7 +53,7 @@ class MarketResource extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id',
     ];
 
     /**
@@ -69,11 +65,18 @@ class MarketResource extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name')
+            // ID::make(__('ID'), 'id')->sortable(),
+            BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class),
+            Text::make('Title1')
             ->sortable()
             ->rules('required', 'max:255'),
-            Text::make('Code')
+            Text::make('Title2')
+            ->sortable()
+            ->rules('required', 'max:255'),
+            Text::make('Body1')
+            ->sortable()
+            ->rules('required', 'max:255'),
+            Text::make('Body2')
             ->sortable()
             ->rules('required', 'max:255'),
         ];
