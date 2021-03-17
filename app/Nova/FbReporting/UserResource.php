@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Nova;
+namespace App\Nova\FbReporting;
 
+use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 
-class User extends Resource
+class UserResource extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -16,6 +17,27 @@ class User extends Resource
      * @var string
      */
     public static $model = \App\Models\User::class;
+
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'Users';
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return 'User';
+    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.
