@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AdTextResource extends Resource
@@ -73,12 +74,16 @@ class AdTextResource extends Resource
             Text::make('Title2')
             ->sortable()
             ->rules('required', 'max:255'),
-            Text::make('Body1')
+            Textarea::make('Body1')
+            ->alwaysShow()
+            ->showOnIndex(true)
             ->sortable()
-            ->rules('required', 'max:255'),
-            Text::make('Body2')
+            ->rules('required'),
+            Textarea::make('Body2')
+            ->alwaysShow()
+            ->showOnIndex(true)
             ->sortable()
-            ->rules('required', 'max:255'),
+            ->rules('required'),
         ];
     }
 
