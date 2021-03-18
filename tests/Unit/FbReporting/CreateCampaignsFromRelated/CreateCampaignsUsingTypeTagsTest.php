@@ -48,6 +48,8 @@ class CreateCampaignsUsingTypeTagsTest extends TestCase
             $obj = new stdClass;
             $obj->batch_id = $submission->batch_id;
             $obj->type_tag = $this->faker->city;
+            $obj->keyword = $submission->keyword;
+            $obj->id = $submission->id;
             array_push($data, $obj);
         }
 
@@ -56,7 +58,7 @@ class CreateCampaignsUsingTypeTagsTest extends TestCase
             ->json('POST', '/nova-vendor/create-campaigns-from-related-card/create-campaign', [
                 'data' =>  json_encode($data), 
             ]); 
-            
+         dd($response);   
         $response->assertStatus(200); 
     }
 }
