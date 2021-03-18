@@ -494,9 +494,10 @@ class SubmittedKeywordService
             foreach($rows as $row) {
                 if ($row->action_taken === 'new') {
                     array_push($new, [
-                        'keyword' => $this->facebookCampaign->formatKeyword($row->keyword, '+'),
+                        'keyword' => strtolower($row->keyword),
                         'type_tag' => '',
-                        'id' => $row->id
+                        'id' => $row->id,
+                        'batch_id' => $row->batch_id
                     ]);
                 }
                 else {
@@ -527,7 +528,7 @@ class SubmittedKeywordService
         $sm = new StringManipulator;
       
         $rows = SubmittedKeyword::select('*')
-            ->where('status', '!=', 'pending')->limit(10)->latest()->get(); 
+            ->where('status', '!=', 'pending')->limit(10)->orderBy('updated_at', 'desc')->get(); 
             
             foreach($rows as $row) {
                 $new = $skipped = [];
@@ -592,6 +593,11 @@ class SubmittedKeywordService
                             'status' => 'processed'
                         ]);
                     } 
+                    else {
+                        $this->updateRow($batchId, $submission->keyword, [
+                            'status' => 'pending'
+                        ]);
+                    }
                 }
               
             }

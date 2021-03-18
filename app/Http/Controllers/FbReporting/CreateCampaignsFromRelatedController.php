@@ -32,9 +32,14 @@ class CreateCampaignsFromRelatedController extends Controller
         return $this->successResponse('Data returned successfully', $sks->loadBatchHistory());
     }
 
-    public function processPendingBatches(CreateCampaignFromRelatedRequest $request)
+    public function processPendingBatches(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
     {
-        ProcessPendingBatchesUsingTypeTagsJob::dispatch($request->all()['data']);  
+        foreach ($request->all()['data'] as $key => $keyword) {
+            $sks->updateRow($keyword->batch_id, $keyword->keyword, [
+                'status' => 'processing'
+            ]);
+        }
+        ProcessPendingBatchesUsingTypeTagsJob::dispatch($request->all()['data']);
         return $this->successResponse('Request was successful. Batch processing in progress');
     }
 }

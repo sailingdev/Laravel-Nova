@@ -300,6 +300,11 @@ abstract class Facebook
     }
 
 
+    /**
+     * @param string $marketId
+     * 
+     * @return array
+     */
     public function generateNewBodyTexts(string $marketId)
     {
         $marketService = new AdTextService;
