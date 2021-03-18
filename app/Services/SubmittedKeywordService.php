@@ -371,6 +371,25 @@ class SubmittedKeywordService
                             );
 
                             $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
+                            $marketService = new MarketService;
+
+                            $marketCode = $marketService->getMarketIdbyCode($submission->market);
+                           
+                            $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode);
+                             
+                            if (count($newBodyTexts) > 1) {
+                                $rand = rand(0,1);
+                                $randTitle = 'title'.$rand;
+                                $randBody = 'body'.$rand;
+
+                                $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->{$randTitle};
+                                $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->{$randBody};
+
+                                $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->{$randTitle};
+                                $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->{$randBody};
+                            }
+                          
+                            // dd($existingAdSetFeedSpec['bodies'], $existingAdSetFeedSpec['titles'],$newBodyTexts, $ile['bodies'], $ile['titles']);
 
                             $newAdCreativeData = [
                                 'name' =>  ucfirst($submission['keyword']), // $existingAdCreative[1]->name,

@@ -3,6 +3,8 @@
 namespace App\Revenuedriver\Base;
 
 use App\Labs\StringManipulator;
+use App\Services\AdTextService;
+use App\Services\MarketService;
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
 use Illuminate\Support\Facades\App;
@@ -295,6 +297,13 @@ abstract class Facebook
     {
         return 'https://' . strtolower($market) . '.' . $mainSite . '/search/4/?type='.$typeTag . 
         '&keyword=' . $this->formatKeyword($keyword, '+') . '&source=facebook';
+    }
+
+
+    public function generateNewBodyTexts(string $marketId)
+    {
+        $marketService = new AdTextService;
+        return $marketService->getRandomDataByMarketId($marketId);
     }
 
 }
