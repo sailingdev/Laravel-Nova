@@ -21,831 +21,827 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
                 'title1' => '❗SEARCH FOR {KEYWORD}❗',
                 'title2' => '❗Save Money Today❗ - Search for {Keyword}',
-                'body1' => nl2br('🤩 Looking for {Keyword}?
-
-                    ✅ Find out our best deals today 👇👇'),
-                'body2' => nl2br('😲 {KEYWORD} 😲
-
-                ✅ Find the best offers today 👇👇')
+                'body1' => '🤩 Looking for {Keyword}?  ' . PHP_EOL . PHP_EOL .'Find out our best deals today 👇👇',
+                'body2' => '😲 {KEYWORD} 😲 ' .PHP_EOL. PHP_EOL .' Find the best offers today 👇👇'
             ],
             [
                 'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
                 'title1' => '❗SEARCH FOR {KEYWORD}❗',
                 'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
-                'body1' => nl2br('🤩 {Keyword} 🤩
-
-                ⚫ Time Limited Opportunities
-                ⚫ Check it out - New offers every day'),
-                'body2' => nl2br('Search for 👉 {Keyword} 👈 
-                ⚡ Find Amazing Offers Online ⚡')
-            ]
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
-        //         'title1' => '❗SEARCH FOR {KEYWORD}❗',
-        //         'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
-        //         'body1' => 'TIME LIMITED OPPORTUNITIES
-        //         😱 Search for {keyword} 😱
+                'body1' => '🤩 {Keyword} 🤩
+                ' . PHP_EOL . PHP_EOL . '
+                ⚫ Time Limited Opportunities' . PHP_EOL . '
+                ⚫ Check it out - New offers every day',
+                'body2' => 'Search for 👉 {Keyword} 👈 ' . PHP_EOL . PHP_EOL . '
+                ⚡ Find Amazing Offers Online ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
+                'title1' => '❗SEARCH FOR {KEYWORD}❗',
+                'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
+                'body1' => 'TIME LIMITED OPPORTUNITIES
+                😱 Search for {keyword} 😱 ' . PHP_EOL . PHP_EOL . '
                 
-        //         Find out more ⬇️⬇️',
-        //         'body2' => 'Search & Save on  👉 {Keyword} 👈 
-        //         ⚡Find Amazing Offers Online ⚡'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
-        //         'title1' => '❗SEARCH FOR {KEYWORD}❗',
-        //         'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
-        //         'body1' => 'Search for  👉 {Keyword} 👈 
-        //         Find Amazing Offers Online 😲',
-        //         'body2' => 'Search for {Keyword} ✨
+                Find out more ⬇️⬇️',
+                'body2' => 'Search & Save on  👉 {Keyword} 👈 ' . PHP_EOL . PHP_EOL . '
+                ⚡Find Amazing Offers Online ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
+                'title1' => '❗SEARCH FOR {KEYWORD}❗',
+                'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
+                'body1' => 'Search for  👉 {Keyword} 👈 ' . PHP_EOL . '
+                Find Amazing Offers Online 😲',
+                'body2' => 'Search for {Keyword} ✨ ' . PHP_EOL . PHP_EOL . '
 
-        //         ◉ Find Amazing Offers Online
-        //         ◉ Check it out - New offers every day'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
-        //         'title1' => '⚡SEARCH FOR DISCOUNTS {KEYWORD} ⚡',
-        //         'title2' => '😱SEARCH FOR {KEYWORD} OFFERS😱',
-        //         'body1' => '😲 {KEYWORD} 😲
+                ◉ Find Amazing Offers Online ' . PHP_EOL . '
+                ◉ Check it out - New offers every day'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
+                'title1' => '⚡SEARCH FOR DISCOUNTS {KEYWORD} ⚡',
+                'title2' => '😱SEARCH FOR {KEYWORD} OFFERS😱',
+                'body1' => '😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅Limited time discounts
-        //         ✅Save Money today',
-        //         'body2' => '🤩 {KEYWORD} 🤩
+                ✅Limited time discounts ' . PHP_EOL  . '
+                ✅Save Money today',
+                'body2' => '🤩 {KEYWORD} 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         ⭕ Time Limited Opportunities
-        //         ⭕ Save Money Today'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
-        //         'title1' => '❗SEARCH FOR {Keyword}❗',
-        //         'title2' => '😮Save Money Today😮 - Search for {Keyword}',
-        //         'body1' => '🔥 Looking for {Keyword} ? 🔥
+                ⭕ Time Limited Opportunities ' . PHP_EOL . '
+                ⭕ Save Money Today'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
+                'title1' => '❗SEARCH FOR {Keyword}❗',
+                'title2' => '😮Save Money Today😮 - Search for {Keyword}',
+                'body1' => '🔥 Looking for {Keyword} ? 🔥' . PHP_EOL . PHP_EOL . '
 
-        //         Time Limited Offers
-        //         Discover them today ⬇️',
-        //         'body2' => '🤩 Looking for {Keyword} ? 🤩
+                Time Limited Offers ' . PHP_EOL . '
+                Discover them today ⬇️',
+                'body2' => '🤩 Looking for {Keyword} ? 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         Find the BEST Offers Online 😲
-        //         Check it out today ⬇️⬇️'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
-        //         'title1' => '❗SEARCH FOR {Keyword}❗',
-        //         'title2' => '✨Search for {KEYWORD}✨',
-        //         'body1' => '🔥TIME LIMITED PROMOTIONS 🔥
+                Find the BEST Offers Online 😲 ' . PHP_EOL  . '
+                Check it out today ⬇️⬇️'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
+                'title1' => '❗SEARCH FOR {Keyword}❗',
+                'title2' => '✨Search for {KEYWORD}✨',
+                'body1' => '🔥TIME LIMITED PROMOTIONS 🔥 ' . PHP_EOL . PHP_EOL . '
 
-        //         Looking for {Keyword} ? 
-        //         ✅Discover our best promotions today',
-        //         'body2' => 'Search for 👉 {KEYWORD} 👈 
+                Looking for {Keyword} ? ' . PHP_EOL  . '
+                ✅Discover our best promotions today',
+                'body2' => 'Search for 👉 {KEYWORD} 👈 ' . PHP_EOL . PHP_EOL . '
 
-        //         🤩Find Amazing Offers Online 🤩'
-        //     ],
+                🤩Find Amazing Offers Online 🤩'
+            ],
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '❗Risparmia Oggi❗ - Cerca {Keyword}',
-        //         'title2' => '❗CERCA {KEYWORD}❗',
-        //         'body1' => '🤩 Stai cercando {Keyword}?
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '❗Risparmia Oggi❗ - Cerca {Keyword}',
+                'title2' => '❗CERCA {KEYWORD}❗',
+                'body1' => '🤩 Stai cercando {Keyword}? ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Scopri subito le migliori offerte👇👇',
-        //         'body2' => '😲 {KEYWORD} 😲
+                ✅ Scopri subito le migliori offerte👇👇',
+                'body2' => '😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Scopri le migliori offerte👇👇'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '❗Risparmia❗ - Cerca i Miglior Risultati per {Keyword}',
-        //         'title2' => '❗CERCA {KEYWORD}❗',
-        //         'body1' => '🤩 {Keyword} 🤩
+                ✅ Scopri le migliori offerte👇👇'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '❗Risparmia❗ - Cerca i Miglior Risultati per {Keyword}',
+                'title2' => '❗CERCA {KEYWORD}❗',
+                'body1' => '🤩 {Keyword} 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         ⚫ Offerta speciale
-        //         ⚫ Tutte le promozioni disponibili',
-        //         'body2' => 'Cerca 👉 {Keyword} 👈 
-        //         ⚡ Offerte speciali | I migliori prezzi ⚡'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '❗Risparmia Oggi❗ - Cerca {Keyword}',
-        //         'title2' => '❗CERCA {KEYWORD}❗',
-        //         'body1' => 'OCCASIONI A TEMPO LIMITATO 
-        //         😱 Cerca {keyword} 😱
+                ⚫ Offerta speciale ' . PHP_EOL  . '
+                ⚫ Tutte le promozioni disponibili',
+                'body2' => 'Cerca 👉 {Keyword} 👈 ' . PHP_EOL  . '
+                ⚡ Offerte speciali | I migliori prezzi ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '❗Risparmia Oggi❗ - Cerca {Keyword}',
+                'title2' => '❗CERCA {KEYWORD}❗',
+                'body1' => 'OCCASIONI A TEMPO LIMITATO 
+                😱 Cerca {keyword} 😱 ' . PHP_EOL . PHP_EOL . '
                 
-        //         Scopri di più ⬇️⬇️',
-        //         'body2' => 'Cerca e Trova 👉 Keyword 👈 
-        //         ⚡ Offerte speciali | I migliori prezzi ⚡'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '❗Risparmia❗ - Cerca i Migliori Risultati per {Keyword}',
-        //         'title2' => '❗CERCA {KEYWORD}❗',
-        //         'body1' => 'Trova 👉 {Keyword} 👈 
-        //         Ampia Scelta Online 😲',
-        //         'body2' => "Cerca {Keyword} ✨
+                Scopri di più ⬇️⬇️',
+                'body2' => 'Cerca e Trova 👉 Keyword 👈 ' . PHP_EOL  . '
+                ⚡ Offerte speciali | I migliori prezzi ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '❗Risparmia❗ - Cerca i Migliori Risultati per {Keyword}',
+                'title2' => '❗CERCA {KEYWORD}❗',
+                'body1' => 'Trova 👉 {Keyword} 👈 ' . PHP_EOL . '
+                Ampia Scelta Online 😲',
+                'body2' => "Cerca {Keyword} ✨ " . PHP_EOL . PHP_EOL . "
 
-        //         ◉ Confronta prezzi e caratteristiche
-        //         ◉ Trova l'offerta migliore"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '⚡CERCA SCONTI {KEYWORD} ⚡',
-        //         'title2' => '😱CERCA {KEYWORD} 😱',
-        //         'body1' => '😲 {KEYWORD} 😲
+                ◉ Confronta prezzi e caratteristiche " . PHP_EOL . PHP_EOL . "
+                ◉ Trova l'offerta migliore"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '⚡CERCA SCONTI {KEYWORD} ⚡',
+                'title2' => '😱CERCA {KEYWORD} 😱',
+                'body1' => '😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅Sconti a tempo limitato
-        //         ✅Risparmia oggi',
+                ✅Sconti a tempo limitato ' . PHP_EOL  . '
+                ✅Risparmia oggi',
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => '🤩 {KEYWORD} 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         ⭕ Offerte a tempo limitato
-        //         ⭕ Risparmia oggi"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '❗Promozioni Online - Cerca  {Keyword}❗',
-        //         'title2' => '😮Risparmia oggi 😮 - Migliori Offerte {Keyword}',
-        //         'body1' => '🔥 Cerchi {Keyword} ? 🔥
+                ⭕ Offerte a tempo limitato ' . PHP_EOL  . '
+                ⭕ Risparmia oggi'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '❗Promozioni Online - Cerca  {Keyword}❗',
+                'title2' => '😮Risparmia oggi 😮 - Migliori Offerte {Keyword}',
+                'body1' => '🔥 Cerchi {Keyword} ? 🔥 ' . PHP_EOL . PHP_EOL . '
 
-        //         Trova le Migliori Offerte a Tempo Limitato😲
-        //         Scoprile oggi ⬇️⬇️',
+                Trova le Migliori Offerte a Tempo Limitato😲 ' . PHP_EOL  . '
+                Scoprile oggi ⬇️⬇️',
 
-        //         'body2' => "🤩 Cerchi {Keyword} ? 🤩
+                'body2' => '🤩 Cerchi {Keyword} ? 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         Trova le Migliori Offerte Online😲
-        //         Scoprile oggi ⬇️⬇️"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
-        //         'title1' => '❗CERCA {KEYWORD}❗',
-        //         'title2' => '✨ CERCA OFFERTE {KEYWORD} ✨',
-        //         'body1' => '🔥PROMOZIONI A TEMPO LIMITATO 🔥 
+                Trova le Migliori Offerte Online😲 ' . PHP_EOL  . '
+                Scoprile oggi ⬇️⬇️'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
+                'title1' => '❗CERCA {KEYWORD}❗',
+                'title2' => '✨ CERCA OFFERTE {KEYWORD} ✨',
+                'body1' => '🔥PROMOZIONI A TEMPO LIMITATO 🔥 ' . PHP_EOL . PHP_EOL . '
 
-        //         Cerchi {Keyword} ? 
-        //         ✅ Scopri oggi le nostre migliori promozioni👇👇
-        //         ',
+                Cerchi {Keyword} ? ' . PHP_EOL  . '
+                ✅ Scopri oggi le nostre migliori promozioni👇👇
+                ',
 
-        //         'body2' => "Cerca 👉 {KEYWORD} 👈 
+                'body2' => 'Cerca 👉 {KEYWORD} 👈 ' . PHP_EOL . PHP_EOL . '
 
-        //         🤩Trova le Migliori Offerte Online 🤩"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
-        //         'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
-        //         'body1' => '🤩 Auf der Suche nach {Keyword}?
+                🤩Trova le Migliori Offerte Online 🤩'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
+                'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
+                'body1' => '🤩 Auf der Suche nach {Keyword}? ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Finden Sie die besten Angebote online 👇👇',
+                ✅ Finden Sie die besten Angebote online 👇👇',
 
-        //         'body2' => "😲 {KEYWORD} 😲
+                'body2' => '😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Finden Sie die besten Angebote online 👇👇"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
-        //         'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
-        //         'body1' => '🤩 {Keyword} 🤩
+                ✅ Finden Sie die besten Angebote online 👇👇'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
+                'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
+                'body1' => '🤩 {Keyword} 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         ⚫ Jetzt und nur für kurze zeit
-        //         ⚫ Entdecken Sie Top Online-Schnäppchen',
+                ⚫ Jetzt und nur für kurze zeit ' . PHP_EOL  . '
+                ⚫ Entdecken Sie Top Online-Schnäppchen',
 
-        //         'body2' => "Finde 👉{Keyword}👈 
-        //         ⚡ Sonderangebote | Die besten Preise ⚡"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
-        //         'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
-        //         'body1' => 'ZEITLICH BEGRENZTE ANGEBOTE 
-        //         😱 Finde {keyword} 😱
+                'body2' => 'Finde 👉{Keyword}👈 ' . PHP_EOL  . '
+                ⚡ Sonderangebote | Die besten Preise ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
+                'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
+                'body1' => 'ZEITLICH BEGRENZTE ANGEBOTE ' . PHP_EOL  . '
+                😱 Finde {keyword} 😱 ' . PHP_EOL . PHP_EOL . '
                 
-        //         Jetzt stöbern! ⬇️⬇️',
+                Jetzt stöbern! ⬇️⬇️',
 
-        //         'body2' => 'Suchen Sie nach  👉{Keyword}👈 
-        //         ⚡ Entdecken Sie Top Online-Schnäppchen ⚡'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
-        //         'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
-        //         'body1' => 'Finde 👉 {Keyword} 👈 
-        //         Jetzt Entdecken 👇',
+                'body2' => 'Suchen Sie nach  👉{Keyword}👈 ' . PHP_EOL  . '
+                ⚡ Entdecken Sie Top Online-Schnäppchen ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
+                'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
+                'body1' => 'Finde 👉 {Keyword} 👈 ' . PHP_EOL  . '
+                Jetzt Entdecken 👇',
 
-        //         'body2' => 'Finde {Keyword} ✨
+                'body2' => 'Finde {Keyword} ✨ ' . PHP_EOL . PHP_EOL . '
 
-        //         ◉ Sonderangebote | Die besten Preise
-        //         ◉ Finden Sie Ergebnisse mit unseren Empfehlungen'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '⚡ SUCHE NACH {KEYWORD} ⚡',
-        //         'title2' => '😱SUCHE NACH {KEYWORD} ANGEBOTE😱',
-        //         'body1' => '😲 {KEYWORD} 😲
+                ◉ Sonderangebote | Die besten Preise ' . PHP_EOL  . '
+                ◉ Finden Sie Ergebnisse mit unseren Empfehlungen'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '⚡ SUCHE NACH {KEYWORD} ⚡',
+                'title2' => '😱SUCHE NACH {KEYWORD} ANGEBOTE😱',
+                'body1' => '😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Zeitlich begrenzte Rabatte
-        //         ✅ Sparen Sie heute Geld',
+                ✅ Zeitlich begrenzte Rabatte ' . PHP_EOL  . '
+                ✅ Sparen Sie heute Geld',
 
-        //         'body2' => '🤩 {KEYWORD} 🤩
+                'body2' => '🤩 {KEYWORD} 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         ⭕ Zeitlich begrenzte Angebote
-        //         ⭕ Heute Geld sparen'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '❗ Suche Nach {Keyword} ❗',
-        //         'title2' => '😮Heute Geld sparen 😮 - Suche Nach {Keyword}',
-        //         'body1' => '🔥 Auf der Suche nach {Keyword} ? 🔥
+                ⭕ Zeitlich begrenzte Angebote ' . PHP_EOL  . '
+                ⭕ Heute Geld sparen'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '❗ Suche Nach {Keyword} ❗',
+                'title2' => '😮Heute Geld sparen 😮 - Suche Nach {Keyword}',
+                'body1' => '🔥 Auf der Suche nach {Keyword} ? 🔥 ' . PHP_EOL . PHP_EOL . '
 
-        //         Zeitlich begrenzte Angebote
-        //         Entdecken Sie sie noch heute ⬇️',
+                Zeitlich begrenzte Angebote ' . PHP_EOL . '
+                Entdecken Sie sie noch heute ⬇️',
 
-        //         'body2' => '🤩 Auf der Suche nach {Keyword}? 🤩
+                'body2' => '🤩 Auf der Suche nach {Keyword}? 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         Finde die BESTEN Angebote online 😲
-        //         Schau es dir noch heute an ⬇️⬇️️'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
-        //         'title1' => '❗ SUCHE NACH {KEYWORD}❗',
-        //         'title2' => '✨SUCHE NACH {KEYWORD} ANGEBOTE✨',
-        //         'body1' => '🔥TIME BEGRENZTE WERBEAKTIONEN 🔥
+                Finde die BESTEN Angebote online 😲 ' . PHP_EOL  . '
+                Schau es dir noch heute an ⬇️⬇️️'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
+                'title1' => '❗ SUCHE NACH {KEYWORD}❗',
+                'title2' => '✨SUCHE NACH {KEYWORD} ANGEBOTE✨',
+                'body1' => '🔥TIME BEGRENZTE WERBEAKTIONEN 🔥 ' . PHP_EOL . PHP_EOL . '
 
-        //         Suchen Sie nach {Keyword} ? 
-        //         ✅ Entdecken Sie noch heute unsere besten Werbeaktionen',
+                Suchen Sie nach {Keyword} ? ' . PHP_EOL  . '
+                ✅ Entdecken Sie noch heute unsere besten Werbeaktionen',
 
-        //         'body2' => '️Suche nach  👉 {KEYWORD} 👈 
+                'body2' => '️Suche nach  👉 {KEYWORD} 👈 ' . PHP_EOL . PHP_EOL . '
 
-        //         🤩Erstaunliche Angebote online finden 🤩'
-        //     ],
+                🤩Erstaunliche Angebote online finden 🤩'
+            ],
 
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
-        //         'title2' => '❗RECHERCHE {KEYWORD}❗',
-        //         'body1' => '🤩 Recherche de {keyword} 
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
+                'title2' => '❗RECHERCHE {KEYWORD}❗',
+                'body1' => '🤩 Recherche de {keyword} ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Découvrez nos Meilleurs Offres!👇👇',
+                ✅ Découvrez nos Meilleurs Offres!👇👇',
 
-        //         'body2' => '️😲 {KEYWORD} 😲
+                'body2' => '️😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '
 
-        //         ✅ Découvrir les meilleures opportunités!👇👇'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
-        //         'title2' => '❗RECHERCHE {KEYWORD}❗',
-        //         'body1' => 'OPPORTUNITÉS LIMITÉES DANS LE TEMPS
-        //         😱 Recherche de {keyword} 😱
+                ✅ Découvrir les meilleures opportunités!👇👇'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
+                'title2' => '❗RECHERCHE {KEYWORD}❗',
+                'body1' => 'OPPORTUNITÉS LIMITÉES DANS LE TEMPS ' . PHP_EOL  . '
+                😱 Recherche de {keyword} 😱 ' . PHP_EOL . PHP_EOL . '
                 
-        //         Découvrez-en plus ! ⬇️⬇️',
+                Découvrez-en plus ! ⬇️⬇️',
 
-        //         'body2' => '️Recherchez 👉{Keyword}👈 
-        //         😍😍 Vente Flash ⚡️ Achetez Maintenant !!'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
-        //         'title2' => '❗RECHERCHE {KEYWORD}❗',
-        //         'body1' => '🤩 {Keyword} 🤩
+                'body2' => '️Recherchez 👉{Keyword}👈  ' . PHP_EOL  . '
+                😍😍 Vente Flash ⚡️ Achetez Maintenant !!'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
+                'title2' => '❗RECHERCHE {KEYWORD}❗',
+                'body1' => '🤩 {Keyword} 🤩 ' . PHP_EOL . PHP_EOL . '
 
-        //         ⚫ Découvrir les meilleures opportunités
-        //         ⚫ Trouver des résultats avec nos choix',
+                ⚫ Découvrir les meilleures opportunités ' . PHP_EOL  . '
+                ⚫ Trouver des résultats avec nos choix',
 
-        //         'body2' => 'Recherchez 👉 {Keyword}👈 
-        //         😍😍 Vente Flash ⚡️ Achetez Maintenant !!'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
-        //         'title2' => '❗RECHERCHE {KEYWORD}❗',
-        //         'body1' => 'Trouvez 👉 {Keyword} 👈 
-        //         Meilleures offres en ligne 😲',
+                'body2' => 'Recherchez 👉 {Keyword}👈  ' . PHP_EOL  . '
+                😍😍 Vente Flash ⚡️ Achetez Maintenant !!'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
+                'title2' => '❗RECHERCHE {KEYWORD}❗',
+                'body1' => 'Trouvez 👉 {Keyword} 👈 ' . PHP_EOL  . '
+                Meilleures offres en ligne 😲 ' . PHP_EOL . PHP_EOL . '',
 
-        //         'body2' => 'Recherchez {Keyword} ✨
+                'body2' => 'Recherchez {Keyword} ✨ ' . PHP_EOL . PHP_EOL . '
 
-        //         ◉ Suggestions et opportunités en ligne.
-        //         ◉ Découvrez nos Meilleurs Offres!'
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '⚡ RECHERCHE {KEYWORD} ⚡',
-        //         'title2' => '😱RECHERCHE {KEYWORD} OFFRES😱',
-        //         'body1' => "😲 {KEYWORD} 😲
+                ◉ Suggestions et opportunités en ligne.' . PHP_EOL  . '
+                ◉ Découvrez nos Meilleurs Offres!'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '⚡ RECHERCHE {KEYWORD} ⚡',
+                'title2' => '😱RECHERCHE {KEYWORD} OFFRES😱',
+                'body1' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Offres à durée limitée
-        //         ✅ Économisez de l'argent aujourd'hui",
+                ✅ Offres à durée limitée " . PHP_EOL  . "
+                ✅ Économisez de l'argent aujourd'hui",
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => "🤩 {KEYWORD} 🤩 " . PHP_EOL  . "
 
-        //         ⭕ Offres limitées dans le temps
-        //         ⭕ Économisez de l'argent dès aujourd'hui"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '❗ Promotions en ligne {Keyword} ❗',
-        //         'title2' => "😮 Économisez de l'argent dès aujourd'hui 😮 - Meilleures offres {Keyword}",
-        //         'body1' => "🔥 Vous recherchez {Keyword}? 🔥
+                ⭕ Offres limitées dans le temps " . PHP_EOL  . "
+                ⭕ Économisez de l'argent dès aujourd'hui"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '❗ Promotions en ligne {Keyword} ❗',
+                'title2' => "😮 Économisez de l'argent dès aujourd'hui 😮 - Meilleures offres {Keyword}",
+                'body1' => "🔥 Vous recherchez {Keyword}? 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Offres limitées dans le temps
-        //         Découvrez-les aujourd'hui ⬇️",
+                Offres limitées dans le temps " . PHP_EOL . PHP_EOL . "
+                Découvrez-les aujourd'hui ⬇️",
 
-        //         'body2' => "🤩 Vous cherchez {Keyword} ? 🤩
+                'body2' => "🤩 Vous cherchez {Keyword} ? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Trouvez les meilleures offres en ligne 😲
-        //         Consultez-le dès aujourd'hui ⬇️⬇️"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
-        //         'title1' => '❗ OFFRES EN LIGNE {KEYWORD} ❗',
-        //         'title2' => "✨{KEYWORD} 
-        //         MEILLEURES OFFRES✨",
-        //         'body1' => "🔥 PROMOTIONS LIMITÉES À TEMPS 🔥
+                Trouvez les meilleures offres en ligne 😲 " . PHP_EOL  . "
+                Consultez-le dès aujourd'hui ⬇️⬇️"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
+                'title1' => '❗ OFFRES EN LIGNE {KEYWORD} ❗',
+                'title2' => "✨{KEYWORD} 
+                MEILLEURES OFFRES✨",
+                'body1' => "🔥 PROMOTIONS LIMITÉES À TEMPS 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Vous recherchez {Keyword}?
-        //         ✅ Découvrez nos meilleures promotions aujourd'hui",
+                Vous recherchez {Keyword}? " . PHP_EOL  . "
+                ✅ Découvrez nos meilleures promotions aujourd'hui",
 
-        //         'body2' => "Recherchez 👉 {KEYWORD} 👈 
+                'body2' => "Recherchez 👉 {KEYWORD} 👈 
 
-        //         🤩Trouvez des offres étonnantes en ligne 🤩"
-        //     ],
+                🤩Trouvez des offres étonnantes en ligne 🤩"
+            ],
 
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗BUSCA {KEYWORD}  OFERTAS ❗',
-        //         'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
-        //         'body1' => "🤩¿Buscando {Keyword}?🤩
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗BUSCA {KEYWORD}  OFERTAS ❗',
+                'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
+                'body1' => "🤩¿Buscando {Keyword}?🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Descubre nuestras mejores ofertas de hoy 👇👇",
+                ✅ Descubre nuestras mejores ofertas de hoy 👇👇",
 
-        //         'body2' => "😲 {KEYWORD} 😲
+                'body2' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Encuentra las mejores ofertas de hoy 👇👇"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗BUSCA {KEYWORD}❗',
-        //         'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
-        //         'body1' => "🤩 {Keyword} 🤩
+                ✅ Encuentra las mejores ofertas de hoy 👇👇"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗BUSCA {KEYWORD}❗',
+                'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
+                'body1' => "🤩 {Keyword} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⚫ Precios por tiempo limitado
-        //         ⚫ Compruébalo - Nuevas ofertas todos los días",
+                ⚫ Precios por tiempo limitado " . PHP_EOL . "
+                ⚫ Compruébalo - Nuevas ofertas todos los días",
 
-        //         'body2' => "Buscar 👉  {Keyword}  👈 
-        //         ⚡ Encuentra ofertas increíbles online⚡"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗BUSCA {KEYWORD}  OFERTAS ❗',
-        //         'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
-        //         'body1' => "OFERTAS POR TIEMPO LIMITADO
-        //         😱 Buscar {Keyword} 😱
+                'body2' => "Buscar 👉  {Keyword}  👈 " . PHP_EOL  . "
+                ⚡ Encuentra ofertas increíbles online⚡"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗BUSCA {KEYWORD}  OFERTAS ❗',
+                'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
+                'body1' => "OFERTAS POR TIEMPO LIMITADO " . PHP_EOL  . "
+                😱 Buscar {Keyword} 😱 " . PHP_EOL . PHP_EOL . "
                 
-        //         Más información ⬇️⬇️",
+                Más información ⬇️⬇️",
 
-        //         'body2' => "Buscar y guardar en 👉 {Keyword} 👈
-        //         Encuentre ofertas increíbles online"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗BUSCA {KEYWORD}❗',
-        //         'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
-        //         'body1' => "Buscar y ahorrar en  👉{Keyword}👈 
-        //         Encuentra ofertas increíbles online😲",
+                'body2' => "Buscar y guardar en 👉 {Keyword} 👈 " . PHP_EOL . "
+                Encuentre ofertas increíbles online"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗BUSCA {KEYWORD}❗',
+                'title2' => "❗ Ahorra dinero hoy ❗ - Busca {Keyword}",
+                'body1' => "Buscar y ahorrar en  👉{Keyword}👈 " . PHP_EOL  . "
+                Encuentra ofertas increíbles online😲 " . PHP_EOL . PHP_EOL,
 
-        //         'body2' => "Busca por {Keyword} ✨
+                'body2' => "Busca por {Keyword} ✨ " . PHP_EOL . PHP_EOL . "
 
-        //         ◉ Encuentra ofertas increíbles online ◉ Compruébalo - Nuevas ofertas todos los días"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '⚡ BUSCA DESCUENTOS {KEYWORD} ⚡',
-        //         'title2' => "😱BUSCA {KEYWORD}😱",
-        //         'body1' => "😲 {KEYWORD} 😲
+                ◉ Encuentra ofertas increíbles online ◉ Compruébalo - Nuevas ofertas todos los días"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '⚡ BUSCA DESCUENTOS {KEYWORD} ⚡',
+                'title2' => "😱BUSCA {KEYWORD}😱",
+                'body1' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Ofertas por tiempo limitado
-        //         ✅ Ahorre dinero hoy",
+                ✅ Ofertas por tiempo limitado " . PHP_EOL  . "
+                ✅ Ahorre dinero hoy",
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => "🤩 {KEYWORD} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⭕ Ofertas por tiempo limitado
-        //         ⭕ Ahorra dinero hoy
-        //         "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗ Promociones online {Keyword} ❗',
-        //         'title2' => "😮Ahorra dinero hoy 😮 - Mejores Ofertas {Keyword} ",
-        //         'body1' => "🔥 ¿Busca {Keyword}? 🔥
+                ⭕ Ofertas por tiempo limitado " . PHP_EOL  . "
+                ⭕ Ahorra dinero hoy
+                "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗ Promociones online {Keyword} ❗',
+                'title2' => "😮Ahorra dinero hoy 😮 - Mejores Ofertas {Keyword} ",
+                'body1' => "🔥 ¿Busca {Keyword}? 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Ofertas por tiempo limitado
-        //         Descúbrelos hoy ⬇️",
+                Ofertas por tiempo limitado " . PHP_EOL  . "
+                Descúbrelos hoy ⬇️",
 
-        //         'body2' => "🤩 Buscando {Keyword} ? 🤩
+                'body2' => "🤩 Buscando {Keyword} ? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Encuentra las MEJORES ofertas en línea 😲
-        //         Compruébalo hoy ⬇️⬇️"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗ Promociones online {Keyword} ❗',
-        //         'title2' => "😮Ahorra dinero hoy 😮 - Mejores Ofertas {Keyword} ",
-        //         'body1' => "🔥 ¿Busca {Keyword}? 🔥
+                Encuentra las MEJORES ofertas en línea 😲 " . PHP_EOL . "
+                Compruébalo hoy ⬇️⬇️"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗ Promociones online {Keyword} ❗',
+                'title2' => "😮Ahorra dinero hoy 😮 - Mejores Ofertas {Keyword} ",
+                'body1' => "🔥 ¿Busca {Keyword}? 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Ofertas por tiempo limitado
-        //         Descúbrelos hoy ⬇️",
+                Ofertas por tiempo limitado " . PHP_EOL  . "
+                Descúbrelos hoy ⬇️",
 
-        //         'body2' => "🤩 Buscando {Keyword} ? 🤩
+                'body2' => "🤩 Buscando {Keyword} ? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Encuentra las MEJORES ofertas en línea 😲
-        //         Compruébalo hoy ⬇️⬇️"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
-        //         'title1' => '❗ OFERTAS ONLINE {KEYWORD} ❗',
-        //         'title2' => "✨{KEYWORD} MEJORES OFERTAS ✨",
-        //         'body1' => "🔥 PROMOCIONES POR TIEMPO LIMITADO 🔥
+                Encuentra las MEJORES ofertas en línea 😲 " . PHP_EOL  . "
+                Compruébalo hoy ⬇️⬇️"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'ES')->first()['id'],
+                'title1' => '❗ OFERTAS ONLINE {KEYWORD} ❗',
+                'title2' => "✨{KEYWORD} MEJORES OFERTAS ✨",
+                'body1' => "🔥 PROMOCIONES POR TIEMPO LIMITADO 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         ¿Busca {Keyword}?
-        //         ✅ Descubra nuestras mejores promociones hoy",
+                ¿Busca {Keyword}? " . PHP_EOL  . "
+                ✅ Descubra nuestras mejores promociones hoy",
 
-        //         'body2' => "Busca 👉 {KEYWORD} 👈 
+                'body2' => "Busca 👉 {KEYWORD} 👈  " . PHP_EOL . PHP_EOL . "
 
-        //         🤩 Encuentra ofertas increíbles en línea 🤩"
-        //     ],
+                🤩 Encuentra ofertas increíbles en línea 🤩"
+            ],
 
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '❗ZOEK VOOR {KEYWORD} AANBIEDINGEN❗',
-        //         'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword} Beste Aanboden ",
-        //         'body1' => "🤩 Op zoek naar {Keyword}?
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '❗ZOEK VOOR {KEYWORD} AANBIEDINGEN❗',
+                'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword} Beste Aanboden ",
+                'body1' => "🤩 Op zoek naar {Keyword}? " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Ontdek vandaag nog onze beste aanbiedingen 👇👇",
+                ✅ Ontdek vandaag nog onze beste aanbiedingen 👇👇",
 
-        //         'body2' => "😲 {KEYWORD} 😲
+                'body2' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Vind de beste aanbiedingen vandaag nog 👇👇"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '❗ZOEK VOOR {KEYWORD}❗',
-        //         'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword}",
-        //         'body1' => "🤩 {Keyword} 🤩
+                ✅ Vind de beste aanbiedingen vandaag nog 👇👇"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '❗ZOEK VOOR {KEYWORD}❗',
+                'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword}",
+                'body1' => "🤩 {Keyword} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⚫ Tijdgebonden prijzen
-        //         ⚫ Elke dag nieuwe aanbiedingen",
+                ⚫ Tijdgebonden prijzen " . PHP_EOL  . "
+                ⚫ Elke dag nieuwe aanbiedingen",
 
-        //         'body2' => "Zoek naar 👉 {Keyword} 👈 
-        //         ⚡ Vind geweldige aanbiedingen online ⚡
-        //         "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '❗ZOEK VOOR {KEYWORD} AANBIEDINGEN❗',
-        //         'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword} Beste Aanboden",
-        //         'body1' => "TIJD BEPERKTE AANBIEDINGEN
-        //         😱 Zoeken op {Keyword} 😱
+                'body2' => "Zoek naar 👉 {Keyword} 👈 " . PHP_EOL  . "
+                ⚡ Vind geweldige aanbiedingen online ⚡
+                "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '❗ZOEK VOOR {KEYWORD} AANBIEDINGEN❗',
+                'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword} Beste Aanboden",
+                'body1' => "TIJD BEPERKTE AANBIEDINGEN " . PHP_EOL  . "
+                😱 Zoeken op {Keyword} 😱 " . PHP_EOL . PHP_EOL . "
                 
-        //         Ontdek meer ⬇️⬇️️
-        //         ",
+                Ontdek meer ⬇️⬇️️
+                ",
 
-        //         'body2' => "Zoeken en opslaan op 👉 {Keyword}👈 
-        //         ⚡ Vind geweldige aanbiedingen online ⚡"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '❗ZOEK VOOR {KEYWORD}❗',
-        //         'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword}",
-        //         'body1' => "Zoek naar 👉 {Keyword} 👈 
+                'body2' => "Zoeken en opslaan op 👉 {Keyword}👈  " . PHP_EOL  . "
+                ⚡ Vind geweldige aanbiedingen online ⚡"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '❗ZOEK VOOR {KEYWORD}❗',
+                'title2' => "❗ Bespaar vandaag❗ - Zoek voor {Keyword}",
+                'body1' => "Zoek naar 👉 {Keyword} 👈 " . PHP_EOL . PHP_EOL . "
 
-        //         Vind Geweldige Aanbiedingen online 😲",
+                Vind Geweldige Aanbiedingen online 😲",
 
-        //         'body2' => "Zoek naar {Keyword} ✨
+                'body2' => "Zoek naar {Keyword} ✨ " . PHP_EOL . PHP_EOL . "
 
-        //         ◉ Verbazingwekkende prijzen online vinden
-        //         ◉ Bekijk ze eens - Elke dag nieuwe aanbiedingen"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '⚡ ZOEK VOOR {KEYWORD} ⚡',
-        //         'title2' => "😱ZOEK VOOR {KEYWORD} AANBIEDINGEN😱",
-        //         'body1' => "😲 {KEYWORD} 😲
+                ◉ Verbazingwekkende prijzen online vinden " . PHP_EOL  . "
+                ◉ Bekijk ze eens - Elke dag nieuwe aanbiedingen"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '⚡ ZOEK VOOR {KEYWORD} ⚡',
+                'title2' => "😱ZOEK VOOR {KEYWORD} AANBIEDINGEN😱",
+                'body1' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Tijdelijke aanbiedingen
-        //         ✅ Bespaar vandaag geld",
+                ✅ Tijdelijke aanbiedingen " . PHP_EOL  . "
+                ✅ Bespaar vandaag geld",
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => "🤩 {KEYWORD} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⭕ Aanbiedingen met beperkte tijd
-        //         ⭕ Bespaar vandaag nog geld
-        //         "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '❗ Online promoties {Keyword} ❗',
-        //         'title2' => "😮 Bespaar vandaag nog geld 😮 Beste {Keyword} Aanbiedingen",
-        //         'body1' => "🔥 Op zoek naar {Keyword}? 🔥
+                ⭕ Aanbiedingen met beperkte tijd " . PHP_EOL  . "
+                ⭕ Bespaar vandaag nog geld
+                "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '❗ Online promoties {Keyword} ❗',
+                'title2' => "😮 Bespaar vandaag nog geld 😮 Beste {Keyword} Aanbiedingen",
+                'body1' => "🔥 Op zoek naar {Keyword}? 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Tijdelijke aanbiedingen
-        //         Ontdek ze vandaag ⬇️",
+                Tijdelijke aanbiedingen " . PHP_EOL  . "
+                Ontdek ze vandaag ⬇️",
 
-        //         'body2' => "🤩 Op zoek naar {Keyword} ? 🤩
+                'body2' => "🤩 Op zoek naar {Keyword} ? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Vind de BESTE AANBODEN Online 😲
-        //         Bekijk het vandaag ⬇️⬇️"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
-        //         'title1' => '❗ ONLINE AANBIEDINGEN {KEYWORD} ❗',
-        //         'title2' => "✨{KEYWORD} BESTE AANBODEN✨",
-        //         'body1' => "
-        //         🔥 TIJD BEPERKTE PROMOTIES 🔥
+                Vind de BESTE AANBODEN Online 😲 " . PHP_EOL  . "
+                Bekijk het vandaag ⬇️⬇️"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NL')->first()['id'],
+                'title1' => '❗ ONLINE AANBIEDINGEN {KEYWORD} ❗',
+                'title2' => "✨{KEYWORD} BESTE AANBODEN✨",
+                'body1' => "
+                🔥 TIJD BEPERKTE PROMOTIES 🔥 " . PHP_EOL . PHP_EOL . "
                 
-        //         Op zoek naar {Keyword}?
-        //         ✅ Ontdek vandaag onze beste promoties",
+                Op zoek naar {Keyword}? " . PHP_EOL  . "
+                ✅ Ontdek vandaag onze beste promoties",
 
-        //         'body2' => "Zoek naar👉 {KEYWORD} 👈 
+                'body2' => "Zoek naar👉 {KEYWORD} 👈 " . PHP_EOL . PHP_EOL . "
 
-        //         🤩Vind geweldige aanbiedingen online🤩"
-        //     ],
+                🤩Vind geweldige aanbiedingen online🤩"
+            ],
 
 
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
-        //         'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
-        //         'body1' => "🤩 Sök efter {Keyword}
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
+                'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
+                'body1' => "🤩 Sök efter {Keyword} " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Lär dig mer om det 👇👇",
+                ✅ Lär dig mer om det 👇👇",
 
-        //         'body2' => "😲 {KEYWORD} 😲
+                'body2' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Hitta de bästa erbjudandena online 👇👇"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
-        //         'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
-        //         'body1' => "🤩 {Keyword} 🤩
+                ✅ Hitta de bästa erbjudandena online 👇👇"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
+                'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
+                'body1' => "🤩 {Keyword} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⚫ Hitta de bästa erbjudandena online
-        //         ⚫ Våra 3 bästa förslag den här månaden.",
+                ⚫ Hitta de bästa erbjudandena online " . PHP_EOL  . "
+                ⚫ Våra 3 bästa förslag den här månaden.",
 
-        //         'body2' => "Sök 👉 Keyword 👈 
-        //         ⚡ Jämför erbjudanden, priser och recensioner ⚡"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
-        //         'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
-        //         'body1' => "TIDSBEGRÄNSADE MÖJLIGHETER
-        //         😱 Sök {keyword} 😱
+                'body2' => "Sök 👉 Keyword 👈  " . PHP_EOL  . "
+                ⚡ Jämför erbjudanden, priser och recensioner ⚡"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
+                'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
+                'body1' => "TIDSBEGRÄNSADE MÖJLIGHETER " . PHP_EOL  . "
+                😱 Sök {keyword} 😱 " . PHP_EOL . PHP_EOL . "
                 
-        //         Lär dig mer om det ⬇️⬇️",
+                Lär dig mer om det ⬇️⬇️",
 
-        //         'body2' => "Sök  👉 Keyword 👈 
-        //         ⚡ Upptäck fler möjligheter online ⚡"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
-        //         'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
-        //         'body1' => "Sök  👉 {Keyword} 👈 
-        //         Toppförslag & möjligheter online 😲",
+                'body2' => "Sök  👉 Keyword 👈 " . PHP_EOL  . "
+                ⚡ Upptäck fler möjligheter online ⚡"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
+                'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
+                'body1' => "Sök  👉 {Keyword} 👈 " . PHP_EOL  . "
+                Toppförslag & möjligheter online 😲 " . PHP_EOL . PHP_EOL,
 
-        //         'body2' => "Sök {Keyword} ✨
+                'body2' => "Sök {Keyword} ✨ " . PHP_EOL . PHP_EOL . "
 
-        //         ⚫ Hitta de bästa erbjudandena online
-        //         ⚫ Våra 3 bästa förslag den här månaden. "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '⚡ SÖK EFTER {KEYWORD} ⚡',
-        //         'title2' => "😱SÖK EFTER {KEYWORD} ERBJUDANDEN😱",
-        //         'body1' => "😲 {KEYWORD} 😲
+                ⚫ Hitta de bästa erbjudandena online" . PHP_EOL . "
+                ⚫ Våra 3 bästa förslag den här månaden. "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '⚡ SÖK EFTER {KEYWORD} ⚡',
+                'title2' => "😱SÖK EFTER {KEYWORD} ERBJUDANDEN😱",
+                'body1' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Erbjudanden med begränsad tid
-        //         ✅ Spara pengar idag",
+                ✅ Erbjudanden med begränsad tid " . PHP_EOL  . "
+                ✅ Spara pengar idag",
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => "🤩 {KEYWORD} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⭕ Tidsbegränsade erbjudanden
-        //         ⭕ Spara pengar idag"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '❗ Online-erbjudanden {Keyword} ❗',
-        //         'title2' => "😮 Bespaar vandaag nog geld 😮 Beste {Keyword} Aanbiedingen",
-        //         'body1' => "🔥 Letar du efter {Keyword}? 🔥
+                ⭕ Tidsbegränsade erbjudanden" . PHP_EOL . "
+                ⭕ Spara pengar idag"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '❗ Online-erbjudanden {Keyword} ❗',
+                'title2' => "😮 Bespaar vandaag nog geld 😮 Beste {Keyword} Aanbiedingen",
+                'body1' => "🔥 Letar du efter {Keyword}? 🔥" . PHP_EOL . PHP_EOL . "
 
-        //         Tidsbegränsade erbjudanden
-        //         Upptäck dem idag ⬇️",
+                Tidsbegränsade erbjudanden " . PHP_EOL  . "
+                Upptäck dem idag ⬇️",
 
-        //         'body2' => "🤩 Letar du efter {Keyword}? 🤩
+                'body2' => "🤩 Letar du efter {Keyword}? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Hitta de BÄSTA ERBJUDANDEN 😲
-        //         Kolla in det idag ⬇️⬇️ "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
-        //         'title1' => '❗ ONLINE ERBJUDANDEN {KEYWORD} ❗',
-        //         'title2' => "✨{KEYWORD} BÄSTA ERBJUDANDEN✨",
-        //         'body1' => "🔥 TIDSBEGRÄNSADE ERBJUDANDEN 🔥
+                Hitta de BÄSTA ERBJUDANDEN 😲 " . PHP_EOL . "
+                Kolla in det idag ⬇️⬇️ "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
+                'title1' => '❗ ONLINE ERBJUDANDEN {KEYWORD} ❗',
+                'title2' => "✨{KEYWORD} BÄSTA ERBJUDANDEN✨",
+                'body1' => "🔥 TIDSBEGRÄNSADE ERBJUDANDEN 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Letar du efter {Keyword}?
-        //         ✅ Upptäck våra bästa erbjudanden idag",
+                Letar du efter {Keyword}? " . PHP_EOL  . "
+                ✅ Upptäck våra bästa erbjudanden idag",
 
-        //         'body2' => "Sök efter 👉 {KEYWORD} 👈
+                'body2' => "Sök efter 👉 {KEYWORD} 👈 " . PHP_EOL . PHP_EOL . "
 
-        //         🤩 Hitta fantastiska erbjudanden online 🤩"
-        //     ],
+                🤩 Hitta fantastiska erbjudanden online 🤩"
+            ],
 
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '❗ SØG EFTER {KEYWORD} ❗',
-        //         'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
-        //         'body1' => "🤩 Leder du efter {Keyword}?
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '❗ SØG EFTER {KEYWORD} ❗',
+                'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
+                'body1' => "🤩 Leder du efter {Keyword}? " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Find ud af vores bedste tilbud i dag 👇👇",
+                ✅ Find ud af vores bedste tilbud i dag 👇👇",
 
-        //         'body2' => "
-        //         😲 {KEYWORD} 😲
+                'body2' => "
+                😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
                 
-        //         ✅ Find de bedste tilbud i dag 👇👇 "
-        //     ],
+                ✅ Find de bedste tilbud i dag 👇👇 "
+            ],
             
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '❗ SØG EFTER {KEYWORD} ❗',
-        //         'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
-        //         'body1' => "🤩 {Keyword} 🤩
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '❗ SØG EFTER {KEYWORD} ❗',
+                'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
+                'body1' => "🤩 {Keyword} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⚫ Tidsbegrænsede priser
-        //         ⚫ Nye tilbud hver dag",
+                ⚫ Tidsbegrænsede priser " . PHP_EOL . "
+                ⚫ Nye tilbud hver dag",
 
-        //         'body2' => "Søg efter 👉 {Keyword}👈 
-        //         ⚡ Find fantastiske Tilbud online ⚡"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '❗ SØG EFTER {KEYWORD} ❗',
-        //         'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
-        //         'body1' => "TIDSBEGRÆNSEDE TILBUD
-        //         😱 Søg efter {keyword} 😱
+                'body2' => "Søg efter 👉 {Keyword}👈  " . PHP_EOL . "
+                ⚡ Find fantastiske Tilbud online ⚡"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '❗ SØG EFTER {KEYWORD} ❗',
+                'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
+                'body1' => "TIDSBEGRÆNSEDE TILBUD " . PHP_EOL  . "
+                😱 Søg efter {keyword} 😱 " . PHP_EOL . PHP_EOL . "
                 
-        //         Find ud af mere ⬇️⬇️",
+                Find ud af mere ⬇️⬇️",
 
-        //         'body2' => "
-        //         Søg og spar på 👉 {Keyword}👈 
-        //         ⚡ Find fantastiske tilbud online ⚡ "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '❗ SØG EFTER {KEYWORD} ❗',
-        //         'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
-        //         'body1' => "Søg efter 👉 {Keyword} 👈
-        //         Find fantastiske tilbud online 😲",
+                'body2' => "
+                Søg og spar på 👉 {Keyword}👈  " . PHP_EOL  . "
+                ⚡ Find fantastiske tilbud online ⚡ "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '❗ SØG EFTER {KEYWORD} ❗',
+                'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
+                'body1' => "Søg efter 👉 {Keyword} 👈 " . PHP_EOL . "
+                Find fantastiske tilbud online 😲",
 
-        //         'body2' => "Søg efter {Keyword} ✨
+                'body2' => "Søg efter {Keyword} ✨ " . PHP_EOL . PHP_EOL . "
 
-        //         ◉ Find fantastiske priser online
-        //         ◉ Tjek dem - Nye tilbud hver dag"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '⚡ SØG EFTER {KEYWORD} ⚡',
-        //         'title2' => "😱SØG EFTER {KEYWORD} TILBUD😱",
-        //         'body1' => "😲 {KEYWORD} 😲
+                ◉ Find fantastiske priser online " . PHP_EOL  . "
+                ◉ Tjek dem - Nye tilbud hver dag"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '⚡ SØG EFTER {KEYWORD} ⚡',
+                'title2' => "😱SØG EFTER {KEYWORD} TILBUD😱",
+                'body1' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅Begrænsede tilbud
-        //         ✅Spar penge i dag",
+                ✅Begrænsede tilbud " . PHP_EOL  . "
+                ✅Spar penge i dag",
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => "🤩 {KEYWORD} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⭕ Tidsbegrænsede tilbud
-        //         ⭕ Spar penge i dag"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '❗ Online tilbud {Keyword} ❗',
-        //         'title2' => "😮 Spar penge i dag 😮 Bedste {Keyword} tilbud",
-        //         'body1' => "🔥 Leder du efter {Keyword}? 🔥
+                ⭕ Tidsbegrænsede tilbud " . PHP_EOL  . "
+                ⭕ Spar penge i dag"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '❗ Online tilbud {Keyword} ❗',
+                'title2' => "😮 Spar penge i dag 😮 Bedste {Keyword} tilbud",
+                'body1' => "🔥 Leder du efter {Keyword}? 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Tidsbegrænsede tilbud
-        //         Oplev dem i dag ⬇️",
+                Tidsbegrænsede tilbud " . PHP_EOL  . "
+                Oplev dem i dag ⬇️",
 
-        //         'body2' => "🤩 Leder du efter {Keyword}? 🤩
+                'body2' => "🤩 Leder du efter {Keyword}? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Find de BEDSTE TILBUD online😲
-        //         Tjek det ud i dag ⬇️⬇️ "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
-        //         'title1' => '❗ ONLINE TILBUD {KEYWORD} ❗',
-        //         'title2' => "✨{KEYWORD} BEDSTE TILBUD✨",
-        //         'body1' => "🔥 TIDSBEGRÆNSEDE TILBUD 🔥
+                Find de BEDSTE TILBUD online😲 " . PHP_EOL  . "
+                Tjek det ud i dag ⬇️⬇️ "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
+                'title1' => '❗ ONLINE TILBUD {KEYWORD} ❗',
+                'title2' => "✨{KEYWORD} BEDSTE TILBUD✨",
+                'body1' => "🔥 TIDSBEGRÆNSEDE TILBUD 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Leder du efter {Keyword}?
-        //         ✅ Oplev vores bedste kampagner i dag",
+                Leder du efter {Keyword}? " . PHP_EOL  . "
+                ✅ Oplev vores bedste kampagner i dag",
 
-        //         'body2' => "Søg efte 👉 {KEYWORD} 👈 
+                'body2' => "Søg efte 👉 {KEYWORD} 👈  " . PHP_EOL . PHP_EOL . "
 
-        //         🤩 Find fantastiske tilbud online 🤩"
-        //     ],
+                🤩 Find fantastiske tilbud online 🤩"
+            ],
 
 
 
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '❗SØK ETTER {KEYWORD}❗',
-        //         'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
-        //         'body1' => "🤩 Leter du etter {Keyword}?
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '❗SØK ETTER {KEYWORD}❗',
+                'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
+                'body1' => "🤩 Leter du etter {Keyword}? " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Finn ut de beste tilbudene våre i dag 👇👇",
+                ✅ Finn ut de beste tilbudene våre i dag 👇👇",
 
-        //         'body2' => "😲 {KEYWORD} 😲
+                'body2' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅ Finn de beste tilbudene i dag 👇👇"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '❗SØK ETTER {KEYWORD}❗',
-        //         'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
-        //         'body1' => "🤩 {Keyword} 🤩
+                ✅ Finn de beste tilbudene i dag 👇👇"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '❗SØK ETTER {KEYWORD}❗',
+                'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
+                'body1' => "🤩 {Keyword} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⚫ Tidsbegrensede priser
-        //         ⚫ Nye tilbud hver dag",
+                ⚫ Tidsbegrensede priser " . PHP_EOL  . "
+                ⚫ Nye tilbud hver dag",
 
-        //         'body2' => "Søk etter 👉{Keyword}👈 
-        //         ⚡ Finn fantastiske tilbud på nettet ⚡ "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '❗SØK ETTER {KEYWORD}❗',
-        //         'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
-        //         'body1' => "TIDSBEGRENSET TILBUD
-        //         😱 Søk etter {Keyword} 😱
+                'body2' => "Søk etter 👉{Keyword}👈  " . PHP_EOL  . "
+                ⚡ Finn fantastiske tilbud på nettet ⚡ "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '❗SØK ETTER {KEYWORD}❗',
+                'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
+                'body1' => "TIDSBEGRENSET TILBUD " . PHP_EOL  . "
+                😱 Søk etter {Keyword} 😱 " . PHP_EOL . PHP_EOL . "
                 
-        //         Finn ut mer ⬇️⬇️",
+                Finn ut mer ⬇️⬇️",
 
-        //         'body2' => "Søk og lagre på 👉{Keyword}👈 
-        //         ⚡ Finn fantastiske tilbud på nettet ⚡ "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '❗SØK ETTER {KEYWORD}❗',
-        //         'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
-        //         'body1' => "Søk etter 👉{Keyword}👈
-        //         Finn fantastiske tilbud online 😲",
+                'body2' => "Søk og lagre på 👉{Keyword}👈  " . PHP_EOL  . "
+                ⚡ Finn fantastiske tilbud på nettet ⚡ "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '❗SØK ETTER {KEYWORD}❗',
+                'title2' => "Lagre i dag ❗ - Søk etter {Keyword} Tilbud",
+                'body1' => "Søk etter 👉{Keyword}👈 " . PHP_EOL  . "
+                Finn fantastiske tilbud online 😲 " . PHP_EOL . PHP_EOL,
 
-        //         'body2' => "Søk etter {Keyword} ✨
+                'body2' => "Søk etter {Keyword} ✨ " . PHP_EOL . PHP_EOL . "
 
-        //         ◉ Finn fantastiske priser online
-        //         ◉ Sjekk dem ut - Nye tilbud hver dag"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '⚡ SØK ETTER {KEYWORD} ⚡',
-        //         'title2' => "😱SØK ETTER {KEYWORD} TILBUD😱",
-        //         'body1' => "😲 {KEYWORD} 😲
+                ◉ Finn fantastiske priser online " . PHP_EOL  . "
+                ◉ Sjekk dem ut - Nye tilbud hver dag"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '⚡ SØK ETTER {KEYWORD} ⚡',
+                'title2' => "😱SØK ETTER {KEYWORD} TILBUD😱",
+                'body1' => "😲 {KEYWORD} 😲 " . PHP_EOL . PHP_EOL . "
 
-        //         ✅Tidsbegrensede tilbud
-        //         ✅ Spar penger i dag",
+                ✅Tidsbegrensede tilbud " . PHP_EOL . "
+                ✅ Spar penger i dag",
 
-        //         'body2' => "🤩 {KEYWORD} 🤩
+                'body2' => "🤩 {KEYWORD} 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         ⭕ Tidsbegrænsede tilbud
-        //         ⭕ Spar penge i dag"
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '❗ Online Tilbud {Keyword} ❗',
-        //         'title2' => "😮 Spar penge i dag 😮 Bedste {Keyword} tilbud",
-        //         'body1' => "🔥 Leder du efter {Keyword}? 🔥
+                ⭕ Tidsbegrænsede tilbud " . PHP_EOL  . "
+                ⭕ Spar penge i dag"
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '❗ Online Tilbud {Keyword} ❗',
+                'title2' => "😮 Spar penge i dag 😮 Bedste {Keyword} tilbud",
+                'body1' => "🔥 Leder du efter {Keyword}? 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Tidsbegrænsede tilbud
-        //         Oplev dem i dag ⬇️",
+                Tidsbegrænsede tilbud " . PHP_EOL  . "
+                Oplev dem i dag ⬇️",
 
-        //         'body2' => "🤩 Leder du efter {Keyword}? 🤩
+                'body2' => "🤩 Leder du efter {Keyword}? 🤩 " . PHP_EOL . PHP_EOL . "
 
-        //         Find de BEDSTE TILBUD online😲
-        //         Tjek det ud i dag ⬇️⬇️ "
-        //     ],
-        //     [
-        //         'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
-        //         'title1' => '❗ ONLINE TILBUD {KEYWORD} ❗',
-        //         'title2' => "✨{KEYWORD} BESTE TILBUD✨",
-        //         'body1' => "🔥 TIDSBEGRENSEDE TILBUD 🔥
+                Find de BEDSTE TILBUD online😲 " . PHP_EOL . "
+                Tjek det ud i dag ⬇️⬇️ "
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
+                'title1' => '❗ ONLINE TILBUD {KEYWORD} ❗',
+                'title2' => "✨{KEYWORD} BESTE TILBUD✨",
+                'body1' => "🔥 TIDSBEGRENSEDE TILBUD 🔥 " . PHP_EOL . PHP_EOL . "
 
-        //         Leter du etter {Keyword}?
-        //         ✅ Oppdag de beste kampanjene våre i dag",
+                Leter du etter {Keyword}? " . PHP_EOL  . "
+                ✅ Oppdag de beste kampanjene våre i dag",
 
-        //         'body2' => "Søk etter 👉 {KEYWORD} 👈
+                'body2' => "Søk etter 👉 {KEYWORD} 👈 " . PHP_EOL . PHP_EOL . "
 
-        //         Finn fantastiske tilbud online 🤩"
-        //     ],
+                Finn fantastiske tilbud online 🤩"
+            ],
         ]); //64
     }
 }
