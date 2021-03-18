@@ -487,7 +487,7 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'NO')->first()['id'],
                 'title1' => '❗ ONLINE TILBUD {KEYWORD} ❗',
                 'title2' => "✨{KEYWORD} BESTE TILBUD✨",
-                'body1' => "🔥 TIDSBEGRENSEDE TILBUD 🔥 " . PHP_EOL . PHP_EOL . "Leter du etter {Keyword}? " . PHP_EOL  . "✅ Oppdag de beste kampanjene våre i dag",
+                'body1' => "🔥 TIDSBEGRENSEDE TILBUD 🔥 " . PHP_EOL . PHP_EOL . "Leter du etter {Keyword}? " . PHP_EOL  . "Oppdag de beste kampanjene våre i dag",
                 'body2' => "Søk etter 👉 {KEYWORD} 👈 " . PHP_EOL . PHP_EOL . "Finn fantastiske tilbud online 🤩"
             ],
         ]); //64

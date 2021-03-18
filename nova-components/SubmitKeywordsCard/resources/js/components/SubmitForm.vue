@@ -42,14 +42,7 @@
                             <div class="w-full block mt-1 justify-center p-6 border-2 border-gray-300 border-dashed rounded-md">
                                 <div class="w-full select-market-wrapper"> 
                                     <select v-model="market" class="mt-1 block w-full p-3 pr-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-lg">
-                                        <option value="AR">Argentina</option>
-                                        <option value="AT">Austria</option>
-                                        <option value="AU">Australia</option>
-                                        <option value="BR">Brazil</option>
-                                        <option value="CA">Canada</option>
-                                        <option value="DE">Germany</option>
-                                        <option value="UK">United Kingdom</option>
-                                        <option value="US">United States</option>
+                                        <option v-for="(market, index) in markets" :key="index" :value="market.code">{{ market.name }}</option> 
                                     </select> 
                                 </div>
                                 <p class="mt-4 text-sm text-gray-500">
@@ -98,13 +91,17 @@ export default {
             errorResponse: {},
             displayForm: true,
             displaySubmitSuccess: false,
-            batchId: ''
+            batchId: '',
+            markets: []
         }
     },
     props: {
         card: {
             required: true
         }
+    },
+    mounted() {
+        this.loadMarkets()
     },
     methods: {
         submit () { 
@@ -134,7 +131,17 @@ export default {
             this.displaySubmitSuccess = false
             this.batchId = ''
             this.displayForm = true
-        } 
+        },
+
+        loadMarkets () { 
+            axios.get('/nova-vendor/' + this.card.component + '/load-markets')
+            .then(response => {
+                this.markets = response.data.data
+            }).catch(error => {
+                
+            })
+        },
+      
     }
 }
 </script>

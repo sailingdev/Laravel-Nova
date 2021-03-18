@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FbReporting\MarketsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FbReporting\SubmitKeywordsController;
@@ -17,3 +18,4 @@ use App\Http\Controllers\FbReporting\SubmitKeywordsController;
 
 Route::post('/submit-keywords', [SubmitKeywordsController::class, 'submit']);
 Route::get('/load-keyword-batches', [SubmitKeywordsController::class, 'loadKeywordBatches']);
+Route::get('/load-markets', [MarketsController::class, 'index']);

@@ -798,8 +798,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "SubmitForm",
@@ -811,7 +809,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             errorResponse: {},
             displayForm: true,
             displaySubmitSuccess: false,
-            batchId: ''
+            batchId: '',
+            markets: []
         };
     },
 
@@ -820,6 +819,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             required: true
         }
     },
+    mounted: function mounted() {
+        this.loadMarkets();
+    },
+
     methods: {
         submit: function submit() {
             var _this = this;
@@ -847,6 +850,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.displaySubmitSuccess = false;
             this.batchId = '';
             this.displayForm = true;
+        },
+        loadMarkets: function loadMarkets() {
+            var _this2 = this;
+
+            axios.get('/nova-vendor/' + this.card.component + '/load-markets').then(function (response) {
+                _this2.markets = response.data.data;
+            }).catch(function (error) {});
         }
     }
 });
@@ -1031,19 +1041,17 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [
-                                  _c("option", { attrs: { value: "DE" } }, [
-                                    _vm._v("Germany")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "UK" } }, [
-                                    _vm._v("United Kingdom")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "US" } }, [
-                                    _vm._v("United States")
-                                  ])
-                                ]
+                                _vm._l(_vm.markets, function(market, index) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: index,
+                                      domProps: { value: market.code }
+                                    },
+                                    [_vm._v(_vm._s(market.name))]
+                                  )
+                                }),
+                                0
                               )
                             ]
                           ),
