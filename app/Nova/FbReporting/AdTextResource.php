@@ -66,7 +66,7 @@ class AdTextResource extends Resource
     public function fields(Request $request)
     {
         return [
-            // ID::make(__('ID'), 'id')->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class),
             Text::make('Title1')
             ->sortable()
