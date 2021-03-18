@@ -12,7 +12,7 @@ class MarketService
      */
     public function getAll()
     {
-        return Cache::remember('type_tags', 3600, function () {
+        return Cache::remember('markets', 3600, function () {
             return Market::all();
         });
     }
