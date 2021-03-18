@@ -58,7 +58,7 @@ class CreateCampaignsUsingTypeTagsTest extends TestCase
             ->json('POST', '/nova-vendor/create-campaigns-from-related-card/create-campaign', [
                 'data' =>  json_encode($data), 
             ]); 
-         dd($response);   
+            
         $response->assertStatus(200); 
     }
 }
