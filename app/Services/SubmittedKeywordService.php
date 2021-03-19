@@ -226,12 +226,14 @@ class SubmittedKeywordService
          
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
+
         $newCampaignName = $this->facebookCampaign->formatCampaignName(
             $submission['keyword'],
             $submission['market'],
             $campaignNameExtracts['feed'],
             $campaignNameExtracts['site'],
-            isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag']
+            isset($submission->type_tag) ? $submission->type_tag : 
+            $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related')    
         );
         
         $newCampaignData = [
