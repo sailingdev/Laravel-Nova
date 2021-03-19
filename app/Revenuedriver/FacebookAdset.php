@@ -19,6 +19,11 @@ class FacebookAdset extends Facebook
     /**
      * @var int
     */
+    protected $deleteAttempt = 0;
+
+    /**
+     * @var int
+    */
     protected $getAdsAttempt = 0;
 
      
@@ -73,6 +78,36 @@ class FacebookAdset extends Facebook
                 sleep(3);
                 $this->getAdsAttempt++;
                 return $this->getAds($adsetId);
+            } 
+            return [false, $e];
+        } catch (\Throwable $th) {
+            return [false, $th->getMessage()];
+        }
+    }
+
+     /**
+     * Delete an adset 
+     * 
+     * @param string $adsetId
+     * 
+     * @return void
+     */
+    public function delete(string $adsetId)
+    { 
+       $set = new AdSet($adsetId);
+     
+        try {
+            $set->deleteSelf();
+            return [true];
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        {
+            if ($this->deleteAttempt < 10) {
+                sleep(5);
+                $this->deleteAttempt++;
+                return $this->delete($adsetId);
             } 
             return [false, $e];
         } catch (\Throwable $th) {

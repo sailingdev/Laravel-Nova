@@ -26,6 +26,11 @@ class FacebookCampaign extends Facebook
     /**
      * @var int
      */
+    protected $deleteCampaignAttempts = 0;
+
+    /**
+     * @var int
+     */
     protected $getAdSetsAttempt = 0;
 
     /**
@@ -118,4 +123,33 @@ class FacebookCampaign extends Facebook
             return [false, $th->getMessage()];
         }
     }
+
+    /**
+     * @param string $accountId
+     * 
+     * @return array
+     */
+    public function delete(string $campaignId)
+    {  
+        $campaign = new Campaign($campaignId);
+        
+        try {
+            $campaign->deleteSelf();
+            return [true];
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        {
+            if ($this->deleteCampaignAttempts < 10) {
+                sleep(5);
+                $this->deleteCampaignAttempts++;
+                return $this->delete($campaignId);
+            } 
+            return [false, $e];
+        } catch (\Throwable $th) {
+            return [false, $th->getMessage()];
+        }
+    }
+ 
 }

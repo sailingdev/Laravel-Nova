@@ -15,6 +15,11 @@ class FacebookAdImage extends Facebook
      * @var int
      */
     protected $createAttempts = 0;
+
+    /**
+     * @var int
+     */
+    protected $deleteAttempts = 0;
      
     /*
      * Create a new image
@@ -45,7 +50,37 @@ class FacebookAdImage extends Facebook
         } catch (\Throwable $th) {
             return[false, $th];
         } 
-     }
- 
+    }
+    
+
+    /**
+     * Delete an ad  image
+     * 
+     * @param string $ad
+     * 
+     * @return void
+     */
+    public function delete(string $adImageId)
+    { 
+       $set = new AdImage($adImageId);
+     
+        try {
+            $set->deleteSelf();
+            return [true];
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        {
+            if ($this->deleteAttempts < 10) {
+                sleep(5);
+                $this->deleteAttempts++;
+                return $this->delete($adImageId);
+            } 
+            return [false, $e];
+        } catch (\Throwable $th) {
+            return [false, $th->getMessage()];
+        }
+    }
 
 }

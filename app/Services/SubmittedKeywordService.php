@@ -264,7 +264,12 @@ class SubmittedKeywordService
                 'errors' => $existingCampaignAdsets[1],
                 'data' => []
             ]);
+
+            // delete the neewly created campaign
+            $this->facebookCampaign->delete($newCampaign[1]['id']);
+            
             return [false, 'No existing campaign adsets were loaded: '. $existingCampaignAdsets[1]->getMessage()];
+           
         }
         else if ($existingCampaignAdsets[1]->count() < 1) {
             Log::info('No existing campaign adsets available', [
@@ -272,10 +277,16 @@ class SubmittedKeywordService
                 'errors' => [],
                 'data' => []
             ]);
+            
+            // delete the neewly created campaign
+            $this->facebookCampaign->delete($newCampaign[1]['id']);
+
             return [false, 'No existing campaign adsets available'];
         }  
 
         $loggedErrors = [];
+
+        $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = []; 
         
         foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
@@ -297,10 +308,14 @@ class SubmittedKeywordService
                     'message' => 'An adset not created',
                     'errors' => $newAdSet[1],
                     'data' => $newAdsetData
-                ]);
-                // delete the campaign
+                ]); 
+                
+                // delete the newly created campaign
+                $this->facebookCampaign->delete($newCampaign[1]['id']);
             }
             else {
+                 
+                array_push($adsetsToRollBack, $newAdSet[1]->id);
 
                 // get ads for existing adset
                 $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
@@ -309,8 +324,7 @@ class SubmittedKeywordService
                         'message' => 'An error occured while loading existing ads in adset with ID: ' . $existingAdSet->id,
                         'errors' => $existingAds[1],
                         'data' => []
-                    ]);
-                    // delete the campaign, the adsets
+                    ]); 
                 }
                 else if ($existingAds[1]->count() < 1) {
                     array_push($loggedErrors, [
@@ -321,7 +335,7 @@ class SubmittedKeywordService
                 }
                 else {  
                     foreach ($existingAds[1] as $existingAd) {
-
+                       
                         // load adcreative for that ad
                         $existingAdCreative = $this->facebookAdCreative->show($existingAd->creative['id'], [
                             'account_id', 'name', 'object_story_spec', 'asset_feed_spec', 'call_to_action_type',
@@ -356,6 +370,7 @@ class SubmittedKeywordService
                                     ]);
                                 }
                                 else {
+                                    
                                     $arrK = array_keys($newAdImage[1]->exportAllData()['images']);
                                     array_push($newAdImages, [
                                         'hash' => $arrK[0]
@@ -411,6 +426,8 @@ class SubmittedKeywordService
                                 ]);
                             }
                             else {
+                                array_push($adCreativesToRollBack, $newAdCreative[1]->id);
+
                                 $newAdData = [
                                     'name' => $existingAd->name,
                                     'adset_id' => $newAdSet[1]->id,
@@ -427,6 +444,9 @@ class SubmittedKeywordService
                                         'data' => $newAdData
                                     ]);
                                 }
+                                else {
+                                    array_push($adsToRollBack, $newAd[1]->id);
+                                }
                             } 
                         }
                     }
@@ -437,10 +457,44 @@ class SubmittedKeywordService
         if (count($loggedErrors) > 0) {
             // log output
             Log::info('An error occured while processing some of the submitted keywords', $loggedErrors);
+            
+            $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack);
             return [false, 'Process was not completed. Please check the log for the affected processes'];
         }
         else {
             return [true, 'Ad was successfully created'];
+        }
+    }
+
+
+    /**
+     * @param string $campaignId
+     * @param array $adsets
+     * @param array $adImages
+     * @param array $adCreatives
+     * @param array $ads
+     * 
+     * @return void
+     */
+    private function rollBacks(string $campaignId, array $adsets, array $adCreatives, array $ads): void
+    {
+        if ($campaignId !== '') {
+            $this->facebookCampaign->delete($campaignId);
+        }
+        if (count($adsets) > 0) {
+            foreach ($adsets as $adsetId) {
+                $this->facebookAdset->delete($adsetId);
+            }
+        }  
+        if (count($adCreatives) > 0) {
+            foreach ($adCreatives as $adCreativeId) {
+                $this->facebookAdCreative->delete($adCreativeId);
+            }
+        }
+        if (count($ads) > 0) {
+            foreach ($ads as $adId) {
+                $this->facebookAd->delete($adId);
+            }
         }
     }
 
