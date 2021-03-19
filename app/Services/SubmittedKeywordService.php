@@ -577,6 +577,7 @@ class SubmittedKeywordService
         $sm = new StringManipulator;
       
         $rows = SubmittedKeyword::select('*')
+            ->where('action_taken', 'new')
             ->where('status', '!=', 'pending')->limit(10)->orderBy('updated_at', 'desc')->get(); 
             
             foreach($rows as $row) {
@@ -609,8 +610,7 @@ class SubmittedKeywordService
                 
                 $obj->status = $processingCount > 0 ? 'processing' : 'processed';
                 array_push($data, $obj);
-            }
-            
+            }   
         return $data;
     }
 
