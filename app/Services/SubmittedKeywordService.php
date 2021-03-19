@@ -385,15 +385,15 @@ class SubmittedKeywordService
                                 $this->facebookCampaign->getTargetAccount(),
                                 ucfirst($submission['keyword']),
                                 isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
-                                $submission->market 
+                                $submission['market'] 
                             );
 
                             $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                             $marketService = new MarketService;
 
-                            $marketCode = $marketService->getMarketIdbyCode($submission->market);
+                            $marketCode = $marketService->getMarketIdbyCode($submission['market']);
                            
-                            $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission->keyword);
+                            $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission['keyword']);
                              
                              
                             if (count($newBodyTexts) > 1) {
