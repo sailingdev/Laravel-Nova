@@ -527,14 +527,21 @@ class SubmittedKeywordService
     {
         $batches =  SubmittedKeyword::select('batch_id', 'created_at', 'market')->where('status', 'pending')
             ->where('action_taken', 'new')->distinct()->latest()->get();
-            
+       
         $data = [];
         $sm = new StringManipulator;
         foreach($batches as $batch) {
-            $rows =  SubmittedKeyword::where('batch_id', $batch->batch_id)
-                // ->where('status', 'pending')
-                ->get(); 
-
+            $rows =  SubmittedKeyword::where(function ($query) use ($batch) {
+                return $query->where('batch_id', $batch->batch_id)
+                ->where('status', 'pending');
+            })
+            ->orWhere(function ($query)  use ($batch) {
+                return $query->where('batch_id', $batch->batch_id)
+                ->where('status', 'processed')
+                    ->where('action_taken', 'skipped'); 
+            })
+            ->get(); 
+            
             $new = $skipped = [];
             $processingCount = 0;
             foreach($rows as $row) {
