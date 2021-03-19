@@ -305,10 +305,41 @@ abstract class Facebook
      * 
      * @return array
      */
-    public function generateNewBodyTexts(string $marketId)
+    public function generateNewBodyTexts(string $marketId, string $keyword)
     {
         $marketService = new AdTextService;
-        return $marketService->getRandomDataByMarketId($marketId);
+       
+        $adTexts = $marketService->getRandomDataByMarketId($marketId);
+        if (count($adTexts) > 0) {
+            foreach ($adTexts as $key => $adText) {
+                $adTexts[$key]->title1 = $this->replaceKeywordPlaceHolderInText($adText->title1, $keyword);
+                $adTexts[$key]->title2 = $this->replaceKeywordPlaceHolderInText($adText->title2, $keyword);
+                $adTexts[$key]->body1 = $this->replaceKeywordPlaceHolderInText($adText->body1, $keyword);
+                $adTexts[$key]->body2 = $this->replaceKeywordPlaceHolderInText($adText->body2, $keyword);
+            }
+        } 
+        return $adTexts;
     }
+
+    /**
+     * @param string $text
+     * @param mixed $keyword
+     * 
+     * @return string
+     */
+    public function replaceKeywordPlaceHolderInText(string $text, $keyword): string
+    {
+
+        $startPos = strpos($text, '{'); $endPos = strpos($text, '}');
+        if ($startPos !== false && $endPos !== false) {
+            $startPos++;
+            $placeholder = substr($text, $startPos, $endPos - $startPos);
+            $sm = new StringManipulator;
+            $newText = preg_replace("~".preg_quote('{')."(.*?)".preg_quote('}')."~", 
+                $sm->isCapsLock($placeholder) ? strtoupper($keyword) : ucfirst($keyword), $text);
+            return $newText;
+        }
+        return $text;
+    }   
 
 }

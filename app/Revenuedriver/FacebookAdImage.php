@@ -31,10 +31,13 @@ class FacebookAdImage extends Facebook
         try {
             $adImage = $account->createAdImage($fields, $params);
             return [true, $adImage];
-        } catch(\FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-                \FacebookAds\Http\Exception\ServerException $e) 
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException  | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException  $e) 
         {
-            if ($this->createAttempts < 5) {
+            if ($this->createAttempts < 10) {
+                sleep(3);
                 $this->createAttempts++;
                 return $this->create($accountId, $params, $fields);
             } 

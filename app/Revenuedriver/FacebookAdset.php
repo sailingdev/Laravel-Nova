@@ -35,17 +35,19 @@ class FacebookAdset extends Facebook
         try {
             $adset = $account->createAdSet($fields, $params);
             return [true, $adset];
-        } catch(\FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-            \FacebookAds\Http\Exception\ServerException $e) 
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+            \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+            | \FacebookAds\Http\Exception\ThrottleException  | \FacebookAds\Http\Exception\PermissionException
+            | \FacebookAds\Http\Exception\AuthorizationException $e) 
         {
-            if ($this->createAttempt < 5) {
+            if ($this->createAttempt < 10) {
+                sleep(3);
                 $this->createAttempt++;
                 return $this->create($accountId, $params, $fields);
             } 
             return [false, $e];
         }
-        catch (\Throwable $th) {
-            dd($th->getMessage());
+        catch (\Throwable $th) { 
             return [false, $th];
         }
     }
@@ -62,10 +64,13 @@ class FacebookAdset extends Facebook
                'name', 'adset_id', 'creative', 'status'
            ]);
            return [true, $ads];
-        } catch(\FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-            \FacebookAds\Http\Exception\ServerException $e) 
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+        \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+        | \FacebookAds\Http\Exception\ThrottleException  | \FacebookAds\Http\Exception\PermissionException
+        | \FacebookAds\Http\Exception\AuthorizationException $e) 
         {
-            if ($this->getAdsAttempt < 5) {
+            if ($this->getAdsAttempt < 10) {
+                sleep(3);
                 $this->getAdsAttempt++;
                 return $this->getAds($adsetId);
             } 

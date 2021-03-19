@@ -195,6 +195,7 @@ class SubmittedKeywordService
                 'special_ad_categories',
                 'account_id'
             ]);
+           
             if ($accountCampaigns[0] !== false) { 
                 foreach ($accountCampaigns[1] as $campaign) {
                     array_push($campaignCombo, [
@@ -222,9 +223,9 @@ class SubmittedKeywordService
      */
     protected function duplicateCampaign($campaign, $submission)
     {  
+         
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
-       
         $newCampaignName = $this->facebookCampaign->formatCampaignName(
             $submission['keyword'],
             $submission['market'],
@@ -375,7 +376,7 @@ class SubmittedKeywordService
 
                             $marketCode = $marketService->getMarketIdbyCode($submission->market);
                            
-                            $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode);
+                            $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission->keyword);
                              
                             // $text = [];
                             if (count($newBodyTexts) > 1) {
@@ -401,7 +402,7 @@ class SubmittedKeywordService
                             ]; 
  
                             $newAdCreative = $this->facebookAdCreative->create($this->facebookCampaign->getTargetAccount(), $newAdCreativeData);
-                          
+                           
                             if ($newAdCreative[0] == false) {
                                 array_push($loggedErrors, [
                                     'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
@@ -579,7 +580,7 @@ class SubmittedKeywordService
                 $campaignTypeTag = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['type_tag'];
                 return $campaignTypeTag == trim($keyword->type_tag);
             });
-           
+          
             if (count($matches) > 0) {
                 // load the batch id of this keyword
                 $submission = SubmittedKeyword::where('id', $keyword->id)->first();
@@ -600,6 +601,11 @@ class SubmittedKeywordService
                     }
                 }
               
+            }
+            else {
+                $this->updateRow($keyword->batch_id, $keyword->keyword, [
+                    'status' => 'pending'
+                ]);
             }
         }
         return true;

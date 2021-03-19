@@ -39,16 +39,25 @@ class FacebookCampaign extends Facebook
     public function loadCampaign($accountId, $fields=[]): array
     {  
         $accountExtension = new AdAccountExtension($accountId);
+       
         try {
             $cursor = $accountExtension->getCampaigns($fields);
             if ($cursor->count() < 1) {
+                if ($this->loadCampaignAttempts < 10) {
+                    sleep(3);
+                    $this->loadCampaignAttempts++;
+                    return $this->loadCampaign($accountId, $fields);
+                } 
                 return [false, 'No record for this campaign'];
             }
             return [true, $cursor];
-        } catch(\FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-                \FacebookAds\Http\Exception\ServerException $e) 
-        {
-            if ($this->loadCampaignAttempts < 5) {
+        } catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->loadCampaignAttempts < 10) {
+                sleep(3);
                 $this->loadCampaignAttempts++;
                 return $this->loadCampaign($accountId, $fields);
             } 
@@ -71,10 +80,13 @@ class FacebookCampaign extends Facebook
         try {
            $campaign = (new AdAccount($accountId))->createCampaign($fields, $params)->exportAllData();
            return [true, $campaign];
-        } catch(\FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-            \FacebookAds\Http\Exception\ServerException $e) 
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+        \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+        | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+        | \FacebookAds\Http\Exception\AuthorizationException $e) 
         {
-            if ($this->createCampaignAttempts < 5) {
+            if ($this->createCampaignAttempts < 10) {
+                sleep(5);
                 $this->createCampaignAttempts++;
                 return $this->createCampaign($accountId, $params, $fields);
             } 
@@ -91,10 +103,13 @@ class FacebookCampaign extends Facebook
              'campaign_id', 'name', 'targeting', 'bid_amount', 'billing_event', 'promoted_object', 'start_time', 'end_time'
             ]);
             return [true, $adsets];
-        } catch(\FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-            \FacebookAds\Http\Exception\ServerException $e) 
+        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
         {
-            if ($this->getAdSetsAttempt < 5) {
+            if ($this->getAdSetsAttempt < 10) {
+                sleep(5);
                 $this->getAdSetsAttempt++;
                 return $this->getAdsets($campaignId);
             } 

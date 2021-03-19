@@ -44,4 +44,14 @@ class StringManipulator
     {
         return Carbon::parse($date)->toFormattedDateString();
     }
+
+    /**
+     * @param string $string
+     * 
+     * @return bool
+     */
+    public function isCapsLock(string $string): bool
+    {
+        return $string === strtoupper($string);
+    }
 }
