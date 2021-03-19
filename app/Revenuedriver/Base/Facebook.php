@@ -131,7 +131,10 @@ abstract class Facebook
      */
     public function generateTypeTag(string $keyword, string $market, $createType=null, $siteTag=null, $dupNo=null): string
     {
-        $datePrep = date('d') . date('m') . substr(date('Y'), 2, 3);
+        $sm = new StringManipulator;
+        $dateSPlit = $sm->generateArrayFromString($this->determineStartTime(), '-');
+        
+        $datePrep = $dateSPlit[2] . $dateSPlit[1] . substr($dateSPlit[0], 2, 3);
         $keywordPrep =  $this->formatKeyword($keyword, '_');
 
         if ($createType === "related") {
@@ -154,7 +157,7 @@ abstract class Facebook
             strtoupper($dupNo) . '_' . 
             $datePrep . '_' . 
             '009';
-        }
+        } 
         return $typeTag;
     }
 

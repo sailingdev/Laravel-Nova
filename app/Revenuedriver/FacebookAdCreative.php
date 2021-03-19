@@ -67,9 +67,9 @@ class FacebookAdCreative extends Facebook
             $adCreative = $account->createAdCreative($fields, $params);
             return [true, $adCreative];
         } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-        \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
-        | \FacebookAds\Http\Exception\ThrottleException  | \FacebookAds\Http\Exception\PermissionException
-        | \FacebookAds\Http\Exception\AuthorizationException  $e) 
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException  | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException  $e) 
         {
             if ($this->createAttempts < 10) {
                 sleep(3);

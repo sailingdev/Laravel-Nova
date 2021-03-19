@@ -298,6 +298,7 @@ class SubmittedKeywordService
                     'errors' => $newAdSet[1],
                     'data' => $newAdsetData
                 ]);
+                // delete the campaign
             }
             else {
 
@@ -309,6 +310,7 @@ class SubmittedKeywordService
                         'errors' => $existingAds[1],
                         'data' => []
                     ]);
+                    // delete the campaign, the adsets
                 }
                 else if ($existingAds[1]->count() < 1) {
                     array_push($loggedErrors, [
@@ -457,19 +459,7 @@ class SubmittedKeywordService
         ->update($data);
     }
 
-    public function loadKeywordsToProcess()
-    {
-        $batches = SubmittedKeyword::select('batch_id', 'created_at')->where('status', 'pending')
-        ->where('action_taken', 'new')->distinct()->latest()->get();
-        
-        $data = [];
-        $new = $skipped = [];
-        $processingCount = 0;
-        
-        foreach ($batches as $batch) {
-            $rows = SubmittedKeyword::where('batch_id', $batch->batch_id)->get(); 
-        }
-    }
+   
 
     /**
      * @param mixed $summaryType=null
@@ -521,6 +511,9 @@ class SubmittedKeywordService
        return $data;
     }
 
+    /**
+     * @return array
+     */
     public function loadBatchHistory(): array
     { 
         $data = [];
@@ -534,7 +527,7 @@ class SubmittedKeywordService
                 $processingCount = 0;
                 if ($row->action_taken === 'new') {
                     array_push($new, [
-                        'keyword' => preg_replace("#[^a-z0-9_]#i", "+", $row->keyword),
+                        'keyword' =>  $this->facebookCampaign->formatKeyword($row->keyword, '+'),
                         'type_tag' => '',
                         'id' => $row->id
                     ]);
@@ -571,6 +564,7 @@ class SubmittedKeywordService
      */
     public function processPendingBatchesUsingTypeTags(array $keywords)
     {
+        
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
        
         foreach ($keywords as $keyword) {
