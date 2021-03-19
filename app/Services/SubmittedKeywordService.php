@@ -378,7 +378,7 @@ class SubmittedKeywordService
                            
                             $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission->keyword);
                              
-                            // $text = [];
+                             
                             if (count($newBodyTexts) > 1) {
                                 $rand = rand(1,2);
                                 $randTitle = 'title'.$rand;
@@ -391,10 +391,8 @@ class SubmittedKeywordService
                                 $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->{$randBody};
                             }
                           
-                            // dd($existingAdSetFeedSpec, $text);
-
                             $newAdCreativeData = [
-                                'name' =>  ucfirst($submission['keyword']), // $existingAdCreative[1]->name,
+                                'name' =>  ucfirst($submission['keyword']),  
                                 'account_id' => $this->facebookCampaign->getTargetAccount(),
                                 'asset_feed_spec' => $existingAdSetFeedSpec,
                                 'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
