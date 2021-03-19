@@ -530,7 +530,8 @@ class SubmittedKeywordService
         $sm = new StringManipulator;
         foreach($batches as $batch) {
             $rows =  SubmittedKeyword::where('batch_id', $batch->batch_id)
-                ->where('status', 'pending')->get(); 
+                // ->where('status', 'pending')
+                ->get(); 
 
             $new = $skipped = [];
             $processingCount = 0;
@@ -561,7 +562,7 @@ class SubmittedKeywordService
             
             $obj->status = $processingCount > 0 ? 'processing' : 'processed';
             array_push($data, $obj);
-        }
+        } 
        return $data;
     }
 

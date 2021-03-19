@@ -35,9 +35,9 @@ class CreateCampaignsFromRelatedController extends Controller
     public function processPendingBatches(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
     {
         foreach ($request->all()['data'] as $key => $keyword) {
-            // $sks->updateRow($keyword->batch_id, $keyword->keyword, [
-            //     'status' => 'processing'
-            // ]);
+            $sks->updateRow($keyword->batch_id, $keyword->keyword, [
+                'status' => 'processing'
+            ]);
         }
         ProcessPendingBatchesUsingTypeTagsJob::dispatch($request->all()['data']);
         return $this->successResponse('Request was successful. Batch processing in progress');
