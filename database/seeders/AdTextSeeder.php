@@ -67,6 +67,68 @@ class AdTextSeeder extends Seeder
                 'body2' => 'Search for 👉 {KEYWORD} 👈 ' . PHP_EOL . PHP_EOL . '🤩Find Amazing Offers Online 🤩'
             ],
 
+
+
+            // US start
+
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '❗SEARCH FOR {KEYWORD}❗',
+                'title2' => '❗Save Money Today❗ - Search for {Keyword}',
+                'body1' => '🤩 Looking for {Keyword}?  ' . PHP_EOL . PHP_EOL .'Find out our best deals today 👇👇',
+                'body2' => '😲 {KEYWORD} 😲 ' .PHP_EOL. PHP_EOL .' Find the best offers today 👇👇'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '❗SEARCH FOR {KEYWORD}❗',
+                'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
+                'body1' => '🤩 {Keyword} 🤩' . PHP_EOL . PHP_EOL . '⚫ Time Limited Opportunities' . PHP_EOL . '⚫ Check it out - New offers every day',
+                'body2' => 'Search for 👉 {Keyword} 👈 ' . PHP_EOL . PHP_EOL . '⚡ Find Amazing Offers Online ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '❗SEARCH FOR {KEYWORD}❗',
+                'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
+                'body1' => 'TIME LIMITED OPPORTUNITIES '.PHP_EOL.' 😱 Search for {keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Find out more ⬇️⬇️',
+                'body2' => 'Search & Save on  👉 {Keyword} 👈 ' . PHP_EOL . PHP_EOL . '⚡Find Amazing Offers Online ⚡'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '❗SEARCH FOR {KEYWORD}❗',
+                'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
+                'body1' => 'Search for  👉 {Keyword} 👈 ' . PHP_EOL . 'Find Amazing Offers Online 😲',
+                'body2' => 'Search for {Keyword} ✨ ' . PHP_EOL . PHP_EOL . '◉ Find Amazing Offers Online ' . PHP_EOL . '◉ Check it out - New offers every day'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '⚡SEARCH FOR DISCOUNTS {KEYWORD} ⚡',
+                'title2' => '😱SEARCH FOR {KEYWORD} OFFERS😱',
+                'body1' => '😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . 'Limited time discounts ' . PHP_EOL  . '✅Save Money today',
+                'body2' => '🤩 {KEYWORD} 🤩 ' . PHP_EOL . PHP_EOL . '⭕ Time Limited Opportunities ' . PHP_EOL . '⭕ Save Money Today'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '❗SEARCH FOR {Keyword}❗',
+                'title2' => '😮Save Money Today😮 - Search for {Keyword}',
+                'body1' => '🔥 Looking for {Keyword} ? 🔥' . PHP_EOL . PHP_EOL . 'Time Limited Offers ' . PHP_EOL . 'Discover them today ⬇️',
+                'body2' => '🤩 Looking for {Keyword} ? 🤩 ' . PHP_EOL . PHP_EOL . 'Find the BEST Offers Online 😲 ' . PHP_EOL  . 'Check it out today ⬇️⬇️'
+            ],
+            [
+                'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
+                'title1' => '❗SEARCH FOR {Keyword}❗',
+                'title2' => '✨Search for {KEYWORD}✨',
+                'body1' => '🔥TIME LIMITED PROMOTIONS 🔥 ' . PHP_EOL . PHP_EOL . 'Looking for {Keyword} ? ' . PHP_EOL  . '✅Discover our best promotions today',
+                'body2' => 'Search for 👉 {KEYWORD} 👈 ' . PHP_EOL . PHP_EOL . '🤩Find Amazing Offers Online 🤩'
+            ],
+
+            // US end
+
+
+
+
+
+            // ITALY
+
             [
                 'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
                 'title1' => '❗Risparmia Oggi❗ - Cerca {Keyword}',
