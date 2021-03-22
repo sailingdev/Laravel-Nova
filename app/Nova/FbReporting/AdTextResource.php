@@ -54,7 +54,7 @@ class AdTextResource extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'market', 'title1', 'title2', 'body1', 'body2'
+        'id', 'market_id', 'title1', 'title2', 'body1', 'body2'
     ];
 
     /**
