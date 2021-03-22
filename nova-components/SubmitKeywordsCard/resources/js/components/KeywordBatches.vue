@@ -1,7 +1,7 @@
 <template>
     <div class="keyword-batches-wrapper my-5">
         <h1 class="text-center text-3xl text-80 font-dark pt-4">Batch Status</h1>
-        <p class="mt-0 text-sm text-center text-gray-500">Within the last 48 hours</p>
+        <p class="mt-0 text-sm text-center text-gray-500"> Last 10 batches </p>
 
         <div v-if="loading" class="rounded-lg flex items-center justify-center relative">
             <loader class="text-60" />
@@ -30,6 +30,7 @@
                         <input class="absolute opacity-0 " :id="`tab-${index}`" type="checkbox" name="tabs">
                         <label class="block p-5 leading-normal cursor-pointer batch-label" :for="`tab-${index}`">
                             <p>Batch ID: <span class="font">{{ batch.batch_id }}</span></p>
+                            <p>Market: <span class="font"> {{ batch.market }} </span> </p>
                             <p>Batch status: 
                                 <button type="button" class="mr-2 text-white p-1 rounded leading-none" 
                                     :class="batch.batch_status == 'processing' ? 'bg-orange-600' : 'bg-green-600'">

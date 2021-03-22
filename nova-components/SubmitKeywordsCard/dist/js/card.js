@@ -1362,6 +1362,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "KeywordBatches",
@@ -1413,7 +1414,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("p", { staticClass: "mt-0 text-sm text-center text-gray-500" }, [
-      _vm._v("Within the last 48 hours")
+      _vm._v(" Last 10 batches ")
     ]),
     _vm._v(" "),
     _vm.loading
@@ -1503,6 +1504,13 @@ var render = function() {
                               _vm._v("Batch ID: "),
                               _c("span", { staticClass: "font" }, [
                                 _vm._v(_vm._s(batch.batch_id))
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [
+                              _vm._v("Market: "),
+                              _c("span", { staticClass: "font" }, [
+                                _vm._v(" " + _vm._s(batch.market) + " ")
                               ])
                             ]),
                             _vm._v(" "),

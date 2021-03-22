@@ -90,17 +90,15 @@ class SubmittedKeywordService
      */
     public function loadKeywordBatches()
     {
-        $batches = SubmittedKeyword::select('batch_id', 'created_at')->distinct()->latest()->get();
+        $batches = SubmittedKeyword::select('batch_id', 'created_at', 'market')->distinct()->latest()->limit(10)->get();
         $data = [];
         if (count($batches) > 0) {
             foreach ($batches as $batch) {
                 $rel = new \stdClass;
                 $rel->batch_id = $batch->batch_id;
+                $rel->market = $batch->market;
                 $batchKeywords = SubmittedKeyword::where('batch_id', $batch->batch_id)
-                ->where('created_at', '>', 
-                    Carbon::now()->subHours(48)->toDateTimeString()
-                )
-                ->select('keyword', 'status', 'market', 'created_at', 'updated_at')
+                ->select('keyword', 'status', 'market', 'created_at')
                 ->latest()
                 ->get();
                 $keywordsInProgress = 0;
@@ -113,8 +111,7 @@ class SubmittedKeywordService
                 $rel->keywords = $batchKeywords;
                 array_push($data, $rel);
             }
-        }
-         
+        } 
         return $data;
     }
 
