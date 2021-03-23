@@ -6,6 +6,7 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -54,7 +55,7 @@ class AdTextResource extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'market_id', 'title1', 'title2', 'body1', 'body2'
+        'id', 'market_id', 'title1', 'title2', 'body1', 'body2', 'version'
     ];
 
     /**
@@ -68,6 +69,11 @@ class AdTextResource extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class),
+            Select::make('Size')->options([
+                'regular' => 'Regular',
+                'xmas' => 'Xmas',
+                'black_friday' => 'Black Friday',
+            ])->displayUsingLabels(),
             Text::make('Title1')
             ->sortable()
             ->rules('required', 'max:255'),
