@@ -21,7 +21,7 @@ class CreateAdAccountsTable extends Migration
             $table->text('notes')->nullable();
             $table->text('configurations');
             $table->timestamps();
-        });select * from ad_accounts;
+        });
     }
 
     /**
