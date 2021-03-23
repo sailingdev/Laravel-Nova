@@ -35,7 +35,7 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'UK')->first()['id'],
                 'title1' => '❗SEARCH FOR {KEYWORD}❗',
                 'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
-                'body1' => 'TIME LIMITED OPPORTUNITIES '.PHP_EOL.' 😱 Search for {keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Find out more ⬇️⬇️',
+                'body1' => 'TIME LIMITED OPPORTUNITIES '.PHP_EOL.' 😱 Search for {Keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Find out more ⬇️⬇️',
                 'body2' => 'Search & Save on  👉 {Keyword} 👈 ' . PHP_EOL . PHP_EOL . '⚡Find Amazing Offers Online ⚡'
             ],
             [
@@ -70,7 +70,7 @@ class AdTextSeeder extends Seeder
 
 
             // US start
-
+            
             [
                 'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
                 'title1' => '❗SEARCH FOR {KEYWORD}❗',
@@ -89,7 +89,7 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'US')->first()['id'],
                 'title1' => '❗SEARCH FOR {KEYWORD}❗',
                 'title2' => '❗Save Money Today❗ - Best {Keyword} Deals',
-                'body1' => 'TIME LIMITED OPPORTUNITIES '.PHP_EOL.' 😱 Search for {keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Find out more ⬇️⬇️',
+                'body1' => 'TIME LIMITED OPPORTUNITIES '.PHP_EOL.' 😱 Search for {Keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Find out more ⬇️⬇️',
                 'body2' => 'Search & Save on  👉 {Keyword} 👈 ' . PHP_EOL . PHP_EOL . '⚡Find Amazing Offers Online ⚡'
             ],
             [
@@ -147,8 +147,8 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
                 'title1' => '❗Risparmia Oggi❗ - Cerca {Keyword}',
                 'title2' => '❗CERCA {KEYWORD}❗',
-                'body1' => 'OCCASIONI A TEMPO LIMITATO 😱 Cerca {keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Scopri di più ⬇️⬇️',
-                'body2' => 'Cerca e Trova 👉 Keyword 👈 ' . PHP_EOL  . '⚡ Offerte speciali | I migliori prezzi ⚡'
+                'body1' => 'OCCASIONI A TEMPO LIMITATO 😱 Cerca {Keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Scopri di più ⬇️⬇️',
+                'body2' => 'Cerca e Trova 👉 {Keyword} 👈 ' . PHP_EOL  . '⚡ Offerte speciali | I migliori prezzi ⚡'
             ],
             [
                 'market_id' => Market::select('id')->where('code', 'IT')->first()['id'],
@@ -198,7 +198,7 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'DE')->first()['id'],
                 'title1' => '❗Heute retten❗ Suche nach {Keyword} Angebote',
                 'title2' => '❗SUCHE NACH {KEYWORD} ANGEBOTE❗',
-                'body1' => 'ZEITLICH BEGRENZTE ANGEBOTE ' . PHP_EOL  . '😱 Finde {keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Jetzt stöbern! ⬇️⬇️',
+                'body1' => 'ZEITLICH BEGRENZTE ANGEBOTE ' . PHP_EOL  . '😱 Finde {Keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Jetzt stöbern! ⬇️⬇️',
                 'body2' => 'Suchen Sie nach  👉{Keyword}👈 ' . PHP_EOL  . '⚡ Entdecken Sie Top Online-Schnäppchen ⚡'
             ],
             [
@@ -235,14 +235,14 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
                 'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
                 'title2' => '❗RECHERCHE {KEYWORD}❗',
-                'body1' => '🤩 Recherche de {keyword} ' . PHP_EOL . PHP_EOL . '✅ Découvrez nos Meilleurs Offres!👇👇',
+                'body1' => '🤩 Recherche de {Keyword} ' . PHP_EOL . PHP_EOL . '✅ Découvrez nos Meilleurs Offres!👇👇',
                 'body2' => '️😲 {KEYWORD} 😲 ' . PHP_EOL . PHP_EOL . '✅ Découvrir les meilleures opportunités!👇👇'
             ],
             [
                 'market_id' => Market::select('id')->where('code', 'FR')->first()['id'],
                 'title1' => '❗GROS RABAIS❗ - Recherche {Keyword}',
                 'title2' => '❗RECHERCHE {KEYWORD}❗',
-                'body1' => 'OPPORTUNITÉS LIMITÉES DANS LE TEMPS ' . PHP_EOL  . '😱 Recherche de {keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Découvrez-en plus ! ⬇️⬇️',
+                'body1' => 'OPPORTUNITÉS LIMITÉES DANS LE TEMPS ' . PHP_EOL  . '😱 Recherche de {Keyword} 😱 ' . PHP_EOL . PHP_EOL . 'Découvrez-en plus ! ⬇️⬇️',
                 'body2' => '️Recherchez 👉{Keyword}👈  ' . PHP_EOL  . '😍😍 Vente Flash ⚡️ Achetez Maintenant !!'
             ],
             [
@@ -411,14 +411,14 @@ class AdTextSeeder extends Seeder
                 'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
                 'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
                 'body1' => "🤩 {Keyword} 🤩 " . PHP_EOL . PHP_EOL . "⚫ Hitta de bästa erbjudandena online " . PHP_EOL  . "⚫ Våra 3 bästa förslag den här månaden.",
-                'body2' => "Sök 👉 Keyword 👈  " . PHP_EOL  . "⚡ Jämför erbjudanden, priser och recensioner ⚡"
+                'body2' => "Sök 👉 {Keyword} 👈  " . PHP_EOL  . "⚡ Jämför erbjudanden, priser och recensioner ⚡"
             ],
             [
                 'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
                 'title1' => '❗Spara pengar idag❗ - Sök efter {Keyword}',
                 'title2' => "❗SÖK EFTER {KEYWORD} ERBJUDANDE❗",
-                'body1' => "TIDSBEGRÄNSADE MÖJLIGHETER " . PHP_EOL  . "😱 Sök {keyword} 😱 " . PHP_EOL . PHP_EOL . "Lär dig mer om det ⬇️⬇️",
-                'body2' => "Sök  👉 Keyword 👈 " . PHP_EOL  . "⚡ Upptäck fler möjligheter online ⚡"
+                'body1' => "TIDSBEGRÄNSADE MÖJLIGHETER " . PHP_EOL  . "😱 Sök {Keyword} 😱 " . PHP_EOL . PHP_EOL . "Lär dig mer om det ⬇️⬇️",
+                'body2' => "Sök  👉 {Keyword} 👈 " . PHP_EOL  . "⚡ Upptäck fler möjligheter online ⚡"
             ],
             [
                 'market_id' => Market::select('id')->where('code', 'SE')->first()['id'],
@@ -469,7 +469,7 @@ class AdTextSeeder extends Seeder
                 'market_id' => Market::select('id')->where('code', 'DK')->first()['id'],
                 'title1' => '❗ SØG EFTER {KEYWORD} ❗',
                 'title2' => "❗Gem i Dag❗ - Søg efter {Keyword}",
-                'body1' => "TIDSBEGRÆNSEDE TILBUD " . PHP_EOL  . "😱 Søg efter {keyword} 😱 " . PHP_EOL . PHP_EOL . "Find ud af mere ⬇️⬇️",
+                'body1' => "TIDSBEGRÆNSEDE TILBUD " . PHP_EOL  . "😱 Søg efter {Keyword} 😱 " . PHP_EOL . PHP_EOL . "Find ud af mere ⬇️⬇️",
                 'body2' => "Søg og spar på 👉 {Keyword}👈  " . PHP_EOL  . "⚡ Find fantastiske tilbud online ⚡ "
             ],
             [
