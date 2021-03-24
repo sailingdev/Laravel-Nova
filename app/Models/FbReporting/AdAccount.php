@@ -12,4 +12,9 @@ class AdAccount extends Model
     protected $casts = [
         'configurations' => 'array'
     ];
+
+    public function websites()
+    {
+        return $this->hasMany(Website::class);
+    }
 }

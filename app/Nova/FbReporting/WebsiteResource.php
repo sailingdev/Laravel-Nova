@@ -4,6 +4,7 @@ namespace App\Nova\FbReporting;
 
 use App\Nova\Resource;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -68,6 +69,7 @@ class WebsiteResource extends Resource
             Text::make('Domain')
             ->sortable()
             ->rules('required', 'max:255'),
+            BelongsTo::make('AdAccount', 'adAccount', \App\Nova\FbReporting\AdAccountResource::class),
             Text::make('Site Tag')
             ->sortable()
             ->rules('required', 'max:255'),
@@ -80,7 +82,7 @@ class WebsiteResource extends Resource
             Text::make('Source Tag')
             ->sortable()
             ->rules('required', 'max:255'),
-            Text::make('Range ID ')
+            Text::make('Range ID')
             ->sortable()
             ->rules('required', 'max:255'), 
             Text::make('Ad Unit ID')
