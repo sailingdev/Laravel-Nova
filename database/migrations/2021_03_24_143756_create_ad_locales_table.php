@@ -17,6 +17,7 @@ class CreateAdLocalesTable extends Migration
             $table->id();
             $table->bigInteger('market_id')->unsigned();
             $table->foreign('market_id')->references('id')->on('markets')->onDelete('cascade');
+            $table->text('locales');
             $table->timestamps();
         });
     }
