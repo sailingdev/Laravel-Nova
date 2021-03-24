@@ -71,6 +71,9 @@ class AdLocaleResource extends Resource
             ->sortable()
             ->showOnIndex()
             ->rules('required', 'max:255')
+            ->help(
+                'Please seperate multiple locales by comma e.g 12,6,19'
+            )
         ];
     }
 

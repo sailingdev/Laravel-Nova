@@ -78,7 +78,24 @@ class AdAccountResource extends Resource
             ->rules('required', 'max:255'),
             Textarea::make('Configurations')
             ->sortable()
-            ->rules('required'),
+            ->rules('required')
+            ->help(
+                'Enter each configuration on a new line. For instance <br/>
+                    duplicate_campaigns=true <br/>
+                    fbreportmss_daily=true <br/>
+                    fbreportmss_hourly=false <br/> <br/> 
+                    <b>Available Configurations:</b> <br/>
+                    duplicate_campaigns <br/>
+                    fbreportmss_daily <br/>
+                    fbreportmss_hourly <br/>
+                    dailyreportmss_daily <br/>
+                    update_bids_10 <br/>
+                    update_bids_21 <br/>
+                    adjust_budgets <br/>
+                    fbengine <br/>
+                    rdslackbot <br/>
+                '
+            ),
             Textarea::make('Notes')
         ];
     }

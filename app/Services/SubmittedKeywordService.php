@@ -139,7 +139,6 @@ class SubmittedKeywordService
      */
     public function processSubmittedKeywords($submittedKeywords)
     {  
-        // dd($this->facebookAdLocale->getAll());
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
         
         foreach ($submittedKeywords as $submission) {
@@ -297,13 +296,23 @@ class SubmittedKeywordService
         $loggedErrors = [];
 
         $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = []; 
-      
+
+        $marketService = new MarketService;
+        $marketCode = $marketService->getMarketIdbyCode($submission['market']);
+
         foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
-            // dd('here', $existingAdSet->targeting['geo_locations']);
+            $newAdsetTargeting = $existingAdSet->targeting;
+            $newAdsetTargeting['geo_locations']['countries'] = [$submission['market']];
+
+            $sm = new StringManipulator;
+
+            $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
+                $this->facebookAdLocale->getMarketLocale($marketCode), ',');
+
             $newAdsetData = [
                 'name' =>   ucfirst($submission['keyword']), //$existingAdSet->name,
-                'targeting' => $existingAdSet->targeting,
+                'targeting' => $newAdsetTargeting,
                 'bid_amount' => $existingAdSet->bid_amount,
                 'billing_event' => $existingAdSet->billing_event,
                 'promoted_object' => $existingAdSet->promoted_object,
@@ -403,9 +412,7 @@ class SubmittedKeywordService
                             );
 
                             $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
-                            $marketService = new MarketService;
-
-                            $marketCode = $marketService->getMarketIdbyCode($submission['market']);
+                          
                            
                             $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission['keyword']);
                              

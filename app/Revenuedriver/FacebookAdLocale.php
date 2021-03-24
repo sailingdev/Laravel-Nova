@@ -2,6 +2,7 @@
 
 namespace App\Revenuedriver;
 
+use App\Models\FbReporting\AdLocale;
 use App\Revenuedriver\Base\Facebook;
 use Illuminate\Support\Facades\Http;
 use FacebookAds\Object\AdAccount;
@@ -20,34 +21,17 @@ class FacebookAdLocale extends Facebook
 
    
     /**
-     * @param mixed $adsetId
+     * @param mixed $marketId
      * 
-     * @return mixed
+     * @return string
      */
-    public function getAll()
+    public function getMarketLocale($marketId): string
     {
-        try {
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-type' => 'application/json',
-            ])->get('https://graph.facebook.com/v10.0/search?access_token='.$this->clientToken.'&type=adlocale');
-            $decoded = json_decode($response->body());
-            // dd('mona', $decoded);
-           return [true, $decoded];
-        } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-        \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
-        | \FacebookAds\Http\Exception\ThrottleException  | \FacebookAds\Http\Exception\PermissionException
-        | \FacebookAds\Http\Exception\AuthorizationException $e) 
-        {
-            if ($this->getAllAttempt < 10) {
-                sleep(3);
-                $this->getAllAttempt++;
-                return $this->getAll();
-            } 
-            return [false, $e];
-        } catch (\Throwable $th) {
-            return [false, $th->getMessage()];
-        }
+        $locale = AdLocale::select('locales')->where('market_id', $marketId)->first();
+        if ($locale === null) {
+            return 6;
+        } 
+        return $locale->locales;
     }
 
     
