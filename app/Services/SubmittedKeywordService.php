@@ -12,6 +12,7 @@ use App\Revenuedriver\FacebookAdset;
 use App\Revenuedriver\FacebookAdImage;
 use App\Revenuedriver\FacebookCampaign;
 use App\Revenuedriver\FacebookAdCreative;
+use App\Revenuedriver\FacebookAdLocale;
 use App\Models\FbReporting\SubmittedKeyword;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 
@@ -48,6 +49,11 @@ class SubmittedKeywordService
     */
     protected $facebookAdImage;
 
+     /**
+     * @var App\Revenuedriver\FacebookAdLocale;
+    */
+    protected $facebookAdLocale;
+
   
     /**
      * Service constructor
@@ -62,6 +68,7 @@ class SubmittedKeywordService
         $this->facebookAd = new FacebookAd;
         $this->facebookAdCreative = new FacebookAdCreative;
         $this->facebookAdImage = new FacebookAdImage;
+        $this->facebookAdLocale = new FacebookAdLocale;
     }
 
     public function submit(array $keywords, string $market)
@@ -132,6 +139,7 @@ class SubmittedKeywordService
      */
     public function processSubmittedKeywords($submittedKeywords)
     {  
+        // dd($this->facebookAdLocale->getAll());
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
         
         foreach ($submittedKeywords as $submission) {
@@ -149,6 +157,7 @@ class SubmittedKeywordService
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
                     return $campaignKeyword == $submission["keyword"];
                 });
+              
                 if (count($matches) < 1) {
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
                         'action_taken' => 'new',
@@ -157,7 +166,9 @@ class SubmittedKeywordService
                     ]);
                 } 
                 else { 
+                  
                     $process = $this->duplicateCampaign(current($matches), $submission);
+                    
                     if ($process[0] == true) {
                         $this->updateRow($submission['batch_id'], $submission['keyword'], [
                             'action_taken' => 'skipped',
@@ -286,9 +297,10 @@ class SubmittedKeywordService
         $loggedErrors = [];
 
         $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = []; 
-        
+      
         foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
+            // dd('here', $existingAdSet->targeting['geo_locations']);
             $newAdsetData = [
                 'name' =>   ucfirst($submission['keyword']), //$existingAdSet->name,
                 'targeting' => $existingAdSet->targeting,
@@ -350,6 +362,9 @@ class SubmittedKeywordService
                         }
                         else {
                             // copy adcreative into new account  
+                            
+                           
+
                             $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
                             $newAdImages = [];
                             foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {

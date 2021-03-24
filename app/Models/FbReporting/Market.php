@@ -13,4 +13,9 @@ class Market extends Model
     {
         return $this->hasMany(AdText::class);
     }
+
+    public function adLocales()
+    {
+        return $this->hasMany(AdLocale::class);
+    }
 }
