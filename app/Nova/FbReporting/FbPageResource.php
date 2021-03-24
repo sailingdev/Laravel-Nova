@@ -10,14 +10,14 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class WebsiteResource extends Resource
+class FbPageResource extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\FbReporting\Website::class;
+    public static $model = \App\Models\FbReporting\FbPage::class;
 
     /**
      * Get the displayable label of the resource.
@@ -26,7 +26,7 @@ class WebsiteResource extends Resource
      */
     public static function label()
     {
-        return 'Websites';
+        return 'Fb Pages';
     }
 
     /**
@@ -36,7 +36,7 @@ class WebsiteResource extends Resource
      */
     public static function singularLabel()
     {
-        return 'Website';
+        return 'Fb Page';
     }
 
 
@@ -45,7 +45,7 @@ class WebsiteResource extends Resource
      *
      * @var string
      */
-    public static $title = 'domain';
+    public static $title = 'page_name';
 
     /**
      * The columns that should be searched.
@@ -53,7 +53,7 @@ class WebsiteResource extends Resource
      * @var array
      */
     public static $search = [
-        'domain', 'site_tag', 'feed'
+        'page_id', 'instagram_id', 'page_name'
     ];
 
     /**
@@ -66,28 +66,18 @@ class WebsiteResource extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Domain')
+            Text::make('Page Name')
             ->sortable()
             ->rules('required', 'max:255'),
-            BelongsTo::make('Ad Account', 'adAccount', \App\Nova\FbReporting\AdAccountResource::class),
-            Text::make('Site Tag')
+            Text::make('Page Id')
             ->sortable()
             ->rules('required', 'max:255'),
-            Textarea::make('Supported Markets')
-            ->sortable()
-            ->rules('required'),
-            Text::make('Feed')
+            Text::make('Instagram Id')
             ->sortable()
             ->rules('required', 'max:255'),
-            Text::make('Source Tag')
+            Text::make('Running Ads')
             ->sortable()
-            ->rules('required', 'max:255'),
-            Text::make('Range ID')
-            ->sortable()
-            ->rules('required', 'max:255'), 
-            Text::make('Ad Unit ID')
-            ->sortable()
-            ->rules('required', 'max:255'),
+            ->rules('required', 'max:255')
         ];
     }
 
