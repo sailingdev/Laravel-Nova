@@ -5,6 +5,7 @@ namespace App\Revenuedriver\Base;
 use App\Labs\StringManipulator;
 use App\Services\AdTextService;
 use App\Services\MarketService;
+use Carbon\Carbon;
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
 use Illuminate\Support\Facades\App;
@@ -91,13 +92,13 @@ abstract class Facebook
     /**
      * @return string
      */
-    public function determineStartTime()
-    {  
-        //next saturday
-        if (date('l') == 'Saturday') {
-            return date('Y-m-d');
-        }
-        return date('Y-m-d', strtotime('next Saturday'));
+    public function determineStartTime($accountTimezone="UTC")
+    {    
+        $start = $accountTimezone === "UTC" ? Carbon::parse('next Saturday') : 
+            Carbon::parse('next saturday', 'America/Los_Angeles');
+    
+        return $accountTimezone === "UTC" ? $start->toDateTimeString(): 
+            Carbon::parse($start)->setTimezone('UTC')->toDateTimeString();
     }
 
     /**

@@ -13,6 +13,7 @@ use App\Revenuedriver\FacebookAdImage;
 use App\Revenuedriver\FacebookCampaign;
 use App\Revenuedriver\FacebookAdCreative;
 use App\Revenuedriver\FacebookAdLocale;
+use App\Revenuedriver\FacebookAdAccount;
 use App\Models\FbReporting\SubmittedKeyword;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 
@@ -69,6 +70,7 @@ class SubmittedKeywordService
         $this->facebookAdCreative = new FacebookAdCreative;
         $this->facebookAdImage = new FacebookAdImage;
         $this->facebookAdLocale = new FacebookAdLocale;
+        $this->facebookAdAccount = new FacebookAdAccount;
     }
 
     public function submit(array $keywords, string $market)
@@ -230,7 +232,7 @@ class SubmittedKeywordService
      */
     protected function duplicateCampaign($campaign, $submission)
     {  
-         
+        
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
 
@@ -310,13 +312,19 @@ class SubmittedKeywordService
             $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
                 $this->facebookAdLocale->getMarketLocale($marketCode), ',');
 
+            $targetAccountData = $this->facebookAdAccount->loadAccount($this->facebookAdAccount->getTargetAccount(), [
+                    'timezone_name'
+            ]); 
+            
+            $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
+        
             $newAdsetData = [
                 'name' =>   ucfirst($submission['keyword']), //$existingAdSet->name,
                 'targeting' => $newAdsetTargeting,
                 'bid_amount' => $existingAdSet->bid_amount,
                 'billing_event' => $existingAdSet->billing_event,
                 'promoted_object' => $existingAdSet->promoted_object,
-                'start_time' => $this->facebookAdset->determineStartTime(),
+                'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),
                 'campaign_id' => $newCampaign[1]['id'],
                 'is_dynamic_creative' => true
             ];
