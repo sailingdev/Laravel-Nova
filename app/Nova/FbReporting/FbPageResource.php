@@ -6,6 +6,7 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -75,9 +76,9 @@ class FbPageResource extends Resource
             Text::make('Instagram Id')
             ->sortable()
             ->rules('required', 'max:255'),
-            Text::make('Running Ads')
+            Number::make('Running Ads')
             ->sortable()
-            ->rules('required', 'max:255')
+            ->rules('max:255')
         ];
     }
 
