@@ -111,6 +111,7 @@ export default {
                 })
                 .then(response => {
                     this.displayForm = false
+                    this.fbPageIDs = ''
                     this.displaySubmitSuccess = true
                     this.igAccounts = response.data.data
                 }).catch(error => {

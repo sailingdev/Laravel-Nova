@@ -436,6 +436,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     fb_page_ids: this.fbPageIDs
                 }).then(function (response) {
                     _this.displayForm = false;
+                    _this.fbPageIDs = '';
                     _this.displaySubmitSuccess = true;
                     _this.igAccounts = response.data.data;
                 }).catch(function (error) {
