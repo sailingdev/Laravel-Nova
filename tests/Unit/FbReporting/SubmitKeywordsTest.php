@@ -3,11 +3,10 @@
 namespace Tests\Unit\FbReporting;
 
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
-use Tests\TestCase;
-use App\Models\User;
+use Tests\TestCase; 
 use Illuminate\Support\Facades\Queue;
 
-class SubmitedKeywordsTest extends TestCase
+class SubmitKeywordsTest extends TestCase
 {
     /**
      * @test 

@@ -23,7 +23,11 @@
         "build-submit-keywords-card": "cd nova-components/SubmitKeywordsCard && npm run dev",
         "build-submit-keywords-card-prod": "cd nova-components/SubmitKeywordsCard && npm run prod",
         "build-create-campaigns-from-related-card": "cd nova-components/CreateCampaignsFromRelatedCard && npm run dev",
-        "build-create-campaigns-from-related-card-prod": "cd nova-components/CreateCampaignsFromRelatedCard && npm run prod"
+        "build-create-campaigns-from-related-card-prod": "cd nova-components/CreateCampaignsFromRelatedCard && npm run prod",
+        "build-ig-account-loader": "cd nova-components/IgAccountLoader && npm run dev",
+        "build-ig-account-loader-prod": "cd nova-components/IgAccountLoader && npm run prod",
+        "build-ig-account-loader-card": "cd nova-components/IgAccountLoaderCard && npm run dev",
+        "build-ig-account-loader-card-prod": "cd nova-components/IgAccountLoaderCard && npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",

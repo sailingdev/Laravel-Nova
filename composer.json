@@ -24,7 +24,8 @@
         "optimistdigital/nova-tailwind": "^1.0",
         "predis/predis": "^1.1",
         "stechstudio/laravel-ssh-tunnel": "^3.0",
-        "fb-reporting/create-campaigns-from-related-card": "*"
+        "fb-reporting/create-campaigns-from-related-card": "*",
+        "fb-reporting/ig-account-loader-card": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -101,7 +102,7 @@
         },
         {
             "type": "path",
-            "url": "./nova-components/CustomTheme"
+            "url": "./nova-components/IgAccountLoaderCard"
         }
     ]
 }

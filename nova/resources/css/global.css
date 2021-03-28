@@ -122,3 +122,26 @@
   margin: auto !important;
   height: 50px !important;
 }
+
+
+.rd__submit-list-form-wrapper textarea {
+  min-height: 150px;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  white-space: pre-line;
+} 
+.rd__submit-list-form-wrapper label {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+.rd__submit-list-form-wrapper .container-box {
+  margin: 20px auto;
+  min-width: 650px;
+  max-width: 100%;
+}
+.rd__notify-submit-success svg {
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin: auto;
+}
