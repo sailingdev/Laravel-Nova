@@ -23,9 +23,9 @@
                             <div class="mt-1 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md">
                                 <textarea rows="13" class="shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md
                                 focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                                placeholder="hp latop
-                                best notebooks
-                                mattress"
+                                placeholder="108032627632083
+                                103847081336171
+                                103152925105389"
                                 v-model="fbPageIDs"
                                 ></textarea>
                                 <p class="mt-4 text-sm text-gray-500">

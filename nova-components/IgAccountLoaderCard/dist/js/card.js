@@ -976,7 +976,7 @@ var render = function() {
                             attrs: {
                               rows: "13",
                               placeholder:
-                                "hp latop\n                            best notebooks\n                            mattress"
+                                "108032627632083\n                            103847081336171\n                            103152925105389"
                             },
                             domProps: { value: _vm.fbPageIDs },
                             on: {
