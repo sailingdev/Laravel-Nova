@@ -2,6 +2,7 @@
 
 namespace App\Nova\FbReporting;
 
+use App\Nova\Actions\FbReporting\LoadIgAccountId;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -75,7 +76,7 @@ class FbPageResource extends Resource
             ->rules('required', 'max:255'),
             Text::make('Instagram Id')
             ->sortable()
-            ->rules('required', 'max:255'),
+            ->rules('max:255'),
             Number::make('Running Ads')
             ->sortable()
             ->rules('max:255')
@@ -123,6 +124,8 @@ class FbPageResource extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new LoadIgAccountId
+        ];
     }
 }

@@ -5,13 +5,11 @@ namespace App\Http\Controllers\FbReporting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FbReporting\LoadIGAccountIdsRequest;
 use App\Labs\StringManipulator;
-use App\Revenuedriver\FacebookPage;
-use App\Traits\LoadIgAccountId;
+use App\Revenuedriver\FacebookPage; 
 use Illuminate\Http\Request;
 
 class IgAccountLoaderController extends Controller
-{
-    use LoadIgAccountId;
+{ 
     function loadIDs(LoadIGAccountIdsRequest $request, StringManipulator $sm)
     { 
         $prep = $sm->generateArrayFromString(str_replace("\n", '<br />',  $request->fb_page_ids), '<br />');
