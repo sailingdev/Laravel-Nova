@@ -6,6 +6,7 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -69,25 +70,29 @@ class WebsiteResource extends Resource
             Text::make('Domain')
             ->sortable()
             ->rules('required', 'max:255'),
-            BelongsTo::make('Ad Account', 'adAccount', \App\Nova\FbReporting\AdAccountResource::class),
             Text::make('Site Tag')
             ->sortable()
             ->rules('required', 'max:255'),
             Textarea::make('Supported Markets')
             ->sortable()
             ->rules('required'),
-            Text::make('Feed')
-            ->sortable()
-            ->rules('required', 'max:255'),
+
+            Select::make('Feed')->searchable()->options([
+                'cbs' => 'CBS',
+                'iac' => 'IAC',
+                'media' => 'Media',
+                'yahoo' => 'Yahoo',
+            ])->displayUsingLabels(),
+
             Text::make('Source Tag')
             ->sortable()
-            ->rules('required', 'max:255'),
+            ->rules('max:255'),
             Text::make('Range ID')
             ->sortable()
-            ->rules('required', 'max:255'), 
+            ->rules('max:255'), 
             Text::make('Ad Unit ID')
             ->sortable()
-            ->rules('required', 'max:255'),
+            ->rules('max:255'),
         ];
     }
 

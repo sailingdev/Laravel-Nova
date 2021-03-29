@@ -16,14 +16,12 @@ class CreateWebsitesTable extends Migration
         Schema::create('websites', function (Blueprint $table) {
             $table->id();
             $table->string('domain');
-            $table->bigInteger('ad_account_id')->unsigned();
-            $table->foreign('ad_account_id')->references('id')->on('ad_accounts')->onDelete('cascade');
             $table->string('site_tag');
             $table->text('supported_markets');
             $table->string('feed');
-            $table->string('source_tag');
-            $table->string('range_id');
-            $table->string('ad_unit_id');
+            $table->string('source_tag')->nullable();
+            $table->string('range_id')->nullable();
+            $table->string('ad_unit_id')->nullable();
             $table->timestamps();
         });
     }
