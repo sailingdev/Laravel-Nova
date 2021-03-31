@@ -152,30 +152,30 @@ class FacebookPage extends Facebook
 
     public function loadBusinessAccountPages()
     {
-       
-        // 137338727436558 rd
-        $businessManagerID = '276611900308096';
         
-        try {
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-type' => 'application/json',
-            ])->get('https://graph.facebook.com/'.$businessManagerID.'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
-            '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
-
-            $decoded = json_decode($response->body());
-            // dd($decoded);
-            if (isset($decoded->data)) {
-               
-                if (count($decoded->data) > 0) {
-                    $fbPageService = new FbPageService;
+        $businessManagers = ['137338727436558', '276611900308096'];
+        foreach ($businessManagers as $businessManager) {
+            try {
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-type' => 'application/json',
+                ])->get('https://graph.facebook.com/'.$businessManager.'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
+                '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
+    
+                $decoded = json_decode($response->body());
+                // dd($decoded);
+                if (isset($decoded->data)) {
                    
-                    dd('Done', $fbPageService->updateOrCreateMultipleRows($decoded->data));
+                    if (count($decoded->data) > 0) {
+                        $fbPageService = new FbPageService;
+                       
+                        $fbPageService->updateOrCreateMultipleRows($decoded->data);
+                    }
                 }
+                // return null;
+            } catch (\Throwable $th) {
+                // return null;
             }
-            return null;
-        } catch (\Throwable $th) {
-            return null;
         }
     }
  
