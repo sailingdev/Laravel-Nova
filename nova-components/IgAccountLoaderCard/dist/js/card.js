@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -174,332 +174,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(2);
-module.exports = __webpack_require__(9);
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-Nova.booting(function (Vue, router, store) {
-  Vue.component('ig-account-loader-card', __webpack_require__(3));
-});
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(4)
-/* template */
-var __vue_template__ = __webpack_require__(8)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/Card.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-b9bc2c0a", Component.options)
-  } else {
-    hotAPI.reload("data-v-b9bc2c0a", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubmitForm__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__SubmitForm__);
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['card'],
-    components: {
-        SubmitForm: __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default.a
-    },
-    mounted: function mounted() {
-        //
-    }
-});
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(14)
-  __webpack_require__(19)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(6)
-/* template */
-var __vue_template__ = __webpack_require__(18)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-468278b2"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/SubmitForm.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-468278b2", Component.options)
-  } else {
-    hotAPI.reload("data-v-468278b2", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: "SubmitForm",
-    data: function data() {
-        return {
-            processing: false,
-            fbPageIDs: '',
-            errorResponse: {},
-            displayForm: true,
-            displaySubmitSuccess: false,
-            igAccounts: [],
-            markets: []
-        };
-    },
-
-    props: {
-        card: {
-            required: true
-        }
-    },
-    methods: {
-        submit: function submit() {
-            var _this = this;
-
-            if (this.fbPageIDs != '') {
-                this.processing = true;
-                axios.post('/nova-vendor/' + this.card.component + '/load-ig-accounts', {
-                    fb_page_ids: this.fbPageIDs
-                }).then(function (response) {
-                    _this.displayForm = false;
-                    _this.fbPageIDs = '';
-                    _this.displaySubmitSuccess = true;
-                    _this.igAccounts = response.data.data;
-                }).catch(function (error) {
-                    _this.errorResponse = error.response.data;
-                }).finally(function () {
-                    _this.processing = false;
-                });
-            }
-        },
-        processAnother: function processAnother() {
-            this.displaySubmitSuccess = false;
-            this.batchId = '';
-            this.displayForm = true;
-        }
-    }
-});
-
-/***/ }),
-/* 7 */,
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "card",
-    { staticClass: "flex flex-col items-center justify-center" },
-    [
-      _c(
-        "div",
-        { staticClass: "px-3 py-3" },
-        [
-          _c("SubmitForm", {
-            attrs: { card: _vm.card },
-            on: { formSubmitted: _vm.formSubmitted }
-          })
-        ],
-        1
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-b9bc2c0a", module.exports)
-  }
-}
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 10 */,
-/* 11 */
 /***/ (function(module, exports) {
 
 /*
@@ -581,49 +255,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 12 */,
-/* 13 */,
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(15);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(16)("d107c04a", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitForm.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitForm.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(11)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.header-box div[data-v-468278b2], .content-box div[data-v-468278b2] {\n    width: 25%;\n}\n.bg-orange-600[data-v-468278b2] { background-color: #dd6b20;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 16 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -642,7 +274,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(17)
+var listToStyles = __webpack_require__(10)
 
 /*
 type StyleObject = {
@@ -851,7 +483,190 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 17 */
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(4);
+module.exports = __webpack_require__(16);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+Nova.booting(function (Vue, router, store) {
+  Vue.component('ig-account-loader-card', __webpack_require__(5));
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(6)
+/* template */
+var __vue_template__ = __webpack_require__(15)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/Card.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b9bc2c0a", Component.options)
+  } else {
+    hotAPI.reload("data-v-b9bc2c0a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubmitForm__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__SubmitForm__);
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['card'],
+    components: {
+        SubmitForm: __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default.a
+    },
+    mounted: function mounted() {
+        //
+    }
+});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(8)
+  __webpack_require__(11)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(13)
+/* template */
+var __vue_template__ = __webpack_require__(14)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-468278b2"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/SubmitForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-468278b2", Component.options)
+  } else {
+    hotAPI.reload("data-v-468278b2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("d107c04a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitForm.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitForm.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.header-box div[data-v-468278b2], .content-box div[data-v-468278b2] {\n    width: 25%;\n}\n.bg-orange-600[data-v-468278b2] { background-color: #dd6b20;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -884,7 +699,186 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 18 */
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(12);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("0bbd4657", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./SubmitForm.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./SubmitForm.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n.batch-container {\n    border-bottom: 1px solid #ccc !important;\n    padding: 40px 0;\n}\n.batch-container h4 {\n    background-color: rgba(0, 0, 0, 0.08) !important;\n    border-top: 1px solid #2b6cb0 !important;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "SubmitForm",
+    data: function data() {
+        return {
+            processing: false,
+            fbPageIDs: '',
+            errorResponse: {},
+            displayForm: true,
+            displaySubmitSuccess: false,
+            igAccounts: [],
+            markets: []
+        };
+    },
+
+    props: {
+        card: {
+            required: true
+        }
+    },
+    methods: {
+        submit: function submit() {
+            var _this = this;
+
+            if (this.fbPageIDs != '') {
+                this.processing = true;
+                axios.post('/nova-vendor/' + this.card.component + '/load-ig-accounts', {
+                    fb_page_ids: this.fbPageIDs
+                }).then(function (response) {
+                    _this.displayForm = false;
+                    _this.fbPageIDs = '';
+                    _this.displaySubmitSuccess = true;
+                    _this.igAccounts = response.data.data;
+                }).catch(function (error) {
+                    _this.errorResponse = error.response.data;
+                }).finally(function () {
+                    _this.processing = false;
+                });
+            }
+        },
+        processAnother: function processAnother() {
+            this.displaySubmitSuccess = false;
+            this.batchId = '';
+            this.displayForm = true;
+        }
+    }
+});
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -1090,31 +1084,27 @@ var render = function() {
                 [_vm._v(" Request was successful! ")]
               ),
               _vm._v(" "),
-              _vm.igAccounts.length < 1
-                ? _c("div", [_vm._m(1)])
-                : _c("div", [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c(
+              _c("div", [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  _vm._l(_vm.igAccounts, function(igAccount, key) {
+                    return _c(
                       "div",
-                      _vm._l(_vm.igAccounts, function(igAccount, key) {
-                        return _c(
-                          "div",
-                          { key: key, staticClass: "content-box flex w-full" },
-                          [
-                            _c("div", [
-                              _vm._v(_vm._s(igAccount.facebook_page_id))
-                            ]),
-                            _vm._v(" "),
-                            _c("div", [
-                              _vm._v(_vm._s(igAccount.instagram_account_id))
-                            ])
-                          ]
-                        )
-                      }),
-                      0
+                      { key: key, staticClass: "content-box flex w-full" },
+                      [
+                        _c("div", [_vm._v(_vm._s(igAccount.facebook_page_id))]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(_vm._s(igAccount.instagram_account_id))
+                        ])
+                      ]
                     )
-                  ]),
+                  }),
+                  0
+                )
+              ]),
               _vm._v(" "),
               _c("div", [
                 _c("p", { staticClass: "mt-3" }, [
@@ -1157,20 +1147,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center",
-        attrs: { role: "alert" }
-      },
-      [_c("p", [_vm._v(" No record ")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "header-box flex" }, [
       _c("div", {}, [_vm._v("Facebook Page ID")]),
       _vm._v(" "),
@@ -1188,44 +1164,41 @@ if (false) {
 }
 
 /***/ }),
-/* 19 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(20);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(16)("0bbd4657", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./SubmitForm.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-468278b2\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./SubmitForm.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "card",
+    { staticClass: "flex flex-col items-center justify-center" },
+    [
+      _c(
+        "div",
+        { staticClass: "px-3 py-3" },
+        [_c("SubmitForm", { attrs: { card: _vm.card } })],
+        1
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-b9bc2c0a", module.exports)
+  }
 }
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 16 */
+/***/ (function(module, exports) {
 
-exports = module.exports = __webpack_require__(11)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n.batch-container {\n    border-bottom: 1px solid #ccc !important;\n    padding: 40px 0;\n}\n.batch-container h4 {\n    background-color: rgba(0, 0, 0, 0.08) !important;\n    border-top: 1px solid #2b6cb0 !important;\n}\n", ""]);
-
-// exports
-
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

@@ -17,12 +17,12 @@ class IgAccountLoaderController extends Controller
         $data = [];
         if (count($prep) > 0) {
             $facebookPage = new FacebookPage;
+            // dd($facebookPage->loadBusinessAccountPages());
             foreach ($prep as $facebookPageId) {
                 // $igAccountId = $this->load($facebookPageId);
                 $igAccountId = $facebookPage->loadInstagramAccounts($facebookPageId, [
                     'id'
                 ]);
-            
                 array_push($data, [
                     'facebook_page_id' => $facebookPageId,
                     'instagram_account_id' => $igAccountId[0] == true ? $igAccountId[1] : null

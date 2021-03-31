@@ -52,13 +52,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414" fill="#3da35a"/></svg>
                 <h4 class="text-2xl text-center text-3xl text-80 font-dark px-4 py-4"> Request was successful! </h4>
                 
-                <div v-if="igAccounts.length < 1">
+                <!-- <div v-if="igAccounts.length < 1">
                     <div class="px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center" role="alert">
                         <p> No record </p>
                     </div> 
-                </div>
-
-                <div v-else>
+                </div> -->
+                <!-- v-else -->
+                <div >
                      <div class="header-box flex">
                         <div class>Facebook Page ID</div>  
                         <div> Instagram Account ID </div>
@@ -113,8 +113,8 @@ export default {
                     this.displayForm = false
                     this.fbPageIDs = ''
                     this.displaySubmitSuccess = true
-                    this.igAccounts = response.data.data
-                }).catch(error => {
+                    this.igAccounts = response.data.data 
+                }).catch(error => { 
                     this.errorResponse = error.response.data
                 })
                 .finally(() => {

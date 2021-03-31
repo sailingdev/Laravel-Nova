@@ -3,6 +3,7 @@
 namespace App\Revenuedriver;
 
 use App\Revenuedriver\Base\Facebook;
+use App\Services\FbPageService;
 use FacebookAds\Object\Ad;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AdSet;
@@ -12,7 +13,9 @@ use FacebookAds\Object\Fields\CampaignFields;
 use FacebookAds\Object\Page;
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
+use FacebookAds\Object\Business;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class FacebookPage extends Facebook
 {
@@ -41,20 +44,7 @@ class FacebookPage extends Facebook
      */
     public $api;
 
-
-    public function __construct()
-    {
-        $this->appId =  config('facebook.marketing.app_id');
-        $this->clientSecret = config('facebook.marketing.client_secret');
-        // $this->clientToken = config('facebook.marketing.client_token');
-        $this->clientToken = 'EAAFmyiUTy1IBAMU2BklKpEJtRU8jZB2yXy6aXD1dZAZAK2MbZAdqlyi4DZCCvrhyb8MgpKQv5fatam7zJi34IvXgkz7ypBjjcmoJWFEeg4ISgfZBq4QiKXOtD0oRYnNF0ZCdJP7GYMwaqxZCcR7Vs1IkrpGJFTxLdBKi7fnJJiOPe3lpMaCxVnWHRH20uwp6t9ZCAC8SEMP2Q6Mk1hl3iOFHd6QYXHl1KhZA6ZCeOVwxLe9tQZDZD';
-        Api::init($this->appId, $this->clientSecret, $this->clientToken, false);
-
-        // The Api object is now available through singleton
-        $this->api = Api::instance(); 
-        $this->api->setLogger(new CurlLogger());
-    }
-
+ 
     /**
      * @param string $accountId
      * @param array $params
@@ -65,13 +55,11 @@ class FacebookPage extends Facebook
     public function loadInstagramAccounts(string $pageId, array $params=[], array $fields=[]): array
     { 
        
-
         $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
 
+        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->clientSecret));
 
-        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, 'e7110f3d0020c61c25d979a55475fedc'));
-
-        $proof= hash_hmac('sha256', $pageAccessToken, 'e7110f3d0020c61c25d979a55475fedc'); 
+        $proof= hash_hmac('sha256', $pageAccessToken, $this->clientSecret); 
         
         if ($pageAccessToken != null) {
            
@@ -87,6 +75,7 @@ class FacebookPage extends Facebook
                 ]);
 
                 $decoded = json_decode($response->body());
+               
                 if (isset($decoded->id)) {
                     return [true, $decoded->id];
                 }
@@ -111,17 +100,15 @@ class FacebookPage extends Facebook
             }
         }
         return [false, 'No record returned'];
-      
-
     }
 
 
     protected function getLongLivedUserAccessToken()
     {
-        $shortUserAccessToken = 'EAAPK1aBYEkUBAFuP79MAa27hamYUZBtR0voOzXcSbCSkKjZCmWgDPgTm7raPMeoTtQk2RzSlW4fGW3ZCNrdrwAbFZC5ZBdhyGeZCc2CXpqYqutOrVbjqigSZAWG7rq09a3KXYXQyIHR5oFvnZAnMyZBRpFfBUEniCUnZACkFLiSOGPXbPGkgVHbDqdbJk0Gf4hjqKoaO2OZBtQs41IxZBZCI9gOC2W0kCAWtCynYmG3GU0igUfwZDZD';
-        
-        // Last fetched: 26 march, 2021 7:30PM UTC
-        $longUserAccessToken='EAAPK1aBYEkUBAKCTICChxZCcjh3oKriLmqTFYHbP6ESUwvtmgKaCNkkRJRwIpuKWqvCHl9ZCPnWgYy6zLwZAL7gsjthy4zXwH4i6FTlIQq3LCTvXo93nudmdN5po5Gi542pxCv2yVZAMXN8ho2BGDQe7yIgdELzD1HlstpiLqgZDZD';
+        $shortUserAccessToken = 'EAAFmyiUTy1IBAAhLDt3bpBmKgViyIDADzkwt38iUuZCEnhXdPHXfG8isLxBZCxVwe4UAgZA4PY3g1XkQ0tkSW6vKz5E2LdN7BWwSvz0SKZBPmTMq4OXdRLUyAOJD0hbHV8GqwLbZAefzxErKwsSFBPeSW1CsxNCsWShSbDkkV4dB7irUgofEEwPVRi6ZC53pMUwJeZAG3bIM40G9Kxym609Nn8ewEeUDeOMHR11J8ElDI3r0mIu1IoD';
+         
+        // Last fetched: 31 march, 2021 10:10PM UTC
+        $longUserAccessToken='EAAFmyiUTy1IBAJrfCnVulpA5SRZCeWXcHdjJ19N5vYURf1sZAKrqQpIpoZBVky7CqnSfAKKxE6YZAN0tZCVr9GH9u0mPpTWZCxoa30qdljQL12hXHZBGVauWQoGtoL5vprt18VSem2ZCPAmxZBO6Yxw1kdcLbjOFWFC7QnZBrAt3EJPAZDZD';
        
         // try {
         //     $response = Http::withHeaders([
@@ -129,10 +116,10 @@ class FacebookPage extends Facebook
         //         'Content-type' => 'application/json',
         //     ])
         //     ->get('https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=' . $this->appId . 
-        //     '&client_secret=e7110f3d0020c61c25d979a55475fedc&fb_exchange_token=' . $shortUserAccessToken);
+        //     '&client_secret='.$this->clientSecret.'&fb_exchange_token=' . $shortUserAccessToken);
 
         //     $decoded = json_decode($response->body());
-        //     dd($decoded);
+        //     dd('Long lived user access token', $decoded);
         //     return $decoded->access_token;
         // } catch (\Throwable $th) {
         //     dd($th);
@@ -158,10 +145,90 @@ class FacebookPage extends Facebook
             // dd($decoded);
             return null;
         } catch (\Throwable $th) {
-            dd($th);
+            return null;
+        }
+    }
+
+
+    public function loadBusinessAccountPages()
+    {
+       
+
+        $businessManagerID = '137338727436558';
+        
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-type' => 'application/json',
+            ])->get('https://graph.facebook.com/'.$businessManagerID.'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
+            '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
+
+            $decoded = json_decode($response->body());
+          
+            if (isset($decoded->data)) {
+               
+                if (count($decoded->data) > 0) {
+                    $fbPageService = new FbPageService;
+                    dd('Done', $fbPageService->updateOrCreateMultipleRows($decoded->data));
+                }
+            }
+            return null;
+        } catch (\Throwable $th) {
             return null;
         }
     }
  
+            
+                    // $data = $decoded->data); 
+                    
+//                         $totalRunningAds = 0;
+//                         try {
+//                             // 108032627632083
+//                             $proof = hash_hmac('sha256', $this->getLongLivedUserAccessToken(), 'e7110f3d0020c61c25d979a55475fedc');
+//                             $pageRunningAds = Http::withHeaders([
+//                                 'Accept' => 'application/json',
+//                                 'Content-type' => 'application/json',
+//                             ])->get('https://graph.facebook.com/v10.0/108296017769619/ads_posts?access_token=' . $this->getLongLivedUserAccessToken() . 
+//                             '&appsecret_proof='.$proof. '&fields=status_type,is_expired,is_hidden,promotion_status&include_inline_create=true&limit=100');
+// // 
+//                             $pageData = json_decode($pageRunningAds->body());
+//                                 dd($pageData);
+//                             if (isset($pageData->data) && count($pageData->data) > 0) {
+//                                 $goNext = false;
+                             
+//                                 $totalRunningAds += count($pageData->data);
+                                
+                                
+//                                 if (isset($pageData->paging) && isset($pageData->paging->next)) {
+//                                     $goNext = true;
+                                    
+//                                     while($goNext === true) {
+//                                         $nextPage = $pageData->paging->next;
+//                                         $nextPageCon = $nextPage . '&appsecret_proof=' . $proof;
+//                                         // dd($nextPageCon);
+//                                         Log::info('See this', [$nextPageCon]);
+//                                         $pageRunningAds2 = Http::withHeaders([
+//                                             'Accept' => 'application/json',
+//                                             'Content-type' => 'application/json',
+//                                         ])->get($nextPageCon);
+
+//                                         $pageData2 = json_decode($pageRunningAds2->body());
+                                        
+//                                         if (!isset($pageData2->paging->next) || 
+//                                         ( isset($pageData2->paging->next) && $pageData2->paging->next == '' ) ) {
+//                                             $goNext = false;
+//                                            dd('Ilele', $pageData2);
+//                                         }
+//                                         else {
+//                                             $totalRunningAds += count($pageData2->data);
+//                                         }
+//                                     }
+//                                 } 
+//                             }
+//                             dd($totalRunningAds, 'Mona Moxie');
+                           
+//                         } catch (\Throwable $th) {
+//                             dd($th);
+//                         } 
 
 }
