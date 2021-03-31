@@ -19,6 +19,7 @@ class CreateFbPagesTable extends Migration
             $table->string('page_id');
             $table->string('instagram_id')->nullable();
             $table->integer('running_ads')->nullable()->default(0);
+            $table->string('environment');
             $table->timestamps();
         });
     }

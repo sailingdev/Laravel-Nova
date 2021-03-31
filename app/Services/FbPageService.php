@@ -13,17 +13,20 @@ class FbPageService
      * 
      * @return bool|null
      */
-    public function updateOrCreateMultipleRows(array $data): ?bool
+    public function updateOrCreateMultipleRows(array $data, $environment='rd'): ?bool
     { 
         $skip = ['112005480631100']; 
         foreach ($data as $row) {
+            // dd(!in_array($row->id, $skip));
             if (!in_array($row->id, $skip)) {
                 FbPage::updateOrCreate([
                     'page_name' => $row->name,
-                    'page_id' => $row->id 
+                    'page_id' => $row->id,
+                    'environment' => $environment
                 ], [
                     'page_name' => $row->name,
-                    'page_id' => $row->id
+                    'page_id' => $row->id,
+                    'environment' => $environment
                 ]);
             }
         }

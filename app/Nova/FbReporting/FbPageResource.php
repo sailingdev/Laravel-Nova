@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -55,7 +56,7 @@ class FbPageResource extends Resource
      * @var array
      */
     public static $search = [
-        'page_id', 'instagram_id', 'page_name'
+        'page_id', 'instagram_id', 'page_name', 'environment'
     ];
 
     /**
@@ -79,7 +80,11 @@ class FbPageResource extends Resource
             ->rules('max:255'),
             Number::make('Running Ads')
             ->sortable()
-            ->rules('max:255')
+            ->rules('max:255'),
+            Select::make('Environment')->options([
+                'rd' => 'Revenuedriver',
+                'tt' => 'TechAds Media'
+            ])->displayUsingLabels(),
         ];
     }
 

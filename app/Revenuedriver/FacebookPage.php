@@ -153,8 +153,8 @@ class FacebookPage extends Facebook
     public function loadBusinessAccountPages()
     {
        
-
-        $businessManagerID = '137338727436558';
+        // 137338727436558 rd
+        $businessManagerID = '276611900308096';
         
         try {
             $response = Http::withHeaders([
@@ -164,11 +164,12 @@ class FacebookPage extends Facebook
             '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
 
             $decoded = json_decode($response->body());
-          
+            // dd($decoded);
             if (isset($decoded->data)) {
                
                 if (count($decoded->data) > 0) {
                     $fbPageService = new FbPageService;
+                   
                     dd('Done', $fbPageService->updateOrCreateMultipleRows($decoded->data));
                 }
             }
