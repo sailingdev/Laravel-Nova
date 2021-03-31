@@ -85,7 +85,7 @@ class FbPageResource extends Resource
                 'rd' => 'Revenuedriver',
                 'tt' => 'TechAds Media'
             ])->displayUsingLabels()
-            ->rules('required'),,
+            ->rules('required'),
         ];
     }
 
