@@ -84,7 +84,8 @@ class FbPageResource extends Resource
             Select::make('Environment')->options([
                 'rd' => 'Revenuedriver',
                 'tt' => 'TechAds Media'
-            ])->displayUsingLabels(),
+            ])->displayUsingLabels()
+            ->rules('required'),,
         ];
     }
 
