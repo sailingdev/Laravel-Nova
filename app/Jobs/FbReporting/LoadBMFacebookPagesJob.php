@@ -24,7 +24,6 @@ class LoadBMFacebookPagesJob implements ShouldQueue
     public function handle()
     {
         $facebookPage = new FacebookPage;
-        Log::info('Job from LoadBMFacebookPagesJob class logged', ['Hello world!']);
-        // return $facebookPage->loadBusinessAccountPages();
+        return $facebookPage->loadBusinessAccountPages();
     }
 }
