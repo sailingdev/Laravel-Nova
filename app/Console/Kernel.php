@@ -26,8 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new LoadBMFacebookPagesJob)->everyMinute()->withoutOverlapping()
-        ->runInBackground();
+        $schedule->job(new LoadBMFacebookPagesJob)->everyMinute();
     }
 
     /**
