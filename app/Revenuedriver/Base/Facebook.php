@@ -18,9 +18,9 @@ abstract class Facebook
     */
     public $appId;
 
-    public $clientSecret;
+    public $appSecret;
 
-    public $clientToken;
+    public $appAccessToken;
  
     /**
      * @var string
@@ -46,11 +46,11 @@ abstract class Facebook
     public function __construct()
     {
         $this->appId =  config('facebook.marketing.app_id');
-        $this->clientSecret = config('facebook.marketing.client_secret');
-        $this->clientToken = config('facebook.marketing.client_token');
-         
-        Api::init($this->appId, $this->clientSecret, $this->clientToken, false);
-
+        $this->appSecret = config('facebook.marketing.app_secret');
+        $this->appAccessToken = config('facebook.marketing.app_access_token');
+       
+        Api::init($this->appId, $this->appSecret, $this->appAccessToken, false);
+        
         // The Api object is now available through singleton
         $this->api = Api::instance(); 
         $this->api->setLogger(new CurlLogger());

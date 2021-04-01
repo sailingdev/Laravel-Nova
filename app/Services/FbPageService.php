@@ -16,8 +16,7 @@ class FbPageService
     public function updateOrCreateMultipleRows(array $data, $environment='rd'): ?bool
     { 
         $skip = ['112005480631100']; 
-        foreach ($data as $row) {
-            // dd(!in_array($row->id, $skip));
+        foreach ($data as $row) { 
             if (!in_array($row->id, $skip)) {
                 FbPage::updateOrCreate([
                     'page_name' => $row->name,
@@ -31,5 +30,26 @@ class FbPageService
             }
         }
         return true;
+    }
+
+    /**
+     * @param mixed $rowId
+     * @param mixed $newCount
+     * 
+     * @return 
+     */
+    public function updateRunningAdsCount($rowId, $newCount)
+    { 
+        return FbPage::where('id', $rowId)->update([
+            'running_ads' => $newCount
+        ]);
+    }
+
+     /**
+     * @return [type]
+     */
+    public function getAll()
+    {
+        return FbPage::all();
     }
 }

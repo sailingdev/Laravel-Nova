@@ -3,6 +3,7 @@
 namespace App\Revenuedriver;
 
 use App\Revenuedriver\Base\Facebook;
+use App\Services\AdAccountService;
 use App\Services\FbPageService;
 use FacebookAds\Object\Ad;
 use FacebookAds\Object\AdAccount;
@@ -57,10 +58,10 @@ class FacebookPage extends Facebook
        
         $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
 
-        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->clientSecret));
+        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
 
-        $proof= hash_hmac('sha256', $pageAccessToken, $this->clientSecret); 
-        
+        $proof= hash_hmac('sha256', $pageAccessToken, $this->appSecret); 
+     
         if ($pageAccessToken != null) {
            
             try {
@@ -150,34 +151,86 @@ class FacebookPage extends Facebook
     }
 
 
+    /**
+     * @return [type]
+     */
     public function loadBusinessAccountPages()
     {
         
-        $businessManagers = ['137338727436558', '276611900308096'];
+        $businessManagers = [
+            [
+                'id' => '137338727436558',
+                'name' => 'rd'
+            ], 
+            [
+                'id' => '276611900308096',
+                'name' => 'tt'
+            ]
+        ];
+
         foreach ($businessManagers as $businessManager) {
             try {
                 $response = Http::withHeaders([
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
-                ])->get('https://graph.facebook.com/'.$businessManager.'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
+                ])->get('https://graph.facebook.com/'.$businessManager['id'].'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
                 '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
     
                 $decoded = json_decode($response->body());
                 // dd($decoded);
                 if (isset($decoded->data)) {
-                   
                     if (count($decoded->data) > 0) {
                         $fbPageService = new FbPageService;
                        
-                        $fbPageService->updateOrCreateMultipleRows($decoded->data);
+                        $fbPageService->updateOrCreateMultipleRows($decoded->data, $businessManager['name']);
                     }
-                }
-                // return null;
+                } 
             } catch (\Throwable $th) {
-                // return null;
+                Log::error('An error occured while processing the loadBusinessAccountPages call', [$th]);
             }
         }
     }
+
+
+    /**
+     * @return void
+     */
+    public function curateRunningAds()
+    {
+        $fbPageService = new FbPageService;
+        $fbPages = $fbPageService->getAll();
+        if (count($fbPages) > 0) {
+            $inst = new FacebookAdAccount();
+            foreach ($fbPages as $fbPage) {
+                $adAccountId = $this->getAccount21Id(); 
+                // I don't understand why they required an ad account as part of the parameter. 
+                // It seems to work fine no matter the ad account provided
+                $pull = $inst->getAdsVolume($adAccountId, [
+                    'ads_running_or_in_review_count'
+                ], [
+                    'page_id' => $fbPage->page_id
+                ]); 
+                if ($pull[0] == true) { 
+                    if (count($pull[1]) > 0) {
+                       $newCount = isset($pull[1][0]->ads_running_or_in_review_count) ? 
+                            $pull[1][0]->ads_running_or_in_review_count : null;
+
+                        $fbPageService->updateRunningAdsCount($fbPage->id, $newCount);
+                    } 
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
  
             
                     // $data = $decoded->data); 

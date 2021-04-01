@@ -11,6 +11,7 @@ use FacebookAds\Object\Values\CampaignDatePresetValues;
 use FacebookAds\Object\Values\CampaignEffectiveStatusValues;
 use FacebookAds\ApiRequest;
 use FacebookAds\Http\RequestInterface;
+use FacebookAds\Object\AdCreative;
 use FacebookAds\TypeChecker;
 
 class AdAccountExtension extends AdAccount
@@ -44,4 +45,6 @@ class AdAccountExtension extends AdAccount
     $request->addFields($fields);
     return $pending ? $request : $request->execute();
   }
+
+   
 }
