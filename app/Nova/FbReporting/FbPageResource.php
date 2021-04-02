@@ -2,6 +2,7 @@
 
 namespace App\Nova\FbReporting;
 
+use App\Nova\Actions\FbReporting\LoadFbPageRunningAdsCount;
 use App\Nova\Actions\FbReporting\LoadIgAccountId;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
@@ -131,7 +132,8 @@ class FbPageResource extends Resource
     public function actions(Request $request)
     {
         return [
-            new LoadIgAccountId
+            new LoadIgAccountId,
+            new LoadFbPageRunningAdsCount
         ];
     }
 }

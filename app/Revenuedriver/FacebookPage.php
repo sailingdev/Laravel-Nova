@@ -195,31 +195,28 @@ class FacebookPage extends Facebook
     /**
      * @return void
      */
-    public function curateRunningAds()
+    public function curateRunningAds(int $rowId, string $pageId)
     {
         $fbPageService = new FbPageService;
-        $fbPages = $fbPageService->getAll();
-        if (count($fbPages) > 0) {
-            $inst = new FacebookAdAccount();
-            foreach ($fbPages as $fbPage) {
-                $adAccountId = $this->getAccount21Id(); 
-                // I don't understand why they required an ad account as part of the parameter. 
-                // It seems to work fine no matter the ad account provided
-                $pull = $inst->getAdsVolume($adAccountId, [
-                    'ads_running_or_in_review_count'
-                ], [
-                    'page_id' => $fbPage->page_id
-                ]); 
-                if ($pull[0] == true) { 
-                    if (count($pull[1]) > 0) {
-                       $newCount = isset($pull[1][0]->ads_running_or_in_review_count) ? 
-                            $pull[1][0]->ads_running_or_in_review_count : null;
+        $inst = new FacebookAdAccount(); 
+        $adAccountId = $this->getAccount21Id(); 
+        // I don't understand why they required an ad account as part of the parameter. 
+        // It seems to work fine no matter the ad account provided
+        $pull = $inst->getAdsVolume($adAccountId, [
+            'ads_running_or_in_review_count'
+        ], [
+            'page_id' => $pageId
+        ]); 
+        if ($pull[0] == true) { 
+            if (count($pull[1]) > 0) {
+                $newCount = isset($pull[1][0]->ads_running_or_in_review_count) ? 
+                    $pull[1][0]->ads_running_or_in_review_count : null;
 
-                        $fbPageService->updateRunningAdsCount($fbPage->id, $newCount);
-                    } 
-                }
-            }
-        }
+                $fbPageService->updateRunningAdsCount($rowId, $newCount);
+                return true;
+            } 
+        } 
+        return false;
     }
 
 
