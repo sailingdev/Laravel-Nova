@@ -94,6 +94,8 @@ class AdAccountResource extends Resource
                     adjust_budgets <br/>
                     fbengine <br/>
                     rdslackbot <br/>
+                    site <br/>
+                    dupno
                 '
             ),
             Textarea::make('Notes')
