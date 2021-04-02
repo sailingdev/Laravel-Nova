@@ -174,11 +174,9 @@ class FacebookPage extends Facebook
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
                 ])->get('https://graph.facebook.com/'.$businessManager['id'].'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
-                '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
+                '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->appSecret) . '&limit=60000');
     
-                $decoded = json_decode($response->body());
-                Log::info('I got in here', [count($decoded->data)]);
-                // dd($decoded);
+                $decoded = json_decode($response->body()); 
                 if (isset($decoded->data)) {
                     if (count($decoded->data) > 0) {
                         $fbPageService = new FbPageService;
