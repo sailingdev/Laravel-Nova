@@ -177,6 +177,7 @@ class FacebookPage extends Facebook
                 '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->clientSecret) . '&limit=60000');
     
                 $decoded = json_decode($response->body());
+                Log::info('I got in here', [count($decoded->data)]);
                 // dd($decoded);
                 if (isset($decoded->data)) {
                     if (count($decoded->data) > 0) {
