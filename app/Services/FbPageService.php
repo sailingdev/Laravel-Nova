@@ -7,28 +7,21 @@ use App\Models\FbReporting\Rpc;
 use Carbon\Carbon;
 
 class FbPageService
-{
+{ 
+
     /**
      * @param array $data
      * 
      * @return bool|null
      */
-    public function updateOrCreateMultipleRows(array $data, $environment='rd'): ?bool
+    public function create(string $pageName, string $pageId, $instagramId, $environment): ?bool
     { 
-        $skip = ['112005480631100']; 
-        foreach ($data as $row) { 
-            if (!in_array($row->id, $skip)) {
-                FbPage::updateOrCreate([
-                    'page_name' => $row->name,
-                    'page_id' => $row->id,
-                    'environment' => $environment
-                ], [
-                    'page_name' => $row->name,
-                    'page_id' => $row->id,
-                    'environment' => $environment
-                ]);
-            }
-        }
+        FbPage::create([
+            'page_name' => $pageName,
+            'page_id' => $pageId,
+            'instagram_id' => $instagramId,
+            'environment' => $environment
+        ]);
         return true;
     }
 
@@ -51,5 +44,15 @@ class FbPageService
     public function getAll()
     {
         return FbPage::all();
+    }
+
+    public function getByPageId(string $pageId)
+    { 
+        return FbPage::where('page_id', $pageId)->first();
+    }
+
+    public function updateData($data, $rowId)
+    {
+        return FbPage::where('id', $rowId)->update($data);
     }
 }

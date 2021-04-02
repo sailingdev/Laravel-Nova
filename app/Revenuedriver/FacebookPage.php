@@ -156,7 +156,7 @@ class FacebookPage extends Facebook
      */
     public function loadBusinessAccountPages()
     {
-        
+         
         $businessManagers = [
             [
                 'id' => '137338727436558',
@@ -180,8 +180,36 @@ class FacebookPage extends Facebook
                 if (isset($decoded->data)) {
                     if (count($decoded->data) > 0) {
                         $fbPageService = new FbPageService;
-                       
-                        $fbPageService->updateOrCreateMultipleRows($decoded->data, $businessManager['name']);
+                        
+                        foreach ($decoded->data as $page) {
+                            
+                            $pageRow = $fbPageService->getByPageId($page->id);
+                           
+                            if ($pageRow == null || 
+                                ( $pageRow != null && $pageRow->instagram_id == null)  ) {
+                                    // load the instagram ID for the page
+                                   
+                                    if ($page->id != '112005480631100') {
+                                       
+                                        $pageIgAccountId = $this->loadInstagramAccounts($page->id);
+                                       
+                                        if ($pageIgAccountId[0] == true) { 
+                                            if ($pageRow == null) {
+                                                $fbPageService->create($page->name, $page->id, $pageIgAccountId[1], $businessManager['name']);
+                                            }
+                                            else {
+                                                $fbPageService->updateData([
+                                                    'instagram_id' => $pageIgAccountId[1]
+                                                ], $pageRow->id);
+                                                Log::info('Updated', [$pageRow->page_name, $pageIgAccountId[1]]);
+                                            }
+                                           
+                                        }
+                                    }
+                                    
+                            }
+                        }
+ 
                     }
                 } 
             } catch (\Throwable $th) {
