@@ -68,7 +68,7 @@ class AdTextResource extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class),
+            BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class)->sortable(),
             Select::make('Version')->options([
                 'regular' => 'Regular',
                 'xmas' => 'Xmas',
