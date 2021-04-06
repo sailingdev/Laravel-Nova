@@ -53,8 +53,20 @@ class AdLocaleResource extends Resource
      * @var array
      */
     public static $search = [
-        'market'
+        'market_id'
     ];
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    // public static function indexQuery(NovaRequest $request, $query)
+    // {
+    //     return $query->orderBy('market_id', 'asc');
+    // }
 
     /**
      * Get the fields displayed by the resource.
@@ -66,7 +78,7 @@ class AdLocaleResource extends Resource
     {
         return [
             // ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class),
+            BelongsTo::make('Market', 'market', \App\Nova\FbReporting\MarketResource::class)->sortable(), 
             Textarea::make('Locales')
             ->sortable()
             ->showOnIndex()

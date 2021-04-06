@@ -17,8 +17,8 @@ class IgAccountLoaderController extends Controller
         $data = [];
         if (count($prep) > 0) {
             $facebookPage = new FacebookPage;
-           
-            // dd('Omod', $facebookPage->loadBusinessAccountPages());
+            
+            // dd($facebookPage->createPage());
             foreach ($prep as $facebookPageId) {
                 
                 $igAccountId = $facebookPage->loadInstagramAccounts($facebookPageId, [

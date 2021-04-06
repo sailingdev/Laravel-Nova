@@ -104,12 +104,15 @@ class FacebookPage extends Facebook
     }
 
 
-    protected function getLongLivedUserAccessToken()
+    /**
+     * @return string 
+     */
+    protected function getLongLivedUserAccessToken(): string
     {
-        $shortUserAccessToken = 'EAAFmyiUTy1IBAAhLDt3bpBmKgViyIDADzkwt38iUuZCEnhXdPHXfG8isLxBZCxVwe4UAgZA4PY3g1XkQ0tkSW6vKz5E2LdN7BWwSvz0SKZBPmTMq4OXdRLUyAOJD0hbHV8GqwLbZAefzxErKwsSFBPeSW1CsxNCsWShSbDkkV4dB7irUgofEEwPVRi6ZC53pMUwJeZAG3bIM40G9Kxym609Nn8ewEeUDeOMHR11J8ElDI3r0mIu1IoD';
+        $shortUserAccessToken = 'EAAFmyiUTy1IBAGElSLWPOdlDWSlVJdivOcodrPVT1XAx526MX3eLT1qYKEGyMkODzvnhI9JVJOuYuR8pqvndx8SsW8YtWZCz1xWmxR3poRzxKoEPqOVZCwitu9cOkQQtx4XapGAD28TiWRMmZAvCi9Tx6k3grUUN2X3KAu4fZCcFEQcKgnfm0I0ZADystpKBZCCgJjg5ZBIZAPBUBwM608zrIdsTedUsQZBkbUzgTRMA1XQZDZD';
          
         // Last fetched: 31 march, 2021 10:10PM UTC
-        $longUserAccessToken='EAAFmyiUTy1IBAJrfCnVulpA5SRZCeWXcHdjJ19N5vYURf1sZAKrqQpIpoZBVky7CqnSfAKKxE6YZAN0tZCVr9GH9u0mPpTWZCxoa30qdljQL12hXHZBGVauWQoGtoL5vprt18VSem2ZCPAmxZBO6Yxw1kdcLbjOFWFC7QnZBrAt3EJPAZDZD';
+        $longUserAccessToken='EAAFmyiUTy1IBALiQZBTX2E9wHnZBv2stzDJ2oFWD9skzFa6GalC4dwlIqiPb6da8zQxyLBvJNYjcRUszfNvBJ3pQk6fZC11Ny7hNGeGWr5WqmpEQihsKGjWtDSJ9uxFITJAShkNZC4JO7ZB8WqKbkVf44DJq2KVJ9ob0BY1IQLQZDZD';
        
         // try {
         //     $response = Http::withHeaders([
@@ -117,7 +120,7 @@ class FacebookPage extends Facebook
         //         'Content-type' => 'application/json',
         //     ])
         //     ->get('https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=' . $this->appId . 
-        //     '&client_secret='.$this->clientSecret.'&fb_exchange_token=' . $shortUserAccessToken);
+        //     '&client_secret='.$this->appSecret. '&fb_exchange_token=' . $shortUserAccessToken);
 
         //     $decoded = json_decode($response->body());
         //     dd('Long lived user access token', $decoded);
@@ -152,7 +155,7 @@ class FacebookPage extends Facebook
 
 
     /**
-     * @return [type]
+     * @return void
      */
     public function loadBusinessAccountPages()
     {
@@ -219,16 +222,18 @@ class FacebookPage extends Facebook
     }
 
 
+   
     /**
-     * @return void
+     * @param int $rowId
+     * @param string $pageId
+     * 
+     * @return bool
      */
-    public function curateRunningAds(int $rowId, string $pageId)
+    public function curateRunningAds(int $rowId, string $pageId): bool
     {
         $fbPageService = new FbPageService;
         $inst = new FacebookAdAccount(); 
-        $adAccountId = $this->getAccount21Id(); 
-        // I don't understand why they required an ad account as part of the parameter. 
-        // It seems to work fine no matter the ad account provided
+        $adAccountId = $this->getAccount21Id();  
         $pull = $inst->getAdsVolume($adAccountId, [
             'ads_running_or_in_review_count'
         ], [
@@ -247,66 +252,36 @@ class FacebookPage extends Facebook
     }
 
 
-
-
-
-
-
-
-
-
- 
-            
-                    // $data = $decoded->data); 
-                    
-//                         $totalRunningAds = 0;
-//                         try {
-//                             // 108032627632083
-//                             $proof = hash_hmac('sha256', $this->getLongLivedUserAccessToken(), 'e7110f3d0020c61c25d979a55475fedc');
-//                             $pageRunningAds = Http::withHeaders([
-//                                 'Accept' => 'application/json',
-//                                 'Content-type' => 'application/json',
-//                             ])->get('https://graph.facebook.com/v10.0/108296017769619/ads_posts?access_token=' . $this->getLongLivedUserAccessToken() . 
-//                             '&appsecret_proof='.$proof. '&fields=status_type,is_expired,is_hidden,promotion_status&include_inline_create=true&limit=100');
-// // 
-//                             $pageData = json_decode($pageRunningAds->body());
-//                                 dd($pageData);
-//                             if (isset($pageData->data) && count($pageData->data) > 0) {
-//                                 $goNext = false;
-                             
-//                                 $totalRunningAds += count($pageData->data);
-                                
-                                
-//                                 if (isset($pageData->paging) && isset($pageData->paging->next)) {
-//                                     $goNext = true;
-                                    
-//                                     while($goNext === true) {
-//                                         $nextPage = $pageData->paging->next;
-//                                         $nextPageCon = $nextPage . '&appsecret_proof=' . $proof;
-//                                         // dd($nextPageCon);
-//                                         Log::info('See this', [$nextPageCon]);
-//                                         $pageRunningAds2 = Http::withHeaders([
-//                                             'Accept' => 'application/json',
-//                                             'Content-type' => 'application/json',
-//                                         ])->get($nextPageCon);
-
-//                                         $pageData2 = json_decode($pageRunningAds2->body());
-                                        
-//                                         if (!isset($pageData2->paging->next) || 
-//                                         ( isset($pageData2->paging->next) && $pageData2->paging->next == '' ) ) {
-//                                             $goNext = false;
-//                                            dd('Ilele', $pageData2);
-//                                         }
-//                                         else {
-//                                             $totalRunningAds += count($pageData2->data);
-//                                         }
-//                                     }
-//                                 } 
-//                             }
-//                             dd($totalRunningAds, 'Mona Moxie');
-                           
-//                         } catch (\Throwable $th) {
-//                             dd($th);
-//                         } 
-
+   
+    /**
+     * @param array $fields
+     * @param string $businessManagerId
+     * 
+     * @return array
+     */
+    public function createPage(array $fields, string $businessManagerId): array
+    {
+        
+        try { 
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-type' => 'application/json',
+            ])->post('https://graph.facebook.com/'.$businessManagerId.'/accounts?access_token=' . $this->getLongLivedUserAccessToken() . 
+            '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->appSecret), [
+                'name' => $fields['name'],
+                'about' => $fields['about'],
+                'category_enum' => $fields['category_enum'],
+                'category_list' => $fields['category_list'],
+                'city_id' => $fields['city_id'],
+                'cover_photo' => $fields['cover_photo'],
+                'description' => $fields['description'],
+                'picture' => $fields['picture']
+            ]);
+            $decoded = json_decode($response->body());
+            return [true];
+        } catch (\Throwable $th) {
+            Log::error('An error occured while dynmaically creating the facebook page', [$th]);
+            return [false, $th->getMessage()];
+        }
+    }
 }
