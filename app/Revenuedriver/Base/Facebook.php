@@ -243,23 +243,30 @@ abstract class Facebook
                 $domainData = $websiteService->getRowByDomain($domain);
                
                 if ($domainData != null) {
-                    if ($domainData['feed'] === 'media') {
-                        return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
+                    // check if in supported markets
+                    $sm = new StringManipulator;
+                    if ($domainData['supported_markets'] != null) {
+                        $supportedMarkets = $sm->generateArrayFromString($domainData['supported_markets'], ',');
+                        if (in_array($market, $supportedMarkets)) {
+                            if ($domainData['feed'] === 'media') {
+                                return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
+                            }
+                            else if ($domainData['feed'] === 'yahoo') {
+                                return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
+                            }
+                            else if ($domainData['feed'] === 'iac') {
+                               return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
+                            }
+                            else if ($domainData['feed'] === 'cbs') {
+                                return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
+                            }
+                        }
                     }
-                    else if ($domainData['feed'] === 'yahoo') {
-                        return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
-                    }
-                    else if ($domainData['feed'] === 'iac') {
-                       return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
-                    }
-                    else if ($domainData['feed'] === 'cbs') {
-                        return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
-                    }
+
                 } 
             }
            
         }
-
         return null;      
     }
  
