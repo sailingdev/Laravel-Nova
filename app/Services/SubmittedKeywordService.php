@@ -249,9 +249,9 @@ class SubmittedKeywordService
         $newCampaignData = [
             'name' => $newCampaignName,
             'objective' => $campaign['objective'],
-            'bid_strategy' => $campaign['bid_strategy'],
+            'bid_strategy' =>  'COST_CAP', //$campaign['bid_strategy'],
             'buying_type' => $campaign['buying_type'],
-            'daily_budget' => 300,
+            'daily_budget' => 500,
             'status' => $this->facebookCampaign->determineStatus($campaign['status']), //$campaign['status'],
             'special_ad_categories' => $campaign['special_ad_categories']
         ];
@@ -318,11 +318,13 @@ class SubmittedKeywordService
             ]); 
             
             $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
-        
+            
+            $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $campaignNameExtracts['feed']);
+            
             $newAdsetData = [
                 'name' =>   ucfirst($submission['keyword']), //$existingAdSet->name,
                 'targeting' => $newAdsetTargeting,
-                'bid_amount' => $existingAdSet->bid_amount,
+                'bid_amount' => $newBidAmount > 0 ? $newBidAmount * 100 : 1,
                 'billing_event' => $existingAdSet->billing_event,
                 'promoted_object' => $existingAdSet->promoted_object,
                 'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),
@@ -447,7 +449,7 @@ class SubmittedKeywordService
                             ]; 
  
                             $newAdCreative = $this->facebookAdCreative->create($this->facebookCampaign->getTargetAccount(), $newAdCreativeData);
-                           
+                      
                             if ($newAdCreative[0] == false) {
                                 array_push($loggedErrors, [
                                     'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\FbReporting\Rpc;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RpcService
 {
@@ -19,5 +20,22 @@ class RpcService
         ->count();
     }
 
+    /**
+     * @param string $market
+     * @param string $feed
+     * 
+     * @return float
+     */
+    public function averageRpcOfMarketInLast7Days(string $market, string $feed)
+    {
+        $avg = Rpc::select(DB::raw('AVG(NULLIF(rpc ,0)) AS avg'))
+        ->where('market', $market)
+        ->where('feed', $feed)
+        ->where('date', '>=', Carbon::now()->subDays(7))
+        ->where('date', '<=', Carbon::now())
+        ->first();
+
+        return round($avg->avg, 2);
+    }
 
 }

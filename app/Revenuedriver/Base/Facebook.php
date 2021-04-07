@@ -96,8 +96,8 @@ abstract class Facebook
      */
     public function determineStartTime($accountTimezone="UTC")
     {    
-        $start = $accountTimezone === "UTC" ? Carbon::parse('next Saturday') : 
-            Carbon::parse('next saturday', 'America/Los_Angeles');
+        $start = $accountTimezone === "UTC" ? Carbon::parse('tomorrow') : 
+            Carbon::parse('tomorrow', 'America/Los_Angeles');
     
         return $accountTimezone === "UTC" ? $start->toDateTimeString(): 
             Carbon::parse($start)->setTimezone('UTC')->toDateTimeString();
