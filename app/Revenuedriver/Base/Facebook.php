@@ -3,8 +3,10 @@
 namespace App\Revenuedriver\Base;
 
 use App\Labs\StringManipulator;
+use App\Services\AdAccountService;
 use App\Services\AdTextService;
 use App\Services\MarketService;
+use App\Services\WebsiteService;
 use Carbon\Carbon;
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
@@ -218,90 +220,135 @@ abstract class Facebook
         return strtolower(preg_replace("#[^a-z0-9]#i", $replacer, trim($keyword)));
     }
 
-
-    public function getAccountSite(string $accountId): string
-    {
-        // for now, since we are ONLY using account 30 during dev and 21 during prod, and both are mapped to the worldbestsaver site, 
-        // use as default
-        return 'worldbestsaver.com';
-    }
-
+  
     /**
-     * @return array
-     */
-    protected function siteData($market=null)
-    {
-        return [
-            'worldbestsaver.com' => [
-                'landing_page' => 'https://results.worldbestsaver.com',
-                'feed' => 'media'
-            ],
-            'smartysavers.com' => [
-                'landing_page' => 'https://' . $market . '.smartysavers.com',
-                'feed' => 'yahoo'
-            ],
-        ];
-    }
-
-    /**
-     * @param string $site
+     * @param string $accountId
+     * @param string $keyword
+     * @param string $typeTag
+     * @param string $market
      * 
-     * @return array
+     * @return string|null
      */
-    public function getSiteData(string $site, $market): array
+    public function generateAdCreativeWebsiteUrl(string $accountId, string $keyword, string $typeTag, string $market): ?string
     {
-        if (array_key_exists($site, $this->siteData($market))) {
-            return $this->siteData()[$site];
-        };
-        return [];
-    }
-
-    
-    public function generateAdCreativeWebsiteUrl(string $accountId, string $keyword, string $typeTag, string $market) 
-    {
-        $mainSite = $this->getAccountSite($accountId);
-        $mainSiteData = $this->getSiteData($mainSite, $market);
-
        
-        if ($mainSiteData['feed'] === 'media') {
-            return $this->makeMediaFeedWebsiteUrl($mainSite, $mainSiteData['landing_page'], $keyword, $typeTag, $market);
+        $adAccountService = new AdAccountService;
+        $row = $adAccountService->getRowByAccountId($accountId);
+        if ($row != null) {
+            $domain = $this->getSiteFromAdAccountConfigurations($row->configurations);
+          
+            if ($domain != null) {
+                 
+                $websiteService = new WebsiteService; 
+                $domainData = $websiteService->getRowByDomain($domain);
+               
+                if ($domainData != null) {
+                    if ($domainData['feed'] === 'media') {
+                        return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
+                    }
+                    else if ($domainData['feed'] === 'yahoo') {
+                        return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
+                    }
+                    else if ($domainData['feed'] === 'iac') {
+                       return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
+                    }
+                    else if ($domainData['feed'] === 'cbs') {
+                        return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
+                    }
+                } 
+            }
+           
         }
-        else if ($mainSiteData['feed'] === 'yahoo') {
-            return $this->makeYahooFeedWebsiteUrl($mainSite, $mainSiteData['landing_page'], $keyword, $typeTag, $market);
-        }
-        return $this->makeMediaFeedWebsiteUrl($mainSite, $mainSiteData['landing_page'], $keyword, $typeTag, $market);
-      
+
+        return null;      
     }
  
     /**
-     * @param string $mainSite
-     * @param string $landingPage
+     * @param string $domain
+     * @param string $subdomain
      * @param string $keyword
      * @param string $typeTag
      * @param string $market
      * 
      * @return string
      */
-    private function makeMediaFeedWebsiteUrl(string $mainSite, string $landingPage, string $keyword, string $typeTag, string $market): string
+    private function makeMediaFeedWebsiteUrl(string $domain, string $subdomain, string $keyword, string $typeTag, string $market): string
     {
-        return $landingPage . '/search/?q=' . $this->formatKeyword($keyword, '+') . 
-        '&p=5&chnm=facebook&chnm2=fb_' . $mainSite . '_' . strtolower($market) . '&chnm3='.$typeTag;
+        $sm = new StringManipulator;
+        // we need a sub domain here
+        return 'https://' . $subdomain . '.' . $domain . '/search/?q=' . $this->formatKeyword($keyword, '+') . 
+        '&p=5&chnm=facebook&chnm2=fb_' . $domain . '_' .$sm->generateArrayFromString($domain, '.')[0] . 
+        '_' . $market . '&chnm3=' . $typeTag;
     }
 
     /**
-     * @param string $mainSite
-     * @param string $landingPage
+     * @param string $domain 
      * @param string $keyword
      * @param string $typeTag
      * @param string $market
      * 
      * @return string
      */
-    private function makeYahooFeedWebsiteUrl(string $mainSite, string $landingPage, string $keyword, string $typeTag, string $market): string
+    private function makeYahooFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market): string
     {
-        return 'https://' . strtolower($market) . '.' . $mainSite . '/search/4/?type='.$typeTag . 
+        return 'https://' . strtolower($market) . '.' . $domain . '/search/4/?type='.$typeTag . 
         '&keyword=' . $this->formatKeyword($keyword, '+') . '&source=facebook';
     }
+
+    /**
+     * @param string $domain
+     * @param string $keyword
+     * @param string $typeTag
+     * @param string $market
+     * @param string $rangeId
+     * 
+     * @return string|null
+     */
+    public function makeIacFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId): ?string
+    {
+        $groupA = ['US'];
+
+        if (in_array($market, $groupA)) {
+            return 'https://search.'.$domain.'/ar?q=' . $this->formatKeyword($keyword, '+') . 
+            '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId;
+        }
+        
+        $groupB = ['CA', 'AU', 'UK', 'IE', 'IN', 'NZ'];
+        if (in_array($market, $groupB)) {
+            return 'https://search.' . $domain . '/ar?q=' . 
+            $this->formatKeyword($keyword, '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $market == 'UK' ? 'GB' : $market;
+        } 
+
+        $groupC = ['DE','FR','ES','IT','NL','SE','NO','DK','BR'];
+        if (in_array($market, $groupC)) {
+            return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword($keyword, '+') .
+            '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId;
+        }
+
+        $groupD = ['AT', 'CH'];
+        if (in_array($market, $groupD)) {
+            return 'https://search.de.'.$domain.'/ar?q='.
+            $this->formatKeyword($keyword, '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market;
+        } 
+        return null;
+    }
+
+    
+    /**
+     * @param string $domain
+     * @param string $keyword
+     * @param string $typeTag
+     * @param string $market
+     * @param string $rangeId
+     * 
+     * @return string
+     */
+    private function makeCbsFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId): string
+    {
+        return 'https://' . $domain . '/'.$market.'/seek?src=3&q=' .
+            $this->formatKeyword($keyword, '+').'&qsrc=0&campname='.$typeTag.'&rangeId=' . $rangeId;
+    }
+
 
 
     /**
@@ -346,4 +393,29 @@ abstract class Facebook
         return $text;
     }   
 
+
+    public function getSiteFromAdAccountConfigurations(string $config): ?string
+    {
+        if ($config != null) {
+            $sm = new StringManipulator;
+            $configArray = $sm->generateArrayFromString(str_replace("\n", '<br />',  $config), '<br />');
+            $search = [];
+            if (count($configArray) > 0) {
+                foreach ($configArray as $key => $line) { 
+                    
+                    $lineParams = array_map(function ($param) {
+                        return trim($param);
+                    }, $sm->generateArrayFromString($line, '=')); 
+
+                    if (in_array('site', $lineParams)) {
+                        $search = $lineParams;
+                    }
+                }
+            }
+           if (count($search) > 0) {
+            return $search[1];
+           }
+        }
+        return null;
+    }
 }

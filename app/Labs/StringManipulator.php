@@ -54,4 +54,6 @@ class StringManipulator
     {
         return $string === strtoupper($string);
     }
+    
+    
 }

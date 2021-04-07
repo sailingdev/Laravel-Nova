@@ -54,7 +54,7 @@ class WebsiteResource extends Resource
      * @var array
      */
     public static $search = [
-        'domain', 'site_tag', 'feed'
+        'domain', 'site_tag', 'feed', 'subdomain'
     ];
 
     /**
@@ -70,6 +70,9 @@ class WebsiteResource extends Resource
             Text::make('Domain')
             ->sortable()
             ->rules('required', 'max:255'),
+            Text::make('Subdomain')
+            ->sortable()
+            ->rules('max:255'),
             Text::make('Site Tag')
             ->sortable()
             ->rules('required', 'max:255'),

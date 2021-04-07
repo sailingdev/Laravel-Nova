@@ -141,6 +141,7 @@ class SubmittedKeywordService
      */
     public function processSubmittedKeywords($submittedKeywords)
     {  
+        
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
         
         foreach ($submittedKeywords as $submission) {
@@ -158,7 +159,7 @@ class SubmittedKeywordService
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
                     return $campaignKeyword == $submission["keyword"];
                 });
-              
+             
                 if (count($matches) < 1) {
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
                         'action_taken' => 'new',
@@ -179,7 +180,7 @@ class SubmittedKeywordService
                     }
                 }
             }
-        }
+        } 
         return [true, 'submitted'];
     }
 
@@ -418,7 +419,7 @@ class SubmittedKeywordService
                                 isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
                                 $submission['market'] 
                             );
-
+                            
                             $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                           
                            
