@@ -41,6 +41,16 @@ abstract class Facebook
 
     /**
      * @var string
+     */
+    protected $account38 = 'act_2877564995847585';
+
+    /**
+     * @var string
+     */
+    protected $account39 = 'act_265327981656779';
+
+    /**
+     * @var string
     */
     protected $account30 = 'act_426162348442901';
     
@@ -165,11 +175,12 @@ abstract class Facebook
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getTargetAccount(): string
+    public function getTargetAccounts(): array
     {
-        return $this->account30;
+        // $this->account38, $this->account38, 
+        return [$this->account30, $this->account38, $this->account39];
         if (App::environment('production')) {
             return $this->account21;
         }
