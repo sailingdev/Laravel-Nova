@@ -311,8 +311,8 @@ class SubmittedKeywordService
             foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
                 $newAdsetTargeting = $existingAdSet->targeting;
-                $newAdsetTargeting['geo_locations']['countries'] = [$marketCode == 'UK' ? 'GB' : $submission['market']];
-    
+                $newAdsetTargeting['geo_locations']['countries'] = [$submission['market'] == 'UK' ? 'GB' : $submission['market']];
+                // dd('Ilemona Ibrahim', $newAdsetTargeting, $submission['market']);
                 $sm = new StringManipulator;
     
                 $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
