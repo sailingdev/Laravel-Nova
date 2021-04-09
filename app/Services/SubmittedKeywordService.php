@@ -244,15 +244,21 @@ class SubmittedKeywordService
         $marketCode = $marketService->getMarketIdbyCode($submission['market']);
         
         $targetAccounts = $this->facebookCampaign->getTargetAccounts();
-       
+        $adAccountService = new AdAccountService;
+        
+        $websiteService = new WebsiteService;
         foreach ($targetAccounts as $targetAccount) {
 
-            Log::info('Logged', [$targetAccount]);
+            $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $targetAccount));
+            $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
+            
+            $websiteData = $websiteService->getRowByDomain($domain);
+            
             $newCampaignName = $this->facebookCampaign->formatCampaignName(
                 $submission['keyword'],
                 $submission['market'],
-                $campaignNameExtracts['feed'],
-                $campaignNameExtracts['site'],
+                $websiteData->feed,
+                $domain,
                 isset($submission->type_tag) ? $submission->type_tag : 
                 $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related')    
             );
@@ -425,7 +431,7 @@ class SubmittedKeywordService
                                     ucfirst($submission['keyword']),
                                     isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
                                     $submission['market'] 
-                                );
+                                ); 
                                 
                                 $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                               

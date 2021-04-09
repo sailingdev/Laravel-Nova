@@ -108,9 +108,9 @@ abstract class Facebook
     {    
         $start = $accountTimezone === "UTC" ? Carbon::parse('tomorrow') : 
             Carbon::parse('tomorrow', 'America/Los_Angeles');
-    
-        return $accountTimezone === "UTC" ? $start->toDateTimeString(): 
-            Carbon::parse($start)->setTimezone('UTC')->toDateTimeString();
+           
+        return $accountTimezone === "UTC" ? $start->toDateString(): 
+            Carbon::parse($start)->setTimezone('UTC')->toDateString();
     }
 
     /**
@@ -146,7 +146,7 @@ abstract class Facebook
     {
         $sm = new StringManipulator;
         $dateSPlit = $sm->generateArrayFromString($this->determineStartTime(), '-');
-        
+      
         $datePrep = $dateSPlit[2] . $dateSPlit[1] . substr($dateSPlit[0], 2, 3);
         $keywordPrep =  $this->formatKeyword($keyword, '_');
 
@@ -179,7 +179,7 @@ abstract class Facebook
      */
     public function getTargetAccounts(): array
     {
-        // $this->account38, $this->account38, 
+        // $this->account38, $this->account38, ,
         return [$this->account30, $this->account38, $this->account39];
         if (App::environment('production')) {
             return $this->account21;
@@ -332,19 +332,20 @@ abstract class Facebook
         }
         
         $groupB = ['CA', 'AU', 'UK', 'IE', 'IN', 'NZ'];
-        if (in_array($market, $groupB)) {
+        if (in_array($market, $groupB)) { 
+            $suf = $market == 'UK' ? 'GB' : $market;
             return 'https://search.' . $domain . '/ar?q=' . 
-            $this->formatKeyword($keyword, '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $market == 'UK' ? 'GB' : $market;
+            $this->formatKeyword($keyword, '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf;
         } 
 
         $groupC = ['DE','FR','ES','IT','NL','SE','NO','DK','BR'];
-        if (in_array($market, $groupC)) {
+        if (in_array($market, $groupC)) { 
             return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword($keyword, '+') .
             '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId;
         }
 
         $groupD = ['AT', 'CH'];
-        if (in_array($market, $groupD)) {
+        if (in_array($market, $groupD)) { 
             return 'https://search.de.'.$domain.'/ar?q='.
             $this->formatKeyword($keyword, '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market;
         } 
