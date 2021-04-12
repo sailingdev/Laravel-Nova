@@ -292,11 +292,10 @@ abstract class Facebook
      */
     private function makeMediaFeedWebsiteUrl(string $domain, string $subdomain, string $keyword, string $typeTag, string $market): string
     {
-        $sm = new StringManipulator;
-        // we need a sub domain here
+        $sm = new StringManipulator; 
         return 'https://' . $subdomain . '.' . $domain . '/search/?q=' . $this->formatKeyword($keyword, '+') . 
-        '&p=5&chnm=facebook&chnm2=fb_' . $domain . '_' .$sm->generateArrayFromString($domain, '.')[0] . 
-        '_' . $market . '&chnm3=' . $typeTag;
+        '&p=5&chnm=facebook&chnm2=fb_' .$sm->generateArrayFromString($domain, '.')[0] . 
+        '_' . strtolower($market) . '&chnm3=' . $typeTag;
     }
 
     /**
