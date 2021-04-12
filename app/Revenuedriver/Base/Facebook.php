@@ -153,14 +153,14 @@ abstract class Facebook
         if ($createType === "related") {
             $typeTag =  $keywordPrep. '_' 
             . strtoupper($market) . '_' .
-            $datePrep . '_' .
+            // $datePrep . '_' .
             'r' . '_' . 
             '009';
         }
         else if ($createType === "template") {
             $typeTag = $keywordPrep . '_' 
             . strtoupper($market) . '_' .
-            $datePrep . '_' . 
+            // $datePrep . '_' . 
             '009';
         }
         else {
@@ -168,7 +168,7 @@ abstract class Facebook
             strtoupper($market) . '_' .
             strtoupper($siteTag) . '_' .
             strtoupper($dupNo) . '_' . 
-            $datePrep . '_' . 
+            // $datePrep . '_' . 
             '009';
         } 
         return $typeTag;
@@ -325,29 +325,30 @@ abstract class Facebook
     public function makeIacFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId): ?string
     {
         $groupA = ['US'];
+        $unitSuffix = $domain === 'top10answers.com' ? '&adUnitId=366911' : '';
 
         if (in_array($market, $groupA)) {
             return 'https://search.'.$domain.'/ar?q=' . $this->formatKeyword($keyword, '+') . 
-            '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId;
+            '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId . $unitSuffix;
         }
         
         $groupB = ['CA', 'AU', 'UK', 'IE', 'IN', 'NZ'];
         if (in_array($market, $groupB)) { 
             $suf = $market == 'UK' ? 'GB' : $market;
             return 'https://search.' . $domain . '/ar?q=' . 
-            $this->formatKeyword($keyword, '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf;
+            $this->formatKeyword($keyword, '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf . $unitSuffix;
         } 
 
         $groupC = ['DE','FR','ES','IT','NL','SE','NO','DK','BR'];
         if (in_array($market, $groupC)) { 
             return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword($keyword, '+') .
-            '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId;
+            '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId . $unitSuffix;
         }
 
         $groupD = ['AT', 'CH'];
         if (in_array($market, $groupD)) { 
             return 'https://search.de.'.$domain.'/ar?q='.
-            $this->formatKeyword($keyword, '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market;
+            $this->formatKeyword($keyword, '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market . $unitSuffix;
         } 
         return null;
     }

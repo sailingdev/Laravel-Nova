@@ -248,7 +248,7 @@ class SubmittedKeywordService
         
         $websiteService = new WebsiteService;
         foreach ($targetAccounts as $targetAccount) {
-
+           
             $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $targetAccount));
             $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
             
@@ -318,7 +318,7 @@ class SubmittedKeywordService
             
                 $newAdsetTargeting = $existingAdSet->targeting;
                 $newAdsetTargeting['geo_locations']['countries'] = [$submission['market'] == 'UK' ? 'GB' : $submission['market']];
-                // dd('Ilemona Ibrahim', $newAdsetTargeting, $submission['market']);
+                
                 $sm = new StringManipulator;
     
                 $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
@@ -432,7 +432,7 @@ class SubmittedKeywordService
                                     isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
                                     $submission['market'] 
                                 ); 
-                                
+                                 
                                 $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                               
                                
@@ -450,13 +450,23 @@ class SubmittedKeywordService
                                     $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->title2;
                                     $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->body2;
                                 }
+                                $fbPageService = new FbPageService;
+                                $randomFbPage = $fbPageService->getRandomFbPage();
+                                $objectStorySpec = [];
+
+                                if ($randomFbPage != null) {
+                                    $objectStorySpec = [
+                                        'page_id' => $randomFbPage->page_id,
+                                        'instagram_actor_id' => $randomFbPage->instagram_id
+                                    ];
+                                }
                                 
                                 $newAdCreativeData = [
                                     'name' =>  ucfirst($submission['keyword']),  
                                     'account_id' => $targetAccount,
                                     'asset_feed_spec' => $existingAdSetFeedSpec,
                                     'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
-                                    'object_story_spec' => $existingAdCreative[1]->object_story_spec, 
+                                    'object_story_spec' => $objectStorySpec, 
                                 ]; 
      
                                 $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
@@ -678,7 +688,7 @@ class SubmittedKeywordService
                 $campaignTypeTag = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['type_tag'];
                 return $campaignTypeTag == trim($keyword->type_tag);
             });
-          
+             
             if (count($matches) > 0) {
                 // load the batch id of this keyword
                 $submission = SubmittedKeyword::where('id', $keyword->id)->first();

@@ -55,4 +55,9 @@ class FbPageService
     {
         return FbPage::where('id', $rowId)->update($data);
     }
+
+    public function getRandomFbPage()
+    {
+        return FbPage::where('running_ads', '<', 250)->first();
+    }
 }
