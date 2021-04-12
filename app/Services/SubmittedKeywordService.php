@@ -516,6 +516,7 @@ class SubmittedKeywordService
             return [false, 'Process was not completed. Please check the log for the affected processes'];
         }
         else {
+             
             return [true, 'Ad was successfully created'];
         }
     }
