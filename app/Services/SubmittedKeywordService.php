@@ -497,7 +497,7 @@ class SubmittedKeywordService
                                             'data' => $newAdData
                                         ]);
                                     }
-                                    else {
+                                    else { 
                                         array_push($adsToRollBack, $newAd[1]->id);
                                     }
                                 } 
