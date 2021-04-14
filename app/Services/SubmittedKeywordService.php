@@ -683,7 +683,8 @@ class SubmittedKeywordService
     public function processPendingBatchesUsingTypeTags(array $keywords)
     {
         
-        $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
+        $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
+            $this->facebookCampaign->getAccountRD1Id()]);
        
         foreach ($keywords as $keyword) {
             $matches = array_filter($campaignCombo, function ($campaign) use ($keyword) {
