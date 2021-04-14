@@ -151,7 +151,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 512,
 
     /*
     |--------------------------------------------------------------------------
@@ -169,9 +169,9 @@ return [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
-            'maxProcesses' => 1,
-            'memory' => 128,
-            'tries' => 1,
+            'maxProcesses' => 6,
+            'memory' => 256,
+            'tries' => 3,
             'nice' => 0,
         ],
     ],
@@ -182,6 +182,9 @@ return [
                 'maxProcesses' => 10,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
+                'processes' => 5,
+                'tries' => 3,
+                'timeout' => 900 
             ],
         ],
 
