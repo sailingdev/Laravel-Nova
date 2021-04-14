@@ -355,7 +355,7 @@ class SubmittedKeywordService
                     $this->facebookCampaign->delete($newCampaign[1]['id']);
                 }
                 else {
-                    Log::info('Adset for '. $targetAccount . ' created', []);
+                    Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
                     array_push($adsetsToRollBack, $newAdSet[1]->id);
     
                     // get ads for existing adset
@@ -479,7 +479,7 @@ class SubmittedKeywordService
                                 }
                                 else {
                                     array_push($adCreativesToRollBack, $newAdCreative[1]->id);
-                                    Log::info('Adcreative for '. $targetAccount . ' created', []);
+                                    Log::info('Adcreative for '. $targetAccount . ' created', [ $newAdCreative[1]->id]);
                                     $newAdData = [
                                         'name' => $existingAd->name,
                                         'adset_id' => $newAdSet[1]->id,
@@ -497,7 +497,7 @@ class SubmittedKeywordService
                                         ]);
                                     }
                                     else { 
-                                        Log::info('Ad for '. $targetAccount . ' created', []);
+                                        Log::info('Ad for '. $targetAccount . ' created', [$newAd[1]->id]);
                                         array_push($adsToRollBack, $newAd[1]->id);
                                     }
                                 } 
