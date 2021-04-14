@@ -233,7 +233,6 @@ class SubmittedKeywordService
      */
     protected function duplicateCampaign($campaign, $submission)
     {  
-        
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
         $loggedErrors = [];
@@ -248,7 +247,7 @@ class SubmittedKeywordService
         
         $websiteService = new WebsiteService;
         foreach ($targetAccounts as $targetAccount) {
-           
+           Log::info('Reporting for account', [$targetAccount]);
             $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $targetAccount));
             $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
             
@@ -356,7 +355,7 @@ class SubmittedKeywordService
                     $this->facebookCampaign->delete($newCampaign[1]['id']);
                 }
                 else {
-                     
+                    Log::info('Adset for '. $targetAccount . ' created', []);
                     array_push($adsetsToRollBack, $newAdSet[1]->id);
     
                     // get ads for existing adset
@@ -480,7 +479,7 @@ class SubmittedKeywordService
                                 }
                                 else {
                                     array_push($adCreativesToRollBack, $newAdCreative[1]->id);
-    
+                                    Log::info('Adcreative for '. $targetAccount . ' created', []);
                                     $newAdData = [
                                         'name' => $existingAd->name,
                                         'adset_id' => $newAdSet[1]->id,
@@ -498,6 +497,7 @@ class SubmittedKeywordService
                                         ]);
                                     }
                                     else { 
+                                        Log::info('Ad for '. $targetAccount . ' created', []);
                                         array_push($adsToRollBack, $newAd[1]->id);
                                     }
                                 } 
