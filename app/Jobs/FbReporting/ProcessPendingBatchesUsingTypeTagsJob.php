@@ -15,6 +15,13 @@ class ProcessPendingBatchesUsingTypeTagsJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 900;
+
+    /**
      * The data to be processed.
      *
      * @var array
@@ -42,4 +49,6 @@ class ProcessPendingBatchesUsingTypeTagsJob implements ShouldQueue
         $sks = new SubmittedKeywordService;
         return $sks->processPendingBatchesUsingTypeTags($this->data);
     }
+
+    
 }
