@@ -268,7 +268,7 @@ class SubmittedKeywordService
                 'bid_strategy' =>  'COST_CAP', 
                 'buying_type' => $campaign['buying_type'],
                 'daily_budget' => 500,
-                'status' => $this->facebookCampaign->determineStatus($campaign['status']), //$campaign['status'],
+                'status' => $this->facebookCampaign->determineStatus($campaign['status']),
                 'special_ad_categories' => $campaign['special_ad_categories']
             ];
 

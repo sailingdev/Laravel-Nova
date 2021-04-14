@@ -194,7 +194,7 @@ abstract class Facebook
      */
     public function determineStatus(string $status): string
     {
-        return 'PAUSED';
+        return 'ACTIVE';
         if (App::environment('production')) {
             return $this->status;
         }
