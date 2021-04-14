@@ -142,7 +142,8 @@ class SubmittedKeywordService
     public function processSubmittedKeywords($submittedKeywords)
     {  
         
-        $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id()]);
+        $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
+            $this->facebookCampaign->getAccountRD1Id()]);
         
         foreach ($submittedKeywords as $submission) {
             $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market']);

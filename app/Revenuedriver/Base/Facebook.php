@@ -53,6 +53,11 @@ abstract class Facebook
      * @var string
     */
     protected $account30 = 'act_426162348442901';
+
+    /**
+     * @var string
+    */
+    protected $accountRD1 = 'act_230931148668537';
     
     
     public function __construct()
@@ -217,6 +222,14 @@ abstract class Facebook
     public function getAccount3Id(): string
     {
         return $this->account3;
+    }
+
+     /**
+     * @return string
+     */
+    public function getAccountRD1Id(): string
+    {
+        return $this->accountRD1;
     }
 
 
