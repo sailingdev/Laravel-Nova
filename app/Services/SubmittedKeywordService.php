@@ -178,6 +178,11 @@ class SubmittedKeywordService
                             'note' => 'campaign restarted',
                             'status' => 'processed'
                         ]);
+                        $cotService = new CampaignOptimizeTrackerService;
+                        $cotService->create([
+                            'type_tag' =>  $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related'),
+                            'campaign_id' => $process[1]
+                        ]);
                     }
                 }
             }
@@ -518,7 +523,7 @@ class SubmittedKeywordService
         }
         else {
              
-            return [true, 'Ad was successfully created'];
+            return [true, $newCampaign[1]['id']];
         }
     }
 
@@ -698,13 +703,21 @@ class SubmittedKeywordService
                 if ($submission !== null) {
                     $batchId = $submission->batch_id;
                     
-                    $submission->type_tag = $this->facebookCampaign->generateTypeTag($submission->keyword, $submission->market, 'related');
+                    $typeTag = $this->facebookCampaign->generateTypeTag($submission->keyword, $submission->market, 'related');
+                    
+                    $submission->type_tag = $typeTag;
+                    
                     $process = $this->duplicateCampaign(current($matches), $submission);
                     if ($process[0] == true) {
                         $this->updateRow($batchId, $submission->keyword, [
                             'status' => 'processed'
                         ]);
                         // store the record into db
+                        $cotService = new CampaignOptimizeTrackerService;
+                        $cotService->create([
+                            'type_tag' => $typeTag,
+                            'campaign_id' => $process[1]
+                        ]);
                     } 
                     else {
                         $this->updateRow($batchId, $submission->keyword, [

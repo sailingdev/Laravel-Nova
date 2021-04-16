@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCampaignOptimizeTracker extends Migration
+class CreateCampaignOptimizeTrackers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCampaignOptimizeTracker extends Migration
      */
     public function up()
     {
-        Schema::create('campaign_optimize_tracker', function (Blueprint $table) {
+        Schema::create('campaign_optimize_trackers', function (Blueprint $table) {
             $table->id();
             $table->string('type_tag');
             $table->string('campaign_id');
