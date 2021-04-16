@@ -704,6 +704,7 @@ class SubmittedKeywordService
                         $this->updateRow($batchId, $submission->keyword, [
                             'status' => 'processed'
                         ]);
+                        // store the record into db
                     } 
                     else {
                         $this->updateRow($batchId, $submission->keyword, [
