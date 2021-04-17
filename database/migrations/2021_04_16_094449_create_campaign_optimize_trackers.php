@@ -16,6 +16,8 @@ class CreateCampaignOptimizeTrackers extends Migration
         Schema::create('campaign_optimize_trackers', function (Blueprint $table) {
             $table->id();
             $table->string('type_tag');
+            $table->string('feed');
+            $table->dateTime('campaign_start');
             $table->string('campaign_id');
             $table->timestamps();
         });
@@ -28,6 +30,6 @@ class CreateCampaignOptimizeTrackers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campaign_optimize_tracker');
+        Schema::dropIfExists('campaign_optimize_trackers');
     }
 }

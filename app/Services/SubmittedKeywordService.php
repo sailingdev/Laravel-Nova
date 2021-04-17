@@ -178,11 +178,6 @@ class SubmittedKeywordService
                             'note' => 'campaign restarted',
                             'status' => 'processed'
                         ]);
-                        $cotService = new CampaignOptimizeTrackerService;
-                        $cotService->create([
-                            'type_tag' =>  $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related'),
-                            'campaign_id' => $process[1]
-                        ]);
                     }
                 }
             }
@@ -243,7 +238,7 @@ class SubmittedKeywordService
         
         $loggedErrors = [];
 
-        $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = []; 
+        $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = $campaignsToTrack = []; 
 
         $marketService = new MarketService;
         $marketCode = $marketService->getMarketIdbyCode($submission['market']);
@@ -259,13 +254,15 @@ class SubmittedKeywordService
             
             $websiteData = $websiteService->getRowByDomain($domain);
             
+            $typeTag = isset($submission->type_tag) ? $submission->type_tag : 
+            $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related');
+
             $newCampaignName = $this->facebookCampaign->formatCampaignName(
                 $submission['keyword'],
                 $submission['market'],
                 $websiteData->feed,
                 $domain,
-                isset($submission->type_tag) ? $submission->type_tag : 
-                $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related')    
+                $typeTag   
             );
             
             $newCampaignData = [
@@ -505,6 +502,13 @@ class SubmittedKeywordService
                                     else { 
                                         Log::info('Ad for '. $targetAccount . ' created', [$newAd[1]->id]);
                                         array_push($adsToRollBack, $newAd[1]->id);
+                                        if (!array_key_exists($newCampaign[1]['id'], $campaignsToTrack)) {
+                                            $campaignsToTrack[$newCampaign[1]['id']] = [
+                                                'type_tag' => $typeTag,
+                                                'campaign_start' => $this->facebookCampaign->determineStartTime(),
+                                                'feed' => $websiteData->feed
+                                            ];
+                                        }
                                     }
                                 } 
                             }
@@ -513,7 +517,20 @@ class SubmittedKeywordService
                 }
             } 
         } 
-     
+        
+        if (count($campaignsToTrack) > 0) {
+            $cotService = new CampaignOptimizeTrackerService;
+            foreach ($campaignsToTrack as $key => $data) {
+                // store the record into db
+                $cotService->create([
+                    'type_tag' => $data['type_tag'],
+                    'feed' => $data['feed'],
+                    'campaign_id' => $key,
+                    'campaign_start' => $data['campaign_start']
+                ]);
+            }
+        }
+
         if (count($loggedErrors) > 0) {
             // log output
             Log::info('An error occured while processing some of the submitted keywords', $loggedErrors);
@@ -711,12 +728,6 @@ class SubmittedKeywordService
                     if ($process[0] == true) {
                         $this->updateRow($batchId, $submission->keyword, [
                             'status' => 'processed'
-                        ]);
-                        // store the record into db
-                        $cotService = new CampaignOptimizeTrackerService;
-                        $cotService->create([
-                            'type_tag' => $typeTag,
-                            'campaign_id' => $process[1]
                         ]);
                     } 
                     else {

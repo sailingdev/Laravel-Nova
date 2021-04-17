@@ -34,6 +34,16 @@ class FacebookCampaign extends Facebook
     protected $getAdSetsAttempt = 0;
 
     /**
+     * @var int
+     */
+    protected $showAttempts = 0;
+
+    /**
+     * @var int
+     */
+    protected $updateAttempts = 0;
+
+    /**
      * Load campaign
      *
      * @param mixed $accountId
@@ -151,5 +161,67 @@ class FacebookCampaign extends Facebook
             return [false, $th->getMessage()];
         }
     }
- 
+
+
+    /**
+     * Show campaign
+     *
+     * @param mixed $campaignId
+     * @param mixed $fields=[]
+     * 
+     * @return array
+     */
+    public function show($campaignId, $fields=[]): array
+    {   
+        
+        try {
+            $inst = (new Campaign($campaignId))->getSelf($fields);
+            return [true, $inst];
+        } catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->loadCampaignAttempts < 10) {
+                sleep(3);
+                $this->showAttempts++;
+                return $this->show($campaignId, $fields);
+            } 
+            return [false, $e];
+        } catch(\Throwable $th) { 
+            return [false, $th];
+        }
+    }
+
+    
+     /**
+     * Show campaign
+     *
+     * @param mixed $campaignId
+     * @param mixed $fields=[]
+     * 
+     * @return array
+     */
+    public function update($campaignId, $fields=[], $params=[]): array
+    {   
+        
+        try {
+            $set = new Campaign($campaignId);
+            $response = $set->updateSelf($fields, $params);
+            return [true, $response];
+        } catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->loadCampaignAttempts < 10) {
+                sleep(3);
+                $this->updateAttempts++;
+                return $this->update($campaignId, $fields, $params);
+            } 
+            return [false, $e];
+        } catch(\Throwable $th) { 
+            return [false, $th];
+        }
+    }
 }

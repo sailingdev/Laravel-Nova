@@ -558,7 +558,11 @@ class TypeDailyPerfService
         return $query;
     }
 
-
+    public function getCampaignToOptimize(string $feed, string $typeTag, string $date)
+    {
+       return TypeDailyPerf::where('feed', '!=', $feed)
+        ->where('type_tag', '!=', $typeTag)->where('date', '!=', $date)->orderBy('date', 'desc')->first();
+    }
 
 
 
