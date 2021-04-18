@@ -21,16 +21,16 @@ class SubmitKeywordsController extends Controller
     public function submit(SubmitKeywordsRequest $request, StringManipulator $sm, SubmittedKeywordService $sks)
     {
         $cotService = new \App\Services\CampaignOptimizeTrackerService;
-        dd($cotService->OptimizeDay1());
-        // $rawKeywords = $request->keywords; 
-        // $prepKeywords = $sm->generateArrayFromString(str_replace("\n", '<br />',  $rawKeywords), '<br />');
+        // dd($cotService->OptimizeDay1());
+        $rawKeywords = $request->keywords; 
+        $prepKeywords = $sm->generateArrayFromString(str_replace("\n", '<br />',  $rawKeywords), '<br />');
 
-        // $process = $sks->submit($prepKeywords, $request->market);
+        $process = $sks->submit($prepKeywords, $request->market);
         
-        // if ($process[0] == false) {
-        //     return $this->errorResponse('An error occured. Please try again', $process[1]);
-        // }
-        // ProcessCampaignsFromSubmittedKeywordsJob::dispatch($process[2]);
+        if ($process[0] == false) {
+            return $this->errorResponse('An error occured. Please try again', $process[1]);
+        }
+        ProcessCampaignsFromSubmittedKeywordsJob::dispatch($process[2]);
         
         return $this->successResponse('Keywords submitted successfully. Batch processing in progress', $process[1]);
     }
