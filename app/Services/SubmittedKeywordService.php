@@ -232,7 +232,7 @@ class SubmittedKeywordService
      * 
      * @return array
      */
-    protected function duplicateCampaign($campaign, $submission)
+    public function duplicateCampaign($campaign, $submission, $bidStrategy=null)
     {  
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
@@ -268,7 +268,7 @@ class SubmittedKeywordService
             $newCampaignData = [
                 'name' => $newCampaignName,
                 'objective' => $campaign['objective'],
-                'bid_strategy' =>  'COST_CAP', 
+                'bid_strategy' =>  $bidStrategy === null ? 'COST_CAP' : $bidStrategy, 
                 'buying_type' => $campaign['buying_type'],
                 'daily_budget' => 500,
                 'status' => $this->facebookCampaign->determineStatus($campaign['status']),
