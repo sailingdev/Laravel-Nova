@@ -124,6 +124,9 @@ class CampaignOptimizeTrackerService
       }
    }
 
+   /**
+    * @return [type]
+    */
    protected function OptimizeDay3ConsecutiveDays()
    {
       $campaigns = $this->getAll();
@@ -174,5 +177,14 @@ class CampaignOptimizeTrackerService
             }
          }
       }
+   }
+
+   /**
+    * @return 
+    */
+   protected function clearFromTracker()
+   {
+      return CampaignOptimizeTracker::where('campaign_start', '<=', Carbon::now()->subDays(3)->toDateTimeString())
+      ->delete();
    }
 }
