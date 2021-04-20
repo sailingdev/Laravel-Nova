@@ -21,7 +21,7 @@ class SubmitKeywordsController extends Controller
     public function submit(SubmitKeywordsRequest $request, StringManipulator $sm, SubmittedKeywordService $sks)
     {
         $cotService = new \App\Services\CampaignOptimizeTrackerService;
-        // dd($cotService->OptimizeDay1());
+        // dd($cotService->optimizer());
         $rawKeywords = $request->keywords; 
         $prepKeywords = $sm->generateArrayFromString(str_replace("\n", '<br />',  $rawKeywords), '<br />');
 

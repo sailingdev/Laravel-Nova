@@ -184,8 +184,8 @@ abstract class Facebook
      */
     public function getTargetAccounts(): array
     {
-        // $this->account38, $this->account38, ,
-        return [$this->account30, $this->account38, $this->account39];
+        // $this->account38, $this->account38, ,, $this->account38, $this->account39
+        return [$this->account30];
         if (App::environment('production')) {
             return $this->account21;
         }
@@ -199,7 +199,7 @@ abstract class Facebook
      */
     public function determineStatus(string $status): string
     {
-        return 'ACTIVE';
+        return 'PAUSED';
         if (App::environment('production')) {
             return $this->status;
         }

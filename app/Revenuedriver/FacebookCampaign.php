@@ -8,6 +8,7 @@ use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\Fields\AdSetFields;
 use FacebookAds\Object\Campaign;
 use FacebookAds\Object\Fields\CampaignFields;
+use Illuminate\Support\Facades\Log;
 
 class FacebookCampaign extends Facebook
 {
@@ -215,8 +216,10 @@ class FacebookCampaign extends Facebook
                 | \FacebookAds\Http\Exception\AuthorizationException $e) 
         { 
             if ($this->loadCampaignAttempts < 10) {
+                dd('Eee', $e);
                 sleep(3);
                 $this->updateAttempts++;
+                Log::info('update attempt', [$this->updateAttempts]);
                 return $this->update($campaignId, $fields, $params);
             } 
             return [false, $e];

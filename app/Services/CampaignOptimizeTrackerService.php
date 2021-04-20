@@ -41,25 +41,26 @@ class CampaignOptimizeTrackerService
    {
       DB::setDefaultConnection('mysql_tools');
       $tes = new ToolsExecutionService;
+       
       if ($tes->hasRunDailyReportGeneratorMSS()) {
          DB::setDefaultConnection('mysql');
          $this->OptimizeDay1();
-         // $this->OptimizeDay2();
-         // $this->OptimizeDay3();
-         // $this->clearFromTracker();
+         $this->OptimizeDay2();
       }
    }
 
    protected function OptimizeDay1()
    {
+      
       $campaigns = $this->getAll();
       
       if (count($campaigns) > 0) {
+          
          $typeDailyPerfService = new TypeDailyPerfService;
          foreach ($campaigns as $campaign) {
             $day1 = $campaign->campaign_start;
             $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1);
-               
+             
             if ($opt !== null) {
                if ($opt->tot_clicks < 10) {
                   // load the campaigns and increase the budget
@@ -125,65 +126,10 @@ class CampaignOptimizeTrackerService
    }
 
    /**
-    * @return [type]
-    */
-   protected function OptimizeDay3ConsecutiveDays()
-   {
-      $campaigns = $this->getAll();
-      
-      if (count($campaigns) > 0) {
-         $typeDailyPerfService = new TypeDailyPerfService;
-         foreach ($campaigns as $campaign) {
-            $day1 =  $campaign->campaign_start;
-
-            $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1);
-               
-            if ($opt !== null) {
-            
-               if ($opt->tot_clicks < 10) {
-
-                  // check clicks for day 2
-                  $day2 =  Carbon::parse($campaign->campaign_start)->addDays(1);
-                  $opt2 = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day2);
-
-                  if ($opt2 !== null && $opt2->tot_clicks <  10) {
-                     // check clicks for day 3
-                     $day3 =  Carbon::parse($campaign->campaign_start)->addDays(2);
-                     $opt3 = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day3);
-                     if ($opt3 !== null && $opt3->tot_clicks < 10) {
-                         // load the campaigns and increase the budget
-                        $facebookCampaign = new FacebookCampaign;
-                        $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
-                           'daily_budget', 'bid_strategy', 'name'
-                        ]);
-
-                        if ($accountCampaigns[0] !== false) { 
-                           $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($accountCampaigns[1]->name);
-                           $submission = [
-                              'feed' => $campaignNameExtracts['feed'],
-                              'type_tag' => $campaignNameExtracts['type_tag'], // unsure if to use the same type tag
-                              'keyword' => $campaignNameExtracts['keyword'],
-                              'market' => $campaignNameExtracts['market'],
-                           ];
-                           $sks = new SubmittedKeywordService;
-                           $sks->duplicateCampaign($accountCampaigns[1], $submission, 'LOWEST_COST_WITH_BID_CAP');
-                        }
-                        else {
-                           Log::info('Scheduler Error while running OptimizeDay3 ::: Campaign not found', [$accountCampaigns[1]]);
-                        }
-                     }
-                  }
-               }
-            }
-         }
-      }
-   }
-
-   /**
     * @return 
     */
    protected function clearFromTracker()
-   {
+   { 
       return CampaignOptimizeTracker::where('campaign_start', '<=', Carbon::now()->subDays(3)->toDateTimeString())
       ->delete();
    }
