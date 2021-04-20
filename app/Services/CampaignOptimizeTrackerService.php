@@ -37,7 +37,7 @@ class CampaignOptimizeTrackerService
       return CampaignOptimizeTracker::all();
    }
    
-   public function optimizer()
+   public function optimize()
    {
       DB::setDefaultConnection('mysql_tools');
       $tes = new ToolsExecutionService;

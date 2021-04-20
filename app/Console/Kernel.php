@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\FbReporting\CampaignOptimizerJob;
 use App\Jobs\FbReporting\LoadBMFacebookPagesJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->job(new LoadBMFacebookPagesJob)->twiceDaily();
+        $schedule->job(new CampaignOptimizerJob)->dailyAt('16:00:00');
     }
 
     /**
