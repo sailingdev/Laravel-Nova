@@ -25,7 +25,7 @@ class AddAlreadyRanForToCampaignOptimizeTrackersTable extends Migration
      */
     public function down()
     {
-        Schema::table('websites', function (Blueprint $table) {
+        Schema::table('campaign_optimize_trackers', function (Blueprint $table) {
             $table->dropColumn(['already_ran_for']);
         });
     }
