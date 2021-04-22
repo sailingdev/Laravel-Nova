@@ -78,14 +78,18 @@ class SubmittedKeywordService
         $batchId = $this->createBatchId();
  
         $data = [];
+        $feeds = ['Yahoo', 'Media', 'Iac'];
         foreach ($keywords as $keyword) {
-            array_push($data, [
-                'batch_id' => $batchId,
-                'keyword' => $keyword,
-                'market' => $market,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            foreach($feeds as $feed) {
+                array_push($data, [
+                    'batch_id' => $batchId,
+                    'keyword' => $keyword,
+                    'market' => $market,
+                    'feed' => $feed,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);
+            }
         }
         DB::beginTransaction();
         SubmittedKeyword::insert($data);
@@ -144,9 +148,10 @@ class SubmittedKeywordService
         
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
-        
+      
         foreach ($submittedKeywords as $submission) {
-            $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market']);
+        
+            $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], $submission['feed']);
             
             if ($countKeyword > 0) {
                 $this->updateRow($submission['batch_id'], $submission['keyword'], [
@@ -160,7 +165,7 @@ class SubmittedKeywordService
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
                     return $campaignKeyword == $submission["keyword"];
                 });
-             
+                
                 if (count($matches) < 1) {
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
                         'action_taken' => 'new',
@@ -169,7 +174,7 @@ class SubmittedKeywordService
                     ]);
                 } 
                 else { 
-                  
+                    
                     $process = $this->duplicateCampaign(current($matches), $submission);
                     
                     if ($process[0] == true) {
@@ -180,7 +185,8 @@ class SubmittedKeywordService
                         ]);
                     }
                 }
-            }
+            }    
+           
         } 
         return [true, 'submitted'];
     }
@@ -626,7 +632,8 @@ class SubmittedKeywordService
                         'keyword' => strtolower($row->keyword),
                         'type_tag' => '',
                         'id' => $row->id,
-                        'batch_id' => $row->batch_id
+                        'batch_id' => $row->batch_id,
+                        'feed' => $row->feed
                     ]);
                 }
                 else {
