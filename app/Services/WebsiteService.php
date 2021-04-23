@@ -15,4 +15,14 @@ class WebsiteService
     {
         return Website::where('domain', $domain)->first();
     }
+
+    /**
+     * @param string $feed
+     * 
+     * @return Website|null
+     */
+    public function getRowByFeed(string $feed): ?Website
+    {
+        return Website::where('feed', $feed)->first();
+    }
 }

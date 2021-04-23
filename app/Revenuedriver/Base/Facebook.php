@@ -183,9 +183,8 @@ abstract class Facebook
      * @return array
      */
     public function getTargetAccounts(): array
-    {
-        // $this->account38, $this->account38, ,, $this->account38, $this->account39
-        return [$this->account30];
+    { 
+        return [$this->account30, $this->account38, $this->account39];
         if (App::environment('production')) {
             return $this->account21;
         }
