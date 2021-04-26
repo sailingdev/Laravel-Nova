@@ -502,13 +502,14 @@ class SubmittedKeywordService
                                         'name' => $existingAd->name,
                                         'adset_id' => $newAdSet[1]->id,
                                         'creative' => $this->facebookAdCreative->show($newAdCreative[1]->creative_id)[1],
-                                        'status' => $this->facebookCampaign->determineStatus($existingAd->status),
-                                        'conversion_domain' => $domain
+                                        'status' => $this->facebookCampaign->determineStatus($existingAd->status)
+                                        // 'conversion_domain' => $domain
                                     ];
                                     
                                     $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                    
                                     if ($newAd[0] == false) {
+                                        dd($newAd);
                                         array_push($loggedErrors, [
                                             'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
                                             'errors' => $newAd[1],
@@ -757,7 +758,7 @@ class SubmittedKeywordService
                     $submission->type_tag = $typeTag;
                     
                     // using the feed, determine the ad account to duplicate into
-                    
+                   
                     $adAccount = $acs->determineTargetAccountByFeed($submission->feed);
                     Log::info('Feed ' . $submission['feed'], [$adAccount]);
                  

@@ -56,12 +56,12 @@ class CampaignOptimizeTrackerService
       $campaigns = $this->getAll();
       
       if (count($campaigns) > 0) {
-          
+         
          $typeDailyPerfService = new TypeDailyPerfService;
          foreach ($campaigns as $campaign) {
             if ($campaign->already_ran_for == null) {
                $day1 = $campaign->campaign_start;
-               $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1, null);
+               $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1);
                
                if ($opt !== null) {
                   if ($opt->tot_clicks < 10) {
@@ -70,6 +70,7 @@ class CampaignOptimizeTrackerService
                      $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
                         'daily_budget'
                      ]);
+                    
                      if ($accountCampaigns[0] !== false) { 
                         $oldBudget = $accountCampaigns[1]->daily_budget;
                         $newBudget = (int) $oldBudget + 50;
