@@ -1319,6 +1319,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "KeywordBatches",
@@ -1541,6 +1543,15 @@ var render = function() {
                                             staticClass:
                                               "py-4 px-6 border-b border-grey-light text-center"
                                           },
+                                          [_vm._v(_vm._s(keyword.feed))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass:
+                                              "py-4 px-6 border-b border-grey-light text-center"
+                                          },
                                           [_vm._v(_vm._s(keyword.status))]
                                         )
                                       ]
@@ -1575,6 +1586,15 @@ var staticRenderFns = [
               "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
           },
           [_vm._v("Keyword")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("Feed")]
         ),
         _vm._v(" "),
         _c(

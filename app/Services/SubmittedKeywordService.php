@@ -111,7 +111,7 @@ class SubmittedKeywordService
                 $rel->batch_id = $batch->batch_id;
                 $rel->market = $batch->market;
                 $batchKeywords = SubmittedKeyword::where('batch_id', $batch->batch_id)
-                ->select('keyword', 'status', 'market', 'created_at')
+                ->select('keyword', 'status', 'feed', 'market', 'created_at')
                 ->latest()
                 ->get();
                 $keywordsInProgress = 0;
@@ -257,7 +257,7 @@ class SubmittedKeywordService
         $marketService = new MarketService;
         $marketCode = $marketService->getMarketIdbyCode($submission['market']);
         
-        $targetAccounts = $this->facebookCampaign->getTargetAccounts();
+         
         $adAccountService = new AdAccountService;
         
         $websiteService = new WebsiteService;
@@ -502,14 +502,13 @@ class SubmittedKeywordService
                                         'name' => $existingAd->name,
                                         'adset_id' => $newAdSet[1]->id,
                                         'creative' => $this->facebookAdCreative->show($newAdCreative[1]->creative_id)[1],
-                                        'status' => $this->facebookCampaign->determineStatus($existingAd->status)
-                                        // 'conversion_domain' => $domain
+                                        'status' => $this->facebookCampaign->determineStatus($existingAd->status),
+                                        'conversion_domain' => $domain
                                     ];
                                     
                                     $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                    
                                     if ($newAd[0] == false) {
-                                        dd($newAd);
                                         array_push($loggedErrors, [
                                             'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
                                             'errors' => $newAd[1],
@@ -550,13 +549,13 @@ class SubmittedKeywordService
 
         if (count($loggedErrors) > 0) {
             // log output
-            Log::info('An error occured while processing some of the submitted keywords', $loggedErrors);
+            Log::info('An error occured while processing some of the submitted keywords', [$loggedErrors]);
             
             $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack);
             return [false, 'Process was not completed. Please check the log for the affected processes'];
         }
         else {
-             
+            Log::info('Everything worked fine', []);
             return [true, $newCampaign[1]['id']];
         }
     }

@@ -44,12 +44,14 @@
                                 <thead>
                                     <tr>
                                         <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Keyword</th>
+                                        <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Feed</th>
                                         <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(keyword, index2) in batch.keywords" :key="index2" class="hover:bg-blue-lightest">
                                         <td class="py-4 px-6 border-b border-grey-light">{{ keyword.keyword }}</td>
+                                        <td class="py-4 px-6 border-b border-grey-light text-center">{{ keyword.feed  }}</td>
                                         <td class="py-4 px-6 border-b border-grey-light text-center">{{ keyword.status  }}</td>
                                     </tr>
                                 </tbody>

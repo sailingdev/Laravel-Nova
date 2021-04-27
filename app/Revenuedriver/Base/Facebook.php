@@ -266,21 +266,23 @@ abstract class Facebook
                 $domainData = $websiteService->getRowByDomain($domain);
                
                 if ($domainData != null) {
+                   
                     // check if in supported markets
                     $sm = new StringManipulator;
                     if ($domainData['supported_markets'] != null) {
                         $supportedMarkets = $sm->generateArrayFromString($domainData['supported_markets'], ',');
+                       
                         if (in_array($market, $supportedMarkets)) {
-                            if ($domainData['feed'] === 'media') {
+                            if ($domainData['feed'] == 'media') {
                                 return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
                             }
-                            else if ($domainData['feed'] === 'yahoo') {
+                            else if ($domainData['feed'] == 'yahoo') {
                                 return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
                             }
-                            else if ($domainData['feed'] === 'iac') {
+                            else if ($domainData['feed'] == 'iac') {
                                return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
                             }
-                            else if ($domainData['feed'] === 'cbs') {
+                            else if ($domainData['feed'] == 'cbs') {
                                 return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
                             }
                         }
@@ -319,7 +321,7 @@ abstract class Facebook
      * @return string
      */
     private function makeYahooFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market): string
-    {
+    { 
         return 'https://' . strtolower($market) . '.' . $domain . '/search/4/?type='.$typeTag . 
         '&keyword=' . $this->formatKeyword($keyword, '+') . '&source=facebook';
     }
