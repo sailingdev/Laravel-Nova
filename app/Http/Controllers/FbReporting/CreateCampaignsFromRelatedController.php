@@ -42,9 +42,9 @@ class CreateCampaignsFromRelatedController extends Controller
             $toBeCreated = $sks->getToBeCreatedCampaignsByBatchIdAndKeyword($keyword->batch_id, $keyword->keyword);
             if (count($toBeCreated) > 0) {
                 foreach ($toBeCreated as $campaign) {
-                  // $sks->updateRow($campaign->batch_id, $campaign->keyword, [
-                    //     'status' => 'processing'
-                    // ]); 
+                    $sks->updateRow($campaign->batch_id, $campaign->keyword, [
+                        'status' => 'processing'
+                    ]); 
                     $obj = new \stdClass;
                     $obj->keyword = $campaign->keyword;
                     $obj->type_tag = $keyword->type_tag;
