@@ -27,7 +27,11 @@
         "build-ig-account-loader": "cd nova-components/IgAccountLoader && npm run dev",
         "build-ig-account-loader-prod": "cd nova-components/IgAccountLoader && npm run prod",
         "build-ig-account-loader-card": "cd nova-components/IgAccountLoaderCard && npm run dev",
-        "build-ig-account-loader-card-prod": "cd nova-components/IgAccountLoaderCard && npm run prod"
+        "build-ig-account-loader-card-prod": "cd nova-components/IgAccountLoaderCard && npm run prod",
+        "build-fb-page-posts": "cd nova-components/FbPagePosts && npm run dev",
+        "build-fb-page-posts-prod": "cd nova-components/FbPagePosts && npm run prod",
+        "build-fb-page-posts-card": "cd nova-components/FbPagePostsCard && npm run dev",
+        "build-fb-page-posts-card-prod": "cd nova-components/FbPagePostsCard && npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",
