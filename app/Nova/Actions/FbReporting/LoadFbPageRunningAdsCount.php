@@ -29,23 +29,10 @@ class LoadFbPageRunningAdsCount extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     { 
-        $facebookPage = new FacebookPage;
-        // if (count($models) <= 100) {
-            foreach ($models as $model) {
-                if (count($models) <= 100) {
-                    $facebookPage->curateRunningAds($model->id, $model->page_id);
-                }
-                else {
-                    new LoadFacebookPageRunningAdsJob($model);
-                }
-                return Action::message('Runnings ads were successfully updated');
-            }
-        // }
-        // else {
-        //     
-        //    
-        //     return Action::message('The process has been queued and will run in the background');
-        // }
+        $facebookPage = new FacebookPage; 
+        foreach ($models as $model) {
+            $facebookPage->curateRunningAds($model->id, $model->page_id);
+        }
     }
 
     /**
