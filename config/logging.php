@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'slack'],
+            'channels' => ['single', 'slack', 'logzio'],
             'ignore_exceptions' => false,
         ],
 
@@ -52,6 +52,17 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
+        ],
+
+        'logzio' => [
+            'driver' => 'logzio',
+            'name'   => 'logzio',
+            'token'  => 'jSJnKkdlcuNXCKzUySrmfetRBTrtXoJx',
+            'type'   => 'http-bulk',
+            'ssl'    => true,
+            'level'  => 'debug',
+            'bubble' => true,
+            'region' => 'eu', // leave empty for default region
         ],
 
         'slack' => [

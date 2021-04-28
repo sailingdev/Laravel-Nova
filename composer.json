@@ -24,6 +24,7 @@
         "laravel/horizon": "^5.7",
         "laravel/nova": "*",
         "laravel/tinker": "^2.5",
+        "oanhnn/laravel-logzio": "^1.1",
         "optimistdigital/nova-tailwind": "^1.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^2.4",
