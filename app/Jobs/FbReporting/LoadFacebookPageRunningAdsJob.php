@@ -48,8 +48,13 @@ class LoadFacebookPageRunningAdsJob implements ShouldQueue
     public function handle()
     {
         $facebookPage = new FacebookPage;
+        Log::info('Load facebook page running ads count job fired', []);
         foreach ($this->models as $model) {
-            $facebookPage->curateRunningAds($model->id, $model->page_id);
+            try {
+                $facebookPage->curateRunningAds($model->id, $model->page_id);
+            } catch (\Throwable $th) {
+                Log::emergency('An error occured while counting running ads for facebook page', [$th, $model]);
+            }
         }
     }
 }
