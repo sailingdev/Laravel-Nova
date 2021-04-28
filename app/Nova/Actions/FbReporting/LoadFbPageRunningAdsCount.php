@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 
-class LoadFbPageRunningAdsCount extends Action implements ShouldQueue
+class LoadFbPageRunningAdsCount extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -32,13 +32,18 @@ class LoadFbPageRunningAdsCount extends Action implements ShouldQueue
         $facebookPage = new FacebookPage;
         // if (count($models) <= 100) {
             foreach ($models as $model) {
-                $facebookPage->curateRunningAds($model->id, $model->page_id);
+                if (count($models) <= 100) {
+                    $facebookPage->curateRunningAds($model->id, $model->page_id);
+                }
+                else {
+                    new LoadFacebookPageRunningAdsJob($model);
+                }
                 return Action::message('Runnings ads were successfully updated');
             }
         // }
         // else {
-        //     $this->runInBackground = true;
-        //     new LoadFacebookPageRunningAdsJob($models);
+        //     
+        //    
         //     return Action::message('The process has been queued and will run in the background');
         // }
     }

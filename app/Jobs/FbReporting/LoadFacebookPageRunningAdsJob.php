@@ -20,7 +20,7 @@ class LoadFacebookPageRunningAdsJob //implements ShouldQueue
      *
      * @var \App\Models\FacebookPage
      */
-    protected $models;
+    protected $model;
 
 
     /**
@@ -35,9 +35,9 @@ class LoadFacebookPageRunningAdsJob //implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($models)
+    public function __construct($model)
     { 
-        $this->models = $models;
+        $this->model = $model;
     }
 
     /**
@@ -49,12 +49,12 @@ class LoadFacebookPageRunningAdsJob //implements ShouldQueue
     {
         $facebookPage = new FacebookPage;
         Log::info('Load facebook page running ads count job fired', []);
-        foreach ($this->models as $model) {
+        // foreach ($this->models as $model) {
             try {
-                $facebookPage->curateRunningAds($model->id, $model->page_id);
+                $facebookPage->curateRunningAds($this->model->id, $this->model->page_id);
             } catch (\Throwable $th) {
-                Log::emergency('An error occured while counting running ads for facebook page', [$th, $model]);
+                Log::emergency('An error occured while counting running ads for facebook page', [$th, $this->model]);
             }
-        }
+        // }
     }
 }
