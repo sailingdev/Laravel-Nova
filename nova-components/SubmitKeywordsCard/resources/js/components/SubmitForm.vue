@@ -80,7 +80,7 @@
 
     </div>
 </template>
-<script> 
+<script>
 export default {
     name: "SubmitForm",
     data () {

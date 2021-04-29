@@ -114,7 +114,11 @@ import DateTimePicker from '@/components/DateTimePicker'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css' 
 
-Vue.component('v-select', vSelect)
+import VueFileAgent from 'vue-file-agent'
+import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css'
+
+Vue.use(VueFileAgent)
+// Vue.component(VueFileAgent)
 
 Vue.component('action-selector', ActionSelector)
 Vue.component('boolean-icon', BooleanIcon)

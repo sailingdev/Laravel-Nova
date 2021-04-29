@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'slack', 'logzio'],
+            'channels' => ['single', 'logzio', 'sentry'],
             'ignore_exceptions' => false,
         ],
 
@@ -54,15 +54,19 @@ return [
             'days' => 14,
         ],
 
+        'sentry' => [
+            'driver' => 'sentry',
+        ],
+
         'logzio' => [
             'driver' => 'logzio',
-            'name'   => 'logzio',
+            'name'   => 'default',
             'token'  => 'jSJnKkdlcuNXCKzUySrmfetRBTrtXoJx',
             'type'   => 'http-bulk',
             'ssl'    => true,
             'level'  => 'debug',
             'bubble' => true,
-            'region' => 'eu', // leave empty for default region
+            'region' => 'us-east-1',
         ],
 
         'slack' => [

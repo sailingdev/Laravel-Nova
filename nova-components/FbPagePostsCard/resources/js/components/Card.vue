@@ -1,17 +1,20 @@
 <template>
     <card class="flex flex-col items-center justify-center">
         <div class="px-3 py-3">
-            <h1 class="text-center text-3xl text-80 font-light">Work in progress</h1>
+            <SubmitForm/>
         </div>
     </card>
 </template>
 
 <script>
+import SubmitForm from './SubmitForm'
 export default {
     props: [
         'card'
     ],
-
+    components: {
+        SubmitForm
+    },
     mounted() {
         //
     },
