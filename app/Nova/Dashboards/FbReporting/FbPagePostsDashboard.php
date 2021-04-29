@@ -5,7 +5,7 @@ namespace App\Nova\Dashboards\FbReporting;
 use FbReporting\FbPagePostsCard\FbPagePostsCard;
 use Laravel\Nova\Dashboard;
 
-class FbPagePostsDashbord extends Dashboard
+class FbPagePostsDashboard extends Dashboard
 {
 
     
@@ -39,6 +39,6 @@ class FbPagePostsDashbord extends Dashboard
      */
     public static function uriKey()
     {
-        return 'fb-reporting-fb-page-posts-dashbord';
+        return 'fb-reporting-fb-page-posts-dashboard';
     }
 }

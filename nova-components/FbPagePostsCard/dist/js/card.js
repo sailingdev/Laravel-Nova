@@ -185,7 +185,25 @@ module.exports = __webpack_require__(9);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Nova.booting(function (Vue, router, store) {
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vee_validate__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vee_validate_dist_rules__ = __webpack_require__(58);
+
+
+
+
+Object.keys(__WEBPACK_IMPORTED_MODULE_3_vee_validate_dist_rules__).forEach(function (rule) {
+  Object(__WEBPACK_IMPORTED_MODULE_1_vee_validate__["a" /* extend */])(rule, __WEBPACK_IMPORTED_MODULE_3_vee_validate_dist_rules__[rule]);
+});
+Object(__WEBPACK_IMPORTED_MODULE_1_vee_validate__["b" /* localize */])('en', __WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json___default.a);
+
+Nova.booting(function (Vue, router, store, ValidationObserver, ValidationProvider) {
+  Vue.component('ValidationObserver', ValidationObserver);
+  Vue.component('ValidationProvider', ValidationProvider);
   Vue.component('fb-page-posts-card', __webpack_require__(3));
 });
 
@@ -323,12 +341,6 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_select__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vee_validate__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vee_validate_dist_rules__ = __webpack_require__(58);
-//
-//
 //
 //
 //
@@ -452,16 +464,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
-// import Vue from 'vue'
 
-
-
-
-Object.keys(__WEBPACK_IMPORTED_MODULE_3_vee_validate_dist_rules__).forEach(function (rule) {
-    Object(__WEBPACK_IMPORTED_MODULE_1_vee_validate__["c" /* extend */])(rule, __WEBPACK_IMPORTED_MODULE_3_vee_validate_dist_rules__[rule]);
-});
-Object(__WEBPACK_IMPORTED_MODULE_1_vee_validate__["d" /* localize */])('en', __WEBPACK_IMPORTED_MODULE_2_vee_validate_dist_locale_en_json___default.a);
-// setInteractionMode('lazy')
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SubmitForm',
     data: function data() {
@@ -479,10 +482,13 @@ Object(__WEBPACK_IMPORTED_MODULE_1_vee_validate__["d" /* localize */])('en', __W
         };
     },
 
+    props: {
+        card: {
+            required: true
+        }
+    },
     components: {
-        vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a,
-        ValidationObserver: __WEBPACK_IMPORTED_MODULE_1_vee_validate__["a" /* ValidationObserver */],
-        ValidationProvider: __WEBPACK_IMPORTED_MODULE_1_vee_validate__["b" /* ValidationProvider */]
+        vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a
     },
     methods: {
         uploadFile: function uploadFile(e, t) {},
@@ -495,6 +501,17 @@ Object(__WEBPACK_IMPORTED_MODULE_1_vee_validate__["d" /* localize */])('en', __W
         submit: function submit() {
             // this.processing = true
         }
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        axios.get('/nova-vendor/' + this.card.component + '/load-page-groups').then(function (response) {
+            _this.pageGroups = response.data.data;
+        }).catch(function (error) {
+            _this.errorResponse = error.response.data;
+        }).finally(function () {
+            _this.loading = false;
+        });
     }
 });
 
@@ -510,7 +527,14 @@ var render = function() {
   return _c(
     "card",
     { staticClass: "flex flex-col items-center justify-center" },
-    [_c("div", { staticClass: "px-3 py-3" }, [_c("SubmitForm")], 1)]
+    [
+      _c(
+        "div",
+        { staticClass: "px-3 py-3" },
+        [_c("SubmitForm", { attrs: { card: _vm.card } })],
+        1
+      )
+    ]
   )
 }
 var staticRenderFns = []
@@ -979,67 +1003,35 @@ var render = function() {
                   _c("div", { staticClass: "mt-2" }, [
                     _vm._m(0),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "mt-1 text-left" },
-                      [
-                        _c("validation-provider", {
-                          attrs: { rules: "required", name: "post text" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  return [
-                                    _c("textarea", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.keywords,
-                                          expression: "keywords"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md\n                                focus:outline-none focus:ring-blue-500 focus:border-blue-500",
-                                      attrs: {
-                                        rows: "6",
-                                        placeholder: "Enter text"
-                                      },
-                                      domProps: { value: _vm.keywords },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.keywords = $event.target.value
-                                        }
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    errors.length > 0
-                                      ? _c(
-                                          "p",
-                                          {
-                                            staticClass:
-                                              "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
-                                          },
-                                          [_vm._v(" " + _vm._s(errors[0]))]
-                                        )
-                                      : _vm._e()
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            2579863506
-                          )
-                        })
-                      ],
-                      1
-                    )
+                    _c("div", { staticClass: "mt-1 text-left" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.text,
+                            expression: "text"
+                          }
+                        ],
+                        staticClass:
+                          "shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md\n                                focus:outline-none focus:ring-blue-500 focus:border-blue-500",
+                        attrs: { rows: "6", placeholder: "Enter text" },
+                        domProps: { value: _vm.text },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.text = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", {
+                        staticClass:
+                          "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "mt-2" }, [
@@ -1235,7 +1227,7 @@ var render = function() {
                     "button",
                     {
                       staticClass:
-                        "inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                        "d-block justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
                       attrs: { disabled: _vm.processing, type: "submit" },
                       on: { click: _vm.submit }
                     },
@@ -13922,12 +13914,12 @@ module.exports = Vue;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ValidationObserver; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ValidationProvider; });
+/* unused harmony export ValidationObserver */
+/* unused harmony export ValidationProvider */
 /* unused harmony export configure */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return extend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return extend; });
 /* unused harmony export localeChanged */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return localize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return localize; });
 /* unused harmony export normalizeRules */
 /* unused harmony export setInteractionMode */
 /* unused harmony export validate */

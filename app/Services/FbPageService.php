@@ -60,4 +60,23 @@ class FbPageService
     {
         return FbPage::where('running_ads', '<', 250)->first();
     }
+
+    /**
+     * @return array
+     */
+    public function groupPage(): array
+    {
+        $tot = FbPage::count();
+        $groups = [];
+        if ($tot > 0 && $tot <= 200) {
+            $groups['Group 1'];
+        }
+        else {
+            $dv = round($tot / 200, 1);
+            for ($i = 1; $i <= $dv; $i++) { 
+                array_push($groups, 'Group ' . $i);
+            }
+        }
+        return $groups;
+    }
 }

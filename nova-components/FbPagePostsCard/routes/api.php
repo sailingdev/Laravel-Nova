@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FbReporting\FbPagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/endpoint', function (Request $request) {
-//     //
-// });
+Route::get('/load-page-groups', [FbPagesController::class, 'loadPageGroups']);

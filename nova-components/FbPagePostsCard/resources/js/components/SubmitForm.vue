@@ -21,13 +21,11 @@
                             <i class="fa fa-edit"></i> TEXT <span>*</span>
                         </label>
                         <div class="mt-1 text-left">
-                            <validation-provider rules="required" v-slot="{ errors }" name="post text">
                                 <textarea rows="6" class="shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md
                                     focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                                    placeholder="Enter text" v-model="keywords"
+                                    placeholder="Enter text" v-model="text"
                                 ></textarea>
-                                <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="errors.length > 0"> {{ errors[0] }}</p>
-                            </validation-provider>
+                                <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"></p>
                         </div>
                     </div>
 
@@ -94,7 +92,7 @@
 
                 </div>
                 <div class="px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2">
-                    <button :disabled="processing" @click="submit" type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button :disabled="processing" @click="submit" type="submit" class="d-block justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span v-if="processing"><loader class="text-60" :fillColor="'#ffffff'" /></span>
                         <span v-else>SCHEDULE</span>
                     </button>
@@ -122,17 +120,8 @@
     </div>
 </template>
 <script>
-import vSelect from 'vue-select'
-// import Vue from 'vue'
-import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate'
-import en from 'vee-validate/dist/locale/en.json'
-import * as rules from 'vee-validate/dist/rules'
+import vSelect from 'vue-select' 
 
-Object.keys(rules).forEach(rule => {
-  extend(rule, rules[rule])
-})
-localize('en', en)
-// setInteractionMode('lazy')
 export default {
     name: 'SubmitForm',
     data () {
@@ -149,10 +138,13 @@ export default {
             markets: []
         }
     },
+    props: {
+        card: {
+            required: true
+        }
+    },
     components: {
-        vSelect,
-        ValidationObserver,
-        ValidationProvider
+        vSelect
     },
     methods: {
         uploadFile (e, t) {
@@ -167,6 +159,16 @@ export default {
         submit () {
             // this.processing = true
         }
+    },
+    mounted () {
+        axios.get('/nova-vendor/' + this.card.component + '/load-page-groups')  
+        .then(response => {  
+            this.pageGroups = response.data.data
+        }).catch(error => {   
+            this.errorResponse = error.response.data
+        }).finally(() => {
+            this.loading = false
+        })
     }
 }
 </script>
