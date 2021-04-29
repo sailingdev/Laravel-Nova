@@ -13,67 +13,92 @@
                         </p>
                     </div>
                 </div>
-
-                <div>
-                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                        <div>
-                            <label for="about" class="block text-gray-700">
-                                <i class="fa fa-edit"></i> TEXT <span>*</span>
-                            </label>
-                            <div class="mt-1 text-left">
+  
+                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+            
+                    <div  class="mt-2">
+                        <label for="about" class="block text-gray-700">
+                            <i class="fa fa-edit"></i> TEXT <span>*</span>
+                        </label>
+                        <div class="mt-1 text-left">
+                            <validation-provider rules="required" v-slot="{ errors }" name="post text">
                                 <textarea rows="6" class="shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md
                                     focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
                                     placeholder="Enter text" v-model="keywords"
                                 ></textarea>
-                            </div> 
+                                <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="errors.length > 0"> {{ errors[0] }}</p>
+                            </validation-provider>
                         </div>
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">
-                                <i class="fa fa-upload"></i> UPLOAD MEDIA
+                    <div class="mt-2">
+                        <label class="block text-sm font-medium text-gray-700">
+                            <i class="fa fa-upload"></i> UPLOAD MEDIA
+                        </label>
+                        <div class="mt-1 text-left">
+                            <VueFileAgent @change="uploadFile($event, 'media')"  
+                                :deletable="false"
+                                :accept="'image/jpg, image/jpeg, image/png, video/mp4'" 
+                                :maxSize="'5MB'"
+                                :helpText="'Click or drop to upload a file'"  ref="media"
+                            ></VueFileAgent>
+                            <p class="mt-4 text-sm text-gray-500">
+                            Images (png, gif, jpeg) or Videos (mp4) only
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <label for="about" class="block text-gray-700">
+                            <i class="fa fa-link"></i> URL TO ARTICLE
+                        </label>
+                        <div class="mt-1 text-left">
+                            <input type="text" class="form-control" 
+                                placeholder="Enter text" v-model="keywords"
+                            />
+                        </div> 
+                    </div>
+
+                    <div class="mt-2">
+                        <label for="about" class="block text-gray-700">
+                            <i class="fa fa-calendar"></i> SCHEDULE DATE AND TIME
+                        </label>
+                        <div class="mt-1 text-left">
+                            <date-time-picker :placeholder="new Date().toDateString()" @change="startDateChanged"
+                                :value="startDate" :dateFormat="'Y-m-d H:i'" :enableTime="true" :altFormat="'Y-m-d H:i'">
+                            </date-time-picker>
+                        </div> 
+                    </div>
+
+                    <div class="mt-2">
+                        <label for="about" class="block text-gray-700">
+                            <i class="fa fa-object-group"></i> PAGE GROUPS
+                        </label>
+                        <div class="mt-1 text-left">
+                            <v-select :options="pageGroups" class="rd__column-selector" v-model="pageGroupSelected" 
+                                :multiple="true"></v-select>
+                        </div> 
+                    </div>
+
+                    <div class="mt-2">
+                        <validation-provider rules="required" v-slot="{ errors }" name="post text">
+                            <label for="about" class="block text-gray-700">
+                                <i class="fa fa-edit"></i> POST REFERENCE/TAG <span>*</span>
                             </label>
                             <div class="mt-1 text-left">
-                                <VueFileAgent @change="uploadFile($event, 'profilePhoto')"  
-                                    :deletable="false"
-                                    :accept="'image/jpg, image/jpeg, image/png'" 
-                                    :maxSize="'5MB'"
-                                    :helpText="'Click or drop to upload a file'"  ref="profilePhoto"
-                               ></VueFileAgent>
-                                <p class="mt-4 text-sm text-gray-500">
-                                   Images (png, gif, jpeg) or videos (mp4) only
-                                </p>
+                                <input type="text" class="form-control" placeholder="Enter text" v-model="postReference" />
                             </div>
-                        </div>
+                            <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="errors.length > 0"> {{ errors[0] }}</p>
+                        </validation-provider>
+                    </div>
 
-                        <div>
-                            <label for="about" class="block text-gray-700">
-                                <i class="fa fa-edit"></i> URL TO ARTICLE
-                            </label>
-                            <div class="mt-1 text-left">
-                                <textarea rows="6" class="shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md
-                                    focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                                    placeholder="Enter text" v-model="keywords"
-                                ></textarea>
-                            </div> 
-                        </div>
-                         <div>
-                            <label for="about" class="block text-gray-700">
-                                <i class="fa fa-edit"></i> SCHEDULE DATE AND TIME
-                            </label>
-                            <div class="mt-1 text-left">
-                                <date-time-picker :placeholder="new Date().toDateString()" @change="startDateChanged"
-                                    :value="start_date" :dateFormat="'Y-m-d H:i'" :enableTime="true" :altFormat="'Y-m-d'">
-                                </date-time-picker>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="px-4 py-3 bg-gray-20 text-right sm:px-6 mt-2">
-                        <button :disabled="processing" @click="submit" type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <span v-if="processing"><loader class="text-60" :fillColor="'#ffffff'" /></span>
-                            <span v-else>Submit</span>
-                        </button>
-                    </div>
-                </div> 
+                </div>
+                <div class="px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2">
+                    <button :disabled="processing" @click="submit" type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <span v-if="processing"><loader class="text-60" :fillColor="'#ffffff'" /></span>
+                        <span v-else>SCHEDULE</span>
+                    </button>
+                </div>
             </div> 
         </div>
 
@@ -97,12 +122,27 @@
     </div>
 </template>
 <script>
+import vSelect from 'vue-select'
+// import Vue from 'vue'
+import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate'
+import en from 'vee-validate/dist/locale/en.json'
+import * as rules from 'vee-validate/dist/rules'
+
+Object.keys(rules).forEach(rule => {
+  extend(rule, rules[rule])
+})
+localize('en', en)
+// setInteractionMode('lazy')
 export default {
     name: 'SubmitForm',
     data () {
         return {
             processing: false,
             text: '',
+            startDate:'',
+            postReference: '',
+            pageGroupSelected: '',
+            pageGroups: ['Mona', 'Ilemona'],
             errorResponse: {},
             displayForm: true,
             displaySubmitSuccess: false,
@@ -110,6 +150,9 @@ export default {
         }
     },
     components: {
+        vSelect,
+        ValidationObserver,
+        ValidationProvider
     },
     methods: {
         uploadFile (e, t) {
@@ -118,12 +161,32 @@ export default {
         startDateChanged(data) {
            this.startDate = data
         },
+        newOption (newVal) {
+            this.pageGroupSelected = newVal
+        },
+        submit () {
+            // this.processing = true
+        }
     }
 }
 </script>
 <style scoped>
     label {
-        font-size: 16px;
+        font-size: 14px;
+        color: #7c858e;
         font-weight: bold;
+    }
+    label span {
+        color: #900;
+    }
+    label i {
+        display: inline-block;
+        margin-right: 2px;
+    } 
+    input, select {
+        height: 42px;
+    }
+    .rd__column-selector > input  {
+        padding: 13px 10px !important; 
     }
 </style>
