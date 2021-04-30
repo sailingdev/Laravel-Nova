@@ -55,5 +55,16 @@ class StringManipulator
         return $string === strtoupper($string);
     }
     
-    
+    /**
+     * Get only string
+     * 
+     * @param string $string
+     * @param bool $allowSpace
+     * 
+     * @return string 
+     */
+    public function getAlphaNum(string $string, $allowSpace=false): string
+    {
+        return preg_replace('#[^a-z0-9]#i', '', $string);
+    }
 }

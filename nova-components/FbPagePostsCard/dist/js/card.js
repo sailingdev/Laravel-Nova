@@ -566,7 +566,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
 
-
         deleteUploadedFile: function deleteUploadedFile(fileRecord) {
             // Using the default uploader. You may use another uploader instead.
             this.$refs.media.deleteUpload(this.uploadUrl, this.uploadHeaders, fileRecord);
