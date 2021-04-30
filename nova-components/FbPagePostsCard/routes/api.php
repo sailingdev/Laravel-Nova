@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FbReporting\FbPagePostSchedulersController;
 use App\Http\Controllers\FbReporting\FbPagePostsController;
 use App\Http\Controllers\FbReporting\FbPagesController;
 use Illuminate\Http\Request;
@@ -18,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/load-page-groups', [FbPagesController::class, 'loadPageGroups']);
 Route::post('/submit-page-post', [FbPagePostsController::class, 'submit']);
+Route::get('/load-scheduled-drafts', [FbPagePostSchedulersController::class, 'getAllScheduled']);

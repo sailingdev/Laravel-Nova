@@ -5,22 +5,37 @@ namespace App\Http\Controllers\FbReporting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FbReporting\FbPagePost\SubmitPostRequest;
 use App\Labs\FileManager;
-use App\Services\FbPagePostSchedulerService;
+use App\Services\FbReporting\FbPagePostSchedulerService;
 use App\Services\FbReporting\FbPagePostService;
 use Illuminate\Http\Request;
 
 class FbPagePostsController extends Controller
 {
+    /**
+     * @param SubmitPostRequest $request
+     * @param FbPagePostService $fbPagePostService
+     * @param FbPagePostSchedulerService $fbPagePostSchedulerService
+     * @param FileManager $fileManager
+     * 
+     * @return JsonResponse
+     */
     public function submit(SubmitPostRequest $request, FbPagePostService $fbPagePostService, FbPagePostSchedulerService $fbPagePostSchedulerService, FileManager $fileManager)
     {   
+        $media = null;
         if ($request->media !== null && $request->file('media')->isValid()) {
             $uploadImage = $fileManager->uploadFile($request->media, 'media', 'fb_posts');
             if (!$uploadImage[0]) {
                 return $this->errorResponse('File was not uploaded successfully: ' . $uploadImage[1], [], 400);
             }
-            $data['media'] = $uploadImage[1];
+            $media = $uploadImage[1];
         }
-        $newPost = $fbPagePostService->create($data);
+
+        $newPost = $fbPagePostService->create([
+            'text' => $request->text,
+            'url' => $request->url,
+            'reference' => $request->reference,
+            'media' => $media
+        ]);
         if ($newPost[0] !== true) {
             return $this->errorResponse('An error occured. Please try again');
         }

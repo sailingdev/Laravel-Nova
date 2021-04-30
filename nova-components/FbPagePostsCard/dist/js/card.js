@@ -262,6 +262,8 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubmitForm__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__SubmitForm__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ScheduledDrafts__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ScheduledDrafts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ScheduledDrafts__);
 //
 //
 //
@@ -270,12 +272,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['card'],
     components: {
-        SubmitForm: __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default.a
+        SubmitForm: __WEBPACK_IMPORTED_MODULE_0__SubmitForm___default.a,
+        ScheduledDrafts: __WEBPACK_IMPORTED_MODULE_1__ScheduledDrafts___default.a
     },
     mounted: function mounted() {
         //
@@ -475,7 +480,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             processing: false,
             text: 'A sample text',
-            media: [],
+            media: '',
             postUrl: 'http://revenedriver.com/testing',
             startDate: '2021-05-12 12:20',
             postReference: 'Post 1',
@@ -491,10 +496,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             postReferenceInputError: '',
 
             fileRecords: [],
-            uploadUrl: 'https://www.mocky.io/v2/5d4fb20b3000005c111099e3',
-            uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
-            fileRecordsForUpload: [], // maintain an upload queue,
-            formData: {}
+            fileRecordsForUpload: [],
+            formData: {},
+            mediaEvent: {}
         };
     },
 
@@ -508,6 +512,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         uploadFile: function uploadFile(e, t) {
+            this.mediaEvent = e;
             this.media = e.target.files[0];
         },
         startDateChanged: function startDateChanged(data) {
@@ -568,18 +573,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         deleteUploadedFile: function deleteUploadedFile(fileRecord) {
             // Using the default uploader. You may use another uploader instead.
-            this.$refs.media.deleteUpload(this.uploadUrl, this.uploadHeaders, fileRecord);
+            this.$refs.media.deleteUpload('', '', fileRecord);
         },
         filesSelected: function filesSelected(fileRecordsNewlySelected) {
-            var validFileRecords = fileRecordsNewlySelected.filter(function (fileRecord) {
-                return !fileRecord.error;
-            });
-            this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
+            // var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
+            // this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
         },
         onBeforeDelete: function onBeforeDelete(fileRecord) {
             var i = this.fileRecordsForUpload.indexOf(fileRecord);
             if (i !== -1) {
-                // queued file, not yet uploaded. Just remove from the arrays
                 this.fileRecordsForUpload.splice(i, 1);
                 var k = this.fileRecords.indexOf(fileRecord);
                 if (k !== -1) this.fileRecords.splice(k, 1);
@@ -600,6 +602,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         processAnother: function processAnother() {
             this.displayForm = true;
             this.displaySubmitSuccess = false;
+            this.text = this.postUrl = this.postReference = this.startDate = '';
+            this.pageGroupSelected = [];
+            // this.deleteUploadedFile(this.mediaEvent)
+            this.fileRecords = [];
+            this.media = '';
         }
     },
     mounted: function mounted() {
@@ -631,7 +638,11 @@ var render = function() {
       _c(
         "div",
         { staticClass: "px-3 py-3" },
-        [_c("SubmitForm", { attrs: { card: _vm.card } })],
+        [
+          _c("SubmitForm", { attrs: { card: _vm.card } }),
+          _vm._v(" "),
+          _c("ScheduledDrafts", { attrs: { card: _vm.card } })
+        ],
         1
       )
     ]
@@ -770,10 +781,10 @@ if(false) {
 
 exports = module.exports = __webpack_require__(11)(false);
 // imports
-
+exports.push([module.i, "@import url(https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap);", ""]);
 
 // module
-exports.push([module.i, "\nlabel[data-v-468278b2] {\n    font-size: 14px;\n    color: #7c858e;\n    font-weight: bold;\n}\nlabel span[data-v-468278b2] {\n    color: #900;\n}\nlabel i[data-v-468278b2] {\n    display: inline-block;\n    margin-right: 2px;\n}\ninput[data-v-468278b2], select[data-v-468278b2] {\n    height: 42px;\n}\n.rd__column-selector > input[data-v-468278b2]  {\n    padding: 13px 10px !important;\n}\n", ""]);
+exports.push([module.i, "\n.rd__submit-list-form-wrapper[data-v-468278b2] {\r\n        font-family: DM Sans;\n}\ntextarea[data-v-468278b2] {\r\n        resize: none;\n}\nlabel[data-v-468278b2] {\r\n        font-size: 15px;\r\n        color: #7c858e;\r\n        font-weight: bold;\r\n        margin-top: 50px !important;\n}\nlabel span[data-v-468278b2] {\r\n        color: #900;\n}\nlabel i[data-v-468278b2] {\r\n        display: inline-block;\r\n        margin-right: 2px;\n}\ninput[data-v-468278b2], select[data-v-468278b2] {\r\n        height: 42px;\n}\n.rd__column-selector > input[data-v-468278b2]  {\r\n        padding: 13px 10px !important;\n}\r\n", ""]);
 
 // exports
 
@@ -1058,7 +1069,10 @@ var render = function() {
       ? _c("div", { staticClass: "container-box" }, [
           _c(
             "div",
-            { staticClass: "shadow sm:rounded-md sm:overflow-hidden" },
+            {
+              staticClass:
+                "shadow-lg py-5 px-5 sm:rounded-md sm:overflow-hidden"
+            },
             [
               Object.entries(_vm.errorResponse).length > 0
                 ? _c("div", [
@@ -1410,15 +1424,23 @@ var render = function() {
               _vm._v(" "),
               _c("p", { staticClass: "mt-2 mb-2" }, [
                 _vm._v(
-                  " Keywords have been successfully submitted. Batch processing in progress"
-                )
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "mt-3 mb-4" }, [
-                _vm._v(" Batch ID: "),
-                _c("span", { staticClass: "font-dark text-xl font-semibold" }, [
-                  _vm._v(_vm._s(_vm.batchId))
-                ])
+                  " Page post have been successfully drafted and submitted. \n                "
+                ),
+                _vm.startDate == ""
+                  ? _c("span", [
+                      _vm._v(
+                        " The draft was added to the library. You can schedule it whenever it's necessary "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.startDate == ""
+                  ? _c("span", [
+                      _vm._v(
+                        " The scheduler will process the post on the scheduled date "
+                      )
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _c("div", [
@@ -16813,6 +16835,117 @@ var double = {
 
 
 
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(60)
+/* template */
+var __vue_template__ = __webpack_require__(61)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/ScheduledDrafts.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-273466e4", Component.options)
+  } else {
+    hotAPI.reload("data-v-273466e4", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'ScheduledDrafts',
+    data: function data() {
+        return {
+            scheduledDrafts: []
+        };
+    },
+
+    props: {
+        card: {
+            required: true
+        }
+    },
+    mounted: function mounted() {
+        this.loadScheduledDrafts();
+    },
+
+    methods: {
+        loadScheduledDrafts: function loadScheduledDrafts() {
+            var _this = this;
+
+            axios.get('/nova-vendor/' + this.card.component + '/load-scheduled-drafts').then(function (response) {
+                _this.scheduledDrafts = response.data.data;
+            }).catch(function (error) {
+                _this.errorResponse = error.response.data;
+            }).finally(function () {
+                _this.loading = false;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("button", { on: { click: _vm.loadScheduledDrafts } }, [
+    _vm._v("Reload")
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-273466e4", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

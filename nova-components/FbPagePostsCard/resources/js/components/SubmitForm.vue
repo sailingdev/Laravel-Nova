@@ -3,7 +3,7 @@
         <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Draft Post (Work In Progress)</h1>
         
         <div class="container-box" v-if="displayForm">
-            <div class="shadow sm:rounded-md sm:overflow-hidden"> 
+            <div class="shadow-lg py-5 px-5 sm:rounded-md sm:overflow-hidden"> 
                 
                 <div v-if="Object.entries(errorResponse).length > 0">
                     <div class="px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg" role="alert">
@@ -57,8 +57,7 @@
                             <i class="fa fa-link"></i> URL TO ARTICLE
                         </label>
                         <div class="mt-1 text-left">
-                            <input type="text" class="form-control"  placeholder="Enter url" v-model="postUrl"
-                            />
+                            <input type="text" class="form-control"  placeholder="Enter url" v-model="postUrl" />
                         </div> 
                     </div>
 
@@ -108,8 +107,10 @@
             <div class="mt-1 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md rd__notify-submit-success">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414" fill="#3da35a"/></svg>
                 <h4 class="text-2xl text-center text-3xl text-80 font-dark px-4 py-4"> Thank you! </h4>
-                <p class="mt-2 mb-2"> Keywords have been successfully submitted. Batch processing in progress</p>
-                <p class="mt-3 mb-4"> Batch ID: <span class="font-dark text-xl font-semibold">{{ batchId }}</span></p>
+                <p class="mt-2 mb-2"> Page post have been successfully drafted and submitted. 
+                    <span v-if="startDate == ''"> The draft was added to the library. You can schedule it whenever it's necessary </span>    
+                    <span v-if="startDate == ''"> The scheduler will process the post on the scheduled date </span>    
+                </p> 
 
                 <div>
                     <p>
@@ -120,7 +121,6 @@
                 </div>
             </div> 
         </div>
-
     </div>
 </template>
 <script>
@@ -132,7 +132,7 @@ export default {
         return {
             processing: false,
             text: 'A sample text',
-            media: [],
+            media: '',
             postUrl: 'http://revenedriver.com/testing',
             startDate:'2021-05-12 12:20',
             postReference: 'Post 1',
@@ -148,10 +148,9 @@ export default {
             postReferenceInputError: '',
             
             fileRecords: [],
-            uploadUrl: 'https://www.mocky.io/v2/5d4fb20b3000005c111099e3',
-            uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
-            fileRecordsForUpload: [], // maintain an upload queue,
-            formData: {}
+            fileRecordsForUpload: [], 
+            formData: {},
+            mediaEvent: {}
         }
     },
     props: {
@@ -164,6 +163,7 @@ export default {
     },
     methods: {
         uploadFile (e, t) {
+            this.mediaEvent = e
             this.media = e.target.files[0]
         },
         startDateChanged(data) {
@@ -223,16 +223,15 @@ export default {
         }, 
         deleteUploadedFile: function (fileRecord) {
             // Using the default uploader. You may use another uploader instead.
-            this.$refs.media.deleteUpload(this.uploadUrl, this.uploadHeaders, fileRecord);
+            this.$refs.media.deleteUpload('', '', fileRecord);
         },
         filesSelected: function (fileRecordsNewlySelected) {
-            var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
-            this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
+            // var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
+            // this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
         },
         onBeforeDelete: function (fileRecord) {
             var i = this.fileRecordsForUpload.indexOf(fileRecord);
             if (i !== -1) {
-                // queued file, not yet uploaded. Just remove from the arrays
                 this.fileRecordsForUpload.splice(i, 1);
                 var k = this.fileRecords.indexOf(fileRecord);
                 if (k !== -1) this.fileRecords.splice(k, 1);
@@ -253,6 +252,13 @@ export default {
         processAnother () {
             this.displayForm = true
             this.displaySubmitSuccess = false
+            this.text = this.postUrl = this.postReference = this.startDate = ''
+            this.pageGroupSelected = []
+            // this.deleteUploadedFile(this.mediaEvent)
+            this.fileRecords = []
+            this.media = ''
+            
+
         }
     },
     mounted () {
@@ -268,10 +274,18 @@ export default {
 }
 </script>
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+    .rd__submit-list-form-wrapper {
+        font-family: DM Sans;
+    }
+    textarea {
+        resize: none;
+    }
     label {
-        font-size: 14px;
+        font-size: 15px;
         color: #7c858e;
         font-weight: bold;
+        margin-top: 50px !important;
     }
     label span {
         color: #900;
