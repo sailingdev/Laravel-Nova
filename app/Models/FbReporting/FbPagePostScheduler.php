@@ -5,13 +5,12 @@ namespace App\Models\FbReporting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FbPagePost extends Model
+class FbPagePostScheduler extends Model
 {
     use HasFactory;
 
-    public function fbPagePostScheduler()
+    public function fbPagePost()
     {
-        return $this->hasMany(FbPagePostScheduler::class);
+        return $this->belongsTo(FbPagePost::class);
     }
-
 }

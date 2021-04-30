@@ -17,8 +17,7 @@ class CreateFbPagePostSchedulersTable extends Migration
             $table->id();
             $table->bigInteger('fb_page_post_id')->unsigned();
             $table->foreign('fb_page_post_id')->references('id')->on('fb_page_posts')->onDelete('cascade');
-            $table->date('start_date')->nullable();
-            $table->time('start_time')->nullable();
+            $table->dateTime('start_date');
             $table->text('page_groups');
             $table->timestamps();
         });
