@@ -462,6 +462,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -470,15 +474,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             processing: false,
-            text: '',
-            startDate: '',
-            postReference: '',
-            pageGroupSelected: '',
-            pageGroups: ['Mona', 'Ilemona'],
+            text: 'A sample text',
+            media: [],
+            postUrl: 'http://revenedriver.com/testing',
+            startDate: '2021-05-12 12:20',
+            postReference: 'Post 1',
+            pageGroupSelected: ['Group 1', 'Group 2'],
+            pageGroups: [],
             errorResponse: {},
             displayForm: true,
             displaySubmitSuccess: false,
-            markets: []
+
+            textInputError: '',
+            mediaInputError: '',
+            pageGroupInputError: '',
+            postReferenceInputError: '',
+
+            fileRecords: [],
+            uploadUrl: 'https://www.mocky.io/v2/5d4fb20b3000005c111099e3',
+            uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
+            fileRecordsForUpload: [], // maintain an upload queue,
+            formData: {}
         };
     },
 
@@ -491,26 +507,111 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a
     },
     methods: {
-        uploadFile: function uploadFile(e, t) {},
+        uploadFile: function uploadFile(e, t) {
+            this.media = e.target.files[0];
+        },
         startDateChanged: function startDateChanged(data) {
             this.startDate = data;
         },
-        newOption: function newOption(newVal) {
-            this.pageGroupSelected = newVal;
-        },
         submit: function submit() {
-            // this.processing = true
+            var _this = this;
+
+            this.processing = true;
+            if (this.text == '') {
+                this.textInputError = 'Please enter a text for the post';
+                return false;
+            } else {
+                this.textInputError = '';
+            }
+            if (this.pageGroupSelected.length < 1) {
+                this.pageGroupInputError = 'Please select a page group';
+                return false;
+            } else {
+                this.pageGroupInputError = '';
+            }
+            if (this.postReference == '') {
+                this.postReferenceError = 'Please enter a tag or reference for this post';
+                return false;
+            } else {
+                this.postReferenceError = '';
+            }
+
+            this.textInputError = this.pageGroupInputError = this.postReferenceError = '';
+
+            this.formData = new FormData();
+
+            this.formData.append('text', this.text);
+            this.formData.append('url', this.postUrl);
+            this.formData.append('start_date', this.startDate);
+            this.formData.append('page_groups', JSON.stringify(this.pageGroupSelected));
+
+            this.formData.append('reference', this.postReference);
+            var uploadedMedia = [];
+
+            // It is not accepting multiple uploads for now 
+            // if (this.media.length > 0) { 
+            //     this.media.forEach(e => {
+            //         uploadedMedia.push(e)
+            //     })
+            // }
+            this.formData.append('media', this.media);
+            axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+            axios.post('/nova-vendor/' + this.card.component + '/submit-page-post', this.formData).then(function (response) {
+                _this.displayForm = false;
+                _this.displaySubmitSuccess = true;
+            }).catch(function (error) {
+                _this.errorResponse = error.response.data;
+            }).finally(function () {
+                _this.processing = false;
+            });
+        },
+
+
+        deleteUploadedFile: function deleteUploadedFile(fileRecord) {
+            // Using the default uploader. You may use another uploader instead.
+            this.$refs.media.deleteUpload(this.uploadUrl, this.uploadHeaders, fileRecord);
+        },
+        filesSelected: function filesSelected(fileRecordsNewlySelected) {
+            var validFileRecords = fileRecordsNewlySelected.filter(function (fileRecord) {
+                return !fileRecord.error;
+            });
+            this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
+        },
+        onBeforeDelete: function onBeforeDelete(fileRecord) {
+            var i = this.fileRecordsForUpload.indexOf(fileRecord);
+            if (i !== -1) {
+                // queued file, not yet uploaded. Just remove from the arrays
+                this.fileRecordsForUpload.splice(i, 1);
+                var k = this.fileRecords.indexOf(fileRecord);
+                if (k !== -1) this.fileRecords.splice(k, 1);
+            } else {
+                if (confirm('Are you sure you want to delete?')) {
+                    this.$refs.media.deleteFileRecord(fileRecord); // will trigger 'delete' event
+                }
+            }
+        },
+        fileDeleted: function fileDeleted(fileRecord) {
+            var i = this.fileRecordsForUpload.indexOf(fileRecord);
+            if (i !== -1) {
+                this.fileRecordsForUpload.splice(i, 1);
+            } else {
+                this.deleteUploadedFile(fileRecord);
+            }
+        },
+        processAnother: function processAnother() {
+            this.displayForm = true;
+            this.displaySubmitSuccess = false;
         }
     },
     mounted: function mounted() {
-        var _this = this;
+        var _this2 = this;
 
         axios.get('/nova-vendor/' + this.card.component + '/load-page-groups').then(function (response) {
-            _this.pageGroups = response.data.data;
+            _this2.pageGroups = response.data.data;
         }).catch(function (error) {
-            _this.errorResponse = error.response.data;
+            _this2.errorResponse = error.response.data;
         }).finally(function () {
-            _this.loading = false;
+            _this2.loading = false;
         });
     }
 });
@@ -1027,10 +1128,16 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
-                      _c("p", {
-                        staticClass:
-                          "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
-                      })
+                      _vm.textInputError != ""
+                        ? _c(
+                            "p",
+                            {
+                              staticClass:
+                                "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
+                            },
+                            [_vm._v(_vm._s(_vm.textInputError))]
+                          )
+                        : _vm._e()
                     ])
                   ]),
                   _vm._v(" "),
@@ -1044,16 +1151,33 @@ var render = function() {
                         _c("VueFileAgent", {
                           ref: "media",
                           attrs: {
-                            deletable: false,
+                            deletable: true,
                             accept:
                               "image/jpg, image/jpeg, image/png, video/mp4",
                             maxSize: "5MB",
+                            maxFiles: 1,
                             helpText: "Click or drop to upload a file"
                           },
                           on: {
                             change: function($event) {
                               return _vm.uploadFile($event, "media")
+                            },
+                            select: function($event) {
+                              return _vm.filesSelected($event)
+                            },
+                            beforedelete: function($event) {
+                              return _vm.onBeforeDelete($event)
+                            },
+                            delete: function($event) {
+                              return _vm.fileDeleted($event)
                             }
+                          },
+                          model: {
+                            value: _vm.fileRecords,
+                            callback: function($$v) {
+                              _vm.fileRecords = $$v
+                            },
+                            expression: "fileRecords"
                           }
                         }),
                         _vm._v(" "),
@@ -1061,7 +1185,18 @@ var render = function() {
                           _vm._v(
                             "\n                        Images (png, gif, jpeg) or Videos (mp4) only\n                        "
                           )
-                        ])
+                        ]),
+                        _vm._v(" "),
+                        _vm.mediaInputError != ""
+                          ? _c(
+                              "p",
+                              {
+                                staticClass:
+                                  "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
+                              },
+                              [_vm._v(_vm._s(_vm.mediaInputError))]
+                            )
+                          : _vm._e()
                       ],
                       1
                     )
@@ -1076,19 +1211,19 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.keywords,
-                            expression: "keywords"
+                            value: _vm.postUrl,
+                            expression: "postUrl"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Enter text" },
-                        domProps: { value: _vm.keywords },
+                        attrs: { type: "text", placeholder: "Enter url" },
+                        domProps: { value: _vm.postUrl },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.keywords = $event.target.value
+                            _vm.postUrl = $event.target.value
                           }
                         }
                       })
@@ -1137,85 +1272,58 @@ var render = function() {
                         })
                       ],
                       1
-                    )
+                    ),
+                    _vm._v(" "),
+                    _vm.pageGroupInputError != ""
+                      ? _c(
+                          "p",
+                          {
+                            staticClass:
+                              "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
+                          },
+                          [_vm._v(_vm._s(_vm.pageGroupInputError))]
+                        )
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-2" },
-                    [
-                      _c("validation-provider", {
-                        attrs: { rules: "required", name: "post text" },
-                        scopedSlots: _vm._u(
-                          [
-                            {
-                              key: "default",
-                              fn: function(ref) {
-                                var errors = ref.errors
-                                return [
-                                  _c(
-                                    "label",
-                                    {
-                                      staticClass: "block text-gray-700",
-                                      attrs: { for: "about" }
-                                    },
-                                    [
-                                      _c("i", { staticClass: "fa fa-edit" }),
-                                      _vm._v(" POST REFERENCE/TAG "),
-                                      _c("span", [_vm._v("*")])
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "mt-1 text-left" }, [
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.postReference,
-                                          expression: "postReference"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        type: "text",
-                                        placeholder: "Enter text"
-                                      },
-                                      domProps: { value: _vm.postReference },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.postReference =
-                                            $event.target.value
-                                        }
-                                      }
-                                    })
-                                  ]),
-                                  _vm._v(" "),
-                                  errors.length > 0
-                                    ? _c(
-                                        "p",
-                                        {
-                                          staticClass:
-                                            "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
-                                        },
-                                        [_vm._v(" " + _vm._s(errors[0]))]
-                                      )
-                                    : _vm._e()
-                                ]
-                              }
+                  _c("div", { staticClass: "mt-2" }, [
+                    _vm._m(5),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-1 text-left" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.postReference,
+                            expression: "postReference"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", placeholder: "Enter text" },
+                        domProps: { value: _vm.postReference },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          ],
-                          null,
-                          false,
-                          3663626122
-                        )
+                            _vm.postReference = $event.target.value
+                          }
+                        }
                       })
-                    ],
-                    1
-                  )
+                    ]),
+                    _vm._v(" "),
+                    _vm.postReferenceInputError != ""
+                      ? _c(
+                          "p",
+                          {
+                            staticClass:
+                              "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
+                          },
+                          [_vm._v(_vm._s(_vm.postReferenceInputError))]
+                        )
+                      : _vm._e()
+                  ])
                 ]
               ),
               _vm._v(" "),
@@ -1401,6 +1509,20 @@ var staticRenderFns = [
       [
         _c("i", { staticClass: "fa fa-object-group" }),
         _vm._v(" PAGE GROUPS\n                    ")
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "block text-gray-700", attrs: { for: "about" } },
+      [
+        _c("i", { staticClass: "fa fa-edit" }),
+        _vm._v(" POST REFERENCE/TAG "),
+        _c("span", [_vm._v("*")])
       ]
     )
   }

@@ -29,10 +29,13 @@ class LoadFbPageRunningAdsCount extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     { 
-        Log::info('testing Logzio', []);
-        $facebookPage = new FacebookPage; 
-        foreach ($models as $model) {
-            $facebookPage->curateRunningAds($model->id, $model->page_id);
+        try {
+            $facebookPage = new FacebookPage; 
+            foreach ($models as $model) {
+                $facebookPage->curateRunningAds($model->id, $model->page_id);
+            }
+        } catch (\Throwable $th) {
+            app('sentry')->captureException($th);
         }
     }
 

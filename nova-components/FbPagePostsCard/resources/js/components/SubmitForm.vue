@@ -25,7 +25,7 @@
                                     focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
                                     placeholder="Enter text" v-model="text"
                                 ></textarea>
-                                <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"></p>
+                                <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="textInputError != ''">{{ textInputError }}</p>
                         </div>
                     </div>
 
@@ -35,14 +35,20 @@
                         </label>
                         <div class="mt-1 text-left">
                             <VueFileAgent @change="uploadFile($event, 'media')"  
-                                :deletable="false"
+                                :deletable="true"
                                 :accept="'image/jpg, image/jpeg, image/png, video/mp4'" 
                                 :maxSize="'5MB'"
+                                :maxFiles="1"
+                                @select="filesSelected($event)"
+                                @beforedelete="onBeforeDelete($event)"
+                                @delete="fileDeleted($event)"
+                                v-model="fileRecords"
                                 :helpText="'Click or drop to upload a file'"  ref="media"
                             ></VueFileAgent>
                             <p class="mt-4 text-sm text-gray-500">
                             Images (png, gif, jpeg) or Videos (mp4) only
                             </p>
+                            <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="mediaInputError != ''">{{ mediaInputError }}</p>
                         </div>
                     </div>
 
@@ -51,8 +57,7 @@
                             <i class="fa fa-link"></i> URL TO ARTICLE
                         </label>
                         <div class="mt-1 text-left">
-                            <input type="text" class="form-control" 
-                                placeholder="Enter text" v-model="keywords"
+                            <input type="text" class="form-control"  placeholder="Enter url" v-model="postUrl"
                             />
                         </div> 
                     </div>
@@ -76,18 +81,17 @@
                             <v-select :options="pageGroups" class="rd__column-selector" v-model="pageGroupSelected" 
                                 :multiple="true"></v-select>
                         </div> 
+                        <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="pageGroupInputError != ''">{{ pageGroupInputError }}</p>
                     </div>
 
                     <div class="mt-2">
-                        <validation-provider rules="required" v-slot="{ errors }" name="post text">
-                            <label for="about" class="block text-gray-700">
-                                <i class="fa fa-edit"></i> POST REFERENCE/TAG <span>*</span>
-                            </label>
-                            <div class="mt-1 text-left">
-                                <input type="text" class="form-control" placeholder="Enter text" v-model="postReference" />
-                            </div>
-                            <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="errors.length > 0"> {{ errors[0] }}</p>
-                        </validation-provider>
+                        <label for="about" class="block text-gray-700">
+                            <i class="fa fa-edit"></i> POST REFERENCE/TAG <span>*</span>
+                        </label>
+                        <div class="mt-1 text-left">
+                            <input type="text" class="form-control" placeholder="Enter text" v-model="postReference" />
+                        </div>
+                        <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="postReferenceInputError != ''">{{ postReferenceInputError }}</p>
                     </div>
 
                 </div>
@@ -127,15 +131,27 @@ export default {
     data () {
         return {
             processing: false,
-            text: '',
-            startDate:'',
-            postReference: '',
-            pageGroupSelected: '',
-            pageGroups: ['Mona', 'Ilemona'],
+            text: 'A sample text',
+            media: [],
+            postUrl: 'http://revenedriver.com/testing',
+            startDate:'2021-05-12 12:20',
+            postReference: 'Post 1',
+            pageGroupSelected: ['Group 1', 'Group 2'],
+            pageGroups: [],
             errorResponse: {},
             displayForm: true,
             displaySubmitSuccess: false,
-            markets: []
+
+            textInputError: '',
+            mediaInputError: '',
+            pageGroupInputError: '',
+            postReferenceInputError: '',
+            
+            fileRecords: [],
+            uploadUrl: 'https://www.mocky.io/v2/5d4fb20b3000005c111099e3',
+            uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
+            fileRecordsForUpload: [], // maintain an upload queue,
+            formData: {}
         }
     },
     props: {
@@ -148,16 +164,97 @@ export default {
     },
     methods: {
         uploadFile (e, t) {
-            
+            this.media = e.target.files[0]
         },
         startDateChanged(data) {
            this.startDate = data
         },
-        newOption (newVal) {
-            this.pageGroupSelected = newVal
-        },
         submit () {
-            // this.processing = true
+            this.processing = true
+            if (this.text == '') {
+                this.textInputError = 'Please enter a text for the post'
+                return false
+            } else {
+                this.textInputError = ''
+            }
+            if (this.pageGroupSelected.length < 1) {
+                this.pageGroupInputError = 'Please select a page group'
+                return false
+            } else {
+                this.pageGroupInputError = ''
+            }
+            if (this.postReference == '') {
+                this.postReferenceError = 'Please enter a tag or reference for this post'
+                return false
+            } else {
+                this.postReferenceError = ''
+            }
+          
+           
+            this.textInputError = this.pageGroupInputError = this.postReferenceError = ''
+
+            this.formData = new FormData() 
+
+            this.formData.append('text', this.text)
+            this.formData.append('url', this.postUrl)
+            this.formData.append('start_date', this.startDate)
+            this.formData.append('page_groups', JSON.stringify(this.pageGroupSelected))
+           
+            this.formData.append('reference', this.postReference)
+            let uploadedMedia = []
+
+            // It is not accepting multiple uploads for now 
+            // if (this.media.length > 0) { 
+            //     this.media.forEach(e => {
+            //         uploadedMedia.push(e)
+            //     })
+            // }
+            this.formData.append('media', this.media)
+            axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+            axios.post('/nova-vendor/' + this.card.component + '/submit-page-post', this.formData)  
+            .then(response => {  
+                this.displayForm = false
+                this.displaySubmitSuccess = true
+            }).catch(error => {   
+                this.errorResponse = error.response.data
+            }).finally(() => {
+                this.processing = false
+            })
+        },
+
+
+        deleteUploadedFile: function (fileRecord) {
+            // Using the default uploader. You may use another uploader instead.
+            this.$refs.media.deleteUpload(this.uploadUrl, this.uploadHeaders, fileRecord);
+        },
+        filesSelected: function (fileRecordsNewlySelected) {
+            var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
+            this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
+        },
+        onBeforeDelete: function (fileRecord) {
+            var i = this.fileRecordsForUpload.indexOf(fileRecord);
+            if (i !== -1) {
+                // queued file, not yet uploaded. Just remove from the arrays
+                this.fileRecordsForUpload.splice(i, 1);
+                var k = this.fileRecords.indexOf(fileRecord);
+                if (k !== -1) this.fileRecords.splice(k, 1);
+                } else {
+                if (confirm('Are you sure you want to delete?')) {
+                    this.$refs.media.deleteFileRecord(fileRecord); // will trigger 'delete' event
+                }
+            }
+        },
+        fileDeleted: function (fileRecord) {
+            var i = this.fileRecordsForUpload.indexOf(fileRecord);
+            if (i !== -1) {
+            this.fileRecordsForUpload.splice(i, 1);
+            } else {
+            this.deleteUploadedFile(fileRecord);
+            }
+        },
+        processAnother () {
+            this.displayForm = true
+            this.displaySubmitSuccess = false
         }
     },
     mounted () {
