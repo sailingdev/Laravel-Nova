@@ -1,8 +1,9 @@
 <template>
-    <card class="flex flex-col items-center justify-center">
+    <card class="block justify-center items-center fb-page-posts-dashboard">
         <div class="px-3 py-3">
-            <SubmitForm :card="card" />
-            <ScheduledDrafts :card="card" />
+            <SubmitForm :card="card" @formSubmitted="formSubmitted" />
+            <ScheduledDrafts :card="card" ref="scheduledDrafts" />
+            <PostLibrary :card="card" ref="postLibrary" />
         </div>
     </card>
 </template>
@@ -10,16 +11,33 @@
 <script>
 import SubmitForm from './SubmitForm'
 import ScheduledDrafts from './ScheduledDrafts'
+import PostLibrary from './PostLibrary'
 export default {
     props: [
         'card'
     ],
     components: {
         SubmitForm,
-        ScheduledDrafts
+        ScheduledDrafts,
+        PostLibrary
     },
-    mounted() {
-        //
-    },
+     methods: {
+        formSubmitted () {
+            this.$refs.scheduledDrafts.loadScheduledDrafts()
+            this.$refs.postLibrary.loadPostLibrary()
+        } 
+    }
 }
 </script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+    .fb-page-posts-dashboard {
+        font-family: DM Sans;
+    }
+    .t-display-header button {
+        bottom: 25px !important;
+    }
+    table tr td, table tr th {
+        font-size: 14px;
+    }
+</style>

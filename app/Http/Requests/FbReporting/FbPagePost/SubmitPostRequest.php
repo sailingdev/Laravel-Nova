@@ -28,7 +28,7 @@ class SubmitPostRequest extends FormRequest
             'url' => ['nullable', 'string'],
             'start_date' => ['nullable'],
             'page_groups' => ['nullable', 'array'],
-            'reference' => ['required', 'string'],
+            'reference' => ['required', 'string', 'unique:fb_page_posts'],
             'media' => ['nullable', 'file']
         ];
     }

@@ -146,3 +146,30 @@
   display: block;
   margin: auto;
 }
+.w-10p {
+  width: 10%;
+}
+.w-20p {
+  width: 20%;
+}
+.w-30p {
+  width: 30%;
+}
+.w-40p {
+  width: 40%;
+}
+.w-50p {
+  width: 50%;
+}
+.w-60p {
+  width: 60%;
+}
+.w-70p {
+  width: 70%;
+}
+.w-80p {
+  width: 80%;
+}
+.w-90p {
+  width: 90%;
+}

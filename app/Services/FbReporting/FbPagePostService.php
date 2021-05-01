@@ -23,4 +23,9 @@ class FbPagePostService
         }
         return [false];
     }
+
+    public function loadLibrary()
+    {
+        return FbPagePost::all();
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FbReporting;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FbReporting\FbPagePost\SubmitPostRequest;
+use App\Http\Resources\FbReporting\FbPagePostResource;
 use App\Labs\FileManager;
 use App\Services\FbReporting\FbPagePostSchedulerService;
 use App\Services\FbReporting\FbPagePostService;
@@ -47,5 +48,11 @@ class FbPagePostsController extends Controller
             ]);
         }
         return $this->successResponse('New post has been successfully submitted'); 
+    }
+
+    public function loadLibrary(Request $request,  FbPagePostService $fbPagePostService)
+    {
+        return $this->successResponse('Data returned successfully', 
+            FbPagePostResource::collection($fbPagePostService->loadLibrary()));
     }
 }

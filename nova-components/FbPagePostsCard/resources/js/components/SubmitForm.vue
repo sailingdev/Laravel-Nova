@@ -1,5 +1,5 @@
 <template>
-    <div class="rd__submit-list-form-wrapper">
+    <div class="rd__submit-list-form-wrapper w-80p m-auto">
         <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Draft Post (Work In Progress)</h1>
         
         <div class="container-box" v-if="displayForm">
@@ -215,6 +215,7 @@ export default {
             .then(response => {  
                 this.displayForm = false
                 this.displaySubmitSuccess = true
+                this.$emit('formSubmitted')
             }).catch(error => {   
                 this.errorResponse = error.response.data
             }).finally(() => {
@@ -274,10 +275,6 @@ export default {
 }
 </script>
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
-    .rd__submit-list-form-wrapper {
-        font-family: DM Sans;
-    }
     textarea {
         resize: none;
     }
