@@ -10,4 +10,15 @@ class FbPage extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getIsPublishedAttribute($value)
+    {
+        return $value == 1 ? 'true' : 'false';
+    } 
 }

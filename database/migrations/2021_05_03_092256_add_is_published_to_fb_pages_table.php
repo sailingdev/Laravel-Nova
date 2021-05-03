@@ -14,7 +14,7 @@ class AddIsPublishedToFbPagesTable extends Migration
     public function up()
     {
         Schema::table('fb_pages', function (Blueprint $table) {
-            $table->string('is_published')->nullable()->after('environment');
+            $table->boolean('is_published')->nullable()->after('environment');
         });
     }
 
