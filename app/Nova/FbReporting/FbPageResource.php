@@ -90,7 +90,7 @@ class FbPageResource extends Resource
             Select::make('Is Published')->options([
                 '0' => 'true',
                 '1' => 'false'
-            ])
+            ])->sortable()
             ->rules('required')
         ];
     }
