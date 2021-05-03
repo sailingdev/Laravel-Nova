@@ -14,13 +14,14 @@ class FbPageService
      * 
      * @return bool|null
      */
-    public function create(string $pageName, string $pageId, $instagramId, $environment): ?bool
-    { 
+    public function create(string $pageName, string $pageId, $isPublished, $instagramId, $environment): ?bool
+    {  
         FbPage::create([
             'page_name' => $pageName,
             'page_id' => $pageId,
             'instagram_id' => $instagramId,
-            'environment' => $environment
+            'environment' => $environment,
+            'is_published' => $isPublished
         ]);
         return true;
     }

@@ -57,7 +57,7 @@ class FbPageResource extends Resource
      * @var array
      */
     public static $search = [
-        'page_id', 'instagram_id', 'page_name', 'environment'
+        'page_id', 'instagram_id', 'page_name', 'environment', 'is_published'
     ];
 
     /**
@@ -87,6 +87,11 @@ class FbPageResource extends Resource
                 'tt' => 'TechAds Media'
             ])->displayUsingLabels()
             ->rules('required'),
+            Select::make('Is Published')->options([
+                'true' => 'True',
+                'false' => 'False'
+            ])->displayUsingLabels()
+            ->rules('required')
         ];
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FbReporting\FbPagePost\SubmitPostRequest;
 use App\Http\Resources\FbReporting\FbPagePostResource;
 use App\Labs\FileManager;
+use App\Revenuedriver\FacebookPage;
 use App\Services\FbReporting\FbPagePostSchedulerService;
 use App\Services\FbReporting\FbPagePostService;
 use Illuminate\Http\Request;
@@ -52,6 +53,9 @@ class FbPagePostsController extends Controller
 
     public function loadLibrary(Request $request,  FbPagePostService $fbPagePostService)
     {
+        $fb = new FacebookPage;
+        $fb->loadBusinessAccountPages();
+        
         return $this->successResponse('Data returned successfully', 
             FbPagePostResource::collection($fbPagePostService->loadLibrary()));
     }
