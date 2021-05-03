@@ -27,29 +27,39 @@
                             {{ post['text'].length > 60  ? post['text'].substring(0, 60) + '...' : post.text }}
                         </td>
                         <td class="p-3 px-5 flex justify-end">
-                            <button type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
+                            <button @click="viewPost(post)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
                             <button type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
                             <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
         </div> 
-        
+        <modal-overlay :modalStatus="showModal" @modalClosed="modalClosed">
+            <div class="text-center pb-3">
+                <p class="text-2xl font-bold"> {{ postReference }} </p>
+            </div>
+        </modal-overlay>
     </div>
 </template>
 <script>
+import ModalOverlay from '../../../../../nova/resources/js/components/RevenueDriver/ModalOverlay'
 export default {
     name: 'PostLibrary',
     data () {
         return {
             postLibrary: [],
-            loading: false
+            loading: false,
+            showModal: false,
+            postReference: '',
         }
     },
     props: {
         card: {
             required: true
         }
+    },
+    components: {
+        ModalOverlay
     },
     mounted () {
         this.loadPostLibrary()
@@ -65,6 +75,14 @@ export default {
             }).finally(() => {
                 this.loading = false
             })
+        },
+        viewPost (post) {
+            this.postReference = post.reference
+            this.showModal = true
+        },
+        modalClosed () {
+            this.showModal = false
+            // alert('modal closed as emitted')
         }
     }
 }

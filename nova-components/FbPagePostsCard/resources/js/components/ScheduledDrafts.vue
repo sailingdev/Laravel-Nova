@@ -1,8 +1,8 @@
 <template>
     <div class="mt-32 w-90p m-auto">
         <div class="t-display-header relative">
-            <h1 class="text-center text-3xl text-80 font-dark px-4 py-5">Scheduled  Drafts</h1>
-            <button @click="loadScheduledDrafts"  class="absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Reload</button>
+            <h1 class="text-center text-3xl text-80 font-dark px-4 py-5">Scheduled Drafts</h1>
+            <button @click="loadScheduledDrafts" class="absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Reload</button>
         </div>
         <div v-if="loading" class="px-3 py-4 rounded-lg flex items-center justify-center relative">
             <loader class="text-60" />
@@ -26,28 +26,41 @@
                         <td class="p-3 px-5">{{ scheduledDraft.date }}</td>
                         <td class="p-3 px-5">{{ scheduledDraft.time }}</td>
                         <td class="p-3 px-5 flex justify-end">
-                            <button type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
+                            <button @click="viewPost(scheduledDraft)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
                             <button type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
                             <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <modal-overlay :modalStatus="showModal" @modalClosed="modalClosed">   
+            <div class="text-center pb-3">
+                <p class="text-2xl font-bold"> {{ postReference }} </p>
+            </div>
+            This here is the overlay content we talked about 
+        </modal-overlay>
     </div>
 </template>
 <script>
+import ModalOverlay from '../../../../../nova/resources/js/components/RevenueDriver/ModalOverlay'
 export default {
     name: 'ScheduledDrafts',
     data () {
         return {
             scheduledDrafts: [],
-            loading: false
+            loading: false,
+            showModal: false,
+            postReference: '',
+            
         }
     },
     props: {
         card: {
             required: true
         }
+    },
+    components: {
+        ModalOverlay
     },
     mounted () {
         this.loadScheduledDrafts()
@@ -63,6 +76,15 @@ export default {
             }).finally(() => {
                 this.loading = false
             })
+        },
+        viewPost (post) {
+            console.log(post)
+            this.postReference = post.reference
+            this.showModal = true
+            // alert('View post After click' + this.showModal)
+        },
+        modalClosed () {
+            this.showModal = false
         }
     }
 }

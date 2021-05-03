@@ -186,35 +186,33 @@ class FacebookPage extends Facebook
                         $fbPageService = new FbPageService;
                         
                         foreach ($decoded->data as $page) {
-                                                          
-                            $pageRow = $fbPageService->getByPageId($page->id);
-                            
-                            if ($pageRow == null || 
-                                ( $pageRow != null && $pageRow->instagram_id == null)  ) {
-                                    // load the instagram ID for the page
-                                   
-                                    if ($page->id != '112005480631100') {
-                                       
+
+                            if ($page->id != '112005480631100') {
+ 
+                                Log::info('Monitor', [$page->id, $page->is_published]);                             
+                                $pageRow = $fbPageService->getByPageId($page->id);
+                                 
+                                if ($pageRow == null) {
+                                    $pageIgAccountId = $this->loadInstagramAccounts($page->id);
+                                    if ($pageIgAccountId[0] == true) { 
+                                        $fbPageService->create($page->name, $page->id, $page->is_published, $pageIgAccountId[1], $businessManager['name']);
+                                    }
+                                } else  {
+                                    if ($pageRow->instagram_id == null) {
                                         $pageIgAccountId = $this->loadInstagramAccounts($page->id);
-                                       
                                         if ($pageIgAccountId[0] == true) { 
-                                            if ($pageRow == null) {
-                                                $fbPageService->create($page->name, $page->id, $page->is_published, $pageIgAccountId[1], $businessManager['name']);
-                                            }
-                                            else {
-                                                $fbPageService->updateData([
-                                                    'instagram_id' => $pageIgAccountId[1]
-                                                ], $pageRow->id);
-                                            }
-                                           
+                                            $fbPageService->updateData([
+                                                'instagram_id' => $pageIgAccountId[1]
+                                            ], $pageRow->id);
                                         }
                                     }
+                                    $fbPageService->updateData([
+                                        'is_published' => $page->is_published
+                                    ], $pageRow->id);
+                                } 
+                            
                             }
-                            else {
-                                $fbPageService->updateData([
-                                    'is_published' => $page->is_published
-                                ], $pageRow->id);
-                            }
+                             
                         }
  
                     }
