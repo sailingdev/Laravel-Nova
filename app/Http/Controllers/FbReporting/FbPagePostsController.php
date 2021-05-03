@@ -53,9 +53,6 @@ class FbPagePostsController extends Controller
 
     public function loadLibrary(Request $request,  FbPagePostService $fbPagePostService)
     {
-        $fb = new FacebookPage;
-        $fb->loadBusinessAccountPages();
-        
         return $this->successResponse('Data returned successfully', 
             FbPagePostResource::collection($fbPagePostService->loadLibrary()));
     }
