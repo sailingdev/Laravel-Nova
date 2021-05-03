@@ -186,7 +186,9 @@ class FacebookPage extends Facebook
                         $fbPageService = new FbPageService;
                         
                         foreach ($decoded->data as $page) {
-                            
+                            if ($page->id === '101267081481416') {
+                                Log::info('Monitor', [$page]);
+                            }
                             $pageRow = $fbPageService->getByPageId($page->id);
                             
                             if ($pageRow == null || 

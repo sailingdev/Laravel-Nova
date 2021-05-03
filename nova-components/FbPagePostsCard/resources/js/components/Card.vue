@@ -4,7 +4,8 @@
             <SubmitForm :card="card" @formSubmitted="formSubmitted" />
             <ScheduledDrafts :card="card" ref="scheduledDrafts" />
             <PostLibrary :card="card" ref="postLibrary" />
-            
+            <button class="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-2 px-4 rounded-full">Open Modal</button>
+
             <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
                 <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
                 
@@ -63,11 +64,48 @@ export default {
         ScheduledDrafts,
         PostLibrary
     },
-     methods: {
+    methods: {
         formSubmitted () {
             this.$refs.scheduledDrafts.loadScheduledDrafts()
             this.$refs.postLibrary.loadPostLibrary()
-        } 
+        },
+        toggleModal () {
+            const body = document.querySelector('body')
+            const modal = document.querySelector('.modal')
+            modal.classList.toggle('opacity-0')
+            modal.classList.toggle('pointer-events-none')
+            body.classList.toggle('modal-active')
+        }
+    },
+    mounted () {
+        var openmodal = document.querySelectorAll('.modal-open')
+        for (var i = 0; i < openmodal.length; i++) {
+        openmodal[i].addEventListener('click', function(event){
+            event.preventDefault()
+            toggleModal()
+        })
+        }
+        
+        const overlay = document.querySelector('.modal-overlay')
+        overlay.addEventListener('click', toggleModal)
+        
+        var closemodal = document.querySelectorAll('.modal-close')
+        for (var i = 0; i < closemodal.length; i++) {
+        closemodal[i].addEventListener('click', toggleModal)
+        }
+        
+        document.onkeydown = function(evt) {
+        evt = evt || window.event
+        var isEscape = false
+        if ("key" in evt) {
+            isEscape = (evt.key === "Escape" || evt.key === "Esc")
+        } else {
+            isEscape = (evt.keyCode === 27)
+        }
+        if (isEscape && document.body.classList.contains('modal-active')) {
+            toggleModal()
+        }
+        };
     }
 }
 </script>
