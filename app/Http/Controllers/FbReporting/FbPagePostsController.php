@@ -116,8 +116,7 @@ class FbPagePostsController extends Controller
      * @return JsonResponse
      */
     public function delete(DeletePostRequest $request, FbPagePostService $fbPagePostService)
-    {   
-        return $this->successResponse('Post has been successfully deleted');
+    {    
         if (!$fbPagePostService->deleteRow($request->id)) {
             return $this->errorResponse('An error occured. Please try again'); 
         }
