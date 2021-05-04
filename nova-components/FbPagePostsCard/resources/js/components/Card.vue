@@ -4,6 +4,7 @@
             <!-- <SubmitForm :card="card" @formSubmitted="formSubmitted" /> -->
             <ScheduledDrafts :card="card" ref="scheduledDrafts" />
             <PostLibrary :card="card" ref="postLibrary" /> 
+            <vue-confirm-dialog></vue-confirm-dialog>
         </div>
     </card>
 </template>

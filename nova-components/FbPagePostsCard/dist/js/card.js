@@ -654,6 +654,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -1726,7 +1727,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -1975,9 +1975,7 @@ var render = function() {
               })
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("vue-confirm-dialog")
+      )
     ],
     1
   )
@@ -2155,6 +2153,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2199,7 +2198,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         modalClosed: function modalClosed() {
             this.showModal = false;
-            // alert('modal closed as emitted')
+        },
+        deletePost: function deletePost(post, key) {
+            var _this2 = this;
+
+            this.$confirm({
+                message: 'Are you sure you wish to delete this post?',
+                button: {
+                    no: 'No',
+                    yes: 'Yes, I\'m sure'
+                },
+                callback: function callback(confirm) {
+                    if (confirm) {
+                        console.log(confirm);
+                        _this2.postLibrary.splice(key, 1);
+                        axios.delete('/nova-vendor/' + _this2.card.component + '/delete-post', {
+                            data: {
+                                id: post.id
+                            }
+                        });
+                        return true;
+                    }
+                }
+            });
         }
     }
 });
@@ -2265,10 +2286,6 @@ module.exports = Component.exports
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-//
-//
-//
-//
 //
 //
 //
@@ -2441,7 +2458,12 @@ var render = function() {
                             {
                               staticClass:
                                 "text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-                              attrs: { type: "button" }
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deletePost(post, key)
+                                }
+                              }
                             },
                             [_vm._v("Delete")]
                           )
@@ -2525,7 +2547,9 @@ var render = function() {
             attrs: { card: _vm.card }
           }),
           _vm._v(" "),
-          _c("PostLibrary", { ref: "postLibrary", attrs: { card: _vm.card } })
+          _c("PostLibrary", { ref: "postLibrary", attrs: { card: _vm.card } }),
+          _vm._v(" "),
+          _c("vue-confirm-dialog")
         ],
         1
       )

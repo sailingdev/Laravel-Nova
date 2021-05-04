@@ -37,7 +37,6 @@
             <ViewPost v-if="!editMode" :post="post" :setUpdateAlert="setUpdateAlert" @switchToEditMode="switchToEditMode"/>
             <EditSchedule v-else :post="post" :card="card" @formUpdated="formUpdated"/>
         </modal-overlay>
-        <vue-confirm-dialog></vue-confirm-dialog>
     </div>
 </template>
 <script>

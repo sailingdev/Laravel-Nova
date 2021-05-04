@@ -29,7 +29,8 @@
                         <td class="p-3 px-5 flex justify-end">
                             <button @click="viewPost(post)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
                             <button type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
-                            <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button></td>
+                            <button @click="deletePost(post, key)" type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -78,11 +79,33 @@ export default {
         },
         viewPost (post) {
             this.postReference = post.reference
-        this.showModal = true
+            this.showModal = true
         },
         modalClosed () {
             this.showModal = false
-            // alert('modal closed as emitted')
+        },
+        deletePost (post, key) {
+        
+            this.$confirm({
+                message: `Are you sure you wish to delete this post?`,
+                button: {
+                    no: 'No',
+                    yes: `Yes, I'm sure`
+                },
+                callback: confirm => {
+                    if (confirm) {
+                        console.log(confirm)
+                       this.postLibrary.splice(key, 1)
+                        axios.delete('/nova-vendor/' + this.card.component + '/delete-post', {
+                            data: {
+                                id: post.id
+                            }
+                        })
+                        return true
+                    }
+                }
+            })
+            
         }
     }
 }
