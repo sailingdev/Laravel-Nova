@@ -94,6 +94,7 @@ export default {
         },
         modalClosed () {
             this.showModal = false
+            this.editMode = false
         },
         switchToEditMode (post) {
             this.editMode = true

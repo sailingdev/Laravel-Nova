@@ -1785,6 +1785,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         modalClosed: function modalClosed() {
             this.showModal = false;
+            this.editMode = false;
         },
         switchToEditMode: function switchToEditMode(post) {
             this.editMode = true;
@@ -3351,7 +3352,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Object
         },
         setUpdateAlert: {
-            type: Array,
+            type: Boolean,
             default: false
         }
     },

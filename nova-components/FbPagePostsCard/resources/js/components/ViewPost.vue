@@ -59,7 +59,7 @@ export default {
             type: Object
         },
         setUpdateAlert: {
-            type: Array,
+            type: Boolean,
             default: false
         }
     },
