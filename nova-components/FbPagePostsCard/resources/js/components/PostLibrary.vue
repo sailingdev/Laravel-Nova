@@ -78,7 +78,7 @@ export default {
         },
         viewPost (post) {
             this.postReference = post.reference
-            this.showModal = true
+        this.showModal = true
         },
         modalClosed () {
             this.showModal = false
