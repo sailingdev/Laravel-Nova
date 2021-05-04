@@ -42,4 +42,17 @@ class FbPagePostSchedulerService
         }
         return [false];
     }
+
+    /**
+     * @param mixed $rowId
+     * 
+     * @return bool
+     */
+    public function deleteRow($rowId): bool
+    {
+       if(FbPagePostScheduler::where('id', $rowId)->delete()) {
+           return true;
+       }
+       return false;
+    }
 }

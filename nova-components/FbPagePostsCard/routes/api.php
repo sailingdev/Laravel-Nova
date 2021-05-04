@@ -22,3 +22,5 @@ Route::post('/submit-page-post', [FbPagePostsController::class, 'submit']);
 Route::get('/load-scheduled-drafts', [FbPagePostSchedulersController::class, 'getAllScheduled']);
 Route::get('/load-post-library', [FbPagePostsController::class, 'loadLibrary']);
 Route::post('/update-page-post', [FbPagePostsController::class, 'update']);
+Route::delete('/delete-scheduled-draft', [FbPagePostSchedulersController::class, 'delete']);
+Route::delete('/delete-post', [FbPagePostsController::class, 'delete']);

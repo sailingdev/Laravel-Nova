@@ -155,7 +155,6 @@ export default {
             this.media = e.target.files[0]
         },
         editStartDateChanged(data) {
-            console.log(data)
            this.editStartDate = data
         },
         update () {

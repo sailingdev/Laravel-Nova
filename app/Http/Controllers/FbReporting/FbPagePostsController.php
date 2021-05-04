@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FbReporting;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FbReporting\FbPagePost\DeletePostRequest;
 use App\Http\Requests\FbReporting\FbPagePost\SubmitPostRequest;
 use App\Http\Requests\FbReporting\FbPagePost\UpdatePostRequest;
 use App\Http\Resources\FbReporting\FbPagePostResource;
@@ -107,5 +108,19 @@ class FbPagePostsController extends Controller
         } 
         return $this->successResponse('Update was successful', $ret); 
     }
+
+    /**
+     * @param DeletePostSchedulerRequest $request
+     * @param FbPagePostSchedulerService $fbPagePostSchedulerService
+     * 
+     * @return JsonResponse
+     */
+    public function delete(DeletePostRequest $request, FbPagePostService $fbPagePostService)
+    {   
+        if (!$fbPagePostService->deleteRow($request->id)) {
+            return $this->errorResponse('An error occured. Please try again'); 
+        }
+        return $this->successResponse('Post has been successfully deleted');
+}
 
 }

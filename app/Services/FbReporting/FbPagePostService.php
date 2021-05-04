@@ -36,4 +36,17 @@ class FbPagePostService
         }
         return [false];
     }
+
+    /**
+     * @param mixed $rowId
+     * 
+     * @return bool
+     */
+    public function deleteRow($rowId): bool
+    {
+       if(FbPagePost::where('id', $rowId)->delete()) {
+           return true;
+       }
+       return false;
+    }
 }

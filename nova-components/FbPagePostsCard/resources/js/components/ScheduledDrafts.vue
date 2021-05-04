@@ -28,7 +28,7 @@
                         <td class="p-3 px-5 flex justify-end">
                             <button @click="viewPost(scheduledDraft)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
                             <button @click="editPost(scheduledDraft, key)" type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
-                            <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button></td>
+                            <button @click="deleteSchedule(scheduledDraft, key)"  type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -37,12 +37,14 @@
             <ViewPost v-if="!editMode" :post="post" :setUpdateAlert="setUpdateAlert" @switchToEditMode="switchToEditMode"/>
             <EditSchedule v-else :post="post" :card="card" @formUpdated="formUpdated"/>
         </modal-overlay>
+        <vue-confirm-dialog></vue-confirm-dialog>
     </div>
 </template>
 <script>
 import ModalOverlay from '../../../../../nova/resources/js/components/RevenueDriver/ModalOverlay'
 import ViewPost from './ViewPost'
 import EditSchedule from './EditSchedule'
+
 export default {
     name: 'ScheduledDrafts',
     data () {
@@ -105,6 +107,32 @@ export default {
             setTimeout(() => {
                 this.setUpdateAlert = false
             }, 4000);
+        },
+        deleteSchedule (schedule, key) {
+            this.$confirm({
+                message: `Are you sure you wish to delete this schedule?`,
+                button: {
+                    no: 'No',
+                    yes: `Yes, I'm sure`
+                },
+                callback: confirm => {
+                    if (confirm) {
+                       this.scheduledDrafts.splice(key, 1)
+                        axios.delete('/nova-vendor/' + this.card.component + '/delete-scheduled-draft', {
+                            data: {
+                                id: schedule.fb_page_post_scheduler_id
+                            }
+                        })  
+                        .then(response => {  
+                           
+                        }).catch(error => {   
+                            this.errorResponse = error.response.data
+                        }).finally(() => {
+                        })
+                    }
+                }
+            })
+            
         }
     }
 }

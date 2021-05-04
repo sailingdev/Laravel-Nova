@@ -16,6 +16,7 @@
     "dependencies": {
         "vee-validate": "^3.4.5",
         "vue": "^2.5.0",
+        "vue-confirm-dialog": "^1.0.2",
         "vue-file-agent": "^1.7.3",
         "vue-select": "^3.11.2"
     }

@@ -119,6 +119,10 @@ import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css'
 
 Vue.use(VueFileAgent)
 // Vue.component(VueFileAgent)
+import VueConfirmDialog from 'vue-confirm-dialog'
+ 
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 Vue.component('action-selector', ActionSelector)
 Vue.component('boolean-icon', BooleanIcon)
