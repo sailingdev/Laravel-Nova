@@ -28,4 +28,12 @@ class FbPagePostService
     {
         return FbPagePost::all();
     }
+
+    public function update(array $data, $rowId): array
+    { 
+        if (FbPagePost::where('id', $rowId)->update($data)) {
+            return [true, FbPagePost::where('id', $rowId)->first()];
+        }
+        return [false];
+    }
 }

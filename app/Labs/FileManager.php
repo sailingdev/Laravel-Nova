@@ -81,7 +81,7 @@ class FileManager
     public static function fetchUploadedFilePath($fileName=null, string $subPath, $disk='public'): ?string 
     {      
         return 
-        $fileName !== null && Storage::disk('s3')->exists($subPath . '/' . $fileName) ? 
+        $fileName !== null && Storage::disk($disk)->exists($subPath . '/' . $fileName) ? 
         Storage::disk($disk)->url($subPath . '/' . $fileName) : null;
     }
 

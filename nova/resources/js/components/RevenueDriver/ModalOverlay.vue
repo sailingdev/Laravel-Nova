@@ -1,6 +1,7 @@
 <template>
      <div v-if="showModal" class="modal fixed flex w-full h-full top-0 left-0 items-center justify-center">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+          <!-- h-full  -->
+        <div class="modal-overlay absolute w-full bg-gray-900 opacity-50"></div>
         <!-- opacity-1  -->
         <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         
@@ -56,21 +57,21 @@ export default {
     },
     methods: {
         closeModal () {
-            // this.showModal = false
             this.$emit('modalClosed')
         }
     },
-    mounted () {
-        // alert ('Here ' + this.modalStatus)
-    }
 }
 </script>
 <style scoped>
     .modal {
         z-index: 90900999;
+        overflow-y: scroll;
     }
     .modal-container {
         max-width: 80%;
-        border: 3px solid blue;
+        max-height: calc(100vh - 10px);
+    }
+    img {
+        max-height: 400px;
     }
 </style>

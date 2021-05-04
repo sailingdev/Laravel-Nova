@@ -14,4 +14,15 @@ class FbPagePost extends Model
         return $this->hasMany(FbPagePostScheduler::class);
     }
 
+    /**
+     * Get the user's profile photo.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getMediaAttribute($value)
+    {
+        return $value !== null ? \App\Labs\FileManager::fetchUploadedFilePath($value, 'fb_posts') : null;
+    }
+
 }

@@ -28,4 +28,18 @@ class FbPagePostSchedulerService
     {
         return FbPagePostScheduler::where('start_date', '>=', Carbon::now())->get();        
     }
+
+    /**
+     * @param array $data
+     * @param mixed $rowId
+     * 
+     * @return array
+     */
+    public function updateSchedule(array $data, $rowId): array
+    {
+        if (FbPagePostScheduler::where('id', $rowId)->update($data)) {
+            return [true, FbPagePostScheduler::where('id', $rowId)->first()];
+        }
+        return [false];
+    }
 }
