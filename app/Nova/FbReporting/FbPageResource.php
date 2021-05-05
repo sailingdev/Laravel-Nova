@@ -88,8 +88,8 @@ class FbPageResource extends Resource
             ])->displayUsingLabels()
             ->rules('required'),
             Select::make('Is Published')->options([
-                'true' => 'true',
-                'false' => 'false'
+                '1' => 'true',
+                '0' => 'false'
             ])->sortable()
             ->displayUsingLabels()
             ->rules('required')
