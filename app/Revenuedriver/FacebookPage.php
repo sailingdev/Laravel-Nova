@@ -189,7 +189,7 @@ class FacebookPage extends Facebook
 
                             if ($page->id != '112005480631100') {
  
-                                Log::info('Monitor', [$page->id, $page->is_published]);                             
+                                Log::info('Monitoring', [$page->name, $page->id, $page->is_published]);                             
                                 $pageRow = $fbPageService->getByPageId($page->id);
                                  
                                 if ($pageRow == null) {
