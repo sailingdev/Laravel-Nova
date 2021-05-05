@@ -3,6 +3,8 @@
 namespace App\Services\FbReporting;
 
 use App\Models\FbReporting\FbPagePostScheduler;
+use App\Revenuedriver\FacebookPage;
+use App\Services\FbPageService;
 use Carbon\Carbon;
 
 class FbPagePostSchedulerService
@@ -55,4 +57,30 @@ class FbPagePostSchedulerService
        }
        return false;
     }
+
+    public function runSchedule()
+    {
+        $schedules = FbPagePostScheduler::where('start_date', '<>', Carbon::now())
+        ->where('status', '!=', 'processed')
+        ->with(['fbPagePost'])
+        ->get();
+        $facebookPage = new FacebookPage;
+        $fbPageService = new FbPageService;
+        if (count($schedules) > 0) {
+            foreach ($schedules as $schedule) {
+                $targetGroups = $schedule->page_groups;
+                if (count($targetGroups) > 0) {
+                    foreach ($targetGroups as $targetGroup) {
+                        $groupLimit = $fbPageService->getGroupQueryLimits(preg_replace("#[^0-9]#i", "", $targetGroup));
+                        $facebookPages = $fbPageService->getByLimits($groupLimit[0], $groupLimit[1]);
+                       // for each of this page Id, post to page
+                        
+                    }
+                } 
+                dd($targetGroups);
+            }
+        }
+    }
+
+    
 }

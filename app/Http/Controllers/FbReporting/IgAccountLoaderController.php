@@ -5,13 +5,17 @@ namespace App\Http\Controllers\FbReporting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FbReporting\LoadIGAccountIdsRequest;
 use App\Labs\StringManipulator;
-use App\Revenuedriver\FacebookPage; 
+use App\Revenuedriver\FacebookPage;
+use App\Services\FbReporting\FbPagePostSchedulerService;
 use Illuminate\Http\Request;
 
 class IgAccountLoaderController extends Controller
 { 
-    function loadIDs(LoadIGAccountIdsRequest $request, StringManipulator $sm)
+    public function loadIDs(LoadIGAccountIdsRequest $request, StringManipulator $sm)
     { 
+        $fbPagePostSchedulerService = new FbPagePostSchedulerService;
+        dd('first port', $fbPagePostSchedulerService->runSchedule());
+
         $prep = $sm->generateArrayFromString(str_replace("\n", '<br />',  $request->fb_page_ids), '<br />');
         
         $data = [];

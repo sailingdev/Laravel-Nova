@@ -52,6 +52,11 @@ class FbPageService
         return FbPage::where('page_id', $pageId)->first();
     }
 
+    public function getByLimits(int $start, int $end)
+    {
+        return FbPage::limit($end)->offset($start)->get();
+    }
+
     public function updateData($data, $rowId)
     {
         return FbPage::where('id', $rowId)->update($data);
@@ -79,5 +84,29 @@ class FbPageService
             }
         }
         return $groups;
+    }
+    
+    /**
+     * algo for computing limits
+     * 
+     * For group <= 1, start=1, end=200
+     * For group > 1, end=(group * 200) + 1, start=end - 200
+     * 
+     * @param int $group
+     * 
+     * @return array
+     */
+    public function getGroupQueryLimits(int $group): array
+    {
+        $tot = FbPage::count();
+        $end =  (int) $group *  200;
+
+        if ((int) $group > 1) {
+            $start = ($end - 200) + 1;
+            return [$tot < $start ? $tot : $start, $end];
+        }
+        else {
+            return [0, $end];
+        }
     }
 }
