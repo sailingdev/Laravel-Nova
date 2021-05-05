@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily', 'logzio', 'sentry'],
+            'channels' => ['single', 'logzio', 'sentry'],
             'ignore_exceptions' => false,
         ],
 
