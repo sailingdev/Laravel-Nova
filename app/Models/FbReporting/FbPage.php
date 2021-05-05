@@ -17,5 +17,19 @@ class FbPage extends Model
      * @param  string  $value
      * @return string
      */
-    
+    // public function getIsPublishedAttribute($value)
+    // {
+    //     return (int) $value == 1 ? 'true' : 'false';
+    // } 
+
+    /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setIsPublishedAttribute($value)
+    {  
+        return $value == 1 ? 'true' : 'false';
+    } 
 }
