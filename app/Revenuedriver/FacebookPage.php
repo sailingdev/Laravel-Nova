@@ -189,13 +189,13 @@ class FacebookPage extends Facebook
 
                             if ($page->id != '112005480631100') {
  
-                                Log::info('Monitoring', [$page->name, $page->id, $page->is_published]);                             
+                                Log::info('Monitoring', [$page->name, $page->id, (string) $page->is_published]);                             
                                 $pageRow = $fbPageService->getByPageId($page->id);
                                  
                                 if ($pageRow == null) {
                                     $pageIgAccountId = $this->loadInstagramAccounts($page->id);
                                     if ($pageIgAccountId[0] == true) { 
-                                        $fbPageService->create($page->name, $page->id, $page->is_published, $pageIgAccountId[1], $businessManager['name']);
+                                        $fbPageService->create($page->name, $page->id, (string) $page->is_published, $pageIgAccountId[1], $businessManager['name']);
                                     }
                                 } else  {
                                     if ($pageRow->instagram_id == null) {
@@ -207,7 +207,7 @@ class FacebookPage extends Facebook
                                         }
                                     }
                                     $fbPageService->updateData([
-                                        'is_published' => $page->is_published
+                                        'is_published' => (string) $page->is_published
                                     ], $pageRow->id);
                                 } 
                             
