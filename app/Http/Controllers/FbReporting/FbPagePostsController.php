@@ -56,9 +56,6 @@ class FbPagePostsController extends Controller
 
     public function loadLibrary(Request $request,  FbPagePostService $fbPagePostService)
     {
-        // $p = new FacebookPage;
-        // $p->loadBusinessAccountPages();
-        
         return $this->successResponse('Data returned successfully', 
             FbPagePostResource::collection($fbPagePostService->loadLibrary()));
     }
@@ -105,10 +102,15 @@ class FbPagePostsController extends Controller
             if ($schedule[0] === false) {
                 return $this->errorResponse('An error occured while updating the schedule. Please try again');
             }
-            else if ($schedule[0] === true && $request->has('return_scheduler_resource') && $request->return_scheduler_resource == true) {
-                $ret = new FbPagePostSchedulerResource($schedule[1]);
+            else {
+                if ($request->has('return_scheduler_resource') && $request->return_scheduler_resource == true) {
+                    $ret = new FbPagePostSchedulerResource($schedule[1]);
+                }
             }
         } 
+        if ($ret == null) {
+            $ret = new FbPagePostResource($updatePost[1]);
+        }
         return $this->successResponse('Update was successful', $ret); 
     }
 

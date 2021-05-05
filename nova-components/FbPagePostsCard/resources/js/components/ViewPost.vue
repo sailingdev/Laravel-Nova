@@ -6,7 +6,7 @@
         <div class="mx-auto lg:mx-0 w-full pt-3 border-b-2 border-green-500 opacity-25"></div>
 
         <div v-if="showUpdateAlert" class="px-4 py-3 leading-normal text-green-100 bg-green-700 rounded-lg" role="alert">
-            Update was successful!
+            Thank you! Update was successful.
         </div>
 
         <div class="flex items-center h-auto flex-wrap" >
@@ -16,18 +16,24 @@
             
                 <div class="p-4 md:p-12 text-center lg:text-left">
                         
-                    <p class="pt-4 text-xs font-bold flex items-center justify-start">
-                        <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-object-group"></i> Page Groups</span>
-                        <span class="text-sm">{{ post.page_group }}</span> 
-                    </p>
-                    <p class="pt-4 text-xs font-bold flex items-center justify-start">
-                        <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-calendar"></i> Scheduled Date </span>
-                        <span class="text-sm">{{ post.date }}</span> 
-                    </p>
-                    <p class="pt-4 text-xs font-bold flex items-center justify-start">
-                        <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-clock-o"></i> Scheduled Time </span>
-                        <span class="text-sm">{{ post.time }}</span> 
-                    </p>
+                    <template v-if="viewType == 'schedule'">
+                        <p class="pt-4 text-xs font-bold flex items-center justify-start">
+                            <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-object-group"></i> Page Groups</span>
+                            <span class="text-sm">{{ post.page_group }}</span> 
+                        </p>
+                        <p class="pt-4 text-xs font-bold flex items-center justify-start">
+                            <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-calendar"></i> Scheduled Date </span>
+                            <span class="text-sm">{{ post.date }}</span> 
+                        </p>
+                        <p class="pt-4 text-xs font-bold flex items-center justify-start">
+                            <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-clock-o"></i> Scheduled Time </span>
+                            <span class="text-sm">{{ post.time }}</span> 
+                        </p>
+                    </template>
+                     <p class="pt-4 text-xs font-bold flex items-center justify-start">
+                            <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-link"></i> External URL</span>
+                            <span class="text-sm">{{ post.url }}</span> 
+                        </p>
                     <p class="pt-4 text-xs font-bold flex items-center justify-start">
                         <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-book-reader"></i> Post Text</span>
                     </p>
@@ -35,7 +41,7 @@
 
                     <div class="pt-12 pb-8">
                         <button @click="editDraft" class="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
-                            Edit Draft
+                            Edit <template v-if="viewType == 'schedule'">Schedule</template> <template v-else>Post</template> 
                         </button> 
                     </div> 
 
@@ -61,6 +67,10 @@ export default {
         setUpdateAlert: {
             type: Boolean,
             default: false
+        },
+        viewType: {
+            type: String,
+            default: 'post'
         }
     },
     computed: {

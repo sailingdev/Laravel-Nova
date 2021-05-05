@@ -1967,7 +1967,11 @@ var render = function() {
         [
           !_vm.editMode
             ? _c("ViewPost", {
-                attrs: { post: _vm.post, setUpdateAlert: _vm.setUpdateAlert },
+                attrs: {
+                  post: _vm.post,
+                  setUpdateAlert: _vm.setUpdateAlert,
+                  viewType: "schedule"
+                },
                 on: { switchToEditMode: _vm.switchToEditMode }
               })
             : _c("EditSchedule", {
@@ -2111,6 +2115,12 @@ exports.push([module.i, "\ntable tr td[data-v-0a31b560], table tr th[data-v-0a31
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_ModalOverlay__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_ModalOverlay___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_ModalOverlay__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ViewPost__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ViewPost___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ViewPost__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__EditPost__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__EditPost___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__EditPost__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2154,18 +2164,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'PostLibrary',
     data: function data() {
-        return {
+        var _ref;
+
+        return _ref = {
             postLibrary: [],
             loading: false,
             showModal: false,
             postReference: ''
-        };
+        }, _defineProperty(_ref, 'showModal', false), _defineProperty(_ref, 'post', {}), _defineProperty(_ref, 'keyInView', null), _defineProperty(_ref, 'editMode', false), _defineProperty(_ref, 'setUpdateAlert', false), _ref;
     },
 
     props: {
@@ -2174,7 +2187,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     components: {
-        ModalOverlay: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_ModalOverlay___default.a
+        ModalOverlay: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_ModalOverlay___default.a,
+        ViewPost: __WEBPACK_IMPORTED_MODULE_1__ViewPost___default.a,
+        EditPost: __WEBPACK_IMPORTED_MODULE_2__EditPost___default.a
     },
     mounted: function mounted() {
         this.loadPostLibrary();
@@ -2194,14 +2209,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         viewPost: function viewPost(post) {
-            this.postReference = post.reference;
+            this.post = post;
             this.showModal = true;
+        },
+        editPost: function editPost(post, key) {
+            this.keyInView = key;
+            this.post = post;
+            this.showModal = true;
+            this.editMode = true;
         },
         modalClosed: function modalClosed() {
             this.showModal = false;
+            this.editMode = false;
+        },
+        switchToEditMode: function switchToEditMode(post) {
+            this.editMode = true;
+        },
+        formUpdated: function formUpdated(newUpdate) {
+            var _this2 = this;
+
+            this.post = newUpdate;
+            this.postLibrary[this.keyInView] = newUpdate;
+            this.editMode = false;
+            this.setUpdateAlert = true;
+            setTimeout(function () {
+                _this2.setUpdateAlert = false;
+            }, 4000);
         },
         deletePost: function deletePost(post, key) {
-            var _this2 = this;
+            var _this3 = this;
 
             this.$confirm({
                 message: 'Are you sure you wish to delete this post?',
@@ -2212,8 +2248,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 callback: function callback(confirm) {
                     if (confirm) {
                         console.log(confirm);
-                        _this2.postLibrary.splice(key, 1);
-                        axios.delete('/nova-vendor/' + _this2.card.component + '/delete-post', {
+                        _this3.postLibrary.splice(key, 1);
+                        axios.delete('/nova-vendor/' + _this3.card.component + '/delete-post', {
                             data: {
                                 id: post.id
                             }
@@ -2449,7 +2485,12 @@ var render = function() {
                             {
                               staticClass:
                                 "mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-                              attrs: { type: "button" }
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.editPost(post, key)
+                                }
+                              }
                             },
                             [_vm._v("Edit")]
                           ),
@@ -2485,12 +2526,21 @@ var render = function() {
           on: { modalClosed: _vm.modalClosed }
         },
         [
-          _c("div", { staticClass: "text-center pb-3" }, [
-            _c("p", { staticClass: "text-2xl font-bold" }, [
-              _vm._v(" " + _vm._s(_vm.postReference) + " ")
-            ])
-          ])
-        ]
+          !_vm.editMode
+            ? _c("ViewPost", {
+                attrs: {
+                  post: _vm.post,
+                  setUpdateAlert: _vm.setUpdateAlert,
+                  viewType: "post"
+                },
+                on: { switchToEditMode: _vm.switchToEditMode }
+              })
+            : _c("EditPost", {
+                attrs: { post: _vm.post, card: _vm.card },
+                on: { formUpdated: _vm.formUpdated }
+              })
+        ],
+        1
       )
     ],
     1
@@ -3135,7 +3185,7 @@ var render = function() {
               "px-4 py-3 leading-normal text-green-100 bg-green-700 rounded-lg",
             attrs: { role: "alert" }
           },
-          [_vm._v("\n        Update was successful!\n    ")]
+          [_vm._v("\n        Thank you! Update was successful.\n    ")]
         )
       : _vm._e(),
     _vm._v(" "),
@@ -3148,74 +3198,100 @@ var render = function() {
           attrs: { id: "profile" }
         },
         [
-          _c("div", { staticClass: "p-4 md:p-12 text-center lg:text-left" }, [
-            _c(
-              "p",
-              {
-                staticClass:
-                  "pt-4 text-xs font-bold flex items-center justify-start"
-              },
-              [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("span", { staticClass: "text-sm" }, [
-                  _vm._v(_vm._s(_vm.post.page_group))
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "p",
-              {
-                staticClass:
-                  "pt-4 text-xs font-bold flex items-center justify-start"
-              },
-              [
-                _vm._m(1),
-                _vm._v(" "),
-                _c("span", { staticClass: "text-sm" }, [
-                  _vm._v(_vm._s(_vm.post.date))
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "p",
-              {
-                staticClass:
-                  "pt-4 text-xs font-bold flex items-center justify-start"
-              },
-              [
-                _vm._m(2),
-                _vm._v(" "),
-                _c("span", { staticClass: "text-sm" }, [
-                  _vm._v(_vm._s(_vm.post.time))
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _vm._m(3),
-            _vm._v(" "),
-            _c("p", { staticClass: "pt-3 text-sm text-left" }, [
-              _vm._v(" " + _vm._s(_vm.post.text) + " ")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "pt-12 pb-8" }, [
+          _c(
+            "div",
+            { staticClass: "p-4 md:p-12 text-center lg:text-left" },
+            [
+              _vm.viewType == "schedule"
+                ? [
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "pt-4 text-xs font-bold flex items-center justify-start"
+                      },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-sm" }, [
+                          _vm._v(_vm._s(_vm.post.page_group))
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "pt-4 text-xs font-bold flex items-center justify-start"
+                      },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-sm" }, [
+                          _vm._v(_vm._s(_vm.post.date))
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "pt-4 text-xs font-bold flex items-center justify-start"
+                      },
+                      [
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-sm" }, [
+                          _vm._v(_vm._s(_vm.post.time))
+                        ])
+                      ]
+                    )
+                  ]
+                : _vm._e(),
+              _vm._v(" "),
               _c(
-                "button",
+                "p",
                 {
                   staticClass:
-                    "bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full",
-                  on: { click: _vm.editDraft }
+                    "pt-4 text-xs font-bold flex items-center justify-start"
                 },
                 [
-                  _vm._v(
-                    "\n                        Edit Draft\n                    "
-                  )
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "text-sm" }, [
+                    _vm._v(_vm._s(_vm.post.url))
+                  ])
                 ]
-              )
-            ])
-          ])
+              ),
+              _vm._v(" "),
+              _vm._m(4),
+              _vm._v(" "),
+              _c("p", { staticClass: "pt-3 text-sm text-left" }, [
+                _vm._v(" " + _vm._s(_vm.post.text) + " ")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "pt-12 pb-8" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full",
+                    on: { click: _vm.editDraft }
+                  },
+                  [
+                    _vm._v("\n                        Edit "),
+                    _vm.viewType == "schedule"
+                      ? [_vm._v("Schedule")]
+                      : [_vm._v("Post")]
+                  ],
+                  2
+                )
+              ])
+            ],
+            2
+          )
         ]
       ),
       _vm._v(" "),
@@ -3257,6 +3333,16 @@ var staticRenderFns = [
       "span",
       { staticClass: "h-4 fill-current text-green-700 pr-4 pt-1" },
       [_c("i", { staticClass: "fa fa-clock-o" }), _vm._v(" Scheduled Time ")]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      { staticClass: "h-4 fill-current text-green-700 pr-4 pt-1" },
+      [_c("i", { staticClass: "fa fa-link" }), _vm._v(" External URL")]
     )
   },
   function() {
@@ -3343,6 +3429,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'ViewPost',
@@ -3354,6 +3446,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         setUpdateAlert: {
             type: Boolean,
             default: false
+        },
+        viewType: {
+            type: String,
+            default: 'post'
         }
     },
     computed: {
@@ -4103,6 +4199,625 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-ed1633a8", module.exports)
+  }
+}
+
+/***/ }),
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(66)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(68)
+/* template */
+var __vue_template__ = __webpack_require__(69)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-4292f396"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/EditPost.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4292f396", Component.options)
+  } else {
+    hotAPI.reload("data-v-4292f396", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(67);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("770cfac7", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4292f396\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EditPost.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4292f396\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EditPost.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ntextarea[data-v-4292f396] {\n    resize: none;\n}\nlabel[data-v-4292f396] {\n    font-size: 15px;\n    color: #7c858e;\n    font-weight: bold;\n    margin-top: 50px !important;\n}\nlabel span[data-v-4292f396] {\n    color: #900;\n}\nlabel i[data-v-4292f396] {\n    display: inline-block;\n    margin-right: 2px;\n}\ninput[data-v-4292f396], select[data-v-4292f396] {\n    height: 42px;\n}\n.rd__column-selector > input[data-v-4292f396]  {\n    padding: 13px 10px !important;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_select__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_select__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'EditPost',
+    data: function data() {
+        return {
+            processing: false,
+            editText: this.post.text,
+            media: this.post.media,
+            editPostUrl: this.post.url,
+
+            editPostReference: this.post.reference,
+
+            errorResponse: {},
+
+            inputError: '',
+
+            fileRecords: [],
+            fileRecordsForUpload: [],
+            formData: {},
+            mediaEvent: {}
+        };
+    },
+
+    props: {
+        post: {
+            required: true
+        },
+        card: {
+            required: true
+        }
+    },
+    components: {
+        vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a
+    },
+    methods: {
+        uploadFile: function uploadFile(e, t) {
+            this.mediaEvent = e;
+            this.media = e.target.files[0];
+        },
+        editStartDateChanged: function editStartDateChanged(data) {
+            this.editStartDate = data;
+        },
+        update: function update() {
+            var _this = this;
+
+            if (this.editText == '') {
+                this.inputError = 'Please enter a text for the post';
+                return false;
+            }
+            if (this.editPostReference == '') {
+                this.inputError = 'Please enter a tag or reference for this post';
+                return false;
+            }
+
+            this.inputError = '';
+            this.processing = true;
+
+            this.formData = new FormData();
+
+            this.formData.append('text', this.editText);
+            this.formData.append('url', this.editPostUrl);
+
+            this.formData.append('fb_page_post_id', this.post.id);
+            this.formData.append('reference', this.editPostReference);
+            this.formData.append('return_scheduler_resource', false);
+            var uploadedMedia = [];
+
+            this.formData.append('media', this.media == this.post.media ? '' : this.media);
+            axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+
+            axios.post('/nova-vendor/' + this.card.component + '/update-page-post', this.formData).then(function (response) {
+                _this.$emit('formUpdated', response.data.data);
+            }).catch(function (error) {
+                _this.errorResponse = error.response.data;
+            }).finally(function () {
+                _this.processing = false;
+            });
+        },
+
+        deleteUploadedFile: function deleteUploadedFile(fileRecord) {
+            // Using the default uploader. You may use another uploader instead.
+            this.$refs.media.deleteUpload('', '', fileRecord);
+        },
+        filesSelected: function filesSelected(fileRecordsNewlySelected) {
+            // var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
+            // this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
+        },
+        onBeforeDelete: function onBeforeDelete(fileRecord) {
+            var i = this.fileRecordsForUpload.indexOf(fileRecord);
+            if (i !== -1) {
+                this.fileRecordsForUpload.splice(i, 1);
+                var k = this.fileRecords.indexOf(fileRecord);
+                if (k !== -1) this.fileRecords.splice(k, 1);
+            } else {
+                if (confirm('Are you sure you want to delete?')) {
+                    this.$refs.media.deleteFileRecord(fileRecord); // will trigger 'delete' event
+                }
+            }
+        },
+        fileDeleted: function fileDeleted(fileRecord) {
+            var i = this.fileRecordsForUpload.indexOf(fileRecord);
+            if (i !== -1) {
+                this.fileRecordsForUpload.splice(i, 1);
+            } else {
+                this.deleteUploadedFile(fileRecord);
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "rd__submit-list-form-wrapper w-80p m-auto" },
+    [
+      _c(
+        "h1",
+        { staticClass: "text-center text-3xl text-80 font-dark px-4 py-4" },
+        [_vm._v("Edit Post")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-box" }, [
+        _c(
+          "div",
+          {
+            staticClass: "shadow-lg py-5 px-5 sm:rounded-md sm:overflow-hidden"
+          },
+          [
+            Object.entries(_vm.errorResponse).length > 0
+              ? _c("div", [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("h4", { staticClass: "mt-2 mb-2" }, [
+                        _vm._v(" " + _vm._s(_vm.errorResponse.message) + " ")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.errorResponse.errors, function(error, index) {
+                        return _c("p", { key: index, staticClass: "text-sm" }, [
+                          _vm._v(
+                            " \n                        => " +
+                              _vm._s(error[0]) +
+                              " \n                    "
+                          )
+                        ])
+                      })
+                    ],
+                    2
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "px-4 py-5 bg-white space-y-6 sm:p-6" }, [
+              _c("div", { staticClass: "mt-2" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "mt-1 text-left" }, [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editText,
+                        expression: "editText"
+                      }
+                    ],
+                    staticClass:
+                      "shadow-lg mt-1 block w-full sm:text-sm border-gray-300 rounded-md\n                                focus:outline-none focus:ring-blue-500 focus:border-blue-500",
+                    attrs: { rows: "6", placeholder: "Enter text" },
+                    domProps: { value: _vm.editText },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.editText = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-2" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex items-center" }, [
+                  _c("div", { staticClass: "w-1/2" }, [
+                    _c(
+                      "div",
+                      { staticClass: "mt-1 text-left" },
+                      [
+                        _c("VueFileAgent", {
+                          ref: "media",
+                          attrs: {
+                            deletable: true,
+                            accept:
+                              "image/jpg, image/jpeg, image/png, video/mp4",
+                            maxSize: "5MB",
+                            maxFiles: 1,
+                            helpText: "Click or drop to upload a file"
+                          },
+                          on: {
+                            change: function($event) {
+                              return _vm.uploadFile($event, "media")
+                            },
+                            select: function($event) {
+                              return _vm.filesSelected($event)
+                            },
+                            beforedelete: function($event) {
+                              return _vm.onBeforeDelete($event)
+                            },
+                            delete: function($event) {
+                              return _vm.fileDeleted($event)
+                            }
+                          },
+                          model: {
+                            value: _vm.fileRecords,
+                            callback: function($$v) {
+                              _vm.fileRecords = $$v
+                            },
+                            expression: "fileRecords"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "mt-4 text-sm text-gray-500" }, [
+                          _vm._v(
+                            "\n                                    Images (png, gif, jpeg) or Videos (mp4) only\n                                "
+                          )
+                        ])
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/2" }, [
+                    _c("img", {
+                      staticClass: "rounded-lg shadow-2xl max-w-full",
+                      attrs: { src: _vm.post.media }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-2" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c("div", { staticClass: "mt-1 text-left" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editPostUrl,
+                        expression: "editPostUrl"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Enter url" },
+                    domProps: { value: _vm.editPostUrl },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.editPostUrl = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-2" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("div", { staticClass: "mt-1 text-left" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editPostReference,
+                        expression: "editPostReference"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Enter text" },
+                    domProps: { value: _vm.editPostReference },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.editPostReference = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2" },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "d-block justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                    attrs: { disabled: _vm.processing, type: "submit" },
+                    on: { click: _vm.update }
+                  },
+                  [
+                    _vm.processing
+                      ? _c(
+                          "span",
+                          [
+                            _c("loader", {
+                              staticClass: "text-60",
+                              attrs: { fillColor: "#ffffff" }
+                            })
+                          ],
+                          1
+                        )
+                      : _c("span", [_vm._v("UPDATE LIBRARY")])
+                  ]
+                ),
+                _vm._v(" "),
+                _vm.inputError != ""
+                  ? _c(
+                      "p",
+                      {
+                        staticClass:
+                          "px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg"
+                      },
+                      [_vm._v(_vm._s(_vm.inputError))]
+                    )
+                  : _vm._e()
+              ]
+            )
+          ]
+        )
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "block text-gray-700 text-left", attrs: { for: "about" } },
+      [
+        _c("i", { staticClass: "fa fa-edit" }),
+        _vm._v(" TEXT "),
+        _c("span", [_vm._v("*")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "block text-sm font-medium text-gray-700 text-left" },
+      [
+        _c("i", { staticClass: "fa fa-upload" }),
+        _vm._v(" UPLOAD MEDIA\n                    ")
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "block text-gray-700 text-left", attrs: { for: "about" } },
+      [
+        _c("i", { staticClass: "fa fa-link" }),
+        _vm._v(" URL TO ARTICLE\n                    ")
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "block text-gray-700 text-left", attrs: { for: "about" } },
+      [
+        _c("i", { staticClass: "fa fa-edit" }),
+        _vm._v(" POST REFERENCE/TAG "),
+        _c("span", [_vm._v("*")])
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4292f396", module.exports)
   }
 }
 

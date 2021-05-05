@@ -28,7 +28,7 @@
                         </td>
                         <td class="p-3 px-5 flex justify-end">
                             <button @click="viewPost(post)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
-                            <button type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
+                            <button @click="editPost(post, key)" type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
                             <button @click="deletePost(post, key)" type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button>
                         </td>
                     </tr>
@@ -36,14 +36,15 @@
             </table>
         </div> 
         <modal-overlay :modalStatus="showModal" @modalClosed="modalClosed">
-            <div class="text-center pb-3">
-                <p class="text-2xl font-bold"> {{ postReference }} </p>
-            </div>
+            <ViewPost v-if="!editMode" :post="post" :setUpdateAlert="setUpdateAlert" :viewType="'post'" @switchToEditMode="switchToEditMode"/>
+            <EditPost v-else :post="post" :card="card" @formUpdated="formUpdated"/>
         </modal-overlay>
     </div>
 </template>
 <script>
 import ModalOverlay from '../../../../../nova/resources/js/components/RevenueDriver/ModalOverlay'
+import ViewPost from './ViewPost'
+import EditPost from './EditPost'
 export default {
     name: 'PostLibrary',
     data () {
@@ -52,6 +53,11 @@ export default {
             loading: false,
             showModal: false,
             postReference: '',
+            showModal: false,
+            post: {},
+            keyInView: null,
+            editMode: false,
+            setUpdateAlert: false,
         }
     },
     props: {
@@ -60,7 +66,9 @@ export default {
         }
     },
     components: {
-        ModalOverlay
+        ModalOverlay,
+        ViewPost,
+        EditPost
     },
     mounted () {
         this.loadPostLibrary()
@@ -78,11 +86,30 @@ export default {
             })
         },
         viewPost (post) {
-            this.postReference = post.reference
+            this.post = post
             this.showModal = true
+        },
+        editPost (post, key) {
+            this.keyInView = key
+            this.post = post
+            this.showModal = true
+            this.editMode = true
         },
         modalClosed () {
             this.showModal = false
+            this.editMode = false
+        },
+        switchToEditMode (post) {
+            this.editMode = true
+        },
+        formUpdated (newUpdate) {
+            this.post = newUpdate
+            this.postLibrary[this.keyInView] = newUpdate
+            this.editMode = false
+            this.setUpdateAlert = true
+            setTimeout(() => {
+                this.setUpdateAlert = false
+            }, 4000);
         },
         deletePost (post, key) {
         

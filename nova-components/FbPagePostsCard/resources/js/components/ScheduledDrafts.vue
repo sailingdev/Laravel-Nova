@@ -34,7 +34,7 @@
             </table>
         </div>
         <modal-overlay :modalStatus="showModal" @modalClosed="modalClosed">
-            <ViewPost v-if="!editMode" :post="post" :setUpdateAlert="setUpdateAlert" @switchToEditMode="switchToEditMode"/>
+            <ViewPost v-if="!editMode" :post="post" :setUpdateAlert="setUpdateAlert" :viewType="'schedule'" @switchToEditMode="switchToEditMode"/>
             <EditSchedule v-else :post="post" :card="card" @formUpdated="formUpdated"/>
         </modal-overlay>
     </div>
