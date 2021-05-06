@@ -17,6 +17,7 @@ use FacebookAds\Logger\CurlLogger;
 use FacebookAds\Object\Business;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class FacebookPage extends Facebook
 {
@@ -29,6 +30,16 @@ class FacebookPage extends Facebook
      * @var int
      */
     protected $deleteAttempts = 0;
+
+    /**
+     * @var int
+     */
+    protected $getPageAlbumsAttempts = 0;
+
+    /**
+     * @var int
+     */
+    protected $createPageAlbumAttempts = 0;
 
     /**
      * @var int
@@ -186,8 +197,10 @@ class FacebookPage extends Facebook
                         $fbPageService = new FbPageService;
                         
                         foreach ($decoded->data as $page) {
+                            
+                            // for Zinsy
 
-                            if ($page->id != '112005480631100') {
+                            if ($page->id != '112005480631100' && $page->id != '101355112064132') {
  
                                 Log::info('Monitoring', [$page->name, $page->id, (string) $page->is_published]);                             
                                 $pageRow = $fbPageService->getByPageId($page->id);
@@ -284,6 +297,128 @@ class FacebookPage extends Facebook
         } catch (\Throwable $th) {
             Log::error('An error occured while dynmaically creating the facebook page', [$th]);
             return [false, $th->getMessage()];
+        }
+    }
+
+    public function createPagePost(array $fields, array $params, string $pageId)
+    { 
+        if ($pageId == '101355112064132') {
+            $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
+
+            $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
+    
+            $proof= hash_hmac('sha256', $pageAccessToken, $this->appSecret); 
+            $mediaField = $urlField = '';
+           
+            try { 
+                if ($fields['url'] !== null) {
+                    $urlField = '&link=' . $fields['url'];
+                } 
+                if ($fields['media'] !== null) {
+                  
+                    $mediaField = '&attached_media=' . json_encode(['@' . $fields['media']]);
+                    
+                    // check if page has a default album
+                    $this->getPageAlbums(['id'], [], $pageId);
+                    
+                    // upload a photo
+                    $this->createPagePostPhoto([
+                        'source' => '',
+                        'no_story' => true,
+                    ]);
+                }
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-type' => 'application/json',
+                ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
+                '&message=' .  $fields['message'] . $urlField . $mediaField);
+                 
+                $decoded = json_decode($response->body());
+                dd('success', $pageId, $decoded);
+                return [true];
+            } catch (\Throwable $th) {
+                dd('failure', $th);
+                return [false, $th->getMessage()];
+            }
+        }
+    }
+
+    public function createPagePostPhoto()
+    {
+
+    }
+
+    /**
+     * @param array $fields
+     * @param array $params
+     * @param string $pageId
+     * 
+     * @return array
+     */
+    public function getPageAlbums(array $fields = [], array $params = [], string $pageId): array
+    {
+        $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
+
+        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
+        try { 
+           
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-type' => 'application/json',
+            ])->get('https://graph.facebook.com/v10.0/' .$pageId.'/albums?access_token=' . $pageAccessToken);
+            $decoded = json_decode($response->body());
+            return [true, $decoded];
+        } 
+        catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->getPageAlbumsAttempts < 10) {
+                sleep(3);
+                $this->getPageAlbumsAttempts++;
+                return $this->getPageAlbums($fields, $params, $pageId);
+            } 
+            return [false, $e];
+        } catch(\Throwable $th) { 
+            return [false, $th];
+        }
+    }
+
+    /**
+     * @param array $fields
+     * @param array $params
+     * @param string $pageId
+     * 
+     * @return array
+     */
+    public function createPageAlbum(array $fields = [], array $params = [], string $pageId): array
+    {
+        $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
+
+        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
+        try { 
+           
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-type' => 'application/json',
+            ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken);
+            $decoded = json_decode($response->body());
+            return [true, $decoded];
+        } 
+        catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->createPageAlbumAttempts < 10) {
+                // sleep(3);
+                // $this->createPageAlbumAttempts++;
+                return $this->createPageAlbum($fields, $params, $pageId);
+            } 
+            return [false, $e];
+        } catch(\Throwable $th) { 
+            return [false, $th];
         }
     }
 }
