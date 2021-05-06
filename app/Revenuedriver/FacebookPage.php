@@ -39,7 +39,9 @@ class FacebookPage extends Facebook
     /**
      * @var int
      */
-    protected $createPageAlbumAttempts = 0;
+    protected $createPagePhotoAttempts = 0;
+
+    protected $getPagePhotoPictureAttemtps = 0;
 
     /**
      * @var int
@@ -300,33 +302,31 @@ class FacebookPage extends Facebook
         }
     }
 
-    public function createPagePost(array $fields, array $params, string $pageId)
+    /**
+     * @param array $fields
+     * @param array $params=[]
+     * @param string $pageId
+     * 
+     * @return array
+     */
+    public function createPagePost(array $fields, array $params=[], string $pageId): array
     { 
         if ($pageId == '101355112064132') {
             $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
 
             $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
     
-            $proof= hash_hmac('sha256', $pageAccessToken, $this->appSecret); 
             $mediaField = $urlField = '';
            
             try { 
-                if ($fields['url'] !== null) {
+         
+                if (array_key_exists('object_attachment', $fields)) {  
+                    $mediaField = '&object_attachment=' . $fields['object_attachment'];
+                }
+                else if ($fields['url'] !== null) {
                     $urlField = '&link=' . $fields['url'];
                 } 
-                if ($fields['media'] !== null) {
-                  
-                    $mediaField = '&attached_media=' . json_encode(['@' . $fields['media']]);
-                    
-                    // check if page has a default album
-                    $this->getPageAlbums(['id'], [], $pageId);
-                    
-                    // upload a photo
-                    $this->createPagePostPhoto([
-                        'source' => '',
-                        'no_story' => true,
-                    ]);
-                }
+               
                 $response = Http::withHeaders([
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
@@ -334,19 +334,13 @@ class FacebookPage extends Facebook
                 '&message=' .  $fields['message'] . $urlField . $mediaField);
                  
                 $decoded = json_decode($response->body());
-                dd('success', $pageId, $decoded);
-                return [true];
+                return [true, $decoded];
             } catch (\Throwable $th) {
-                dd('failure', $th);
                 return [false, $th->getMessage()];
             }
         }
     }
 
-    public function createPagePostPhoto()
-    {
-
-    }
 
     /**
      * @param array $fields
@@ -392,7 +386,7 @@ class FacebookPage extends Facebook
      * 
      * @return array
      */
-    public function createPageAlbum(array $fields = [], array $params = [], string $pageId): array
+    public function createPagePhoto(array $fields = [], array $params = [], string $pageId): array
     {
         $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
 
@@ -402,7 +396,10 @@ class FacebookPage extends Facebook
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-type' => 'application/json',
-            ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken);
+            ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken, [
+                'no_story' => $fields['no_story'],
+                'url' => $fields['url']
+            ]);
             $decoded = json_decode($response->body());
             return [true, $decoded];
         } 
@@ -411,10 +408,47 @@ class FacebookPage extends Facebook
                 | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
                 | \FacebookAds\Http\Exception\AuthorizationException $e) 
         { 
-            if ($this->createPageAlbumAttempts < 10) {
-                // sleep(3);
-                // $this->createPageAlbumAttempts++;
-                return $this->createPageAlbum($fields, $params, $pageId);
+            if ($this->createPagePhotoAttempts < 10) {
+                sleep(3);
+                $this->createPagePhotoAttempts++;
+                return $this->createPagePhoto($fields, $params, $pageId);
+            } 
+            return [false, $e];
+        } catch(\Throwable $th) { 
+            return [false, $th];
+        }
+    }
+
+    /**
+     * @param array $fields
+     * @param array $params
+     * @param string $pageId
+     * 
+     * @return array
+     */
+    public function getPagePhotoPicture(array $fields = [], array $params = [], string $pageId, string $photoId): array
+    {
+        $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
+
+        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
+        try { 
+           
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-type' => 'application/json',
+            ])->get('https://graph.facebook.com/v10.0/' .$photoId.'?access_token=' . $pageAccessToken.'&fields=picture');
+            $decoded = json_decode($response->body());
+            return [true, $decoded];
+        } 
+        catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->getPagePhotoPictureAttemtps < 10) {
+                sleep(3);
+                $this->getPagePhotoPictureAttemtps++;
+                return $this->getPagePhotoPicture($fields, $params, $pageId, $photoId);
             } 
             return [false, $e];
         } catch(\Throwable $th) { 

@@ -69,6 +69,9 @@ class FbPagePostSchedulerService
         ->get();
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
+
+        // to be removed;
+        $runCount = 0;
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
                 $targetGroups = $schedule->page_groups;
@@ -79,68 +82,46 @@ class FbPagePostSchedulerService
                        // for each of this page Id, post to page
                        foreach ($facebookPages as $facebookPage) { 
                              
+                        // just temp
+                        if ($runCount < 1) {
+                            $runCount++;
                             $pageId = '101355112064132'; //$facebookPage->page_id;
+                            $picture = null;
+                            $photoId = null;
+                            $fd = [];
                             if ($schedule->fbPagePost->media !== null) {
-
-                               
-                                
-                                $albumId = null;
-
-                                // see if this page has an album that it it's photos can be posted into
-                                $pageAlbums = $facebookPageExternal->getPageAlbums(['id', 'name'], [], $pageId);
-                                $shouldCreateNewAlbum = true;
-                                if ($pageAlbums[0] === true) {
-                                    if (isset($pageAlbums[1]->data)) {
-                                        // search for a timeline album
-                                        $search = array_filter($pageAlbums[1]->data, function ($album) {
-                                            return $album->name === 'Timeline';
-                                        });
-                                        if (count($search) > 0) {
-                                            $shouldCreateNewAlbum = false;  
-                                            $albumId = $search[0]->id;
-                                        }
-                                    }
+  
+                                // upload a photo
+                                $createPhoto = $facebookPageExternal->createPagePhoto([
+                                    'no_story' => true,
+                                    'url' => 'http://cp.revenuedriver.com/storage/fb_posts/549e9b670404447a380c6301a10283601620139997.png' //$schedule->fbPagePost->media
+                                ], [], $pageId);
+                                 
+                                if ($createPhoto[0] === true && isset($createPhoto[1]->id)) {
+                                    $fd['object_attachment'] = $createPhoto[1]->id;
                                 }
                                 else {
-                                    $shouldCreateNewAlbum = false;
-                                    Log::info('An error occured while reading the albums for page with ID:' . $pageId, [$pageAlbums[1]]);
-                                }
-                               
-                                if ($shouldCreateNewAlbum === true) {
-                                    // $file =  new File(Storage::disk('public')->path('fb_posts/' . $schedule->fbPagePost->media));
-                                   dd($schedule->fbPagePost->media);
-                                    // process and create a new album
-                                    $newAlbum = $facebookPageExternal->createPageAlbum([
-                                        'no_story' => true,
-                                        'url' => $file->getRealPath()
-                                    ], [], $pageId);
-
-                                    if ($newAlbum[0] === true) {
-                                        $albumId = $newAlbum[1];
-                                    }
-                                    else {
-                                        Log::info('An error occured while creating an album for page with ID:' . $pageId, [$newAlbum[1]]);
-                                    }
-                                }
-
-                                dd($albumId);
-                                if ($albumId != null) {
-                                    // create a new photo
-
-                                }
+                                    Log::info('Photo could not be created for the page with id :: ' . $pageId, [$createPhoto[1]]);
+                                } 
                             } 
-                            
-                            $createPost = $facebookPageExternal->createPagePost([
-                                'message' => $schedule->fbPagePost->text,
-                                'url' => $schedule->fbPagePost->url,
-                                'media' => $schedule->fbPagePost->media
-                            ], [], $pageId);  //$facebookPage->page_id
+                            $fd['message'] = $schedule->fbPagePost->text;
+                            $fd['url'] = $schedule->fbPagePost->url;
+                            $createPost = $facebookPageExternal->createPagePost($fd, [], $pageId); 
 
-                            dd('wale', $createPost);
+                            if ($createPost[0] === false) {
+                                Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
+                            }
+                            else {
+                                // update the schedule as processed
+                                $this->updateSchedule([
+                                    'status' => 'processed'
+                                ], $schedule->id);
+                            }
+                        }
+
                        }
                     }
                 } 
-                dd($targetGroups);
             }
         }
     }
