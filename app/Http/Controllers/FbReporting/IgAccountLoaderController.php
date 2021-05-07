@@ -13,8 +13,8 @@ class IgAccountLoaderController extends Controller
 { 
     public function loadIDs(LoadIGAccountIdsRequest $request, StringManipulator $sm)
     { 
-        $fbPagePostSchedulerService = new FbPagePostSchedulerService;
-        dd('first port', $fbPagePostSchedulerService->runSchedule());
+        // $fbPagePostSchedulerService = new FbPagePostSchedulerService;
+        // dd('first port', $fbPagePostSchedulerService->runSchedule());
 
         $prep = $sm->generateArrayFromString(str_replace("\n", '<br />',  $request->fb_page_ids), '<br />');
         
