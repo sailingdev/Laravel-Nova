@@ -76,14 +76,16 @@ class FbPagePostSchedulerService
                 $targetGroups = (array) $schedule->page_groups;
                  
                 if (count($targetGroups) > 0) {
+                    
                     foreach ($targetGroups as $targetGroup) {
                         $groupLimit = $fbPageService->getGroupQueryLimits(preg_replace("#[^0-9]#i", "", $targetGroup));
-                       
+                         
                         $facebookPages = $fbPageService->getByLimits($groupLimit[0], $groupLimit[1]);
                         // for each of this page Id, post to page
                         $useForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
                         foreach ($useForNow as $facebookPage) { 
                                
+                            
                                 $pageId = $facebookPage;
                                 $fd = [];
                                 if ($schedule->fbPagePost->media !== null) {
@@ -108,15 +110,13 @@ class FbPagePostSchedulerService
                                 if ($createPost[0] === false) {
                                     Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
                                 }
-                                else { 
-                                    // $this->updateSchedule([
-                                    //     'status' => 'processed'
-                                    // ], $schedule->id);
-                                }
                             
                         }
                     }
                 } 
+                $this->updateSchedule([
+                    'status' => 'processed'
+                ], $schedule->id);
             }
         }
     }
