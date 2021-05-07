@@ -43,13 +43,11 @@ class CampaignOptimizeTrackerService
       $tes = new ToolsExecutionService;
        
       if ($tes->hasRunDailyReportGeneratorMSS()) {
-         dd('Moa');
          DB::setDefaultConnection('mysql');
          $this->OptimizeDay1();
          $this->OptimizeDay2();
          $this->clearFromTracker();
       }
-      dd('Moa');
    }
 
    protected function OptimizeDay1()

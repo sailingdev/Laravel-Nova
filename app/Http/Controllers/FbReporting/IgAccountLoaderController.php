@@ -16,9 +16,10 @@ class IgAccountLoaderController extends Controller
     { 
         // $fbPagePostSchedulerService = new FbPagePostSchedulerService;
         // dd('first port', $fbPagePostSchedulerService->runSchedule());
+        
         // $cot = new CampaignOptimizeTrackerService;
         // $cot->optimize();
-        
+
         $prep = $sm->generateArrayFromString(str_replace("\n", '<br />',  $request->fb_page_ids), '<br />');
         
         $data = [];
