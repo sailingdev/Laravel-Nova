@@ -1,7 +1,7 @@
 <template>
     <card class="block justify-center items-center fb-page-posts-dashboard">
         <div class="px-3 py-3">
-            <!-- <SubmitForm :card="card" @formSubmitted="formSubmitted" /> -->
+            <SubmitForm :card="card" @formSubmitted="formSubmitted" />
             <ScheduledDrafts :card="card" ref="scheduledDrafts" />
             <PostLibrary :card="card" ref="postLibrary" /> 
             <vue-confirm-dialog></vue-confirm-dialog>

@@ -26,7 +26,7 @@ class FbPagePostService
 
     public function loadLibrary()
     {
-        return FbPagePost::all();
+        return FbPagePost::latest()->get();
     }
 
     public function update(array $data, $rowId): array

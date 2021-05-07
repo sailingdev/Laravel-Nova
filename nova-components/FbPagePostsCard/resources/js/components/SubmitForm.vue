@@ -1,6 +1,6 @@
 <template>
     <div class="rd__submit-list-form-wrapper w-80p m-auto">
-        <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Draft Post (Work In Progress)</h1>
+        <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Draft Post </h1>
         
         <div class="container-box" v-if="displayForm">
             <div class="shadow-lg py-5 px-5 sm:rounded-md sm:overflow-hidden"> 
@@ -131,12 +131,12 @@ export default {
     data () {
         return {
             processing: false,
-            text: 'A sample text',
+            text: '',
             media: '',
-            postUrl: 'http://revenedriver.com/testing',
-            startDate:'2021-05-12 12:20',
-            postReference: 'Post 1',
-            pageGroupSelected: ['Group 1', 'Group 2'],
+            postUrl: '',
+            startDate:'',
+            postReference: '',
+            pageGroupSelected: [],
             pageGroups: [],
             errorResponse: {},
             displayForm: true,

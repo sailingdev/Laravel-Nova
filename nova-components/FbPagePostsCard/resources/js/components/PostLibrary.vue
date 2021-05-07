@@ -22,7 +22,7 @@
                 <tbody>
                     <tr class="border-b hover:bg-orange-100 bg-white" v-for="(post, key) in postLibrary" :key="key">
                         <td class="p-3 px-5">{{ post.reference }}</td>
-                        <td class="p-3 px-5">{{ post.url }}</td>
+                        <td class="p-3 px-5">{{ post.url === null ? '-' : post.url }}</td>
                         <td class="p-3 px-5">
                             {{ post['text'].length > 60  ? post['text'].substring(0, 60) + '...' : post.text }}
                         </td>

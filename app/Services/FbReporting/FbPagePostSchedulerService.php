@@ -31,7 +31,7 @@ class FbPagePostSchedulerService
 
     public function getAllScheduled()
     {
-        return FbPagePostScheduler::where('start_date', '>=', Carbon::now())->get();        
+        return FbPagePostScheduler::where('start_date', '>=', Carbon::now())->orderBy('start_date', 'desc')->get();        
     }
 
     /**
@@ -63,21 +63,23 @@ class FbPagePostSchedulerService
 
     public function runSchedule()
     {
-        $schedules = FbPagePostScheduler::where('start_date', '<>', Carbon::now())
+        $schedules = FbPagePostScheduler::where('start_date', '<=', Carbon::now())
         ->where('status', '!=', 'processed')
         ->with(['fbPagePost'])
         ->get();
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
-
+       
         // to be removed;
         $runCount = 0;
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
-                $targetGroups = $schedule->page_groups;
+                $targetGroups = (array) $schedule->page_groups;
+                 
                 if (count($targetGroups) > 0) {
                     foreach ($targetGroups as $targetGroup) {
                         $groupLimit = $fbPageService->getGroupQueryLimits(preg_replace("#[^0-9]#i", "", $targetGroup));
+                       
                         $facebookPages = $fbPageService->getByLimits($groupLimit[0], $groupLimit[1]);
                        // for each of this page Id, post to page
                        foreach ($facebookPages as $facebookPage) { 
