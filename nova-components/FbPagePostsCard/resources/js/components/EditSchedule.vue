@@ -193,6 +193,7 @@ export default {
            
             axios.post('/nova-vendor/' + this.card.component + '/update-page-post', this.formData)  
             .then(response => { 
+                console.log(response.data.data)
                 this.$emit('formUpdated', response.data.data)
             }).catch(error => {   
                 this.errorResponse = error.response.data

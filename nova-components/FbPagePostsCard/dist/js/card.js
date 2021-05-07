@@ -1861,7 +1861,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.loading = false;
             });
         },
-        viewPost: function viewPost(post) {
+        viewPost: function viewPost(post, key) {
+            this.keyInView = key;
             this.post = post;
             this.showModal = true;
         },
@@ -1882,6 +1883,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             this.post = newUpdate;
+            alert(this.keyInView);
             this.scheduledDrafts[this.keyInView] = newUpdate;
             this.editMode = false;
             this.setUpdateAlert = true;
@@ -3069,6 +3071,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
             axios.post('/nova-vendor/' + this.card.component + '/update-page-post', this.formData).then(function (response) {
+                console.log(response.data.data);
                 _this.$emit('formUpdated', response.data.data);
             }).catch(function (error) {
                 _this.errorResponse = error.response.data;
@@ -3594,7 +3597,7 @@ var render = function() {
                               attrs: { type: "button" },
                               on: {
                                 click: function($event) {
-                                  return _vm.viewPost(scheduledDraft)
+                                  return _vm.viewPost(scheduledDraft, key)
                                 }
                               }
                             },
@@ -3890,7 +3893,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.loading = false;
             });
         },
-        viewPost: function viewPost(post) {
+        viewPost: function viewPost(post, key) {
+            this.keyInView = key;
             this.post = post;
             this.showModal = true;
         },
@@ -4649,7 +4653,7 @@ var render = function() {
                               attrs: { type: "button" },
                               on: {
                                 click: function($event) {
-                                  return _vm.viewPost(post)
+                                  return _vm.viewPost(post, key)
                                 }
                               }
                             },

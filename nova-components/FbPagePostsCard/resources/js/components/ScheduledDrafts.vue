@@ -26,7 +26,7 @@
                         <td class="p-3 px-5">{{ scheduledDraft.date }}</td>
                         <td class="p-3 px-5">{{ scheduledDraft.time }}</td>
                         <td class="p-3 px-5 flex justify-end">
-                            <button @click="viewPost(scheduledDraft)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
+                            <button @click="viewPost(scheduledDraft, key)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
                             <button @click="editPost(scheduledDraft, key)" type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
                             <button @click="deleteSchedule(scheduledDraft, key)"  type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button></td>
                     </tr>
@@ -82,7 +82,8 @@ export default {
                 this.loading = false
             })
         },
-        viewPost (post) {
+        viewPost (post, key) {
+            this.keyInView = key
             this.post = post
             this.showModal = true
         },
@@ -101,6 +102,7 @@ export default {
         },
         formUpdated (newUpdate) {
             this.post = newUpdate
+            alert(this.keyInView)
             this.scheduledDrafts[this.keyInView] = newUpdate
             this.editMode = false
             this.setUpdateAlert = true
