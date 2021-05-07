@@ -339,7 +339,7 @@ class FacebookPage extends Facebook
                     'Content-type' => 'application/json',
                 ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
                 '&message=' .  $fields['message'] . $urlField . $mediaField);
-                Log::info('Create photo for '.$pageId, [] );
+                Log::info('Post was created for page with ID '.$pageId, [] );
                 $decoded = json_decode($response->body());
                 return [true, $decoded];
             } catch (\Throwable $th) {
@@ -397,10 +397,10 @@ class FacebookPage extends Facebook
     public function createPagePhoto(array $fields = [], array $params = [], string $pageId): array
     {
         $useForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
-      
+        
         if (in_array($pageId, $useForNow)) {
             $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
-
+           
             $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
             try { 
                 
@@ -412,7 +412,7 @@ class FacebookPage extends Facebook
                     'url' => $fields['url']
                 ]);
                 $decoded = json_decode($response->body());
-                Log::info('Create photo for '.$pageId, [] );
+                Log::info('Photo was created for page with ID '.$pageId, [] );
                 return [true, $decoded];
             } 
             catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
