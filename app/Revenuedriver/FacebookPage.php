@@ -200,9 +200,15 @@ class FacebookPage extends Facebook
                         
                         foreach ($decoded->data as $page) {
                             
-                            // for Zinsy
+                            
+                            // Zinsy
+                            // Suspendo 
+                            // Revesto 
+                            // Voloma
+                            // Azeny  
+                            $skipForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
 
-                            if ($page->id != '112005480631100' && $page->id != '101355112064132') {
+                            if ($page->id != '112005480631100' && !in_array($page->id, $skipForNow)) {
  
                                 Log::info('Monitoring', [$page->name, $page->id, (string) $page->is_published]);                             
                                 $pageRow = $fbPageService->getByPageId($page->id);
@@ -311,7 +317,8 @@ class FacebookPage extends Facebook
      */
     public function createPagePost(array $fields, array $params=[], string $pageId): array
     { 
-        if ($pageId == '101355112064132') {
+        $useForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
+        if (in_array($pageId, $useForNow)) {
             $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
 
             $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
@@ -332,13 +339,14 @@ class FacebookPage extends Facebook
                     'Content-type' => 'application/json',
                 ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
                 '&message=' .  $fields['message'] . $urlField . $mediaField);
-                 
+                Log::info('Create photo for '.$pageId, [] );
                 $decoded = json_decode($response->body());
                 return [true, $decoded];
             } catch (\Throwable $th) {
                 return [false, $th->getMessage()];
             }
         }
+        return [false, ''];
     }
 
 
@@ -388,35 +396,41 @@ class FacebookPage extends Facebook
      */
     public function createPagePhoto(array $fields = [], array $params = [], string $pageId): array
     {
-        $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
+        $useForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
+      
+        if (in_array($pageId, $useForNow)) {
+            $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
 
-        $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
-        try { 
-           
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-type' => 'application/json',
-            ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken, [
-                'no_story' => $fields['no_story'],
-                'url' => $fields['url']
-            ]);
-            $decoded = json_decode($response->body());
-            return [true, $decoded];
-        } 
-        catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
-                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
-                | \FacebookAds\Http\Exception\AuthorizationException $e) 
-        { 
-            if ($this->createPagePhotoAttempts < 10) {
-                sleep(3);
-                $this->createPagePhotoAttempts++;
-                return $this->createPagePhoto($fields, $params, $pageId);
+            $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
+            try { 
+                
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-type' => 'application/json',
+                ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken, [
+                    'no_story' => $fields['no_story'],
+                    'url' => $fields['url']
+                ]);
+                $decoded = json_decode($response->body());
+                Log::info('Create photo for '.$pageId, [] );
+                return [true, $decoded];
             } 
-            return [false, $e];
-        } catch(\Throwable $th) { 
-            return [false, $th];
+            catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                    \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                    | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                    | \FacebookAds\Http\Exception\AuthorizationException $e) 
+            { 
+                if ($this->createPagePhotoAttempts < 10) {
+                    sleep(3);
+                    $this->createPagePhotoAttempts++;
+                    return $this->createPagePhoto($fields, $params, $pageId);
+                } 
+                return [false, $e];
+            } catch(\Throwable $th) { 
+                return [false, $th];
+            }
         }
+        return [false, ''];
     }
 
     /**
