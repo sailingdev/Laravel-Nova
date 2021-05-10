@@ -1000,6 +1000,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -1016,7 +1021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             pageGroupSelected: [],
             pageGroups: [],
             errorResponse: {},
-            displayForm: true,
+            displayForm: false,
             displaySubmitSuccess: false,
 
             textInputError: '',
@@ -1137,6 +1142,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // this.deleteUploadedFile(this.mediaEvent)
             this.fileRecords = [];
             this.media = '';
+        },
+        toggleForm: function toggleForm() {
+            this.displayForm = this.displayForm === true ? false : true;
         }
     },
     mounted: function mounted() {
@@ -1164,11 +1172,28 @@ var render = function() {
     "div",
     { staticClass: "rd__submit-list-form-wrapper w-80p m-auto" },
     [
-      _c(
-        "h1",
-        { staticClass: "text-center text-3xl text-80 font-dark px-4 py-4" },
-        [_vm._v("Draft Post ")]
-      ),
+      _c("div", { staticClass: "t-display-header relative" }, [
+        _c(
+          "h1",
+          { staticClass: "text-center text-3xl text-80 font-dark px-4 py-5" },
+          [_vm._v("Draft Post")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              " text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+            class:
+              _vm.displayForm === true
+                ? "absolute right-0 mr-3"
+                : "block m-auto",
+            on: { click: _vm.toggleForm }
+          },
+          [_vm.displayForm ? [_vm._v("Hide Form")] : [_vm._v("Show Form")]],
+          2
+        )
+      ]),
       _vm._v(" "),
       _vm.displayForm
         ? _c("div", { staticClass: "container-box" }, [

@@ -1,7 +1,12 @@
 <template>
     <div class="rd__submit-list-form-wrapper w-80p m-auto">
-        <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Draft Post </h1>
-        
+        <div class="t-display-header relative">
+            <h1 class="text-center text-3xl text-80 font-dark px-4 py-5">Draft Post</h1>
+            <button @click="toggleForm" :class="displayForm === true ? 'absolute right-0 mr-3' : 'block m-auto'" class=" text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                <template v-if="displayForm">Hide Form</template> 
+                <template v-else>Show Form</template> 
+            </button>
+        </div>
         <div class="container-box" v-if="displayForm">
             <div class="shadow-lg py-5 px-5 sm:rounded-md sm:overflow-hidden"> 
                 
@@ -139,7 +144,7 @@ export default {
             pageGroupSelected: [],
             pageGroups: [],
             errorResponse: {},
-            displayForm: true,
+            displayForm: false,
             displaySubmitSuccess: false,
 
             textInputError: '',
@@ -258,8 +263,9 @@ export default {
             // this.deleteUploadedFile(this.mediaEvent)
             this.fileRecords = []
             this.media = ''
-            
-
+        },
+        toggleForm () {
+            this.displayForm = this.displayForm === true ? false : true
         }
     },
     mounted () {
