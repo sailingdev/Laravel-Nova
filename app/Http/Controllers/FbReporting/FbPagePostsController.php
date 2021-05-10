@@ -26,7 +26,7 @@ class FbPagePostsController extends Controller
      */
     public function submit(SubmitPostRequest $request, FbPagePostService $fbPagePostService, FbPagePostSchedulerService $fbPagePostSchedulerService, FileManager $fileManager)
     {   
-        $media = null;
+        $media = '';
         if ($request->media !== null && $request->file('media')->isValid()) {
             $uploadImage = $fileManager->uploadFile($request->media, 'media', 'fb_posts');
             if (!$uploadImage[0]) {
@@ -34,10 +34,10 @@ class FbPagePostsController extends Controller
             }
             $media = $uploadImage[1];
         }
-
+       
         $newPost = $fbPagePostService->create([
             'text' => $request->text,
-            'url' => $request->url,
+            'url' => $request->url === '' || $request->url === null || $request->url === 'null' || $request->url === 'NULL' ? '' : $request->url,
             'reference' => $request->reference,
             'media' => $media
         ]);

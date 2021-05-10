@@ -12,7 +12,7 @@ class FbPagePostService
      * @return array
      */
     public function create(array $data): array
-    {
+    { 
         $fbPagePost = new FbPagePost;
         $fbPagePost->text = $data['text'];
         $fbPagePost->url = $data['url'];

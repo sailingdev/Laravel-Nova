@@ -104,6 +104,7 @@
                         <span v-if="processing"><loader class="text-60" :fillColor="'#ffffff'" /></span>
                         <span v-else>SCHEDULE</span>
                     </button>
+                    <p class="px-4 py-3 mt-2 leading-normal text-red-100 bg-red-700 rounded-lg" v-if="formInputError != ''">{{ formInputError }}  </p>
                 </div>
             </div> 
         </div>
@@ -151,6 +152,7 @@ export default {
             mediaInputError: '',
             pageGroupInputError: '',
             postReferenceInputError: '',
+            formInputError: '',
             
             fileRecords: [],
             fileRecordsForUpload: [], 
@@ -175,28 +177,22 @@ export default {
            this.startDate = data
         },
         submit () {
-            this.processing = true
-            if (this.text == '') {
-                this.textInputError = 'Please enter a text for the post'
-                return false
-            } else {
-                this.textInputError = ''
-            }
-            if (this.pageGroupSelected.length < 1) {
-                this.pageGroupInputError = 'Please select a page group'
-                return false
-            } else {
-                this.pageGroupInputError = ''
-            }
-            if (this.postReference == '') {
-                this.postReferenceError = 'Please enter a tag or reference for this post'
-                return false
-            } else {
-                this.postReferenceError = ''
-            }
-          
            
-            this.textInputError = this.pageGroupInputError = this.postReferenceError = ''
+            if (this.text == '') {
+                this.formInputError = 'Please enter a text for the post'
+                return false
+            } 
+            else if (this.postReference == '') {
+                this.formInputError = 'Please enter a tag or reference for this post'
+                return false
+            } 
+            else if (this.postUrl == '' && this.media == '') {
+                this.formInputError = 'A URL or a media image is required'
+                return false
+            }
+            this.processing = true
+       
+            this.textInputError = this.pageGroupInputError = this.postReferenceError = this.formInputError = ''
 
             this.formData = new FormData() 
 
@@ -208,12 +204,7 @@ export default {
             this.formData.append('reference', this.postReference)
             let uploadedMedia = []
 
-            // It is not accepting multiple uploads for now 
-            // if (this.media.length > 0) { 
-            //     this.media.forEach(e => {
-            //         uploadedMedia.push(e)
-            //     })
-            // }
+   
             this.formData.append('media', this.media)
             axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
             axios.post('/nova-vendor/' + this.card.component + '/submit-page-post', this.formData)  

@@ -62,15 +62,16 @@ class FbPagePostSchedulerService
     }
 
     public function runSchedule()
-    {
-        // dd(Carbon::now('UTC'), date('H:i:s'));
+    { 
         $schedules = FbPagePostScheduler::where('start_date', '<=', Carbon::now())
         ->where('status', '!=', 'processed')
         ->with(['fbPagePost'])
         ->get();
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
-       
+        
+        dd($schedules);  
+        
         $runCount = 0; // to be removed 
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
