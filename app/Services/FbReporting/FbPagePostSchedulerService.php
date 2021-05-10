@@ -64,7 +64,7 @@ class FbPagePostSchedulerService
     public function runSchedule()
     {
         $schedules = FbPagePostScheduler::where('start_date', '<=', Carbon::now())
-        // ->where('status', '!=', 'processed')
+        ->where('status', '!=', 'processed')
         ->with(['fbPagePost'])
         ->get();
         $facebookPageExternal = new FacebookPage;
