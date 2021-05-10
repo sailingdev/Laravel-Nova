@@ -1883,7 +1883,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             this.post = newUpdate;
-            alert(this.keyInView);
             this.scheduledDrafts[this.keyInView] = newUpdate;
             this.editMode = false;
             this.setUpdateAlert = true;

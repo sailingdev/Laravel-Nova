@@ -69,7 +69,6 @@ class FbPagePostSchedulerService
         ->get();
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
-       
         
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
@@ -91,13 +90,13 @@ class FbPagePostSchedulerService
                                 if ($schedule->fbPagePost->media !== null) {
     
                                     // upload a photo
-                                    $createPhoto = $facebookPageExternal->createPagePhoto([
+                                    $createPhoto = $facebookPageExternal->createPagePhoto([], [
                                         'no_story' => true,
                                         'url' => $schedule->fbPagePost->media
-                                    ], [], $pageId);
+                                    ], $pageId);
                                     
                                     if ($createPhoto[0] === true && isset($createPhoto[1]->id)) {
-                                        $fd['object_attachment'] = $createPhoto[1]->id;
+                                        $fd['object_attachment'] = $createPhoto[1]->id; 
                                     }
                                     else {
                                         Log::info('Photo could not be created for the page with id :: ' . $pageId, [$createPhoto[1]]);
@@ -105,12 +104,11 @@ class FbPagePostSchedulerService
                                 } 
                                 $fd['message'] = $schedule->fbPagePost->text;
                                 $fd['url'] = $schedule->fbPagePost->url;
-                                $createPost = $facebookPageExternal->createPagePost($fd, [], $pageId); 
+                                $createPost = $facebookPageExternal->createPagePost([], $fd, $pageId); 
 
                                 if ($createPost[0] === false) {
                                     Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
-                                }
-                            
+                                } 
                         }
                     }
                 } 

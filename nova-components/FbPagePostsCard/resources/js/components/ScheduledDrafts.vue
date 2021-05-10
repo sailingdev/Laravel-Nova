@@ -102,7 +102,6 @@ export default {
         },
         formUpdated (newUpdate) {
             this.post = newUpdate
-            alert(this.keyInView)
             this.scheduledDrafts[this.keyInView] = newUpdate
             this.editMode = false
             this.setUpdateAlert = true

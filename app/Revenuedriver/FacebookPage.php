@@ -315,7 +315,7 @@ class FacebookPage extends Facebook
      * 
      * @return array
      */
-    public function createPagePost(array $fields, array $params=[], string $pageId): array
+    public function createPagePost(array $fields=[], array $params=[], string $pageId): array
     { 
         $useForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
         if (in_array($pageId, $useForNow)) {
@@ -327,18 +327,18 @@ class FacebookPage extends Facebook
            
             try { 
          
-                if (array_key_exists('object_attachment', $fields)) {  
-                    $mediaField = '&object_attachment=' . $fields['object_attachment'];
+                if (array_key_exists('object_attachment', $params)) {  
+                    $mediaField = '&object_attachment=' . $params['object_attachment'];
                 }
-                else if ($fields['url'] !== null) {
-                    $urlField = '&link=' . $fields['url'];
+                else if ($params['url'] !== null) {
+                    $urlField = '&link=' . $params['url'];
                 } 
                
                 $response = Http::withHeaders([
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
                 ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
-                '&message=' .  $fields['message'] . $urlField . $mediaField);
+                '&message=' .  $params['message'] . $urlField . $mediaField);
                 Log::info('Post was created for page with ID '.$pageId, [] );
                 $decoded = json_decode($response->body());
                 return [true, $decoded];
@@ -408,8 +408,8 @@ class FacebookPage extends Facebook
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
                 ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken, [
-                    'no_story' => $fields['no_story'],
-                    'url' => $fields['url']
+                    'no_story' => $params['no_story'],
+                    'url' => $params['url']
                 ]);
                 $decoded = json_decode($response->body());
                 Log::info('Photo was created for page with ID '.$pageId, [] );
