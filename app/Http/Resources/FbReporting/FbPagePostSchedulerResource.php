@@ -25,7 +25,7 @@ class FbPagePostSchedulerResource extends JsonResource
           'page_group' => $sm->generateStringFromArray((array) $this->page_groups, ','),
           'reference' => $this->fbPagePost->reference,
           'date' => Carbon::parse($this->start_date)->toDateString(),
-          'time' => Carbon::parse($this->start_date)->toTimeString(),
+          'time' => Carbon::parse($this->start_date)->timezone('UTC')->toTimeString(),
           'text' => $this->fbPagePost->text,
           'media' => $this->fbPagePost->media,
           'url' => $this->fbPagePost->url

@@ -15,7 +15,8 @@
                         <th class="text-left p-3 px-5">PAGE GROUP</th>
                         <th class="text-left p-3 px-5">POST REFERENCE</th>
                         <th class="text-left p-3 px-5">DATE</th>
-                        <th class="text-left p-3 px-5">TIME(CET)</th>
+                        <th class="text-left p-3 px-5">TIME(UTC)</th>
+                        <th class="text-left p-3 px-5">COUNT DOWN</th>
                         <th class="text-left p-3 px-5">ACTION</th>
                     </tr>
                 </thead>
@@ -25,6 +26,9 @@
                         <td class="p-3 px-5">{{ scheduledDraft.reference }}</td>
                         <td class="p-3 px-5">{{ scheduledDraft.date }}</td>
                         <td class="p-3 px-5">{{ scheduledDraft.time }}</td>
+                        <td class="">
+                            <flip-countdown :labels="{ days: 'D', hours: 'H', minutes: 'M', seconds: 'S',}" :deadline="concatDate(scheduledDraft.date, scheduledDraft.time)"></flip-countdown>
+                        </td>
                         <td class="p-3 px-5 flex justify-end">
                             <button @click="viewPost(scheduledDraft, key)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
                             <button @click="editPost(scheduledDraft, key)" type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
@@ -43,7 +47,7 @@
 import ModalOverlay from '../../../../../nova/resources/js/components/RevenueDriver/ModalOverlay'
 import ViewPost from './ViewPost'
 import EditSchedule from './EditSchedule'
-
+import FlipCountdown from 'vue2-flip-countdown'
 export default {
     name: 'ScheduledDrafts',
     data () {
@@ -65,7 +69,8 @@ export default {
     components: {
         ModalOverlay,
         ViewPost,
-        EditSchedule
+        EditSchedule,
+        FlipCountdown 
     },
     mounted () {
         this.loadScheduledDrafts()
@@ -134,6 +139,17 @@ export default {
                 }
             })
             
+        },
+        concatDate (date, time) {
+            return date + ' ' + time 
+        },
+        countDownLabels () {
+            return {
+                days: 'D',
+                hours: 'H',
+                minutes: 'M',
+                seconds: 'S',
+            }
         }
     }
 }
@@ -141,5 +157,13 @@ export default {
 <style scoped>
     table tr td, table tr th {
         font-size: 14px;
+    } 
+</style>
+<style>
+ .flip-clock__slot {
+        font-size: 0.6rem !important;
+    }
+    .flip-card {
+        font-size: 1.2rem !important;
     }
 </style>

@@ -31,7 +31,7 @@ class FbPagePostSchedulerService
 
     public function getAllScheduled()
     {
-        return FbPagePostScheduler::where('start_date', '>=', Carbon::now())->orderBy('start_date', 'desc')->get();        
+        return FbPagePostScheduler::where('start_date', '>=', Carbon::now())->orderBy('start_date', 'asc')->get();        
     }
 
     /**
@@ -63,6 +63,7 @@ class FbPagePostSchedulerService
 
     public function runSchedule()
     {
+        // dd(Carbon::now('UTC'), date('H:i:s'));
         $schedules = FbPagePostScheduler::where('start_date', '<=', Carbon::now())
         ->where('status', '!=', 'processed')
         ->with(['fbPagePost'])
