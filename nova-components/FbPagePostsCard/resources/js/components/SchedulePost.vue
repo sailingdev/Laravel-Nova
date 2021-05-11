@@ -51,7 +51,7 @@
                             <i class="fa fa-calendar"></i> SCHEDULE DATE AND TIME
                         </label>
                         <div class="mt-1 text-left">
-                            <VueCtkDateTimePicker v-model="scheduleStartDate" :format="'YYYY-MM-DD HH:mm'"/>
+                            <VueCtkDateTimePicker v-model="scheduleStartDate" :format="'YYYY-MM-DD HH:mm'" :position="'top'"/>
                         </div> 
                         <p class="mt-4 text-sm text-gray-500 text-left"> <b>The UTC time zone is used. Please select with UTC in mind.</b> </p>
                     </div>
@@ -87,11 +87,8 @@
 </template>
 <script>
 import vSelect from 'vue-select'
-import DatePicker from 'vue2-datepicker'
-import 'vue2-datepicker/index.css'
-
-import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
-import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker'
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css'
 export default {
     name: 'SchedulePost',
     data () {
@@ -121,7 +118,6 @@ export default {
     },
     components: {
         vSelect,
-        DatePicker,
         VueCtkDateTimePicker
     },
     computed: {

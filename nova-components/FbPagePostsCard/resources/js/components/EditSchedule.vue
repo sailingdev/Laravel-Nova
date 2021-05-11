@@ -73,10 +73,9 @@
                             <i class="fa fa-calendar"></i> SCHEDULE DATE AND TIME
                         </label>
                         <div class="mt-1 text-left">
-                            <!-- date picker package not working on this component. Needed to move on, wasting too much time here -->
-                            <input type="text" v-model="editStartDate" class="form-control">
+                             <VueCtkDateTimePicker v-model="editStartDate" :format="'YYYY-MM-DD HH:mm'" :position="'top'"/>
                         </div> 
-                          <p class="mt-4 text-sm text-gray-500"> <b>The UTC time zone is used. Please select with UTC in mind.</b> </p>
+                          <p class="mt-4 text-sm text-gray-500 text-left"> <b>The UTC time zone is used. Please select with UTC in mind.</b> </p>
                     </div>
 
                     <div class="mt-2">
@@ -113,7 +112,8 @@
 </template>
 <script>
 import vSelect from 'vue-select' 
-
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 export default {
     name: 'EditSchedule',
     data () {
@@ -145,7 +145,8 @@ export default {
         }
     },
     components: {
-        vSelect
+        vSelect,
+        VueCtkDateTimePicker
     },
     methods: {
         preparePageGroup (pageGroups) {

@@ -70,10 +70,8 @@
                         <label for="about" class="block text-gray-700">
                             <i class="fa fa-calendar"></i> SCHEDULE DATE AND TIME
                         </label>
-                        <div class="mt-1 text-left">
-                            <date-time-picker :placeholder="new Date().toDateString()" @change="startDateChanged"
-                                :value="startDate" :dateFormat="'Y-m-d H:i'" :enableTime="true" :altFormat="'Y-m-d H:i'">
-                            </date-time-picker>
+                        <div class="mt-1 text-left"> 
+                            <VueCtkDateTimePicker v-model="startDate" :format="'YYYY-MM-DD HH:mm'" :position="'top'"/>
                         </div> 
                         <p class="mt-4 text-sm text-gray-500"> <b>The UTC time zone is used. Please select with UTC in mind.</b> </p>
                     </div>
@@ -132,7 +130,8 @@
 </template>
 <script>
 import vSelect from 'vue-select' 
-
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker'
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css'
 export default {
     name: 'SubmitForm',
     data () {
@@ -167,7 +166,8 @@ export default {
         }
     },
     components: {
-        vSelect
+        vSelect,
+        VueCtkDateTimePicker
     },
     methods: {
         uploadFile (e, t) {

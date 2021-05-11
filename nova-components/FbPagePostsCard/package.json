@@ -20,7 +20,6 @@
         "vue-ctk-date-time-picker": "^2.5.0",
         "vue-file-agent": "^1.7.3",
         "vue-select": "^3.11.2",
-        "vue2-datepicker": "^3.9.0",
         "vue2-flip-countdown": "^0.11.1"
     }
 }

@@ -54,7 +54,7 @@ class FbPageService
 
     public function getByLimits(int $start, int $end)
     {
-        return FbPage::limit($end)->offset($start)->get();
+        return FbPage::orderBy('created_at', 'asc')->offset($start)->limit(200)->get();
     }
 
     public function updateData($data, $rowId)

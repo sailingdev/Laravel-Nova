@@ -70,7 +70,6 @@ class FbPagePostSchedulerService
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
        
-        $runCount = 0; // to be removed 
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
                 $targetGroups = (array) $schedule->page_groups;
@@ -78,46 +77,39 @@ class FbPagePostSchedulerService
                 if (count($targetGroups) > 0) { 
                     foreach ($targetGroups as $targetGroup) {
                         $groupLimit = $fbPageService->getGroupQueryLimits(preg_replace("#[^0-9]#i", "", $targetGroup));
-                         
+                      
                         $facebookPages = $fbPageService->getByLimits($groupLimit[0], $groupLimit[1]);
+                        
+                        foreach ($facebookPages as $facebookPage) { 
+                            
+                            
+                            $pageId = $facebookPage->page_id; 
+                            
+                            $fd = [];
+                            if ($schedule->fbPagePost->media !== null) {
 
-
-                        if ( $runCount < 1) {
-                            $runCount++; // to be removed
-                            // for each of this page Id, post to page
-                            $useForNow = ['101355112064132', '105254138367809', '105983524959741', '103009081931241', '107605058126213'];
-                            foreach ($useForNow as $facebookPage) { 
+                                // upload a photo
+                                $createPhoto = $facebookPageExternal->createPagePhoto([], [
+                                    'no_story' => true,
+                                    'url' => $schedule->fbPagePost->media
+                                ], $pageId);
                                 
-                                
-                                    $pageId = $facebookPage;
-                                    
-                                    $fd = [];
-                                    if ($schedule->fbPagePost->media !== null) {
-        
-                                        // upload a photo
-                                        $createPhoto = $facebookPageExternal->createPagePhoto([], [
-                                            'no_story' => true,
-                                            'url' => $schedule->fbPagePost->media
-                                        ], $pageId);
-                                        
-                                        if ($createPhoto[0] === true && isset($createPhoto[1]->id)) {
-                                            $fd['object_attachment'] = $createPhoto[1]->id; 
-                                        }
-                                        else {
-                                            Log::info('Photo could not be created for the page with id :: ' . $pageId, [$createPhoto[1]]);
-                                        } 
-                                    } 
-                                    $fd['message'] = $schedule->fbPagePost->text;
-                                    $fd['url'] = $schedule->fbPagePost->url;
-                                    $createPost = $facebookPageExternal->createPagePost([], $fd, $pageId); 
+                                if ($createPhoto[0] === true && isset($createPhoto[1]->id)) {
+                                    $fd['object_attachment'] = $createPhoto[1]->id; 
+                                }
+                                else {
+                                    Log::info('Photo could not be created for the page with id :: ' . $pageId, [$createPhoto[1]]);
+                                } 
+                            } 
+                            $fd['message'] = $schedule->fbPagePost->text;
+                            $fd['url'] = $schedule->fbPagePost->url;
+                            $createPost = $facebookPageExternal->createPagePost([], $fd, $pageId); 
 
-                                    if ($createPost[0] === false) {
-                                        Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
-                                    } 
-                            }
+                            if ($createPost[0] === false) {
+                                Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
+                            } 
                         }
-
-
+                    
                     }
                 } 
                 $this->updateSchedule([
