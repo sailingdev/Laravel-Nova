@@ -22,7 +22,7 @@ class FbPagePostSchedulerService
         $scheduler = new FbPagePostScheduler;
         $scheduler->fb_page_post_id = $data['fb_page_post_id'];
         $scheduler->start_date = $data['start_date'];
-        $scheduler->page_groups = json_encode($data['page_groups']);
+        $scheduler->page_groups = $data['page_groups'];
         if ($scheduler->save()) {
             return [true, $scheduler];
         }
