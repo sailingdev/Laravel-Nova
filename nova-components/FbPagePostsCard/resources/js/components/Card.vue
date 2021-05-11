@@ -3,7 +3,7 @@
         <div class="px-3 py-3">
             <SubmitForm :card="card" @formSubmitted="formSubmitted" />
             <ScheduledDrafts :card="card" ref="scheduledDrafts" />
-            <PostLibrary :card="card" ref="postLibrary" /> 
+            <PostLibrary :card="card" ref="postLibrary" @triggerScheduleReload="triggerScheduleReload"/> 
             <vue-confirm-dialog></vue-confirm-dialog>
         </div>
     </card>
@@ -26,6 +26,9 @@ export default {
         formSubmitted () {
             this.$refs.scheduledDrafts.loadScheduledDrafts()
             this.$refs.postLibrary.loadPostLibrary()
+        },
+        triggerScheduleReload () {
+            this.$refs.scheduledDrafts.loadScheduledDrafts()
         },
         toggleModal () { 
             const body = document.querySelector('body')

@@ -75,6 +75,7 @@
                                 :value="startDate" :dateFormat="'Y-m-d H:i'" :enableTime="true" :altFormat="'Y-m-d H:i'">
                             </date-time-picker>
                         </div> 
+                        <p class="mt-4 text-sm text-gray-500"> <b>The UTC time zone is used. Please select with UTC in mind.</b> </p>
                     </div>
 
                     <div class="mt-2">

@@ -24,3 +24,4 @@ Route::get('/load-post-library', [FbPagePostsController::class, 'loadLibrary']);
 Route::post('/update-page-post', [FbPagePostsController::class, 'update']);
 Route::delete('/delete-scheduled-draft', [FbPagePostSchedulersController::class, 'delete']);
 Route::delete('/delete-post', [FbPagePostsController::class, 'delete']);
+Route::post('/schedule-page-post', [FbPagePostSchedulersController::class, 'create']);

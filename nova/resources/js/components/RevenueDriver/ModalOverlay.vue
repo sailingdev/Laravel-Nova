@@ -60,7 +60,7 @@ export default {
 </script>
 <style scoped>
     .modal {
-        z-index: 90900999;
+        z-index: 9090;
         overflow-y: scroll;
     }
     .modal-container {

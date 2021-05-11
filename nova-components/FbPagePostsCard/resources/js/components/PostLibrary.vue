@@ -28,6 +28,7 @@
                         </td>
                         <td class="p-3 px-5 flex justify-end">
                             <button @click="viewPost(post, key)" type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">View</button>
+                            <button @click="schedulePost(post, key)" type="button" class="mr-3 text-sm bg-indigo-500 hover:bg-indigo-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Schedule</button>
                             <button @click="editPost(post, key)" type="button" class="mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Edit</button>
                             <button @click="deletePost(post, key)" type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button>
                         </td>
@@ -36,8 +37,9 @@
             </table>
         </div> 
         <modal-overlay :modalStatus="showModal" @modalClosed="modalClosed">
-            <ViewPost v-if="!editMode" :post="post" :setUpdateAlert="setUpdateAlert" :viewType="'post'" @switchToEditMode="switchToEditMode"/>
-            <EditPost v-else :post="post" :card="card" @formUpdated="formUpdated"/>
+            <ViewPost v-if="mode == 'view'" :post="post" :setUpdateAlert="setUpdateAlert" :viewType="'post'" @switchToEditMode="switchToEditMode"/>
+            <EditPost v-else-if="mode == 'edit'" :post="post" :card="card" @formUpdated="formUpdated"/>
+            <SchedulePost v-else-if="mode == 'schedule'" :post="post" :card="card" :setUpdateAlert="setUpdateAlert" :viewType="'post'" @triggerScheduleReload="triggerScheduleReload"/>
         </modal-overlay>
     </div>
 </template>
@@ -45,6 +47,7 @@
 import ModalOverlay from '../../../../../nova/resources/js/components/RevenueDriver/ModalOverlay'
 import ViewPost from './ViewPost'
 import EditPost from './EditPost'
+import SchedulePost from './SchedulePost'
 export default {
     name: 'PostLibrary',
     data () {
@@ -56,7 +59,7 @@ export default {
             showModal: false,
             post: {},
             keyInView: null,
-            editMode: false,
+            mode: null,
             setUpdateAlert: false,
         }
     },
@@ -68,7 +71,8 @@ export default {
     components: {
         ModalOverlay,
         ViewPost,
-        EditPost
+        EditPost,
+        SchedulePost
     },
     mounted () {
         this.loadPostLibrary()
@@ -89,24 +93,31 @@ export default {
             this.keyInView = key
             this.post = post
             this.showModal = true
+            this.mode = 'view'
+        },
+        schedulePost (post, key) {
+            this.keyInView = key
+            this.post = post
+            this.showModal = true
+            this.mode = 'schedule'
         },
         editPost (post, key) {
             this.keyInView = key
             this.post = post
             this.showModal = true
-            this.editMode = true
+            this.mode = 'edit'
         },
         modalClosed () {
             this.showModal = false
-            this.editMode = false
+            this.mode = null
         },
         switchToEditMode (post) {
-            this.editMode = true
+            this.mode = 'edit'
         },
         formUpdated (newUpdate) {
             this.post = newUpdate
             this.postLibrary[this.keyInView] = newUpdate
-            this.editMode = false
+            this.mode = 'view'
             this.setUpdateAlert = true
             setTimeout(() => {
                 this.setUpdateAlert = false
@@ -134,6 +145,9 @@ export default {
                 }
             })
             
+        },
+        triggerScheduleReload () {
+            this.$emit('triggerScheduleReload')
         }
     }
 }

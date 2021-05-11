@@ -76,6 +76,7 @@
                             <!-- date picker package not working on this component. Needed to move on, wasting too much time here -->
                             <input type="text" v-model="editStartDate" class="form-control">
                         </div> 
+                          <p class="mt-4 text-sm text-gray-500"> <b>The UTC time zone is used. Please select with UTC in mind.</b> </p>
                     </div>
 
                     <div class="mt-2">

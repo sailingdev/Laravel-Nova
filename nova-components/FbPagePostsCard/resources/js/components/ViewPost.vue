@@ -27,7 +27,7 @@
                         </p>
                         <p class="pt-4 text-xs font-bold flex items-center justify-start">
                             <span class="h-4 fill-current text-green-700 pr-4 pt-1"><i class="fa fa-clock-o"></i> Scheduled Time </span>
-                            <span class="text-sm">{{ post.time }}</span> 
+                            <span class="text-sm">{{ post.time }} (UTC)</span> 
                         </p>
                     </template>
                      <p class="pt-4 text-xs font-bold flex items-center justify-start">
