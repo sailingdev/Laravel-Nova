@@ -69,9 +69,7 @@ class FbPagePostSchedulerService
         ->get();
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
-        
-        dd($schedules);  
-        
+       
         $runCount = 0; // to be removed 
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
