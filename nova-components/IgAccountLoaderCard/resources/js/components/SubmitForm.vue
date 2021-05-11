@@ -1,6 +1,6 @@
 <template>
     <div class="rd__submit-list-form-wrapper">
-        <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Load Instagram Account IDs <small>(Work in Progress)</small></h1>
+        <h1 class="text-center text-3xl text-80 font-dark px-4 py-4">Load Instagram Account IDs </h1>
         
         <div class="container-box shadow-sm rounded" v-if="displayForm">
             <div class="shadow sm:rounded-md sm:overflow-hidden"> 
