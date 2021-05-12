@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\User;
+use App\Services\FbPageService;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Hash;
 
@@ -33,5 +34,11 @@ trait AssignAuthData
     public function getMarkets(array $markets)
     {
         return $this->markets;
+    }
+
+    public function getPageGroups()
+    {
+        $fbPageService = new FbPageService;
+        return $fbPageService->groupPage();
     }
 }

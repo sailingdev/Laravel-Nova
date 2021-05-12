@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 | as many additional routes to this file as your card may require.
 |
 */
-
-Route::get('/load-page-groups', [FbPagesController::class, 'loadPageGroups']);
 Route::post('/submit-page-post', [FbPagePostsController::class, 'submit']);
+Route::get('/load-page-groups', [FbPagesController::class, 'loadPageGroups']);
 Route::get('/load-scheduled-drafts', [FbPagePostSchedulersController::class, 'getAllScheduled']);
 Route::get('/load-post-library', [FbPagePostsController::class, 'loadLibrary']);
 Route::post('/update-page-post', [FbPagePostsController::class, 'update']);
