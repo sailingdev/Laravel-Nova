@@ -71,7 +71,6 @@ class FbPagePostSchedulerService
     { 
         $schedules = FbPagePostScheduler::where('start_date', '<=', Carbon::now())
         ->where('status', '!=', 'processed')
-        ->where('id', '45')
         ->with(['fbPagePost'])
         ->get();
         $facebookPageExternal = new FacebookPage;
@@ -92,7 +91,7 @@ class FbPagePostSchedulerService
                             $pageId = $facebookPage->page_id; 
                           
                             $fd = [];
-                            if ($pageId == '101355112064132' || $pageId == '108094938085637' ) {
+                          
 
                                 Log::info('Will create into ', [$facebookPage->page_name, $facebookPage->page_id]);
 
@@ -118,7 +117,7 @@ class FbPagePostSchedulerService
                                 if ($createPost[0] === false) {
                                     Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
                                 } 
-                            }
+                            
                         }
                     
                     }
