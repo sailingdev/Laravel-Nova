@@ -2,17 +2,17 @@
 
 namespace Database\Factories\FbReporting;
 
-use App\Models\FbReporting\FbPagePostScheduler;
+use App\Models\FbReporting\FbPagePost;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class FbPagePostSchedulerFactory extends Factory
+class FbPagePostFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = FbPagePostScheduler::class;
+    protected $model = FbPagePost::class;
 
     /**
      * Define the model's default state.
@@ -22,8 +22,10 @@ class FbPagePostSchedulerFactory extends Factory
     public function definition()
     {
         return [
-            'page_groups' => json_encode(['Group 1']),
-            'start_date' => $this->faker->dateTime('tomorrow')
+            'text' =>  $this->faker->text,
+            'url' => $this->faker->url,
+            'reference' => $this->faker->name,
+            'media' => ''
         ];
     }
 }

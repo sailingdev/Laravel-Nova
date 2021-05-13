@@ -25,7 +25,7 @@ class DeletePostRequest extends FormRequest
     {   
         
         return [
-            'id' => ['nullable', 'exists:fb_page_posts']
+            'id' => ['required', 'exists:fb_page_posts']
         ];
     }
  

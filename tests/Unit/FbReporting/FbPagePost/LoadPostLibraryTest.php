@@ -7,8 +7,9 @@ use App\Models\FbReporting\FbPagePostScheduler;
 use stdClass;
 use Tests\TestCase; 
 
-class LoadScheduledDraftsTest extends TestCase
+class LoadPostLibraryTest extends TestCase
 {
+
     /**
      * @test
      * @group fbPagePost
@@ -17,27 +18,21 @@ class LoadScheduledDraftsTest extends TestCase
     {  
         $response = $this->actingAs($this->getDefaultUser())
             ->withHeaders(['Accept' => 'application/json'])
-            ->json('PUT', '/nova-vendor/fb-page-posts-card/load-scheduled-drafts');
+            ->json('PUT', '/nova-vendor/fb-page-posts-card/load-post-library');
             
         $response->assertStatus(405);
     }
 
-    
     /**
      * @test 
      * @group fbPagePost
     */
     public function should_pass_if_all_correct()
     {     
-        $fbPagePost = FbPagePost::factory()->make();
-        FbPagePostScheduler::factory()->count(3)->make([
-            'page_groups' => json_encode(['Group 1']),
-            'start_date' => $this->faker->dateTime('tomorrow', 'UTC'),
-            'fb_page_post_id' => $fbPagePost->id,
-        ]);
+        FbPagePost::factory()->count(3)->create();
         $response = $this->actingAs($this->getDefaultUser())
             ->withHeaders(['Accept' => 'application/json'])
-            ->json('GET', '/nova-vendor/fb-page-posts-card/load-scheduled-drafts');
+            ->json('GET', '/nova-vendor/fb-page-posts-card/load-post-library');
         $response->assertStatus(200); 
     }
 }

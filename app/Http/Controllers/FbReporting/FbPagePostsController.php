@@ -26,7 +26,8 @@ class FbPagePostsController extends Controller
      */
     public function submit(SubmitPostRequest $request, FbPagePostService $fbPagePostService, FbPagePostSchedulerService $fbPagePostSchedulerService, FileManager $fileManager)
     {
-        $media = '';
+        $media = null;
+        
         if ($request->media !== null && $request->file('media')->isValid()) {
             $uploadImage = $fileManager->uploadFile($request->media, 'media', 'fb_posts');
             if (!$uploadImage[0]) {
@@ -34,7 +35,7 @@ class FbPagePostsController extends Controller
             }
             $media = $uploadImage[1];
         }
-
+        
         $newPost = $fbPagePostService->create([
             'text' => $request->text,
             'url' => $request->url,
@@ -43,10 +44,11 @@ class FbPagePostsController extends Controller
         ]);
         if ($newPost[0] !== true) {
             return $this->errorResponse('An error occured. Please try again');
-        }
-        if ($request->start_date != null && count($request->page_groups) > 0) {
+        } 
+        if ($request->start_date != null && gettype($request->page_groups) === 'array' && count($request->page_groups) > 0) {
+            $startDate = gettype($request->start_date) === 'array' ? $request->start_date['date'] : $request->start_date;
             $fbPagePostSchedulerService->createSchedule([
-                'start_date' => $request->start_date,
+                'start_date' => $startDate,
                 'fb_page_post_id' => $newPost[1]->id,
                 'page_groups' => $request->page_groups
             ]);
@@ -94,13 +96,15 @@ class FbPagePostsController extends Controller
         $ret = null;
         if (
             isset($request->fb_page_post_scheduler_id) && $request->fb_page_post_scheduler_id != null &&
-            isset($request->page_groups) && count($request->page_groups) > 0
-        ) {
-
+            isset($request->page_groups) && count($request->page_groups) > 0 && 
+            isset($request->start_date)
+        ) { 
+           
+            $startDate = gettype($request->start_date) === 'array' ? $request->start_date['date'] : $request->start_date;
             $schedule = $fbPagePostSchedulerService->updateSchedule([
-                'start_date' => $request->start_date,
+                'start_date' => $startDate,
                 'fb_page_post_id' => $updatePost[1]->id,
-                'page_groups' => json_encode($request->page_groups)
+                'page_groups' => $request->page_groups
             ], $request->fb_page_post_scheduler_id);
 
             if ($schedule[0] === false) {

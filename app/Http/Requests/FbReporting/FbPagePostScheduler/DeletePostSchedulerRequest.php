@@ -25,7 +25,7 @@ class DeletePostSchedulerRequest extends FormRequest
     {   
         
         return [
-            'id' => ['nullable', 'exists:fb_page_post_schedulers']
+            'id' => ['required', 'exists:fb_page_post_schedulers']
         ];
     }
  

@@ -34,8 +34,9 @@ class FbPagePostSchedulersController extends Controller
 
     public function create(CreateScheduleRequest $request,  FbPagePostSchedulerService $fbPagePostSchedulerService) 
     {
+        $startDate = gettype($request->start_date) === 'array' ? $request->start_date['date'] : $request->start_date;
         $new = $fbPagePostSchedulerService->createSchedule([
-            'start_date' => $request->start_date,
+            'start_date' => $startDate,
             'fb_page_post_id' => $request->fb_page_post_id,
             'page_groups' => $request->page_groups
         ]);

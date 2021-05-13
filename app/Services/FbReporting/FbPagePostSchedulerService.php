@@ -2,6 +2,7 @@
 
 namespace App\Services\FbReporting;
 
+use App\Models\FbReporting\FbPagePost;
 use App\Models\FbReporting\FbPagePostScheduler;
 use App\Revenuedriver\FacebookPage;
 use App\Services\FbPageService;
@@ -23,6 +24,7 @@ class FbPagePostSchedulerService
         $scheduler->fb_page_post_id = $data['fb_page_post_id'];
         $scheduler->start_date = $data['start_date'];
         $scheduler->page_groups = $data['page_groups'];
+        
         if ($scheduler->save()) {
             return [true, $scheduler];
         }
@@ -41,10 +43,14 @@ class FbPagePostSchedulerService
      * @return array
      */
     public function updateSchedule(array $data, $rowId): array
-    {
-        if (FbPagePostScheduler::where('id', $rowId)->update($data)) {
-            return [true, FbPagePostScheduler::where('id', $rowId)->first()];
+    { 
+        $fbPagePostScheduler = FbPagePostScheduler::where('id', $rowId)->first();
+        foreach ($data as $key => $value) {
+            $fbPagePostScheduler->{$key} = $value;
         }
+        if ($fbPagePostScheduler->save()) {
+            return [true, $fbPagePostScheduler];
+        } 
         return [false];
     }
 
@@ -54,7 +60,7 @@ class FbPagePostSchedulerService
      * @return bool
      */
     public function deleteRow($rowId): bool
-    {
+    { 
        if(FbPagePostScheduler::where('id', $rowId)->delete()) {
            return true;
        }

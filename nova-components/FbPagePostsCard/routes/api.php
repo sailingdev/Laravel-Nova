@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/submit-page-post', [FbPagePostsController::class, 'submit']);
-Route::get('/load-page-groups', [FbPagesController::class, 'loadPageGroups']);
 Route::get('/load-scheduled-drafts', [FbPagePostSchedulersController::class, 'getAllScheduled']);
 Route::get('/load-post-library', [FbPagePostsController::class, 'loadLibrary']);
 Route::post('/update-page-post', [FbPagePostsController::class, 'update']);
+Route::get('/load-page-groups', [FbPagesController::class, 'loadPageGroups']);
+Route::post('/schedule-page-post', [FbPagePostSchedulersController::class, 'create']);
+
 Route::delete('/delete-scheduled-draft', [FbPagePostSchedulersController::class, 'delete']);
 Route::delete('/delete-post', [FbPagePostsController::class, 'delete']);
-Route::post('/schedule-page-post', [FbPagePostSchedulersController::class, 'create']);

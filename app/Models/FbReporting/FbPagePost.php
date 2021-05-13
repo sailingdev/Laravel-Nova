@@ -22,7 +22,7 @@ class FbPagePost extends Model
      */
     public function getMediaAttribute($value)
     {
-        return $value !== null ? \App\Labs\FileManager::fetchUploadedFilePath($value, 'fb_posts') : null;
+        return $value !== null && $value !== '' ? \App\Labs\FileManager::fetchUploadedFilePath($value, 'fb_posts') : null;
     }
 
 }

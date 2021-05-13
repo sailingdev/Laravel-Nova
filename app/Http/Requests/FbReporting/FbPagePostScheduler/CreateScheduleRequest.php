@@ -24,7 +24,7 @@ class CreateScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date' => ['required', 'date'],
+            'start_date' => ['required'],
             'page_groups' => ['required', 'array'],
             'fb_page_post_id' => ['required', ]
         ];
