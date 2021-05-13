@@ -75,7 +75,7 @@ class FbPagePostSchedulerService
         ->get();
         $facebookPageExternal = new FacebookPage;
         $fbPageService = new FbPageService;
-       
+    
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
                 $targetGroups = (array) $schedule->page_groups;
@@ -86,12 +86,14 @@ class FbPagePostSchedulerService
                       
                         $facebookPages = $fbPageService->getByLimits($groupLimit[0], $groupLimit[1]);
                         
-                        foreach ($facebookPages as $facebookPage) { 
-                            
-                            
+                        foreach ($facebookPages as $facebookPage) {  
+
                             $pageId = $facebookPage->page_id; 
-                            
+                          
                             $fd = [];
+                             
+                            Log::info('Will create into ', [$facebookPage->page_name, $facebookPage->page_id]);
+
                             if ($schedule->fbPagePost->media !== null) {
 
                                 // upload a photo
@@ -114,6 +116,7 @@ class FbPagePostSchedulerService
                             if ($createPost[0] === false) {
                                 Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
                             } 
+                            
                         }
                     
                     }

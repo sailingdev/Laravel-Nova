@@ -21,7 +21,7 @@ class ProcessScheduledFacebookPagePostsJob implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 900;
+    public $timeout = 1800;
     
     /**
      * Execute the job.
