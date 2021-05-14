@@ -615,11 +615,11 @@ class SubmittedKeywordService
      * 
      * @return array
      */
-    public function loadBatchSummaries(): array
+    public function loadToBeCreated()
     {
-        $batches =  SubmittedKeyword::select('batch_id', 'created_at', 'market')->where('status', 'pending')
-            ->where('action_taken', 'new')->distinct()->latest()->get();
-       
+        $batches =  SubmittedKeyword::select(['id', 'batch_id', 'keyword', 'feed', 'status'])->where('status', 'pending')
+            ->where('action_taken', 'new')->where('feed', 'Iac')->get();
+        return $batches;
         $data = [];
         $sm = new StringManipulator;
         foreach($batches as $batch) {
@@ -684,7 +684,7 @@ class SubmittedKeywordService
     /**
      * @return array
      */
-    public function loadBatchHistory(): array
+    public function loadBatchHistory()
     { 
         $data = [];
         $sm = new StringManipulator;
@@ -692,38 +692,38 @@ class SubmittedKeywordService
         $rows = SubmittedKeyword::select('*')
             ->where('action_taken', 'new')
             ->where('status', '!=', 'pending')->limit(10)->orderBy('updated_at', 'desc')->get(); 
-            
-            foreach($rows as $row) {
-                $new = $skipped = [];
-                $processingCount = 0;
-                if ($row->action_taken === 'new') {
-                    array_push($new, [
-                        'keyword' =>  $this->facebookCampaign->formatKeyword($row->keyword, '+'),
-                        'type_tag' => '',
-                        'id' => $row->id
-                    ]);
-                }
-                else {
-                    array_push($skipped, $row->keyword);
-                }
+        return $rows;
+            // foreach($rows as $row) {
+            //     $new = $skipped = [];
+            //     $processingCount = 0;
+            //     if ($row->action_taken === 'new') {
+            //         array_push($new, [
+            //             'keyword' =>  $this->facebookCampaign->formatKeyword($row->keyword, '+'),
+            //             'type_tag' => '',
+            //             'id' => $row->id
+            //         ]);
+            //     }
+            //     else {
+            //         array_push($skipped, $row->keyword);
+            //     }
 
-                if ($row->status == 'pending' || $row->status == 'processing') {
-                    $processingCount++;
-                }
+            //     if ($row->status == 'pending' || $row->status == 'processing') {
+            //         $processingCount++;
+            //     }
 
-                $obj = new \stdClass;
-                $obj->batch_id = $row->batch_id;
-                $obj->date = Carbon::parse($row->created_at)->toDateString();
+            //     $obj = new \stdClass;
+            //     $obj->batch_id = $row->batch_id;
+            //     $obj->date = Carbon::parse($row->created_at)->toDateString();
                 
-                $collec = [];
-                foreach ($new as $keywordAssoc) {
-                    array_push($collec, $keywordAssoc['keyword']);
-                }
-                $obj->to_create = $sm->generateStringFromArray($collec, ',');
+            //     $collec = [];
+            //     foreach ($new as $keywordAssoc) {
+            //         array_push($collec, $keywordAssoc['keyword']);
+            //     }
+            //     $obj->to_create = $sm->generateStringFromArray($collec, ',');
                 
-                $obj->status = $processingCount > 0 ? 'processing' : 'processed';
-                array_push($data, $obj);
-            }   
+            //     $obj->status = $processingCount > 0 ? 'processing' : 'processed';
+            //     array_push($data, $obj);
+            // }   
         return $data;
     }
 

@@ -1,6 +1,5 @@
 <template>
-    <div class="batches-to-process mt-5 mb-5 w-full">
-        <h1 class="text-left text-xl text-80 font-dark pt-4 pl-6">Batch Status</h1>
+    <div class="batches-to-process mt-5 mb-5 w-full"> 
 
          <div v-if="displaySubmitSuccess">
             <div class="mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success">
@@ -15,7 +14,7 @@
         </div>
         
         <div v-else class="w-full mx-auto p-8">   
-            <div class="shadow-md" v-if="displayForm">
+            <div class="shadow-md pt-6 pb-6" v-if="displayForm">
                 
                 <div v-if="Object.entries(errorResponse).length > 0">
                     <div class="mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg" role="alert">
@@ -33,33 +32,44 @@
                 </div>
                 
                 <div v-else class="px-4 py-3"> 
-                    <div v-for="(batch, key) in batches" :key="key" class="batch-container">
-                        <h4 class="px-4 py-4 leading-normal"> 
-                            <small> Batch ID:</small> {{ batch.batch_id }}  <br/>
-                            <small> Market: {{ batch.market  }}</small> <br/>
-                            <small> Date: {{ batch.date  }}</small>
-                        </h4>
-                        <p class="mt-4 mb-4"> <b>Keywords to skip:</b>
-                            {{ batch.skipped == '' || batch.skipped == null ? 'NULL' : batch.skipped }}
-                        </p>
-                        <p class="mt-4 mb-4"> <b> Keywords to create </b> </p>
-
-                        <div class="header-box flex">
-                            <div>Keyword</div> 
-                            <div>Typetag to Duplicate</div>
-                        </div>
-                        <div class="content-box flex w-full" v-for="(keyword, key2) in batch.to_create" :key="key2">
-                            <div>{{ keyword.keyword }}</div>
-                            <div> <input class="form-control" type="text" @keyup="pressed" v-model="batches[key]['to_create'][key2]['type_tag']" /> </div>
-                        </div>
+                    <div class="batch-container">
+                        <div class="px-3 py-4 flex justify-center">
+                            <table class="w-full text-md rounded mb-4 table-striped table-bordered">
+                                <thead class="bg-black ">
+                                    <tr class="">
+                                        <th class="text-left p-3 px-5">DELETE</th>
+                                        <th class="text-left p-3 px-5">KEYWORD</th>
+                                        <th class="text-left p-3 px-5">TYPETAG TO DUPLICATE</th>
+                                        <th class="text-left p-3 px-5">CREATE ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b hover:bg-orange-100 bg-white" v-for="(batch, key) in batches" :key="key" >
+                    
+                                        <td class="p-3 px-5 flex justify-center">
+                                            <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                <i class="fa fa-times-circle"></i>
+                                            </button>
+                                        </td>
+                                        <td class="p-3 px-5">{{ batch.keyword }}</td>
+                                        <td class="p-3 px-5"><input type="text" placeholder="Enter type tag to duplicate" class="form-control"></td>
+                                        <td class="p-3 px-5">
+                                            <button type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                <i class="fa fa-check-circle"></i> &nbsp; Create
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> 
                     </div> 
-                     <div class="px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2">
+                     <!-- <div class="px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2">
                         <button :disabled="processing" @click="prepareForDispatch" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <span v-if="processing"><loader class="text-60" :fillColor="'#ffffff'" /></span>
                             <span v-else>Create Campaigns</span>
                         </button> 
                         <span class="ml-2 text-red-600 text-sm"> {{validateError}} </span>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
@@ -209,12 +219,9 @@ export default {
         color: #212529;
         background-color: rgba(0, 0, 0, 0.075);
     }
-    .batch-container {
-        border-bottom: 1px solid #ccc !important;
-        padding: 40px 0;
-    }
-    .batch-container h4 {
-        background-color: rgba(0, 0, 0, 0.08) !important;
-        border-top: 1px solid #2b6cb0 !important;
+</style>
+<style scoped>
+    table tr td, table tr th {
+        font-size: 14px;
     }
 </style>

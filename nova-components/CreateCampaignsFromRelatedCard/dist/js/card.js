@@ -503,6 +503,10 @@ Nova.booting(function (Vue, router, store) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(35)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(6)
@@ -511,7 +515,7 @@ var __vue_template__ = __webpack_require__(27)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -588,18 +592,19 @@ var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(8)
+  __webpack_require__(37)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(11)
 /* template */
-var __vue_template__ = __webpack_require__(21)
+var __vue_template__ = __webpack_require__(39)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-974f2952"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -666,7 +671,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n.batch-container {\n    border-bottom: 1px solid #ccc !important;\n    padding: 40px 0;\n}\n.batch-container h4 {\n    background-color: rgba(0, 0, 0, 0.08) !important;\n    border-top: 1px solid #2b6cb0 !important;\n}\n", ""]);
+exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n", ""]);
 
 // exports
 
@@ -712,6 +717,16 @@ module.exports = function listToStyles (parentId, list) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -13678,324 +13693,7 @@ if (false) {
 }
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "batches-to-process mt-5 mb-5 w-full" }, [
-    _c("h1", { staticClass: "text-left text-xl text-80 font-dark pt-4 pl-6" }, [
-      _vm._v("Batch Status")
-    ]),
-    _vm._v(" "),
-    _vm.displaySubmitSuccess
-      ? _c("div", [
-          _c(
-            "div",
-            {
-              staticClass:
-                "mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success"
-            },
-            [
-              _c(
-                "svg",
-                {
-                  staticStyle: {
-                    "-ms-transform": "rotate(360deg)",
-                    "-webkit-transform": "rotate(360deg)",
-                    transform: "rotate(360deg)"
-                  },
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    "xmlns:xlink": "http://www.w3.org/1999/xlink",
-                    "aria-hidden": "true",
-                    focusable: "false",
-                    width: "1em",
-                    height: "1em",
-                    preserveAspectRatio: "xMidYMid meet",
-                    viewBox: "0 0 24 24"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414",
-                      fill: "#3da35a"
-                    }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "h4",
-                {
-                  staticClass:
-                    "text-2xl text-center text-3xl text-80 font-dark px-4 py-4"
-                },
-                [_vm._v(" Thank you! ")]
-              ),
-              _vm._v(" "),
-              _c("p", { staticClass: "mt-2 mb-2 text-center" }, [
-                _vm._v(
-                  " Batch processing in progress. Please check back in few minutes time"
-                )
-              ])
-            ]
-          )
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.loading
-      ? _c(
-          "div",
-          {
-            staticClass: "rounded-lg flex items-center justify-center relative"
-          },
-          [_c("loader", { staticClass: "text-60" })],
-          1
-        )
-      : _c("div", { staticClass: "w-full mx-auto p-8" }, [
-          _vm.displayForm
-            ? _c("div", { staticClass: "shadow-md" }, [
-                Object.entries(_vm.errorResponse).length > 0
-                  ? _c("div", [
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
-                          attrs: { role: "alert" }
-                        },
-                        [
-                          _c("h4", { staticClass: "mt-2 mb-2" }, [
-                            _vm._v(
-                              " " + _vm._s(_vm.errorResponse.message) + " "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.errorResponse.errors, function(
-                            error,
-                            index
-                          ) {
-                            return _c(
-                              "p",
-                              { key: index, staticClass: "text-sm" },
-                              [
-                                _vm._v(
-                                  " \n                        => " +
-                                    _vm._s(error[0]) +
-                                    " \n                    "
-                                )
-                              ]
-                            )
-                          })
-                        ],
-                        2
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.batches.length < 1
-                  ? _c("div", [_vm._m(0)])
-                  : _c(
-                      "div",
-                      { staticClass: "px-4 py-3" },
-                      [
-                        _vm._l(_vm.batches, function(batch, key) {
-                          return _c(
-                            "div",
-                            { key: key, staticClass: "batch-container" },
-                            [
-                              _c(
-                                "h4",
-                                { staticClass: "px-4 py-4 leading-normal" },
-                                [
-                                  _c("small", [_vm._v(" Batch ID:")]),
-                                  _vm._v(" " + _vm._s(batch.batch_id) + "  "),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c("small", [
-                                    _vm._v(" Market: " + _vm._s(batch.market))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c("small", [
-                                    _vm._v(" Date: " + _vm._s(batch.date))
-                                  ])
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("p", { staticClass: "mt-4 mb-4" }, [
-                                _c("b", [_vm._v("Keywords to skip:")]),
-                                _vm._v(
-                                  "\n                        " +
-                                    _vm._s(
-                                      batch.skipped == "" ||
-                                        batch.skipped == null
-                                        ? "NULL"
-                                        : batch.skipped
-                                    ) +
-                                    "\n                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _vm._m(1, true),
-                              _vm._v(" "),
-                              _vm._m(2, true),
-                              _vm._v(" "),
-                              _vm._l(batch.to_create, function(keyword, key2) {
-                                return _c(
-                                  "div",
-                                  {
-                                    key: key2,
-                                    staticClass: "content-box flex w-full"
-                                  },
-                                  [
-                                    _c("div", [
-                                      _vm._v(_vm._s(keyword.keyword))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value:
-                                              _vm.batches[key]["to_create"][
-                                                key2
-                                              ]["type_tag"],
-                                            expression:
-                                              "batches[key]['to_create'][key2]['type_tag']"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: { type: "text" },
-                                        domProps: {
-                                          value:
-                                            _vm.batches[key]["to_create"][key2][
-                                              "type_tag"
-                                            ]
-                                        },
-                                        on: {
-                                          keyup: _vm.pressed,
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.batches[key]["to_create"][
-                                                key2
-                                              ],
-                                              "type_tag",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ])
-                                  ]
-                                )
-                              })
-                            ],
-                            2
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2"
-                          },
-                          [
-                            _c(
-                              "button",
-                              {
-                                staticClass:
-                                  "inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-                                attrs: { disabled: _vm.processing },
-                                on: { click: _vm.prepareForDispatch }
-                              },
-                              [
-                                _vm.processing
-                                  ? _c(
-                                      "span",
-                                      [
-                                        _c("loader", {
-                                          staticClass: "text-60",
-                                          attrs: { fillColor: "#ffffff" }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  : _c("span", [_vm._v("Create Campaigns")])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "span",
-                              { staticClass: "ml-2 text-red-600 text-sm" },
-                              [_vm._v(" " + _vm._s(_vm.validateError) + " ")]
-                            )
-                          ]
-                        )
-                      ],
-                      2
-                    )
-              ])
-            : _vm._e()
-        ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center",
-        attrs: { role: "alert" }
-      },
-      [_c("p", [_vm._v(" No record ")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "mt-4 mb-4" }, [
-      _c("b", [_vm._v(" Keywords to create ")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header-box flex" }, [
-      _c("div", [_vm._v("Keyword")]),
-      _vm._v(" "),
-      _c("div", [_vm._v("Typetag to Duplicate")])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-974f2952", module.exports)
-  }
-}
-
-/***/ }),
+/* 21 */,
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14144,6 +13842,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "ProcessedHistory",
@@ -14176,6 +13878,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).finally(function () {
                 _this.loading = false;
             });
+        },
+        batchStatusExtraClass: function batchStatusExtraClass(status) {
+            if (status === 'pending') {
+                return 'bg-grey-500 hover:bg-grey-700';
+            } else if (status == 'processing') {
+                return 'bg-orange-500 hover:bg-orange-700';
+            } else {
+                return 'bg-green-500 hover:bg-green-700';
+            }
         }
     }
 });
@@ -14189,9 +13900,11 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "keyword-batches-wrapper my-5" }, [
-    _c("h1", { staticClass: "text-left text-xl text-80 font-dark pt-4 pl-7" }, [
-      _vm._v("Last 10 tasks")
-    ]),
+    _c(
+      "h1",
+      { staticClass: "text-center text-2xl  text-80 font-dark pt-4 mt-2 mb-2" },
+      [_vm._v("Last 10 tasks")]
+    ),
     _vm._v(" "),
     _vm.loading
       ? _c(
@@ -14202,8 +13915,8 @@ var render = function() {
           [_c("loader", { staticClass: "text-60" })],
           1
         )
-      : _c("div", { staticClass: "w-full mx-auto p-8" }, [
-          _c("div", { staticClass: "shadow-md" }, [
+      : _c("div", { staticClass: "mx-auto shadow-md pt-6 pb-6" }, [
+          _c("div", { staticClass: "w-90p" }, [
             Object.entries(_vm.errorResponse).length > 0
               ? _c("div", [
                   _c(
@@ -14236,45 +13949,68 @@ var render = function() {
             _vm.batches.length < 1
               ? _c("div", [_vm._m(0)])
               : _c("div", [
-                  _vm._m(1),
-                  _vm._v(" "),
                   _c(
-                    "div",
-                    _vm._l(_vm.batches, function(batch, key) {
-                      return _c(
-                        "div",
-                        { key: key, staticClass: "content-box flex w-full" },
-                        [
-                          _c("div", [_vm._v(_vm._s(batch.batch_id))]),
-                          _vm._v(" "),
-                          _c("div", [_vm._v(_vm._s(batch.date))]),
-                          _vm._v(" "),
-                          _c("div", [_vm._v(_vm._s(batch.to_create))]),
-                          _vm._v(" "),
-                          _c("div", [
-                            _c(
-                              "span",
-                              {
-                                staticClass:
-                                  "mr-2 text-white p-1 rounded leading-none",
-                                class:
-                                  batch.status == "processing"
-                                    ? "bg-orange-600"
-                                    : "bg-green-600"
-                              },
-                              [
-                                _vm._v(
-                                  " \n                                " +
-                                    _vm._s(batch.status) +
-                                    " \n                            "
-                                )
-                              ]
-                            )
-                          ])
-                        ]
+                    "table",
+                    {
+                      staticClass:
+                        "w-full text-md shadow-md rounded mb-4 table-striped table-bordered"
+                    },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.batches, function(batch, key) {
+                          return _c(
+                            "tr",
+                            {
+                              key: key,
+                              staticClass:
+                                "border-b hover:bg-orange-100 bg-white"
+                            },
+                            [
+                              _c("td", { staticClass: "p-3 px-5" }, [
+                                _vm._v(" " + _vm._s(batch.keyword) + " ")
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "p-3 px-5" }, [
+                                _vm._v(" " + _vm._s(batch.feed) + " ")
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "p-3 px-5" }, [
+                                _vm._v(_vm._s(batch.market))
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "p-3 px-5 flex justify-center" },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "mr-3 text-sm text-white py-2 px-2 rounded focus:outline-none focus:shadow-outline",
+                                      class: _vm.batchStatusExtraClass(
+                                        batch.status
+                                      ),
+                                      attrs: { type: "button" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                   " +
+                                          _vm._s(batch.status) +
+                                          " \n                                "
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        }),
+                        0
                       )
-                    }),
-                    0
+                    ]
                   )
                 ])
           ])
@@ -14300,14 +14036,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header-box flex" }, [
-      _c("div", {}, [_vm._v("Batch ID")]),
-      _vm._v(" "),
-      _c("div", [_vm._v("Date")]),
-      _vm._v(" "),
-      _c("div", [_vm._v("Keywords to create")]),
-      _vm._v(" "),
-      _c("div", [_vm._v(" Status ")])
+    return _c("thead", { staticClass: "bg-black " }, [
+      _c("tr", { staticClass: "border-b" }, [
+        _c("th", { staticClass: "text-left p-3 px-5" }, [
+          _vm._v("Keywords to create")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("Feed")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("Market")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("Status")])
+      ])
     ])
   }
 ]
@@ -14330,7 +14070,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "card",
-    { staticClass: "flex flex-col items-center justify-center" },
+    {
+      staticClass:
+        "flex flex-col items-center justify-center create-campaigns-from-related-card"
+    },
     [
       _c(
         "div",
@@ -14369,6 +14112,353 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(36);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("ac06e93a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b9bc2c0a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b9bc2c0a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.create-campaigns-from-related-card {\n    font-family: DM Sans;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(38);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("f0ae6816", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-974f2952\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./BatchesToProcess.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-974f2952\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./BatchesToProcess.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ntable tr td[data-v-974f2952], table tr th[data-v-974f2952] {\n    font-size: 14px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "batches-to-process mt-5 mb-5 w-full" }, [
+    _vm.displaySubmitSuccess
+      ? _c("div", [
+          _c(
+            "div",
+            {
+              staticClass:
+                "mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success"
+            },
+            [
+              _c(
+                "svg",
+                {
+                  staticStyle: {
+                    "-ms-transform": "rotate(360deg)",
+                    "-webkit-transform": "rotate(360deg)",
+                    transform: "rotate(360deg)"
+                  },
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                    "aria-hidden": "true",
+                    focusable: "false",
+                    width: "1em",
+                    height: "1em",
+                    preserveAspectRatio: "xMidYMid meet",
+                    viewBox: "0 0 24 24"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414",
+                      fill: "#3da35a"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "h4",
+                {
+                  staticClass:
+                    "text-2xl text-center text-3xl text-80 font-dark px-4 py-4"
+                },
+                [_vm._v(" Thank you! ")]
+              ),
+              _vm._v(" "),
+              _c("p", { staticClass: "mt-2 mb-2 text-center" }, [
+                _vm._v(
+                  " Batch processing in progress. Please check back in few minutes time"
+                )
+              ])
+            ]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.loading
+      ? _c(
+          "div",
+          {
+            staticClass: "rounded-lg flex items-center justify-center relative"
+          },
+          [_c("loader", { staticClass: "text-60" })],
+          1
+        )
+      : _c("div", { staticClass: "w-full mx-auto p-8" }, [
+          _vm.displayForm
+            ? _c("div", { staticClass: "shadow-md pt-6 pb-6" }, [
+                Object.entries(_vm.errorResponse).length > 0
+                  ? _c("div", [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
+                          attrs: { role: "alert" }
+                        },
+                        [
+                          _c("h4", { staticClass: "mt-2 mb-2" }, [
+                            _vm._v(
+                              " " + _vm._s(_vm.errorResponse.message) + " "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.errorResponse.errors, function(
+                            error,
+                            index
+                          ) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "text-sm" },
+                              [
+                                _vm._v(
+                                  " \n                        => " +
+                                    _vm._s(error[0]) +
+                                    " \n                    "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.batches.length < 1
+                  ? _c("div", [_vm._m(0)])
+                  : _c("div", { staticClass: "px-4 py-3" }, [
+                      _c("div", { staticClass: "batch-container" }, [
+                        _c(
+                          "div",
+                          { staticClass: "px-3 py-4 flex justify-center" },
+                          [
+                            _c(
+                              "table",
+                              {
+                                staticClass:
+                                  "w-full text-md rounded mb-4 table-striped table-bordered"
+                              },
+                              [
+                                _vm._m(1),
+                                _vm._v(" "),
+                                _c(
+                                  "tbody",
+                                  _vm._l(_vm.batches, function(batch, key) {
+                                    return _c(
+                                      "tr",
+                                      {
+                                        key: key,
+                                        staticClass:
+                                          "border-b hover:bg-orange-100 bg-white"
+                                      },
+                                      [
+                                        _vm._m(2, true),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "p-3 px-5" }, [
+                                          _vm._v(_vm._s(batch.keyword))
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm._m(3, true),
+                                        _vm._v(" "),
+                                        _vm._m(4, true)
+                                      ]
+                                    )
+                                  }),
+                                  0
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+              ])
+            : _vm._e()
+        ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center",
+        attrs: { role: "alert" }
+      },
+      [_c("p", [_vm._v(" No record ")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "bg-black " }, [
+      _c("tr", {}, [
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("DELETE")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("KEYWORD")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [
+          _vm._v("TYPETAG TO DUPLICATE")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [
+          _vm._v("CREATE ACTION")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "p-3 px-5 flex justify-center" }, [
+      _c(
+        "button",
+        {
+          staticClass:
+            "text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+          attrs: { type: "button" }
+        },
+        [_c("i", { staticClass: "fa fa-times-circle" })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "p-3 px-5" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Enter type tag to duplicate" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "p-3 px-5" }, [
+      _c(
+        "button",
+        {
+          staticClass:
+            "mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+          attrs: { type: "button" }
+        },
+        [
+          _c("i", { staticClass: "fa fa-check-circle" }),
+          _vm._v("   Create\n                                        ")
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-974f2952", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

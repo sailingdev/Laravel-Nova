@@ -18,7 +18,7 @@ class CreateCampaignsFromRelatedController extends Controller
      */
     public function toProcess(Request $request, SubmittedKeywordService $sks)
     {
-        return $this->successResponse('Data returned successfully', $sks->loadBatchSummaries());
+        return $this->successResponse('Data returned successfully', $sks->loadToBeCreated());
     }
 
     /**

@@ -1,13 +1,13 @@
 <template>
     <div class="keyword-batches-wrapper my-5">
-        <h1 class="text-left text-xl text-80 font-dark pt-4 pl-7">Last 10 tasks</h1> 
+        <h1 class="text-center text-2xl  text-80 font-dark pt-4 mt-2 mb-2">Last 10 tasks</h1> 
 
         <div v-if="loading" class="rounded-lg flex items-center justify-center relative">
             <loader class="text-60" />
         </div>
 
-        <div v-else class="w-full mx-auto p-8">   
-            <div class="shadow-md">
+        <div v-else class="mx-auto shadow-md pt-6 pb-6">   
+            <div class="w-90p">
                 
                 <div v-if="Object.entries(errorResponse).length > 0">
                     <div class="mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg" role="alert">
@@ -24,26 +24,30 @@
                     </div> 
                 </div>
                 
-                <div v-else>
-                     <div class="header-box flex">
-                        <div class>Batch ID</div>
-                        <div>Date</div>
-                        <div>Keywords to create</div> 
-                        <div> Status </div>
-                    </div>
-                    <div>
-                        <div class="content-box flex w-full" v-for="(batch, key) in batches" :key="key">
-                            <div>{{ batch.batch_id }}</div>
-                            <div>{{ batch.date }}</div>
-                            <div>{{ batch.to_create }}</div>
-                            <div> 
-                                <span class="mr-2 text-white p-1 rounded leading-none" 
-                                    :class="batch.status == 'processing' ? 'bg-orange-600' : 'bg-green-600'"> 
-                                    {{ batch.status }} 
-                                </span> 
-                            </div>
-                        </div>
-                    </div>
+                <div v-else > 
+                    <table class="w-full text-md shadow-md rounded mb-4 table-striped table-bordered">
+                        <thead class="bg-black ">
+                            <tr class="border-b">
+                                <th class="text-left p-3 px-5">Keywords to create</th>
+                                <th class="text-left p-3 px-5">Feed</th>
+                                <th class="text-left p-3 px-5">Market</th>
+                                <th class="text-left p-3 px-5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b hover:bg-orange-100 bg-white" v-for="(batch, key) in batches" :key="key"> 
+                                <td class="p-3 px-5"> {{ batch.keyword }} </td>
+                                <td class="p-3 px-5"> {{ batch.feed }} </td>
+                                 <td class="p-3 px-5">{{ batch.market }}</td>
+                                <td class="p-3 px-5 flex justify-center">
+                                    <button type="button"  class="mr-3 text-sm text-white py-2 px-2 rounded focus:outline-none focus:shadow-outline" 
+                                     :class="batchStatusExtraClass(batch.status)">
+                                       {{ batch.status }} 
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
@@ -67,7 +71,7 @@ export default {
     },
     mounted () {
         this.processHistory()
-    },
+    }, 
     methods: {
         processHistory () {
             this.loading = true
@@ -80,6 +84,17 @@ export default {
             .finally(() => {
                 this.loading = false
             })
+        },
+        batchStatusExtraClass (status) {
+            if (status === 'pending') {
+                return 'bg-grey-500 hover:bg-grey-700'
+            } 
+            else if (status == 'processing') {
+               return 'bg-orange-500 hover:bg-orange-700';
+            }
+            else {
+               return 'bg-green-500 hover:bg-green-700'
+            }
         }
     }
 }
