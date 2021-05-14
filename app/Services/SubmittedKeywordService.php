@@ -78,7 +78,7 @@ class SubmittedKeywordService
         $batchId = $this->createBatchId();
  
         $data = [];
-        $feeds = ['Yahoo', 'Media', 'IAC'];
+        $feeds = ['yahoo', 'media', 'iac'];
         foreach ($keywords as $keyword) {
             foreach($feeds as $feed) {
                 array_push($data, [
@@ -685,46 +685,12 @@ class SubmittedKeywordService
      * @return array
      */
     public function loadBatchHistory()
-    { 
-        $data = [];
-        $sm = new StringManipulator;
-      
-        $rows = SubmittedKeyword::select('*')
+    {  
+        return  SubmittedKeyword::select('*')
             ->where('action_taken', 'new')
-            ->where('status', '!=', 'pending')->limit(10)->orderBy('updated_at', 'desc')->get(); 
-        return $rows;
-            // foreach($rows as $row) {
-            //     $new = $skipped = [];
-            //     $processingCount = 0;
-            //     if ($row->action_taken === 'new') {
-            //         array_push($new, [
-            //             'keyword' =>  $this->facebookCampaign->formatKeyword($row->keyword, '+'),
-            //             'type_tag' => '',
-            //             'id' => $row->id
-            //         ]);
-            //     }
-            //     else {
-            //         array_push($skipped, $row->keyword);
-            //     }
-
-            //     if ($row->status == 'pending' || $row->status == 'processing') {
-            //         $processingCount++;
-            //     }
-
-            //     $obj = new \stdClass;
-            //     $obj->batch_id = $row->batch_id;
-            //     $obj->date = Carbon::parse($row->created_at)->toDateString();
-                
-            //     $collec = [];
-            //     foreach ($new as $keywordAssoc) {
-            //         array_push($collec, $keywordAssoc['keyword']);
-            //     }
-            //     $obj->to_create = $sm->generateStringFromArray($collec, ',');
-                
-            //     $obj->status = $processingCount > 0 ? 'processing' : 'processed';
-            //     array_push($data, $obj);
-            // }   
-        return $data;
+            ->where('status', '!=', 'pending')->limit(10)
+            ->orderBy('updated_at', 'desc')
+            ->get(); 
     }
 
     /**
