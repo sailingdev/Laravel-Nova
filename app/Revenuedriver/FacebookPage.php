@@ -323,7 +323,7 @@ class FacebookPage extends Facebook
             else if ($params['url'] !== null) {
                 $urlField = '&link=' . $params['url'];
             } 
-            sleep(5);
+            sleep(1);
             // $response = Http::withHeaders([
             //     'Accept' => 'application/json',
             //     'Content-type' => 'application/json',
@@ -389,7 +389,7 @@ class FacebookPage extends Facebook
         
         $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
         try { 
-            sleep(5);
+            sleep(1);
             // $response = Http::withHeaders([
             //     'Accept' => 'application/json',
             //     'Content-type' => 'application/json',
@@ -402,18 +402,6 @@ class FacebookPage extends Facebook
             // Log::info('Photo was created for page with ID '.$pageId, [] );
             // return [true, $decoded];
             return [true];
-        } 
-        catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
-                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
-                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
-                | \FacebookAds\Http\Exception\AuthorizationException $e) 
-        { 
-            if ($this->createPagePhotoAttempts < 10) {
-                sleep(3);
-                $this->createPagePhotoAttempts++;
-                return $this->createPagePhoto($fields, $params, $pageId);
-            } 
-            return [false, $e];
         } catch(\Throwable $th) { 
             return [false, $th];
         }

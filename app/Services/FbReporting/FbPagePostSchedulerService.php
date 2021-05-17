@@ -78,7 +78,10 @@ class FbPagePostSchedulerService
     
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
-                 
+                $this->updateSchedule([
+                    'status' => 'processed'
+                ], $schedule->id);
+                
                 $targetGroups = (array) $schedule->page_groups;
               
                 if (count($targetGroups) > 0) { 
@@ -124,9 +127,7 @@ class FbPagePostSchedulerService
                     }
                 } 
 
-                $this->updateSchedule([
-                    'status' => 'processed'
-                ], $schedule->id);
+               
             }
         }
     }
