@@ -78,6 +78,7 @@ class FbPagePostSchedulerService
     
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
+                
                 $this->updateSchedule([
                     'status' => 'processed'
                 ], $schedule->id);
