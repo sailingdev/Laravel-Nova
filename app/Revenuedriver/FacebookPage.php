@@ -329,7 +329,7 @@ class FacebookPage extends Facebook
                 'Content-type' => 'application/json',
             ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
             '&message=' .  $params['message'] . $urlField . $mediaField);
-            Log::info('Post was created for page with ID '.$pageId, [] );
+            // Log::info('Post was created for page with ID '.$pageId, [] );
             $decoded = json_decode($response->body());
             return [true, $decoded];
         } catch (\Throwable $th) {
@@ -397,7 +397,7 @@ class FacebookPage extends Facebook
                 'url' => $params['url']
             ]);
             $decoded = json_decode($response->body());
-            Log::info('Photo was created for page with ID '.$pageId, [] );
+            // Log::info('Photo was created for page with ID '.$pageId, [] );
             return [true, $decoded];
         } 
         catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
