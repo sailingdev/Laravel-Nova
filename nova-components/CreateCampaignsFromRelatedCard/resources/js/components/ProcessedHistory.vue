@@ -7,7 +7,7 @@
         </div>
 
         <div v-else class="mx-auto shadow-md pt-6 pb-6">   
-            <div class="w-90p">
+            <div class="w-90p m-auto">
                 
                 <div v-if="Object.entries(errorResponse).length > 0">
                     <div class="mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg" role="alert">
@@ -25,10 +25,10 @@
                 </div>
                 
                 <div v-else > 
-                    <table class="w-full text-md shadow-md rounded mb-4 table-striped table-bordered">
+                    <table class="w-full text-md mb-4 table-striped table-bordered m-auto">
                         <thead class="bg-black ">
                             <tr class="border-b">
-                                <th class="text-left p-3 px-5">Keywords to create</th>
+                                <th class="text-left p-3 px-5">Keyword</th>
                                 <th class="text-left p-3 px-5">Feed</th>
                                 <th class="text-left p-3 px-5">Market</th>
                                 <th class="text-left p-3 px-5">Status</th>
