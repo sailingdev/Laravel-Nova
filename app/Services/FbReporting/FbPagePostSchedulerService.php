@@ -81,13 +81,14 @@ class FbPagePostSchedulerService
                 $this->updateSchedule([
                     'status' => 'processed'
                 ], $schedule->id);
-                
+
                 $targetGroups = (array) $schedule->page_groups;
-              
+               
                 if (count($targetGroups) > 0) { 
                     foreach ($targetGroups as $targetGroup) {
+                        
                         $groupLimit = $fbPageService->getGroupQueryLimits(preg_replace("#[^0-9]#i", "", $targetGroup));
-                      
+                       
                         $facebookPages = $fbPageService->getByLimits($groupLimit[0], $groupLimit[1]);
                         
                         foreach ($facebookPages as $facebookPage) {  
