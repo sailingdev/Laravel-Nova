@@ -323,15 +323,16 @@ class FacebookPage extends Facebook
             else if ($params['url'] !== null) {
                 $urlField = '&link=' . $params['url'];
             } 
-            
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-type' => 'application/json',
-            ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
-            '&message=' .  $params['message'] . $urlField . $mediaField);
-            // Log::info('Post was created for page with ID '.$pageId, [] );
-            $decoded = json_decode($response->body());
-            return [true, $decoded];
+            sleep(5);
+            // $response = Http::withHeaders([
+            //     'Accept' => 'application/json',
+            //     'Content-type' => 'application/json',
+            // ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
+            // '&message=' .  $params['message'] . $urlField . $mediaField);
+            // // Log::info('Post was created for page with ID '.$pageId, [] );
+            // $decoded = json_decode($response->body());
+            // return [true, $decoded];
+            return [true];
         } catch (\Throwable $th) {
             return [false, $th->getMessage()];
         }
@@ -388,17 +389,19 @@ class FacebookPage extends Facebook
         
         $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
         try { 
+            sleep(5);
+            // $response = Http::withHeaders([
+            //     'Accept' => 'application/json',
+            //     'Content-type' => 'application/json',
+            // ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken, [
+            //     'no_story' => $params['no_story'],
+            //     'url' => $params['url']
+            // ]);
             
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-type' => 'application/json',
-            ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/photos?access_token=' . $pageAccessToken, [
-                'no_story' => $params['no_story'],
-                'url' => $params['url']
-            ]);
-            $decoded = json_decode($response->body());
+            // $decoded = json_decode($response->body());
             // Log::info('Photo was created for page with ID '.$pageId, [] );
-            return [true, $decoded];
+            // return [true, $decoded];
+            return [true];
         } 
         catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
                 \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
