@@ -71,6 +71,7 @@ class FbPagePostSchedulerService
     { 
         $schedules = FbPagePostScheduler::where('start_date', '<=', Carbon::now())
         ->where('status', '!=', 'processed')
+        // ->where('id', 48)
         ->with(['fbPagePost'])
         ->get();
         $facebookPageExternal = new FacebookPage;
@@ -99,29 +100,29 @@ class FbPagePostSchedulerService
                             $fd = []; 
                                 // Log::info('Will create into ', [$facebookPage->page_name, $facebookPage->page_id]);
 
-                                if ($schedule->fbPagePost->media !== null) {
+                            if ($schedule->fbPagePost->media !== null) {
 
-                                    // upload a photo
-                                    $createPhoto = $facebookPageExternal->createPagePhoto([], [
-                                        'no_story' => true,
-                                        'url' => $schedule->fbPagePost->media
-                                    ], $pageId);
-                                    
-                                    if ($createPhoto[0] === true && isset($createPhoto[1]->id)) {
-                                        $fd['object_attachment'] = $createPhoto[1]->id; 
-                                    }
-                                    else {
-                                        Log::info('Photo could not be created for the page with id :: ' . $pageId, [$createPhoto[1]]);
-                                    } 
+                                // upload a photo
+                                $createPhoto = $facebookPageExternal->createPagePhoto([], [
+                                    'no_story' => true,
+                                    'url' => $schedule->fbPagePost->media
+                                ], $pageId);
+                                
+                                if ($createPhoto[0] === true && isset($createPhoto[1]->id)) {
+                                    $fd['object_attachment'] = $createPhoto[1]->id; 
+                                }
+                                else {
+                                    Log::info('Photo could not be created for the page with id :: ' . $pageId, [$createPhoto[1]]);
                                 } 
-                                $fd['message'] = $schedule->fbPagePost->text;
-                                $fd['url'] = $schedule->fbPagePost->url;
-                                $createPost = $facebookPageExternal->createPagePost([], $fd, $pageId); 
-    
-                                if ($createPost[0] === false) {
-                                    Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
-                                } 
-                            
+                            } 
+                            $fd['message'] = $schedule->fbPagePost->text;
+                            $fd['url'] = $schedule->fbPagePost->url;
+                            $createPost = $facebookPageExternal->createPagePost([], $fd, $pageId); 
+
+                            if ($createPost[0] === false) {
+                                Log::info('An error occured. Post was not created for schedule with ID: ' . $schedule->id, [$createPost[1]]);
+                            } 
+                        
                         }
                     
                     }

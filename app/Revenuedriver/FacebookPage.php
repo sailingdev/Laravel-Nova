@@ -125,10 +125,10 @@ class FacebookPage extends Facebook
      */
     protected function getLongLivedUserAccessToken(): string
     {
-        $shortUserAccessToken = 'EAAFmyiUTy1IBAGElSLWPOdlDWSlVJdivOcodrPVT1XAx526MX3eLT1qYKEGyMkODzvnhI9JVJOuYuR8pqvndx8SsW8YtWZCz1xWmxR3poRzxKoEPqOVZCwitu9cOkQQtx4XapGAD28TiWRMmZAvCi9Tx6k3grUUN2X3KAu4fZCcFEQcKgnfm0I0ZADystpKBZCCgJjg5ZBIZAPBUBwM608zrIdsTedUsQZBkbUzgTRMA1XQZDZD';
+        $shortUserAccessToken = 'EAAFmyiUTy1IBAGxBIJgweUCMQZCqIAjsv7sqr8vZBBydSledU7l02cNqh7TWWtlZCpUPkcfxdwkkk6hvr0WOn1ZAmwtRlXbYzd1Hw4ZBZCzMCjcfUCI6BaGsEZBsDZBDheK4F9Qqvw5jFZAZCR2rImxpBa4QhecD0fO2sv8V5dIuE25RwlVx8uLS6UiqZChxEkENL95a36uGMDvlceH5qrVXaMCfIefgIhuNxFNETpbuGvDO4p3WZAU9dZCkZB';
          
-        // Last fetched: 31 march, 2021 10:10PM UTC
-        $longUserAccessToken='EAAFmyiUTy1IBALiQZBTX2E9wHnZBv2stzDJ2oFWD9skzFa6GalC4dwlIqiPb6da8zQxyLBvJNYjcRUszfNvBJ3pQk6fZC11Ny7hNGeGWr5WqmpEQihsKGjWtDSJ9uxFITJAShkNZC4JO7ZB8WqKbkVf44DJq2KVJ9ob0BY1IQLQZDZD';
+        // Last fetched: 17 may, 2021 15:22 UTC
+        $longUserAccessToken = 'EAAFmyiUTy1IBAB6RZAfWTv4kbEFCKB6sL9tNgS9DUaAaP1AfsGgBgCxgcbT3xnptwW1QtAgvbUjMMhMtJfQt0acSYnuh5DSMuJT4uJYHzJVQQe6eeGR9Wz4News6rP2JSkpM0Wge7GYXUE2AqIwrbkU64faZCo4C2hdgfZCmBSJ8zSZBXN2W';
        
         // try {
         //     $response = Http::withHeaders([
@@ -139,7 +139,7 @@ class FacebookPage extends Facebook
         //     '&client_secret='.$this->appSecret. '&fb_exchange_token=' . $shortUserAccessToken);
 
         //     $decoded = json_decode($response->body());
-        //     dd('Long lived user access token', $decoded);
+        //     dd('Long lived user access token is ', $decoded);
         //     return $decoded->access_token;
         // } catch (\Throwable $th) {
         //     dd($th);
@@ -162,7 +162,7 @@ class FacebookPage extends Facebook
             if (isset($decoded->access_token)) {
                 return $decoded->access_token;
             }
-            // dd($decoded);
+            dd($decoded);
             return null;
         } catch (\Throwable $th) {
             return null;
@@ -311,11 +311,11 @@ class FacebookPage extends Facebook
      * @return array
      */
     public function createPagePost(array $fields=[], array $params=[], string $pageId): array
-    { 
+    {  
         $longLivedUserAccessToken = $this->getLongLivedUserAccessToken();
-
+      
         $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
-
+      
         $mediaField = $urlField = '';
         
         try { 
@@ -333,7 +333,9 @@ class FacebookPage extends Facebook
                     'Content-type' => 'application/json',
                 ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
                     '&message=' .  $params['message'] . $urlField . $mediaField);
-              $this->pagesPostedInto[] = $pageId;
+                 
+                $this->pagesPostedInto[] = $pageId;
+                Log::info('Processed for page with ID', [$pageId]);
                 $decoded = json_decode($response->body());
                 return [true, $decoded];
                 
@@ -407,7 +409,6 @@ class FacebookPage extends Facebook
             $decoded = json_decode($response->body());
             // Log::info('Photo was created for page with ID '.$pageId, [] );
             return [true, $decoded];
-            return [true];
         } catch(\Throwable $th) { 
             return [false, $th];
         }
