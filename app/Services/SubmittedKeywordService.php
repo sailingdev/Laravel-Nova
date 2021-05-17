@@ -698,7 +698,7 @@ class SubmittedKeywordService
      * 
      * @return bool
      */
-    public function processPendingBatchesUsingTypeTags(array $keywords)
+    public function createCampaignFromRelatedTypeTag(array $keywords)
     { 
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);

@@ -22,22 +22,10 @@ class CreateCampaignFromRelatedRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    { 
         return [
-            'data' => ['required', 'array'],
+            'data' => ['required'],
         ];
     }
-
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    { 
-       return $this->merge([
-           'data' => json_decode($this->data),
-       ]);
-    }
+ 
 }

@@ -52,10 +52,14 @@
                                             </button>
                                         </td>
                                         <td class="p-3 px-5">{{ batch.keyword }}</td>
-                                        <td class="p-3 px-5"><input type="text" placeholder="Enter type tag to duplicate" class="form-control"></td>
                                         <td class="p-3 px-5">
-                                            <button type="button" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
-                                                <i class="fa fa-check-circle"></i> &nbsp; Create
+                                            <input type="text" v-model="batches[key].type_tag" placeholder="Enter type tag to duplicate" class="form-control">
+                                            <span v-if="processingKeyErr == key" class="ml-2 text-red-600 text-sm"> {{ validateError  }} </span>
+                                        </td>
+                                        <td class="p-3 px-5">
+                                            <button :disabled="processingKey == key" type="button" @click="prepareForDispatch(key)" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                <span v-if="processingKey == key"><loader class="text-60" :fillColor="'#ffffff'" /></span>
+                                                <span v-else><i class="fa fa-check-circle"></i> &nbsp; Create</span>
                                             </button>
                                         </td>
                                     </tr>
@@ -63,13 +67,6 @@
                             </table>
                         </div> 
                     </div> 
-                     <!-- <div class="px-4 py-3 bg-gray-20 text-left sm:px-6 mt-2">
-                        <button :disabled="processing" @click="prepareForDispatch" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <span v-if="processing"><loader class="text-60" :fillColor="'#ffffff'" /></span>
-                            <span v-else>Create Campaigns</span>
-                        </button> 
-                        <span class="ml-2 text-red-600 text-sm"> {{validateError}} </span>
-                    </div> -->
                 </div>
 
             </div>
@@ -83,10 +80,10 @@ export default {
     data () {
         return {
             loading: false,
-            processing: false,
+            processingKey: null,
+            processingKeyErr: null,
             batches: [],
             errorResponse: {},
-            validateError: null,
             displayForm: true,
             displaySubmitSuccess: false
         }
@@ -119,30 +116,21 @@ export default {
                 this.loading = false
             })
         },
-        prepareForDispatch () {
-            let loader =[]
-            this.batches.forEach( batch => {
-                if (batch.to_create.length > 0) {
-                    const keywords = batch.to_create
-                    keywords.forEach((keyword) => {
-                        if (keyword.type_tag != '') {
-                            loader.push(keyword)
-                        }
-                    })
-                }
-            })
-             
-            if (loader.length < 1) {
-                this.validateError = 'Please enter a type tag for at lease one of the keywords'
+        prepareForDispatch (key) {
+            let loader = []
+            if (this.batches[key].type_tag == null) {
+                this.processingKeyErr = key
+                this.validateError = 'Please enter a valid type tag'
                 return false
-            } 
-            return this.createCampaigns(loader) 
+            }
+            this.processingKeyErr = this.validateError = null
+            this.processingKey = key 
+            console.log(typeof this.batches[key])
+            return this.createCampaign(this.batches[key]) 
         },
-        createCampaigns (payload) {
-            this.processing = true
-            this.validateError = null
+        createCampaign (payload) {
             axios.post('/nova-vendor/' + this.card.component + '/create-campaign', {
-                data: JSON.stringify(payload)
+                data: payload
             })
             .then(response => {
                 const data = response.data.data
@@ -153,12 +141,9 @@ export default {
                 this.errorResponse = error.response.data
             })
             .finally(() => {
-                this.processing = false
+                this.processingKey = null
             })
         },
-        pressed() {
-            // console.log(this.batches)
-        }
     },
     computed: { 
           values() {

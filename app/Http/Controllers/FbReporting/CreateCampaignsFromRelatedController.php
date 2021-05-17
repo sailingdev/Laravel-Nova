@@ -32,10 +32,11 @@ class CreateCampaignsFromRelatedController extends Controller
         return $this->successResponse('Data returned successfully', $sks->loadBatchHistory());
     }
 
-    public function processPendingBatches(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
+    public function createCampaignFromRelatedTypeTag(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
     {
         $superArray = [];
         $data = $request->all()['data'];
+        dd($data);
         foreach ($data as $keyword) {
            
             // Get all the records that belongs to this batch ID

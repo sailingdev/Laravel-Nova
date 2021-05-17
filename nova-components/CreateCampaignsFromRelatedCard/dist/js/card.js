@@ -797,9 +797,8 @@ exports.push([module.i, "\ntable tr td[data-v-974f2952], table tr th[data-v-974f
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__);
-//
-//
-//
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 //
 //
 //
@@ -882,10 +881,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             loading: false,
-            processing: false,
+            processingKey: null,
+            processingKeyErr: null,
             batches: [],
             errorResponse: {},
-            validateError: null,
             displayForm: true,
             displaySubmitSuccess: false
         };
@@ -920,32 +919,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.loading = false;
             });
         },
-        prepareForDispatch: function prepareForDispatch() {
+        prepareForDispatch: function prepareForDispatch(key) {
             var loader = [];
-            this.batches.forEach(function (batch) {
-                if (batch.to_create.length > 0) {
-                    var keywords = batch.to_create;
-                    keywords.forEach(function (keyword) {
-                        if (keyword.type_tag != '') {
-                            loader.push(keyword);
-                        }
-                    });
-                }
-            });
-
-            if (loader.length < 1) {
-                this.validateError = 'Please enter a type tag for at lease one of the keywords';
+            if (this.batches[key].type_tag == null) {
+                this.processingKeyErr = key;
+                this.validateError = 'Please enter a valid type tag';
                 return false;
             }
-            return this.createCampaigns(loader);
+            this.processingKeyErr = this.validateError = null;
+            this.processingKey = key;
+            console.log(_typeof(this.batches[key]));
+            return this.createCampaign(this.batches[key]);
         },
-        createCampaigns: function createCampaigns(payload) {
+        createCampaign: function createCampaign(payload) {
             var _this2 = this;
 
-            this.processing = true;
-            this.validateError = null;
             axios.post('/nova-vendor/' + this.card.component + '/create-campaign', {
-                data: JSON.stringify(payload)
+                data: payload
             }).then(function (response) {
                 var data = response.data.data;
                 _this2.displaySubmitSuccess = true;
@@ -954,11 +944,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 _this2.errorResponse = error.response.data;
             }).finally(function () {
-                _this2.processing = false;
+                _this2.processingKey = null;
             });
-        },
-        pressed: function pressed() {
-            // console.log(this.batches)
         }
     },
     computed: {
@@ -13923,9 +13910,104 @@ var render = function() {
                                           _vm._v(_vm._s(batch.keyword))
                                         ]),
                                         _vm._v(" "),
-                                        _vm._m(3, true),
+                                        _c("td", { staticClass: "p-3 px-5" }, [
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value:
+                                                  _vm.batches[key].type_tag,
+                                                expression:
+                                                  "batches[key].type_tag"
+                                              }
+                                            ],
+                                            staticClass: "form-control",
+                                            attrs: {
+                                              type: "text",
+                                              placeholder:
+                                                "Enter type tag to duplicate"
+                                            },
+                                            domProps: {
+                                              value: _vm.batches[key].type_tag
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.batches[key],
+                                                  "type_tag",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.processingKeyErr == key
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "ml-2 text-red-600 text-sm"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    " " +
+                                                      _vm._s(
+                                                        _vm.validateError
+                                                      ) +
+                                                      " "
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ]),
                                         _vm._v(" "),
-                                        _vm._m(4, true)
+                                        _c("td", { staticClass: "p-3 px-5" }, [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                disabled:
+                                                  _vm.processingKey == key,
+                                                type: "button"
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.prepareForDispatch(
+                                                    key
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm.processingKey == key
+                                                ? _c(
+                                                    "span",
+                                                    [
+                                                      _c("loader", {
+                                                        staticClass: "text-60",
+                                                        attrs: {
+                                                          fillColor: "#ffffff"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                : _c("span", [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fa fa-check-circle"
+                                                    }),
+                                                    _vm._v("   Create")
+                                                  ])
+                                            ]
+                                          )
+                                        ])
                                       ]
                                     )
                                   }),
@@ -13990,36 +14072,6 @@ var staticRenderFns = [
           attrs: { type: "button" }
         },
         [_c("i", { staticClass: "fa fa-times-circle" })]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "p-3 px-5" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "text", placeholder: "Enter type tag to duplicate" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "p-3 px-5" }, [
-      _c(
-        "button",
-        {
-          staticClass:
-            "mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-          attrs: { type: "button" }
-        },
-        [
-          _c("i", { staticClass: "fa fa-check-circle" }),
-          _vm._v("   Create\n                                        ")
-        ]
       )
     ])
   }
