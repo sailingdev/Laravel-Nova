@@ -323,7 +323,7 @@ class FacebookPage extends Facebook
             else if ($params['url'] !== null) {
                 $urlField = '&link=' . $params['url'];
             } 
-            sleep(1);
+           
             // $response = Http::withHeaders([
             //     'Accept' => 'application/json',
             //     'Content-type' => 'application/json',
@@ -389,7 +389,6 @@ class FacebookPage extends Facebook
         
         $pageAccessToken = $this->getPageAccessToken($pageId, $longLivedUserAccessToken, hash_hmac('sha256', $longLivedUserAccessToken, $this->appSecret));
         try { 
-            sleep(1);
             // $response = Http::withHeaders([
             //     'Accept' => 'application/json',
             //     'Content-type' => 'application/json',
