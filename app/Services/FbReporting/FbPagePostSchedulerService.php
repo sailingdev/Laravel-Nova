@@ -78,7 +78,7 @@ class FbPagePostSchedulerService
     
         if (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
-                
+
                 $this->updateSchedule([
                     'status' => 'processed'
                 ], $schedule->id);
@@ -96,10 +96,8 @@ class FbPagePostSchedulerService
 
                             $pageId = $facebookPage->page_id; 
                           
-                            $fd = [];
-                          
-
-                                Log::info('Will create into ', [$facebookPage->page_name, $facebookPage->page_id]);
+                            $fd = []; 
+                                // Log::info('Will create into ', [$facebookPage->page_name, $facebookPage->page_id]);
 
                                 if ($schedule->fbPagePost->media !== null) {
 
