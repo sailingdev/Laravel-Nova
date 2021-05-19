@@ -322,28 +322,28 @@ class FacebookPage extends Facebook
          
             if (!in_array($pageId, $this->pagesPostedInto)) {
               
-                // if (array_key_exists('object_attachment', $params)) {  
-                //     $mediaField = '&object_attachment=' . $params['object_attachment'];
-                // }
-                // else if ($params['url'] !== null) {
-                //     $urlField = '&link=' . $params['url'];
-                // } 
-                // $response = Http::withHeaders([
-                //     'Accept' => 'application/json',
-                //     'Content-type' => 'application/json',
-                // ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
-                //     '&message=' .  $params['message'] . $urlField . $mediaField);
+                if (array_key_exists('object_attachment', $params)) {  
+                    $mediaField = '&object_attachment=' . $params['object_attachment'];
+                }
+                else if ($params['url'] !== null) {
+                    $urlField = '&link=' . $params['url'];
+                } 
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-type' => 'application/json',
+                ])->post('https://graph.facebook.com/v10.0/' .$pageId.'/feed?access_token=' . $pageAccessToken . 
+                    '&message=' .  $params['message'] . $urlField . $mediaField);
                  
-                // $this->pagesPostedInto[] = $pageId;
-                // $decoded = json_decode($response->body());
-                Log::info('PROCESSED for page with ID ' . $pageId, []);
-                // return [true, $decoded];
+                $this->pagesPostedInto[] = $pageId;
+                $decoded = json_decode($response->body());
+                Log::info('PROCESSED for page with ID ' . $pageId, [$decoded]);
+                return [true, $decoded];
                 
             } 
             return [true];
         } catch (\Throwable $th) {
             Log::error('ERROR for page with ID ' . $pageId, [$th]);
-            // return [false, $th->getMessage()];
+            return [false, $th->getMessage()];
         }
     }
 
