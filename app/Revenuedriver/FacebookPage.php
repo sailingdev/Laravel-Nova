@@ -321,7 +321,7 @@ class FacebookPage extends Facebook
         try { 
          
             if (!in_array($pageId, $this->pagesPostedInto)) {
-                Log::info('Logged pages', [$this->pagesPostedInto]);
+              
                 if (array_key_exists('object_attachment', $params)) {  
                     $mediaField = '&object_attachment=' . $params['object_attachment'];
                 }
@@ -335,14 +335,14 @@ class FacebookPage extends Facebook
                     '&message=' .  $params['message'] . $urlField . $mediaField);
                  
                 $this->pagesPostedInto[] = $pageId;
-                Log::info('Processed for page with ID', [$pageId]);
                 $decoded = json_decode($response->body());
+                Log::info('PROCESSED for page with ID ' . $pageId, [$decoded]);
                 return [true, $decoded];
                 
-            }
-           
+            } 
             return [true];
         } catch (\Throwable $th) {
+            Log::error('ERROR for page with ID ' . $pageId, [$th]);
             return [false, $th->getMessage()];
         }
     }
