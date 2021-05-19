@@ -336,7 +336,7 @@ class FacebookPage extends Facebook
                  
                 // $this->pagesPostedInto[] = $pageId;
                 // $decoded = json_decode($response->body());
-                Log::info('PROCESSED for page with ID ' . $pageId, [$decoded]);
+                Log::info('PROCESSED for page with ID ' . $pageId, []);
                 // return [true, $decoded];
                 
             } 
