@@ -219,8 +219,7 @@ class SubmittedKeywordService
                 'daily_budget',
                 'special_ad_categories',
                 'account_id'
-            ]);
-           
+            ]);  
             if ($accountCampaigns[0] !== false) { 
                 foreach ($accountCampaigns[1] as $campaign) {
                     array_push($campaignCombo, [
@@ -249,7 +248,7 @@ class SubmittedKeywordService
     public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null)
     {  
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
-       
+        
         $loggedErrors = [];
 
         $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = $campaignsToTrack = []; 
@@ -266,7 +265,7 @@ class SubmittedKeywordService
            Log::info('Reporting for account', [$targetAccount]);
             $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $targetAccount));
             $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
-            
+           
             $websiteData = $websiteService->getRowByDomain($domain);
             
             $typeTag = isset($submission->type_tag) ? $submission->type_tag : 
@@ -408,11 +407,7 @@ class SubmittedKeywordService
                                     'data' => []
                                 ]);
                             }
-                            else {
-                                // copy adcreative into new account  
-                                
-                               
-    
+                            else { 
                                 $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
                                 $newAdImages = [];
                                 foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
@@ -458,8 +453,7 @@ class SubmittedKeywordService
                                  
                                 if (count($newBodyTexts) > 1) {
                                     $rand = rand(1,2);
-                                    $randTitle = 'title'.$rand;
-                                    $randBody = 'body'.$rand;
+                                    
     
                                     $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->title1;
                                     $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->body1;
@@ -509,6 +503,7 @@ class SubmittedKeywordService
                                     $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                    
                                     if ($newAd[0] == false) {
+                                        dd($newAd[1]);
                                         array_push($loggedErrors, [
                                             'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
                                             'errors' => $newAd[1],
@@ -538,12 +533,12 @@ class SubmittedKeywordService
             $cotService = new CampaignOptimizeTrackerService;
             foreach ($campaignsToTrack as $key => $data) {
                 // store the record into db
-                $cotService->create([
-                    'type_tag' => $data['type_tag'],
-                    'feed' => $data['feed'],
-                    'campaign_id' => $key,
-                    'campaign_start' => $data['campaign_start']
-                ]);
+                // $cotService->create([
+                //     'type_tag' => $data['type_tag'],
+                //     'feed' => $data['feed'],
+                //     'campaign_id' => $key,
+                //     'campaign_start' => $data['campaign_start']
+                // ]);
             }
         }
 
@@ -617,68 +612,10 @@ class SubmittedKeywordService
      */
     public function loadToBeCreated()
     {
-        $batches =  SubmittedKeyword::select(['id', 'batch_id', 'keyword', 'feed', 'status'])->where('status', 'pending')
-            ->where('action_taken', 'new')->where('feed', 'Iac')->get();
+        $batches =  SubmittedKeyword::select(['id', 'batch_id', 'market', 'keyword', 'feed', 'status'])->where('status', 'pending')
+            ->where('action_taken', 'new')->where('feed', 'iac')->get();
         return $batches;
-        $data = [];
-        $sm = new StringManipulator;
-        foreach($batches as $batch) {
-            $rows =  SubmittedKeyword::select('*')->where(function ($query) use ($batch) {
-                return $query->where('batch_id', $batch->batch_id)
-                ->where('status', 'pending');
-            })
-            ->orWhere(function ($query)  use ($batch) {
-                return $query->where('batch_id', $batch->batch_id)
-                ->where('status', 'processed')
-                    ->where('action_taken', 'skipped'); 
-            })
-            ->get(); 
-            
-            $new = $skipped = [];
-            $processingCount = 0;
-            foreach($rows as $row) {
-                
-                if ($row->action_taken === 'new') {
-                    $existing = array_filter($new, function ($entry) use ($row) {
-                        return strtolower($entry['keyword']) == strtolower($row->keyword) && 
-                            $entry['batch_id'] == $row->batch_id;
-                    });
-                    if (count($existing) <  1) {
-                        array_push($new, [
-                            'keyword' => strtolower($row->keyword),
-                            'type_tag' => '',
-                            'id' => $row->id,
-                            'batch_id' => $row->batch_id,
-                            'feed' => $row->feed
-                        ]);
-                    }
-                }
-                else {
-                    $existing = array_filter($new, function ($entry) use ($row) {
-                        return strtolower($entry['keyword']) == strtolower($row->keyword) && 
-                            $entry['batch_id'] == $row->batch_id;
-                    });
-                    if (count($existing) <  1) {
-                        array_push($skipped, $row->keyword);
-                    }
-                }
-
-                if ($row->status == 'pending' || $row->status == 'processing') {
-                    $processingCount++;
-                }
-            }
-            $obj = new \stdClass;
-            $obj->batch_id = $batch->batch_id;
-            $obj->date = Carbon::parse($batch->created_at)->toDateString();
-            $obj->market = $batch->market;
-            
-            $obj->skipped = $sm->generateStringFromArray($skipped, ',');
-            $obj->to_create = $new;
-            
-            $obj->status = $processingCount > 0 ? 'processing' : 'processed';
-            array_push($data, $obj);
-        } 
-       return $data;
+        
     }
 
     /**
@@ -698,60 +635,56 @@ class SubmittedKeywordService
      * 
      * @return bool
      */
-    public function createCampaignFromRelatedTypeTag(array $keywords)
+    public function createCampaignFromRelatedTypeTag(array $keyword)
     { 
+       
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
         
-            $wbs = new WebsiteService;
-            $acs = new AdAccountService;
+        $wbs = new WebsiteService;
+        $acs = new AdAccountService;
+     
         
-        foreach ($keywords as $keyword) {
-            $matches = array_filter($campaignCombo, function ($campaign) use ($keyword) {
-                $campaignTypeTag = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['type_tag'];
-                return $campaignTypeTag == trim($keyword->type_tag);
-            });
-             
-            if (count($matches) > 0) {
-                // load the batch id of this keyword
-                $submission = SubmittedKeyword::where('id', $keyword->id)->first();
-                if ($submission !== null) {
-                    $batchId = $submission->batch_id;
-                    
-                    $typeTag = $this->facebookCampaign->generateTypeTag($submission->keyword, $submission->market, 'related');
-                    
-                    $submission->type_tag = $typeTag;
-                    
-                    // using the feed, determine the ad account to duplicate into
-                   
-                    $adAccount = $acs->determineTargetAccountByFeed($submission->feed);
-                    Log::info('Feed ' . $submission['feed'], [$adAccount]);
-                 
-                        if ($adAccount == null) {
-                            Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $submission['feed'], [$keyword]);
-                        }
-                        else {
-                            $process = $this->duplicateCampaign(current($matches), $submission, $adAccount);
-                            if ($process[0] == true) {
-                                $this->updateRow($batchId, $submission->keyword, [
-                                    'status' => 'processed'
-                                ]);
-                            } 
-                            else {
-                                $this->updateRow($batchId, $submission->keyword, [
-                                    'status' => 'pending'
-                                ]);
-                            }
-                        }
-                }
-              
+        $matches = array_filter($campaignCombo, function ($campaign) use ($keyword) {
+            $campaignTypeTag = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['type_tag'];
+            return $campaignTypeTag == trim($keyword['type_tag']);
+        });
+         
+        if (count($matches) > 0) {
+            
+            
+            $typeTag = $this->facebookCampaign->generateTypeTag($keyword['keyword'], $keyword['market'], 'related');
+            
+            $keyword['type_tag'] = $typeTag;
+            
+            // using the feed, determine the ad account to duplicate into
+            $adAccount = $acs->determineTargetAccountByFeed($keyword['feed']);
+           
+            if ($adAccount == null) {
+                Log::info('No target was found for createCampaignFromRelatedTypeTag ::: ' . $keyword['feed'], [$keyword]);
             }
             else {
-                $this->updateRow($keyword->batch_id, $keyword->keyword, [
-                    'status' => 'pending'
-                ]);
+                
+                $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount);
+                if ($process[0] == true) {
+                    $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
+                        'status' => 'processed'
+                    ]);
+                } 
+                else {
+                    $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
+                        'status' => 'pending'
+                    ]);
+                }
             }
+               
         }
+        else {
+            $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
+                'status' => 'pending'
+            ]);
+        }
+        
         return true;
     }
 

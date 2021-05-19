@@ -33,31 +33,24 @@ class CreateCampaignsFromRelatedController extends Controller
     }
 
     public function createCampaignFromRelatedTypeTag(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
-    {
-        $superArray = [];
+    { 
         $data = $request->all()['data'];
-        dd($data);
-        foreach ($data as $keyword) {
-           
-            // Get all the records that belongs to this batch ID
-            $toBeCreated = $sks->getToBeCreatedCampaignsByBatchIdAndKeyword($keyword->batch_id, $keyword->keyword);
-            if (count($toBeCreated) > 0) {
-                foreach ($toBeCreated as $campaign) {
-                    $sks->updateRow($campaign->batch_id, $campaign->keyword, [
-                        'status' => 'processing'
-                    ]); 
-                    $obj = new \stdClass;
-                    $obj->keyword = $campaign->keyword;
-                    $obj->type_tag = $keyword->type_tag;
-                    $obj->batch_id = $campaign->batch_id;
-                    $obj->feed = $campaign->feed;
-                    $obj->id = $campaign->id;
-                    $superArray[] = $obj;
-                } 
-            }
+        // dd($data);
+      
+        $sks->updateRow($data['batch_id'], $data['keyword'], [
+            // 'status' => 'processing'
+        ]); 
+        // $obj = new \stdClass;
+        // $obj->keyword = $campaign->keyword;
+        // $obj->type_tag = $keyword->type_tag;
+        // $obj->batch_id = $campaign->batch_id;
+        // $obj->feed = $campaign->feed;
+        // $obj->id = $campaign->id;
+        // $superArray[] = $obj;
+                
             
-        }  
-        ProcessPendingBatchesUsingTypeTagsJob::dispatch($superArray);
+            
+        ProcessPendingBatchesUsingTypeTagsJob::dispatch($data);
         return $this->successResponse('Request was successful. Batch processing in progress');
     }
 }
