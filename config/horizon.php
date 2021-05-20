@@ -185,7 +185,7 @@ return [
                 'balanceCooldown' => 3,
                 'processes' => 5,
                 'tries' => 3,
-                'timeout' => 900 
+                'timeout' => 15000 
             ],
         ],
 

@@ -247,6 +247,7 @@ class SubmittedKeywordService
      */
     public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null)
     {  
+         
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
         
         $loggedErrors = [];
@@ -329,9 +330,21 @@ class SubmittedKeywordService
 
                 return [false, 'No existing campaign adsets available'];
             }  
+            
+            $marketsArr = [];
+            if (strtolower($submission['feed']) == 'iac') {
+                $markets = $marketService->getAll();
+               
+                foreach ($markets as $m) {
+                    $marketsArr[] = $m->code;
+                }
+            }
 
+            dd($marketsArr);
             foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
+                dd($existingAdSet);
+
                 $newAdsetTargeting = $existingAdSet->targeting;
                 $newAdsetTargeting['geo_locations']['countries'] = [$submission['market'] == 'UK' ? 'GB' : $submission['market']];
                 
@@ -348,12 +361,22 @@ class SubmittedKeywordService
                 
                 $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $campaignNameExtracts['feed']);
                 
+                if (strtolower($submission['feed']) == 'iac') {
+                    $promotedObject = [
+                        'pixel_id' => '652384435238728',
+                        'custom_event_type' => 'LEAD'
+                    ];
+                }
+                else {
+                    $promotedObject = $existingAdSet->promoted_object;
+                }
+
                 $newAdsetData = [
-                    'name' =>   ucfirst($submission['keyword']), //$existingAdSet->name,
+                    'name' =>   ucfirst($submission['keyword']), 
                     'targeting' => $newAdsetTargeting,
                     'bid_amount' => $newBidAmount > 0 ? $newBidAmount * 100 : 1,
                     'billing_event' => $existingAdSet->billing_event,
-                    'promoted_object' => $existingAdSet->promoted_object,
+                    'promoted_object' => $promotedObject,
                     'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),
                     'campaign_id' => $newCampaign[1]['id'],
                     'is_dynamic_creative' => true
@@ -442,7 +465,8 @@ class SubmittedKeywordService
                                     $targetAccount,
                                     ucfirst($submission['keyword']),
                                     isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
-                                    $submission['market'] 
+                                    $submission['market'],
+                                    $newCampaignName
                                 ); 
                                  
                                 $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
@@ -453,8 +477,7 @@ class SubmittedKeywordService
                                  
                                 if (count($newBodyTexts) > 1) {
                                     $rand = rand(1,2);
-                                    
-    
+                                     
                                     $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->title1;
                                     $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->body1;
     
@@ -503,7 +526,7 @@ class SubmittedKeywordService
                                     $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                    
                                     if ($newAd[0] == false) {
-                                        dd($newAd[1]);
+                                      
                                         array_push($loggedErrors, [
                                             'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
                                             'errors' => $newAd[1],
@@ -668,12 +691,12 @@ class SubmittedKeywordService
                 $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount);
                 if ($process[0] == true) {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                        'status' => 'processed'
+                        // 'status' => 'processed'
                     ]);
                 } 
                 else {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                        'status' => 'pending'
+                        // 'status' => 'pending'
                     ]);
                 }
             }
@@ -681,7 +704,7 @@ class SubmittedKeywordService
         }
         else {
             $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                'status' => 'pending'
+                // 'status' => 'pending'
             ]);
         }
         

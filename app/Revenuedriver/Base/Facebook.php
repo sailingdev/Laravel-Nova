@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use FacebookAds\Api;
 use FacebookAds\Logger\CurlLogger;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 abstract class Facebook
 { 
@@ -58,6 +59,16 @@ abstract class Facebook
      * @var string
     */
     protected $accountRD1 = 'act_230931148668537';
+
+    /**
+     * @var string
+    */
+    protected $accountRD22 = 'act_268825541368920';
+
+    /**
+     * @var string
+    */
+    protected $accountRD26 = 'act_195606425356330';
     
     
     public function __construct()
@@ -184,7 +195,7 @@ abstract class Facebook
      */
     public function getTargetAccounts(): array
     { 
-        return [$this->account30, $this->account38, $this->account39];
+        return [$this->account30, $this->account38, $this->accountRD26];
         if (App::environment('production')) {
             return $this->account21;
         }
@@ -249,10 +260,11 @@ abstract class Facebook
      * @param string $keyword
      * @param string $typeTag
      * @param string $market
+     * @param string $campaignName
      * 
      * @return string|null
      */
-    public function generateAdCreativeWebsiteUrl(string $accountId, string $keyword, string $typeTag, string $market): ?string
+    public function generateAdCreativeWebsiteUrl(string $accountId, string $keyword, string $typeTag, string $market, string $campaignName): ?string
     {
        
         $adAccountService = new AdAccountService;
@@ -280,7 +292,7 @@ abstract class Facebook
                                 return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
                             }
                             else if ($domainData['feed'] == 'iac') {
-                               return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
+                               return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id'], $campaignName);
                             }
                             else if ($domainData['feed'] == 'cbs') {
                                 return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
@@ -332,11 +344,16 @@ abstract class Facebook
      * @param string $typeTag
      * @param string $market
      * @param string $rangeId
+     * @param string $campaignName
      * 
      * @return string|null
      */
-    public function makeIacFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId): ?string
+    public function makeIacFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId, string $campaignName): ?string
     {
+        if ($domain === 'allresultsweb.com') {
+            Log::info('Just got here for allresultsweb.com', []);
+            return $this->makeIacAllResultsWebWebsiteUrl($domain, $keyword, $typeTag, $market, $rangeId, $campaignName);
+        }
         $groupA = ['US'];
         $unitSuffix = $domain === 'top10answers.com' ? '&adUnitId=366911' : '';
 
@@ -364,6 +381,69 @@ abstract class Facebook
             $this->formatKeyword($keyword, '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market . $unitSuffix;
         } 
         return null;
+    }
+
+    public function makeIacAllResultsWebWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId, string $campaignName)
+    { 
+        $rangeId = '263';
+        if ($market == 'US') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId;
+        }
+        else if ($market == 'CA') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-CA';
+        }
+        else if ($market == 'UK') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-UK';
+        }
+        else if ($market == 'DE') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=de-DE';
+        }
+        else if ($market == 'FR') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=fr-FR';
+        }
+        else if ($market == 'IT') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=it-IT';
+        }
+        else if ($market == 'ES') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=es-ES';
+        }
+        else if ($market == 'MX') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=es-MX';
+        }
+        else if ($market == 'AU') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-AU';
+        }
+        else if ($market == 'IE') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-IE';
+        }
+        else if ($market == 'IN') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-IN';
+        }
+        else if ($market == 'NL') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=nl-NL';
+        }
+        else if ($market == 'SE') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=sv-SE';
+        }
+        else if ($market == 'NO') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=nb-NO';
+        }
+        else if ($market == 'DK') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=da-DK';
+        }
+        else if ($market == 'BR') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=pt-BR';
+        }
+        else if ($market == 'AT') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=de-AT';
+        }
+        else if ($market == 'CH') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=de-CH';
+        }
+        else if ($market == 'NZ') {
+            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-NZ';
+        }
+        return true;
     }
 
     

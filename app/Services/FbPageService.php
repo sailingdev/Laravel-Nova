@@ -54,7 +54,7 @@ class FbPageService
 
     public function getByLimits(int $start, int $end)
     {
-        return FbPage::orderBy('created_at', 'asc')->offset($start)->limit(200)->get();
+        return FbPage::orderBy('created_at', 'asc')->offset($start)->limit(50)->get();
     }
 
     public function updateData($data, $rowId)
@@ -74,11 +74,11 @@ class FbPageService
     {
         $tot = FbPage::count();
         $groups = [];
-        if ($tot > 0 && $tot <= 200) {
+        if ($tot > 0 && $tot <= 50) {
             $groups['Group 1'];
         }
         else {
-            $dv = round($tot / 200, 1);
+            $dv = round($tot / 50, 1);
             for ($i = 1; $i <= $dv; $i++) { 
                 array_push($groups, 'Group ' . $i);
             }
@@ -89,8 +89,8 @@ class FbPageService
     /**
      * algo for computing limits
      * 
-     * For group <= 1, start=1, end=200
-     * For group > 1, end=(group * 200) + 1, start=end - 200
+     * For group <= 1, start=1, end=50
+     * For group > 1, end=(group * 50) + 1, start=end - 50
      * 
      * @param int $group
      * 
@@ -99,10 +99,10 @@ class FbPageService
     public function getGroupQueryLimits(int $group): array
     {
         $tot = FbPage::count();
-        $end =  (int) $group *  200;
+        $end =  (int) $group *  50;
 
         if ((int) $group > 1) {
-            $start = ($end - 200) + 1;
+            $start = ($end - 50) + 1;
             return [$tot < $start ? $tot : $start, $end];
         }
         else {
