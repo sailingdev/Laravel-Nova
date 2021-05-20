@@ -130,7 +130,7 @@ class SubmittedKeywordService
 
     /**
      * Create batch ID
-     *
+     * 
      * @return string
      */
     protected function createBatchId(): string
@@ -245,7 +245,7 @@ class SubmittedKeywordService
      * 
      * @return array
      */
-    public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null)
+    public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null, $batchId=null)
     {  
          
         $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
@@ -336,18 +336,27 @@ class SubmittedKeywordService
                 $markets = $marketService->getAll();
                
                 foreach ($markets as $m) {
-                    $marketsArr[] = $m->code;
+                    $marketsArr[] = $m->code == 'UK' ? 'GB' : $m->code;
                 }
+
+                $devicePlatforms = ['mobile'];
+            }
+            else if (strtolower($submission['feed']) == 'media') {
+                $marketsArr = ['US', 'CA'];
+                $devicePlatforms = ['mobile', 'tablet'];
+            }
+            else if (strtolower($submission['feed']) == 'yahoo') {
+                $marketsArr = ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'];
+                $devicePlatforms = ['desktop'];
             }
 
-            dd($marketsArr);
+          
             foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
             
-                dd($existingAdSet);
-
                 $newAdsetTargeting = $existingAdSet->targeting;
-                $newAdsetTargeting['geo_locations']['countries'] = [$submission['market'] == 'UK' ? 'GB' : $submission['market']];
-                
+                $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
+                $newAdsetTargeting['device_platforms'] = $devicePlatforms;
+ 
                 $sm = new StringManipulator;
     
                 $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
@@ -556,12 +565,13 @@ class SubmittedKeywordService
             $cotService = new CampaignOptimizeTrackerService;
             foreach ($campaignsToTrack as $key => $data) {
                 // store the record into db
-                // $cotService->create([
-                //     'type_tag' => $data['type_tag'],
-                //     'feed' => $data['feed'],
-                //     'campaign_id' => $key,
-                //     'campaign_start' => $data['campaign_start']
-                // ]);
+                $cotService->create([
+                    'batch_id' => $batchId === null ? Str::uuid() : $batchId,
+                    'type_tag' => $data['type_tag'],
+                    'feed' => $data['feed'],
+                    'campaign_id' => $key,
+                    'campaign_start' => $data['campaign_start']
+                ]);
             }
         }
 
@@ -691,12 +701,12 @@ class SubmittedKeywordService
                 $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount);
                 if ($process[0] == true) {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                        // 'status' => 'processed'
+                        'status' => 'processed'
                     ]);
                 } 
                 else {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                        // 'status' => 'pending'
+                        'status' => 'pending'
                     ]);
                 }
             }
@@ -704,7 +714,7 @@ class SubmittedKeywordService
         }
         else {
             $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                // 'status' => 'pending'
+                'status' => 'pending'
             ]);
         }
         

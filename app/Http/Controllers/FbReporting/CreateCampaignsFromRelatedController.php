@@ -35,21 +35,9 @@ class CreateCampaignsFromRelatedController extends Controller
     public function createCampaignFromRelatedTypeTag(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
     { 
         $data = $request->all()['data'];
-        // dd($data);
-      
         $sks->updateRow($data['batch_id'], $data['keyword'], [
-            // 'status' => 'processing'
-        ]); 
-        // $obj = new \stdClass;
-        // $obj->keyword = $campaign->keyword;
-        // $obj->type_tag = $keyword->type_tag;
-        // $obj->batch_id = $campaign->batch_id;
-        // $obj->feed = $campaign->feed;
-        // $obj->id = $campaign->id;
-        // $superArray[] = $obj;
-                
-            
-            
+            'status' => 'processing'
+        ]);  
         ProcessPendingBatchesUsingTypeTagsJob::dispatch($data);
         return $this->successResponse('Request was successful. Batch processing in progress');
     }
