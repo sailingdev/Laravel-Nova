@@ -351,7 +351,6 @@ abstract class Facebook
     public function makeIacFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId, string $campaignName): ?string
     {
         if ($domain === 'allresultsweb.com') {
-            Log::info('Just got here for allresultsweb.com', []);
             return $this->makeIacAllResultsWebWebsiteUrl($domain, $keyword, $typeTag, $market, $rangeId, $campaignName);
         }
         $groupA = ['US'];

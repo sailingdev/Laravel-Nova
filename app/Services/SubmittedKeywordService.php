@@ -559,17 +559,26 @@ class SubmittedKeywordService
                     }
                 }
             } 
-        // } 
         
         if (count($campaignsToTrack) > 0) {
             $cotService = new CampaignOptimizeTrackerService;
+            $cdService = new CampaignDuplicateService;
             foreach ($campaignsToTrack as $key => $data) {
-                // store the record into db
+                // store the record for optimizer
                 $cotService->create([
-                    // 'batch_id' => $batchId === null ? Str::uuid() : $batchId,
                     'type_tag' => $data['type_tag'],
                     'feed' => $data['feed'],
                     'campaign_id' => $key,
+                    'campaign_start' => $data['campaign_start']
+                ]);
+                
+                $cdService->create([
+                    'batch_id' => $batchId == null ? Str::uuid() : $batchId, 
+                    'type_tag' => $data['type_tag'],
+                    'feed' => $data['feed'],
+                    'campaign_id' => $key,
+                    'type' => (string) $data['feed'] == 'iac' ? 'main' : 'duplicate',
+                    'main_batch_status' => (string) $data['feed'] == 'iac' ? 'uncompleted' : NULL,
                     'campaign_start' => $data['campaign_start']
                 ]);
             }
