@@ -21,7 +21,7 @@ class CampaignOptimizeTrackerService
       DB::beginTransaction();
       
       $cot = new CampaignOptimizeTracker;
-      $cot->batch_id = $data['batch_id'];
+      // $cot->batch_id = $data['batch_id'];
       $cot->type_tag = $data['type_tag'];
       $cot->campaign_id = $data['campaign_id'];
       $cot->feed = $data['feed'];

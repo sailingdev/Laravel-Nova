@@ -566,7 +566,7 @@ class SubmittedKeywordService
             foreach ($campaignsToTrack as $key => $data) {
                 // store the record into db
                 $cotService->create([
-                    'batch_id' => $batchId === null ? Str::uuid() : $batchId,
+                    // 'batch_id' => $batchId === null ? Str::uuid() : $batchId,
                     'type_tag' => $data['type_tag'],
                     'feed' => $data['feed'],
                     'campaign_id' => $key,
