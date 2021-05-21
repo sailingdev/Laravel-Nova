@@ -21,6 +21,7 @@ class CreateCampaignDuplicatesTable extends Migration
             $table->dateTime('campaign_start');
             $table->string('campaign_id');
             $table->enum('type', ['main', 'duplicate']);
+            $table->enum('main_batch_status', ['uncompleted', 'completed'])->nullable();
             $table->timestamps();
         });
     }
