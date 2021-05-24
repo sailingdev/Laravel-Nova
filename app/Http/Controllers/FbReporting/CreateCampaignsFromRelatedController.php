@@ -35,6 +35,7 @@ class CreateCampaignsFromRelatedController extends Controller
     public function createCampaignFromRelatedTypeTag(CreateCampaignFromRelatedRequest $request, SubmittedKeywordService $sks)
     { 
         $data = $request->all()['data'];
+        
         $sks->updateRow($data['batch_id'], $data['keyword'], [
             'status' => 'processing'
         ]);  

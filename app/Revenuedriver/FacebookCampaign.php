@@ -173,8 +173,7 @@ class FacebookCampaign extends Facebook
      * @return array
      */
     public function show($campaignId, $fields=[]): array
-    {   
-        
+    {    
         try {
             $inst = (new Campaign($campaignId))->getSelf($fields);
             return [true, $inst];
@@ -184,12 +183,12 @@ class FacebookCampaign extends Facebook
                 | \FacebookAds\Http\Exception\AuthorizationException $e) 
         { 
             if ($this->loadCampaignAttempts < 10) {
-                sleep(3);
+                // sleep(3);
                 $this->showAttempts++;
-                return $this->show($campaignId, $fields);
-            } 
+                // return $this->show($campaignId, $fields);
+            }
             return [false, $e];
-        } catch(\Throwable $th) { 
+        } catch(\Throwable $th) {
             return [false, $th];
         }
     }

@@ -125,10 +125,10 @@ class FacebookPage extends Facebook
      */
     protected function getLongLivedUserAccessToken(): string
     {
-        $shortUserAccessToken = 'EAAFmyiUTy1IBAGxBIJgweUCMQZCqIAjsv7sqr8vZBBydSledU7l02cNqh7TWWtlZCpUPkcfxdwkkk6hvr0WOn1ZAmwtRlXbYzd1Hw4ZBZCzMCjcfUCI6BaGsEZBsDZBDheK4F9Qqvw5jFZAZCR2rImxpBa4QhecD0fO2sv8V5dIuE25RwlVx8uLS6UiqZChxEkENL95a36uGMDvlceH5qrVXaMCfIefgIhuNxFNETpbuGvDO4p3WZAU9dZCkZB';
+        $shortUserAccessToken = 'EAAFmyiUTy1IBADOPWrX2jBaZBHFggsJ4RhiELHg2gsPqzdCnVpLUkd0dOdFIzr8fV5k4tU3TmvZAAL8ueT4CqVrnlRDKArdHkkrBZC0VBSd2uAu16o1RFPehjYxIJJa8PiFhzgiBlQJh5ZCl2zZC1Y2yURMTczHQH6sanc1xteALP3VeCDGmqkX4RcVuarNqGuoGW1E8ACzliRXweXyX8SvVlVt23vwLfbCnDaa2yStHEZCDiqzaoz';
          
-        // Last fetched: 17 may, 2021 15:22 UTC
-        $longUserAccessToken = 'EAAFmyiUTy1IBAB6RZAfWTv4kbEFCKB6sL9tNgS9DUaAaP1AfsGgBgCxgcbT3xnptwW1QtAgvbUjMMhMtJfQt0acSYnuh5DSMuJT4uJYHzJVQQe6eeGR9Wz4News6rP2JSkpM0Wge7GYXUE2AqIwrbkU64faZCo4C2hdgfZCmBSJ8zSZBXN2W';
+        // Last fetched: 24 may, 2021 10:40 UTC
+        $longUserAccessToken = 'EAAFmyiUTy1IBACUnmDZCNNjEjanCyr2PFocr4vUwSKC7BWF6JZAqE1JfGXY5xZAq9HqmDrpBs1rK2wJg5mFZBsCyRuYLJcc99TlGUT8sUaglJiiZBbKHy8NZAzU1nFlf0RDcVig4JWIIVUhjHg9zWZAzngZAc1CAMF3mN8i7MorHuQZDZD';
        
         // try {
         //     $response = Http::withHeaders([

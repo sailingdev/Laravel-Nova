@@ -343,10 +343,10 @@ class SubmittedKeywordService
             }
             else if (strtolower($submission['feed']) == 'media') {
                 $marketsArr = ['US', 'CA'];
-                $devicePlatforms = ['mobile', 'tablet'];
+                $devicePlatforms = ['mobile'];
             }
             else if (strtolower($submission['feed']) == 'yahoo') {
-                $marketsArr = ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'];
+                $marketsArr = ['DE', 'FR', 'IT', 'NL', 'SE', 'GB'];
                 $devicePlatforms = ['desktop'];
             }
 
@@ -375,9 +375,13 @@ class SubmittedKeywordService
                         'pixel_id' => '652384435238728',
                         'custom_event_type' => 'LEAD'
                     ];
-                }
+                } 
                 else {
-                    $promotedObject = $existingAdSet->promoted_object;
+                    // $promotedObject = $existingAdSet->promoted_object;
+                    $promotedObject = [
+                        'pixel_id' => '238715230770371',
+                        'custom_event_type' => 'CONTENT_VIEW'
+                    ];
                 }
 
                 $newAdsetData = [
@@ -394,6 +398,7 @@ class SubmittedKeywordService
                 $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                 
                 if ($newAdSet[0] == false) {
+                   
                     array_push($loggedErrors, [
                         'message' => 'An adset not created',
                         'errors' => $newAdSet[1],
@@ -477,7 +482,7 @@ class SubmittedKeywordService
                                     $submission['market'],
                                     $newCampaignName
                                 ); 
-                                 
+                               
                                 $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                               
                                
@@ -581,12 +586,18 @@ class SubmittedKeywordService
                     'main_batch_status' => (string) $data['feed'] == 'iac' ? 'uncompleted' : NULL,
                     'campaign_start' => $data['campaign_start']
                 ]);
+                
+                // the last feed for this batch
+                if ((string) $data['feed'] === 'yahoo') {
+                    // update main to completed
+                    $cdService->updateMainRow($batchId);
+                }
             }
         }
 
         if (count($loggedErrors) > 0) {
             // log output
-            Log::info('An error occured while processing some of the submitted keywords', [$loggedErrors]);
+            Log::info('An error occured WITH ONE OF THE CREATIONS', [$loggedErrors]);
             
             $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack);
             return [false, 'Process was not completed. Please check the log for the affected processes'];

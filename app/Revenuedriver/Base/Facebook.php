@@ -262,29 +262,31 @@ abstract class Facebook
      * @param string $market
      * @param string $campaignName
      * 
-     * @return string|null
+     * @return mixed
      */
-    public function generateAdCreativeWebsiteUrl(string $accountId, string $keyword, string $typeTag, string $market, string $campaignName): ?string
+    public function generateAdCreativeWebsiteUrl(string $accountId, string $keyword, string $typeTag, string $market, string $campaignName)
     {
        
         $adAccountService = new AdAccountService;
         $row = $adAccountService->getRowByAccountId($accountId);
+       
         if ($row != null) {
             $domain = $this->getSiteFromAdAccountConfigurations($row->configurations);
-          
+           
             if ($domain != null) {
                  
                 $websiteService = new WebsiteService; 
                 $domainData = $websiteService->getRowByDomain($domain);
-               
+              
                 if ($domainData != null) {
                    
                     // check if in supported markets
                     $sm = new StringManipulator;
+                  
                     if ($domainData['supported_markets'] != null) {
                         $supportedMarkets = $sm->generateArrayFromString($domainData['supported_markets'], ',');
-                       
-                        if (in_array($market, $supportedMarkets)) {
+                          
+                        // if (in_array($market, $supportedMarkets)) {
                             if ($domainData['feed'] == 'media') {
                                 return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
                             }
@@ -297,7 +299,12 @@ abstract class Facebook
                             else if ($domainData['feed'] == 'cbs') {
                                 return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
                             }
-                        }
+                        // }
+                        // else {
+                        //     return false; 
+                            //    Log::info('UNSUPPORTED MARKET: The submitted market ('.$market.') for this 
+                                // feed ('.$domainData['feed'] .') is not among the list of supported markets', ['adAccount' => $accountId]);
+                        // }
                     }
 
                 } 

@@ -40,116 +40,91 @@ class CampaignDuplicateService
    
    public function getAll()
    {
-      return CampaignOptimizeTracker::all();
-   }
-   
-   public function optimize()
-   {
-      DB::setDefaultConnection('mysql_tools');
-      $tes = new ToolsExecutionService;
-       
-      if ($tes->hasRunDailyReportGeneratorMSS()) {
-         DB::setDefaultConnection('mysql');
-         $this->OptimizeDay1();
-         $this->OptimizeDay2();
-         $this->clearFromTracker();
-      }
+      return CampaignDuplicate::all();
    }
 
-   protected function OptimizeDay1()
+   public function getAllUncompletedBatches()
    {
-      
-      $campaigns = $this->getAll();
-      
-      if (count($campaigns) > 0) {
-         
-         $typeDailyPerfService = new TypeDailyPerfService;
-         foreach ($campaigns as $campaign) {
-            if ($campaign->already_ran_for == null) {
-               $day1 = $campaign->campaign_start;
-               $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1);
+        return CampaignDuplicate::where('type', 'main')
+        ->where('feed', 'iac')
+        ->where('main_batch_status', 'uncompleted')
+        // ->where('campaign_start', '<=', Carbon::now()->subDays(1)->toDateTimeString())
+        ->get();
+   }
+
+   public function getByFeedAndBatchId(string $feed, string $batchId)
+   {
+      return CampaignDuplicate::where('feed', $feed)->where('batch_id', $batchId)->first();
+   }
+
+   public function updateMainRow($batchId) 
+   {
+        if (CampaignDuplicate::where('batch_id', $batchId)->where('type', 'main')->update([
+            'main_batch_status' => 'completed'
+        ])) {
+            return true;
+        }
+        return false;
+   }
+   
+    public function runCampaignDuplicator()
+    {
+        $uncompletedBatches = $this->getAllUncompletedBatches();
+        $sks = new SubmittedKeywordService;
+        $acs = new AdAccountService;
+        $facebookCampaign = new FacebookCampaign;
+        $feed = $adAccount = null;
+        if (count($uncompletedBatches) > 0) {
+            foreach ($uncompletedBatches as $uncompletedBatch) {
+                // dd(Carbon::now()->subDays(1)->toDateTimeString(), $uncompletedBatch->campaign_start);
+              
+                if ($this->getByFeedAndBatchId('media', $uncompletedBatch->batch_id) == null) {
+                    $feed = 'media';
+                    $adAccount = $acs->determineTargetAccountByFeed('media');
+                }
+                else if ($this->getByFeedAndBatchId('yahoo', $uncompletedBatch->batch_id) == null) {
+                    $feed = 'yahoo';
+                    $adAccount = $acs->determineTargetAccountByFeed('yahoo');
+                }
                
-               if ($opt !== null) {
-                  if ($opt->tot_clicks < 10) {
-                        // load the campaigns and increase the budget
-                     $facebookCampaign = new FacebookCampaign;
-                     $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
-                        'daily_budget'
-                     ]);
+                // load
+                $iacCampaign = $facebookCampaign->show($uncompletedBatch->campaign_id, [
+                    'name', 
+                    'status', 
+                    'objective', 
+                    'bid_strategy',
+                    'buying_type',
+                    'daily_budget',
+                    'special_ad_categories',
+                    'account_id'
+                ]);
+                   
+                if ($iacCampaign[0] !== false) {
                     
-                     if ($accountCampaigns[0] !== false) { 
-                        $oldBudget = $accountCampaigns[1]->daily_budget;
-                        $newBudget = (int) $oldBudget + 50;
-
-                        $updateCampaign = $facebookCampaign->update($campaign->campaign_id, [], [
-                           'daily_budget' => $newBudget
-                        ]);
-                        if ($updateCampaign[0] === false ) {
-                           Log::info('Scheduler Error while running OptimizeDay1', [$updateCampaign[1]]);
-                        }
-                     }
-                     else {
-                        Log::info('Scheduler Error while running OptimizeDay1 ::: Campaign not found', [$accountCampaigns[1]]);
-                     }
-                  }
-                  
-               }
-               CampaignOptimizeTracker::where('id', $campaign->id)->update([
-                  'already_ran_for' => 1
-               ]);
+                    $campaignNameExtracts = $facebookCampaign->extractDataFromCampaignName($iacCampaign[1]->name);
+                    $campaign = [
+                        'id' => $iacCampaign[1]->id,
+                        'name' => $iacCampaign[1]->name,
+                        'status' => $iacCampaign[1]->status,
+                        'objective' => $iacCampaign[1]->objective,
+                        'bid_strategy' => $iacCampaign[1]->bid_strategy,
+                        'buying_type' => $iacCampaign[1]->buying_type,
+                        'daily_budget' => $iacCampaign[1]->daily_budget,
+                        'special_ad_categories' => $iacCampaign[1]->special_ad_categories,
+                        'account_id' =>  $iacCampaign[1]->account_id
+                    ];
+                    $submission = [
+                        'feed' => $feed,
+                        'keyword' => $campaignNameExtracts['keyword'],
+                        'market' => $campaignNameExtracts['market'],
+                        'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
+                    ];
+                    
+                    $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id);
+                }
+                
             }
-         }
-      }
-   }
+        }
+    }
 
-   protected function OptimizeDay2()
-   {
-      $campaigns = $this->getAll();
-      
-      if (count($campaigns) > 0) {
-         $typeDailyPerfService = new TypeDailyPerfService;
-         foreach ($campaigns as $campaign) {
-            if ($campaign->already_ran_for == 1) {
-               $day2 =  Carbon::parse($campaign->campaign_start)->addDays(1);
-               $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day2);
-                  
-               if ($opt !== null) {
-                  if ($opt->tot_clicks < 10) {
-                     // load the campaigns and increase the budget
-                     $facebookCampaign = new FacebookCampaign;
-                     $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
-                        'daily_budget'
-                     ]);
-                     if ($accountCampaigns[0] !== false) { 
-                        $oldBudget = $accountCampaigns[1]->daily_budget;
-                        $newBudget = (int) $oldBudget + 50;
-   
-                        $updateCampaign = $facebookCampaign->update($campaign->campaign_id, [], [
-                           'daily_budget' => $newBudget
-                        ]);
-                        if ($updateCampaign[0] === false ) {
-                           Log::info('Scheduler Error while running OptimizeDay2', [$updateCampaign[1]]);
-                        } 
-                     }
-                     else {
-                        Log::info('Scheduler Error while running OptimizeDay2 ::: Campaign not found', [$accountCampaigns[1]]);
-                     }
-                  }
-               }
-               CampaignOptimizeTracker::where('id', $campaign->id)->update([
-                  'already_ran_for' => 2
-               ]);
-            }
-         }
-      }
-   }
-
-   /**
-    * @return 
-    */
-   protected function clearFromTracker()
-   { 
-      return CampaignOptimizeTracker::where('campaign_start', '<=', Carbon::now()->subDays(3)->toDateTimeString())
-      ->delete();
-   }
 }
