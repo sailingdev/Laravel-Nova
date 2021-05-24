@@ -247,364 +247,364 @@ class SubmittedKeywordService
      */
     public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null, $batchId=null)
     {  
-         
-        $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
-        
-        $loggedErrors = [];
-
-        $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = $campaignsToTrack = []; 
-
-        $marketService = new MarketService;
-        $marketCode = $marketService->getMarketIdbyCode($submission['market']);
-        
-         
+       
+        // only run if market is in the list of supported markets
         $adAccountService = new AdAccountService;
-        
         $websiteService = new WebsiteService;
+        $cdService = new CampaignDuplicateService;
+        $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $targetAccount));
+        $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
+        $websiteData = $websiteService->getRowByDomain($domain);
+        $sm = new StringManipulator;
 
-        // foreach ($targetAccounts as $targetAccount) {
-           Log::info('Reporting for account', [$targetAccount]);
-            $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $targetAccount));
-            $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
-           
-            $websiteData = $websiteService->getRowByDomain($domain);
+        if ($websiteData['supported_markets'] != null) {
+            $supportedMarkets =  strtolower($submission['market']) == 'media' ? ['US', 'CA'] : 
+                $sm->generateArrayFromString($websiteData['supported_markets'], ',');
             
-            $typeTag = isset($submission->type_tag) ? $submission->type_tag : 
-            $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related');
+            if (in_array($submission['market'], $supportedMarkets)) {
+                $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
 
-            $newCampaignName = $this->facebookCampaign->formatCampaignName(
-                $submission['keyword'],
-                $submission['market'],
-                $websiteData->feed,
-                $domain,
-                $typeTag   
-            );
-            
-            $newCampaignData = [
-                'name' => $newCampaignName,
-                'objective' => $campaign['objective'],
-                'bid_strategy' =>  $bidStrategy === null ? 'COST_CAP' : $bidStrategy, 
-                'buying_type' => $campaign['buying_type'],
-                'daily_budget' => 500,
-                'status' => $this->facebookCampaign->determineStatus($campaign['status']),
-                'special_ad_categories' => $campaign['special_ad_categories']
-            ];
+                $loggedErrors = [];
 
-            //   // create the campaign
-            $newCampaign = $this->facebookCampaign->createCampaign($targetAccount, $newCampaignData);
-           
+                $adsetsToRollBack = $adsToRollBack = $adCreativesToRollBack = $campaignsToTrack = []; 
 
-            if ($newCampaign[0] === false) {
-                Log::info('A campaign was not created', [
-                    'message' => $newCampaign[1]->getMessage(),
-                    'errors' => $newCampaign[1],
-                    'data' => $newCampaignData
-                ]);
-                return [false, 'Campaign not created: '.$newCampaign[1]->getMessage()];
-            }
-            
-            $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
-        
-            if ($existingCampaignAdsets[0] === false) {
-                Log::info('No existing campaign adsets were loaded', [
-                    'message' => $existingCampaignAdsets[1]->getMessage(),
-                    'errors' => $existingCampaignAdsets[1],
-                    'data' => []
-                ]);
-
-                // delete the neewly created campaign
-                $this->facebookCampaign->delete($newCampaign[1]['id']);
+                $marketService = new MarketService;
+                $marketCode = $marketService->getMarketIdbyCode($submission['market']);
                 
-                return [false, 'No existing campaign adsets were loaded: '. $existingCampaignAdsets[1]->getMessage()];
+                Log::info('Reporting for account', [$targetAccount]);
             
-            }
-            else if ($existingCampaignAdsets[1]->count() < 1) {
-                Log::info('No existing campaign adsets available', [
-                    'message' => 'No existing campaign adsets available',
-                    'errors' => [],
-                    'data' => []
-                ]);
-                
-                // delete the neewly created campaign
-                $this->facebookCampaign->delete($newCampaign[1]['id']);
+                $typeTag = isset($submission->type_tag) ? $submission->type_tag : 
+                $this->facebookCampaign->generateTypeTag($submission['keyword'], $submission['market'], 'related');
 
-                return [false, 'No existing campaign adsets available'];
-            }  
+                $newCampaignName = $this->facebookCampaign->formatCampaignName(
+                    $submission['keyword'],
+                    $submission['market'],
+                    $websiteData->feed,
+                    $domain,
+                    $typeTag   
+                );
+                
+                $newCampaignData = [
+                    'name' => $newCampaignName,
+                    'objective' => $campaign['objective'],
+                    'bid_strategy' =>  $bidStrategy === null ? 'COST_CAP' : $bidStrategy, 
+                    'buying_type' => $campaign['buying_type'],
+                    'daily_budget' => 500,
+                    'status' => $this->facebookCampaign->determineStatus($campaign['status']),
+                    'special_ad_categories' => $campaign['special_ad_categories']
+                ];
+
+                //   // create the campaign
+                $newCampaign = $this->facebookCampaign->createCampaign($targetAccount, $newCampaignData);
             
-            $marketsArr = [];
-            if (strtolower($submission['feed']) == 'iac') {
-                $markets = $marketService->getAll();
-               
-                foreach ($markets as $m) {
-                    $marketsArr[] = $m->code == 'UK' ? 'GB' : $m->code;
+
+                if ($newCampaign[0] === false) {
+                    Log::info('A campaign was not created', [
+                        'message' => $newCampaign[1]->getMessage(),
+                        'errors' => $newCampaign[1],
+                        'data' => $newCampaignData
+                    ]);
+                    return [false, 'Campaign not created: '.$newCampaign[1]->getMessage()];
                 }
+                
+                $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
+            
+                if ($existingCampaignAdsets[0] === false) {
+                    Log::info('No existing campaign adsets were loaded', [
+                        'message' => $existingCampaignAdsets[1]->getMessage(),
+                        'errors' => $existingCampaignAdsets[1],
+                        'data' => []
+                    ]);
 
-                $devicePlatforms = ['mobile'];
-            }
-            else if (strtolower($submission['feed']) == 'media') {
-                $marketsArr = ['US', 'CA'];
-                $devicePlatforms = ['mobile'];
-            }
-            else if (strtolower($submission['feed']) == 'yahoo') {
-                $marketsArr = ['DE', 'FR', 'IT', 'NL', 'SE', 'GB'];
-                $devicePlatforms = ['desktop'];
-            }
+                    // delete the neewly created campaign
+                    $this->facebookCampaign->delete($newCampaign[1]['id']);
+                    
+                    return [false, 'No existing campaign adsets were loaded: '. $existingCampaignAdsets[1]->getMessage()];
+                
+                }
+                else if ($existingCampaignAdsets[1]->count() < 1) {
+                    Log::info('No existing campaign adsets available', [
+                        'message' => 'No existing campaign adsets available',
+                        'errors' => [],
+                        'data' => []
+                    ]);
+                    
+                    // delete the neewly created campaign
+                    $this->facebookCampaign->delete($newCampaign[1]['id']);
+
+                    return [false, 'No existing campaign adsets available'];
+                }  
+                
+                $marketsArr[] = $submission['market'] == 'UK' ? 'GB' : $submission['market'];
+                if (strtolower($submission['feed']) == 'iac') {
+                    $devicePlatforms = ['mobile'];
+                }
+                else if (strtolower($submission['feed']) == 'media') {
+                    $devicePlatforms = ['mobile'];
+                }
+                else if (strtolower($submission['feed']) == 'yahoo') {
+                    $devicePlatforms = ['desktop'];
+                }
 
           
-            foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
-            
-                $newAdsetTargeting = $existingAdSet->targeting;
-                $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
-                $newAdsetTargeting['device_platforms'] = $devicePlatforms;
- 
-                $sm = new StringManipulator;
+                foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
+                
+                    $newAdsetTargeting = $existingAdSet->targeting;
+                    $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
+                    $newAdsetTargeting['device_platforms'] = $devicePlatforms;
     
-                $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
-                    $this->facebookAdLocale->getMarketLocale($marketCode), ',');
-    
-                $targetAccountData = $this->facebookAdAccount->loadAccount($targetAccount, [
-                        'timezone_name'
-                ]); 
-                
-                $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
-                
-                $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $campaignNameExtracts['feed']);
-                
-                if (strtolower($submission['feed']) == 'iac') {
-                    $promotedObject = [
-                        'pixel_id' => '652384435238728',
-                        'custom_event_type' => 'LEAD'
-                    ];
-                } 
-                else {
-                    // $promotedObject = $existingAdSet->promoted_object;
-                    $promotedObject = [
-                        'pixel_id' => '238715230770371',
-                        'custom_event_type' => 'CONTENT_VIEW'
-                    ];
-                }
-
-                $newAdsetData = [
-                    'name' =>   ucfirst($submission['keyword']), 
-                    'targeting' => $newAdsetTargeting,
-                    'bid_amount' => $newBidAmount > 0 ? $newBidAmount * 100 : 1,
-                    'billing_event' => $existingAdSet->billing_event,
-                    'promoted_object' => $promotedObject,
-                    'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),
-                    'campaign_id' => $newCampaign[1]['id'],
-                    'is_dynamic_creative' => true
-                ];
-                // create new adset
-                $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
-                
-                if ($newAdSet[0] == false) {
-                   
-                    array_push($loggedErrors, [
-                        'message' => 'An adset not created',
-                        'errors' => $newAdSet[1],
-                        'data' => $newAdsetData
+                    $sm = new StringManipulator;
+        
+                    $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
+                        $this->facebookAdLocale->getMarketLocale($marketCode), ',');
+        
+                    $targetAccountData = $this->facebookAdAccount->loadAccount($targetAccount, [
+                            'timezone_name'
                     ]); 
                     
-                    // delete the newly created campaign
-                    $this->facebookCampaign->delete($newCampaign[1]['id']);
-                }
-                else {
-                    Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
-                    array_push($adsetsToRollBack, $newAdSet[1]->id);
-    
-                    // get ads for existing adset
-                    $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
-                    if ($existingAds[0] == false) {
+                    $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
+                    
+                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $campaignNameExtracts['feed']);
+                    
+                    if (strtolower($submission['feed']) == 'iac') {
+                        $promotedObject = [
+                            'pixel_id' => '652384435238728',
+                            'custom_event_type' => 'LEAD'
+                        ];
+                    } 
+                    else {
+                        // $promotedObject = $existingAdSet->promoted_object;
+                        $promotedObject = [
+                            'pixel_id' => '238715230770371',
+                            'custom_event_type' => 'CONTENT_VIEW'
+                        ];
+                    }
+
+                    $newAdsetData = [
+                        'name' =>   ucfirst($submission['keyword']), 
+                        'targeting' => $newAdsetTargeting,
+                        'bid_amount' => $newBidAmount > 0 ? $newBidAmount * 100 : 1,
+                        'billing_event' => $existingAdSet->billing_event,
+                        'promoted_object' => $promotedObject,
+                        'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),
+                        'campaign_id' => $newCampaign[1]['id'],
+                        'is_dynamic_creative' => true
+                    ];
+                    // create new adset
+                    $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
+                    
+                    if ($newAdSet[0] == false) {
+                    
                         array_push($loggedErrors, [
-                            'message' => 'An error occured while loading existing ads in adset with ID: ' . $existingAdSet->id,
-                            'errors' => $existingAds[1],
-                            'data' => []
+                            'message' => 'An adset not created',
+                            'errors' => $newAdSet[1],
+                            'data' => $newAdsetData
                         ]); 
+                        
+                        // delete the newly created campaign
+                        $this->facebookCampaign->delete($newCampaign[1]['id']);
                     }
-                    else if ($existingAds[1]->count() < 1) {
-                        array_push($loggedErrors, [
-                            'message' => 'No existing ads for the adset with ID: ' . $existingAdSet->id,
-                            'errors' => [],
-                            'data' => []
-                        ]);
-                    }
-                    else {  
-                        foreach ($existingAds[1] as $existingAd) {
-                           
-                            // load adcreative for that ad
-                            $existingAdCreative = $this->facebookAdCreative->show($existingAd->creative['id'], [
-                                'account_id', 'name', 'object_story_spec', 'asset_feed_spec', 'call_to_action_type',
-                                'link_url', 'image_hash', 'image_url'
+                    else {
+                        Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
+                        array_push($adsetsToRollBack, $newAdSet[1]->id);
+        
+                        // get ads for existing adset
+                        $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
+                        if ($existingAds[0] == false) {
+                            array_push($loggedErrors, [
+                                'message' => 'An error occured while loading existing ads in adset with ID: ' . $existingAdSet->id,
+                                'errors' => $existingAds[1],
+                                'data' => []
+                            ]); 
+                        }
+                        else if ($existingAds[1]->count() < 1) {
+                            array_push($loggedErrors, [
+                                'message' => 'No existing ads for the adset with ID: ' . $existingAdSet->id,
+                                'errors' => [],
+                                'data' => []
                             ]);
-                           
-                            if ($existingAdCreative[0] == false) {
-                                array_push($loggedErrors, [
-                                    'message' => 'An error occured while loading the adcreative for the ad with ID: ' . $existingAd->id,
-                                    'errors' => $existingAdCreative[1],
-                                    'data' => []
+                        }
+                        else {  
+                            foreach ($existingAds[1] as $existingAd) {
+                            
+                                // load adcreative for that ad
+                                $existingAdCreative = $this->facebookAdCreative->show($existingAd->creative['id'], [
+                                    'account_id', 'name', 'object_story_spec', 'asset_feed_spec', 'call_to_action_type',
+                                    'link_url', 'image_hash', 'image_url'
                                 ]);
-                            }
-                            else { 
-                                $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
-                                $newAdImages = [];
-                                foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
-                                    // copy from old account to new account
-                                    $copyFrom = new \stdclass;
-                                    $copyFrom->source_account_id = preg_replace("#[^0-9]#i", "", $campaign['account_id']);
-                                    $copyFrom->hash = $existingImage['hash'];
-                                    $newAdImage = $this->facebookAdImage->create($targetAccount, [
-                                        'copy_from' => $copyFrom
+                            
+                                if ($existingAdCreative[0] == false) {
+                                    array_push($loggedErrors, [
+                                        'message' => 'An error occured while loading the adcreative for the ad with ID: ' . $existingAd->id,
+                                        'errors' => $existingAdCreative[1],
+                                        'data' => []
                                     ]);
+                                }
+                                else { 
+                                    $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
+                                    $newAdImages = [];
+                                    foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
+                                        // copy from old account to new account
+                                        $copyFrom = new \stdclass;
+                                        $copyFrom->source_account_id = preg_replace("#[^0-9]#i", "", $campaign['account_id']);
+                                        $copyFrom->hash = $existingImage['hash'];
+                                        $newAdImage = $this->facebookAdImage->create($targetAccount, [
+                                            'copy_from' => $copyFrom
+                                        ]);
+                                        
+                                        if ($newAdImage[0] == false) {
+                                            array_push($loggedErrors, [
+                                                'message' => 'An error occured while duplicating an image from source to target account. Existing ad Id: ' . $existingAd->id,
+                                                'errors' => $newAdImage[1],
+                                                'data' => (array) $copyFrom
+                                            ]);
+                                        }
+                                        else {
+                                            
+                                            $arrK = array_keys($newAdImage[1]->exportAllData()['images']);
+                                            array_push($newAdImages, [
+                                                'hash' => $arrK[0]
+                                            ]);
+                                        }
+                                    }
+        
+                                    $existingAdSetFeedSpec['images'] = $newAdImages;
+                                
+                                    // generate new website url 
+                                    $newWebsiteUrl = $this->facebookCampaign->generateAdCreativeWebsiteUrl( 
+                                        $targetAccount,
+                                        ucfirst($submission['keyword']),
+                                        isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
+                                        $submission['market'],
+                                        $newCampaignName
+                                    ); 
+                                
+                                    $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
+                                
+                                
+                                    $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission['keyword']);
                                     
-                                    if ($newAdImage[0] == false) {
+                                    
+                                    if (count($newBodyTexts) > 1) {
+                                        $rand = rand(1,2);
+                                        
+                                        $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->title1;
+                                        $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->body1;
+        
+                                        $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->title2;
+                                        $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->body2;
+                                    }
+                                    $fbPageService = new FbPageService;
+                                    $randomFbPage = $fbPageService->getRandomFbPage();
+                                    $objectStorySpec = [];
+
+                                    if ($randomFbPage != null) {
+                                        $objectStorySpec = [
+                                            'page_id' => $randomFbPage->page_id,
+                                            'instagram_actor_id' => $randomFbPage->instagram_id
+                                        ];
+                                    }
+                                    
+                                    $newAdCreativeData = [
+                                        'name' =>  ucfirst($submission['keyword']),  
+                                        'account_id' => $targetAccount,
+                                        'asset_feed_spec' => $existingAdSetFeedSpec,
+                                        'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
+                                        'object_story_spec' => $objectStorySpec, 
+                                    ]; 
+        
+                                    $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
+                                
+                                    if ($newAdCreative[0] == false) {
                                         array_push($loggedErrors, [
-                                            'message' => 'An error occured while duplicating an image from source to target account. Existing ad Id: ' . $existingAd->id,
-                                            'errors' => $newAdImage[1],
-                                            'data' => (array) $copyFrom
+                                            'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
+                                            'errors' => $newAdCreative[1],
+                                            'data' => $newAdCreativeData
                                         ]);
                                     }
                                     else {
+                                        array_push($adCreativesToRollBack, $newAdCreative[1]->id);
+                                        Log::info('Adcreative for '. $targetAccount . ' created', [ $newAdCreative[1]->id]);
+                                        $newAdData = [
+                                            'name' => $existingAd->name,
+                                            'adset_id' => $newAdSet[1]->id,
+                                            'creative' => $this->facebookAdCreative->show($newAdCreative[1]->creative_id)[1],
+                                            'status' => $this->facebookCampaign->determineStatus($existingAd->status),
+                                            'conversion_domain' => $domain
+                                        ];
                                         
-                                        $arrK = array_keys($newAdImage[1]->exportAllData()['images']);
-                                        array_push($newAdImages, [
-                                            'hash' => $arrK[0]
-                                        ]);
-                                    }
-                                }
-    
-                                $existingAdSetFeedSpec['images'] = $newAdImages;
-                               
-                                // generate new website url 
-                                $newWebsiteUrl = $this->facebookCampaign->generateAdCreativeWebsiteUrl( 
-                                    $targetAccount,
-                                    ucfirst($submission['keyword']),
-                                    isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
-                                    $submission['market'],
-                                    $newCampaignName
-                                ); 
-                               
-                                $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
-                              
-                               
-                                $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission['keyword']);
-                                 
-                                 
-                                if (count($newBodyTexts) > 1) {
-                                    $rand = rand(1,2);
-                                     
-                                    $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->title1;
-                                    $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->body1;
-    
-                                    $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->title2;
-                                    $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->body2;
-                                }
-                                $fbPageService = new FbPageService;
-                                $randomFbPage = $fbPageService->getRandomFbPage();
-                                $objectStorySpec = [];
-
-                                if ($randomFbPage != null) {
-                                    $objectStorySpec = [
-                                        'page_id' => $randomFbPage->page_id,
-                                        'instagram_actor_id' => $randomFbPage->instagram_id
-                                    ];
-                                }
-                                
-                                $newAdCreativeData = [
-                                    'name' =>  ucfirst($submission['keyword']),  
-                                    'account_id' => $targetAccount,
-                                    'asset_feed_spec' => $existingAdSetFeedSpec,
-                                    'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
-                                    'object_story_spec' => $objectStorySpec, 
-                                ]; 
-     
-                                $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
-                             
-                                if ($newAdCreative[0] == false) {
-                                    array_push($loggedErrors, [
-                                        'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
-                                        'errors' => $newAdCreative[1],
-                                        'data' => $newAdCreativeData
-                                    ]);
-                                }
-                                else {
-                                    array_push($adCreativesToRollBack, $newAdCreative[1]->id);
-                                    Log::info('Adcreative for '. $targetAccount . ' created', [ $newAdCreative[1]->id]);
-                                    $newAdData = [
-                                        'name' => $existingAd->name,
-                                        'adset_id' => $newAdSet[1]->id,
-                                        'creative' => $this->facebookAdCreative->show($newAdCreative[1]->creative_id)[1],
-                                        'status' => $this->facebookCampaign->determineStatus($existingAd->status),
-                                        'conversion_domain' => $domain
-                                    ];
+                                        $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                     
-                                    $newAd = $this->facebookAd->create($targetAccount, $newAdData);
-                                   
-                                    if ($newAd[0] == false) {
-                                      
-                                        array_push($loggedErrors, [
-                                            'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
-                                            'errors' => $newAd[1],
-                                            'data' => $newAdData
-                                        ]);
-                                    }
-                                    else { 
-                                        Log::info('Ad for '. $targetAccount . ' created', [$newAd[1]->id]);
-                                        array_push($adsToRollBack, $newAd[1]->id);
-                                        if (!array_key_exists($newCampaign[1]['id'], $campaignsToTrack)) {
-                                            $campaignsToTrack[$newCampaign[1]['id']] = [
-                                                'type_tag' => $typeTag,
-                                                'campaign_start' => $this->facebookCampaign->determineStartTime(),
-                                                'feed' => $websiteData->feed
-                                            ];
+                                        if ($newAd[0] == false) {
+                                        
+                                            array_push($loggedErrors, [
+                                                'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
+                                                'errors' => $newAd[1],
+                                                'data' => $newAdData
+                                            ]);
                                         }
-                                    }
-                                } 
+                                        else { 
+                                            Log::info('Ad for '. $targetAccount . ' created', [$newAd[1]->id]);
+                                            array_push($adsToRollBack, $newAd[1]->id);
+                                            if (!array_key_exists($newCampaign[1]['id'], $campaignsToTrack)) {
+                                                $campaignsToTrack[$newCampaign[1]['id']] = [
+                                                    'type_tag' => $typeTag,
+                                                    'campaign_start' => $this->facebookCampaign->determineStartTime(),
+                                                    'feed' => $websiteData->feed
+                                                ];
+                                            }
+                                        }
+                                    } 
+                                }
                             }
                         }
                     }
+                } 
+            
+                if (count($campaignsToTrack) > 0) {
+                    $cotService = new CampaignOptimizeTrackerService;
+                    
+                    foreach ($campaignsToTrack as $key => $data) {
+                        // store the record for optimizer
+                        $cotService->create([
+                            'type_tag' => $data['type_tag'],
+                            'feed' => $data['feed'],
+                            'campaign_id' => $key,
+                            'campaign_start' => $data['campaign_start']
+                        ]);
+                        
+                        if ((string) $data['feed'] == 'iac') {
+                            $cdService->create([
+                                'batch_id' => $batchId == null ? Str::uuid() : $batchId, 
+                                'type_tag' => $data['type_tag'],
+                                'feed' => $data['feed'],
+                                'campaign_id' => $key,
+                                'type' =>  'iac',
+                                'main_batch_status' => 'uncompleted',
+                                'campaign_start' => $data['campaign_start']
+                            ]);
+                        }
+                       
+                    }
                 }
-            } 
-        
-        if (count($campaignsToTrack) > 0) {
-            $cotService = new CampaignOptimizeTrackerService;
-            $cdService = new CampaignDuplicateService;
-            foreach ($campaignsToTrack as $key => $data) {
-                // store the record for optimizer
-                $cotService->create([
-                    'type_tag' => $data['type_tag'],
-                    'feed' => $data['feed'],
-                    'campaign_id' => $key,
-                    'campaign_start' => $data['campaign_start']
-                ]);
-                
-                $cdService->create([
-                    'batch_id' => $batchId == null ? Str::uuid() : $batchId, 
-                    'type_tag' => $data['type_tag'],
-                    'feed' => $data['feed'],
-                    'campaign_id' => $key,
-                    'type' => (string) $data['feed'] == 'iac' ? 'main' : 'duplicate',
-                    'main_batch_status' => (string) $data['feed'] == 'iac' ? 'uncompleted' : NULL,
-                    'campaign_start' => $data['campaign_start']
-                ]);
-                
-                // the last feed for this batch
-                if ((string) $data['feed'] === 'yahoo') {
-                    // update main to completed
-                    $cdService->updateMainRow($batchId);
+
+                if (count($loggedErrors) > 0) {
+                    // log output
+                    Log::info('An error occured WITH ONE OF THE CREATIONS', [$loggedErrors]);
+                    
+                    $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack);
+                    return [false, 'Process was not completed. Please check the log for the affected processes'];
+                }
+                else {
+                    Log::info('Everything worked fine', []);
+                    return [true, $newCampaign[1]['id']];
                 }
             }
-        }
-
-        if (count($loggedErrors) > 0) {
-            // log output
-            Log::info('An error occured WITH ONE OF THE CREATIONS', [$loggedErrors]);
-            
-            $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack);
-            return [false, 'Process was not completed. Please check the log for the affected processes'];
-        }
-        else {
-            Log::info('Everything worked fine', []);
-            return [true, $newCampaign[1]['id']];
+        } 
+        // the last feed for this batch
+        if ((string) $submission['feed'] === 'yahoo') {
+            // update main to completed
+            $cdService->updateMainRow($batchId);
         }
     }
 

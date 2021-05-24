@@ -78,15 +78,6 @@ class CampaignDuplicateService
             foreach ($uncompletedBatches as $uncompletedBatch) {
                 // dd(Carbon::now()->subDays(1)->toDateTimeString(), $uncompletedBatch->campaign_start);
               
-                if ($this->getByFeedAndBatchId('media', $uncompletedBatch->batch_id) == null) {
-                    $feed = 'media';
-                    $adAccount = $acs->determineTargetAccountByFeed('media');
-                }
-                else if ($this->getByFeedAndBatchId('yahoo', $uncompletedBatch->batch_id) == null) {
-                    $feed = 'yahoo';
-                    $adAccount = $acs->determineTargetAccountByFeed('yahoo');
-                }
-               
                 // load
                 $iacCampaign = $facebookCampaign->show($uncompletedBatch->campaign_id, [
                     'name', 
@@ -113,14 +104,19 @@ class CampaignDuplicateService
                         'special_ad_categories' => $iacCampaign[1]->special_ad_categories,
                         'account_id' =>  $iacCampaign[1]->account_id
                     ];
-                    $submission = [
-                        'feed' => $feed,
-                        'keyword' => $campaignNameExtracts['keyword'],
-                        'market' => $campaignNameExtracts['market'],
-                        'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
-                    ];
-                    
-                    $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id);
+
+                    $feedOnQueue = ['media', 'yahoo'];
+                    foreach ($feedOnQueue as $fq) {
+                        $feed = $fq;
+                        $adAccount = $acs->determineTargetAccountByFeed($fq);
+                        $submission = [
+                            'feed' => $feed,
+                            'keyword' => $campaignNameExtracts['keyword'],
+                            'market' => $campaignNameExtracts['market'],
+                            'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
+                        ];
+                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id);
+                    }
                 }
                 
             }

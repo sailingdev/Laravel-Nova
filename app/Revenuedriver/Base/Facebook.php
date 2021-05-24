@@ -286,25 +286,19 @@ abstract class Facebook
                     if ($domainData['supported_markets'] != null) {
                         $supportedMarkets = $sm->generateArrayFromString($domainData['supported_markets'], ',');
                           
-                        // if (in_array($market, $supportedMarkets)) {
-                            if ($domainData['feed'] == 'media') {
-                                return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
-                            }
-                            else if ($domainData['feed'] == 'yahoo') {
-                                return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
-                            }
-                            else if ($domainData['feed'] == 'iac') {
-                               return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id'], $campaignName);
-                            }
-                            else if ($domainData['feed'] == 'cbs') {
-                                return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
-                            }
-                        // }
-                        // else {
-                        //     return false; 
-                            //    Log::info('UNSUPPORTED MARKET: The submitted market ('.$market.') for this 
-                                // feed ('.$domainData['feed'] .') is not among the list of supported markets', ['adAccount' => $accountId]);
-                        // }
+                        
+                        if ($domainData['feed'] == 'media') {
+                            return $this->makeMediaFeedWebsiteUrl($domain, $domainData['subdomain'], $keyword, $typeTag, $market);
+                        }
+                        else if ($domainData['feed'] == 'yahoo') {
+                            return $this->makeYahooFeedWebsiteUrl($domain, $keyword, $typeTag, $market);
+                        }
+                        else if ($domainData['feed'] == 'iac') {
+                            return $this->makeIacFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id'], $campaignName);
+                        }
+                        else if ($domainData['feed'] == 'cbs') {
+                            return $this->makeCbsFeedWebsiteUrl($domain, $keyword, $typeTag, $market, $domainData['range_id']);
+                        }
                     }
 
                 } 
