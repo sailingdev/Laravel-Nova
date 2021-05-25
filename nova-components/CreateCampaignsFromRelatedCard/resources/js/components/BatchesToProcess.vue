@@ -1,7 +1,7 @@
 <template>
     <div class="batches-to-process mt-5 mb-5 w-full"> 
 
-         <div v-if="displaySubmitSuccess">
+        <div v-if="displaySubmitSuccess">
             <div class="mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414" fill="#3da35a"/></svg>
                 <h4 class="text-2xl text-center text-3xl text-80 font-dark px-4 py-4"> Thank you! </h4>
@@ -70,6 +70,11 @@
                 </div>
 
             </div>
+
+            <button :disabled="mocking" type="button" @click="mockDuplicator()" class="mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                <span v-if="mocking"><loader class="text-60" :fillColor="'#ffffff'" /></span>
+                <span v-else><i class="fa fa-check-circle"></i> &nbsp; Mock Duplicator Scheduler</span>
+            </button>
         </div>
     </div>
 </template>
@@ -85,7 +90,8 @@ export default {
             batches: [],
             errorResponse: {},
             displayForm: true,
-            displaySubmitSuccess: false
+            displaySubmitSuccess: false,
+            mocking: false
         }
     },
     components: {
@@ -144,6 +150,17 @@ export default {
                 this.processingKey = null
             })
         },
+        mockDuplicator () {
+            this.mocking = true
+            axios.post('/nova-vendor/' + this.card.component + '/mock-duplicator')
+            .then(response => {
+                alert('Mock scheduler ran successfully')
+            }).catch(error => {
+            })
+            .finally(() => {
+                this.mocking = false
+            })
+        }
     },
     computed: { 
           values() {

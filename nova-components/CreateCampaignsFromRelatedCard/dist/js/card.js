@@ -874,6 +874,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -886,7 +891,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             batches: [],
             errorResponse: {},
             displayForm: true,
-            displaySubmitSuccess: false
+            displaySubmitSuccess: false,
+            mocking: false
         };
     },
 
@@ -945,6 +951,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 _this2.errorResponse = error.response.data;
             }).finally(function () {
                 _this2.processingKey = null;
+            });
+        },
+        mockDuplicator: function mockDuplicator() {
+            var _this3 = this;
+
+            this.mocking = true;
+            axios.post('/nova-vendor/' + this.card.component + '/mock-duplicator').then(function (response) {
+                alert('Mock scheduler ran successfully');
+            }).catch(function (error) {}).finally(function () {
+                _this3.mocking = false;
             });
         }
     },
@@ -14020,7 +14036,38 @@ var render = function() {
                       ])
                     ])
               ])
-            : _vm._e()
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+              attrs: { disabled: _vm.mocking, type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.mockDuplicator()
+                }
+              }
+            },
+            [
+              _vm.mocking
+                ? _c(
+                    "span",
+                    [
+                      _c("loader", {
+                        staticClass: "text-60",
+                        attrs: { fillColor: "#ffffff" }
+                      })
+                    ],
+                    1
+                  )
+                : _c("span", [
+                    _c("i", { staticClass: "fa fa-check-circle" }),
+                    _vm._v("   Mock Duplicator Scheduler")
+                  ])
+            ]
+          )
         ])
   ])
 }

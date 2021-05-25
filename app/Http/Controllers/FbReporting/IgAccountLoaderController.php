@@ -14,13 +14,7 @@ use Illuminate\Http\Request;
 class IgAccountLoaderController extends Controller
 { 
     public function loadIDs(LoadIGAccountIdsRequest $request, StringManipulator $sm)
-    { 
-        // $fbPagePostSchedulerService = new FbPagePostSchedulerService;
-        // dd('first port', $fbPagePostSchedulerService->runSchedule());
-         
-        $cd = new CampaignDuplicateService;
-        dd('first port', $cd->runCampaignDuplicator());
-
+    {  
         $prep = $sm->generateArrayFromString(str_replace("\n", '<br />',  $request->fb_page_ids), '<br />');
         
         $data = [];

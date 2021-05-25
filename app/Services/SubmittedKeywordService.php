@@ -78,7 +78,8 @@ class SubmittedKeywordService
         $batchId = $this->createBatchId();
  
         $data = [];
-        $feeds = ['yahoo', 'media', 'iac'];
+        $feeds = ['iac']; // 'yahoo', 'media', 
+
         foreach ($keywords as $keyword) {
             foreach($feeds as $feed) {
                 array_push($data, [
@@ -163,12 +164,14 @@ class SubmittedKeywordService
                 ]);
             } 
             else {
+
                 $matches = array_filter($campaignCombo, function ($campaign) use ($submission) {
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
                     return $campaignKeyword == $submission["keyword"];
                 });
                 
                 if (count($matches) < 1) {
+                   
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
                         'action_taken' => 'new',
                         'note' => 'campaign to be created',
@@ -176,7 +179,7 @@ class SubmittedKeywordService
                     ]);
                 } 
                 else { 
-                     
+                   
                     $adAccount = $acs->determineTargetAccountByFeed($submission['feed']);
                     if ($adAccount == null) {
                         Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $submission['feed'], [$submission]);
@@ -257,7 +260,7 @@ class SubmittedKeywordService
         $websiteData = $websiteService->getRowByDomain($domain);
         $sm = new StringManipulator;
 
-        if ($websiteData['supported_markets'] != null) {
+        if ($websiteData['supported_markets'] == null) {
             $supportedMarkets =  strtolower($submission['market']) == 'media' ? ['US', 'CA'] : 
                 $sm->generateArrayFromString($websiteData['supported_markets'], ',');
             
@@ -394,15 +397,20 @@ class SubmittedKeywordService
                     $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                     
                     if ($newAdSet[0] == false) {
-                    
-                        array_push($loggedErrors, [
-                            'message' => 'An adset not created',
-                            'errors' => $newAdSet[1],
-                            'data' => $newAdsetData
-                        ]); 
                         
-                        // delete the newly created campaign
-                        $this->facebookCampaign->delete($newCampaign[1]['id']);
+                        if ($newAdSet[1]->getErrorUserTitle() == 'No Custom Audience Ownership') {
+                            continue;
+                        }
+                        else {
+                            array_push($loggedErrors, [
+                                'message' => 'An adset not created',
+                                'errors' => $newAdSet[1],
+                                'data' => $newAdsetData
+                            ]); 
+                            
+                            // delete the newly created campaign
+                            $this->facebookCampaign->delete($newCampaign[1]['id']);
+                        }
                     }
                     else {
                         Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
@@ -577,9 +585,9 @@ class SubmittedKeywordService
                             $cdService->create([
                                 'batch_id' => $batchId == null ? Str::uuid() : $batchId, 
                                 'type_tag' => $data['type_tag'],
-                                'feed' => $data['feed'],
+                                'feed' => 'iac',
                                 'campaign_id' => $key,
-                                'type' =>  'iac',
+                                'type' =>  'main',
                                 'main_batch_status' => 'uncompleted',
                                 'campaign_start' => $data['campaign_start']
                             ]);
@@ -601,8 +609,10 @@ class SubmittedKeywordService
                 }
             }
         } 
+        
         // the last feed for this batch
-        if ((string) $submission['feed'] === 'yahoo') {
+        if (strtolower($submission['feed']) == 'yahoo') {
+           
             // update main to completed
             $cdService->updateMainRow($batchId);
         }
@@ -704,7 +714,6 @@ class SubmittedKeywordService
         });
          
         if (count($matches) > 0) {
-            
             
             $typeTag = $this->facebookCampaign->generateTypeTag($keyword['keyword'], $keyword['market'], 'related');
             

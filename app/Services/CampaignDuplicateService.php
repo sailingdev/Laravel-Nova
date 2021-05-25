@@ -57,15 +57,13 @@ class CampaignDuplicateService
       return CampaignDuplicate::where('feed', $feed)->where('batch_id', $batchId)->first();
    }
 
-   public function updateMainRow($batchId) 
-   {
-        if (CampaignDuplicate::where('batch_id', $batchId)->where('type', 'main')->update([
-            'main_batch_status' => 'completed'
-        ])) {
-            return true;
-        }
-        return false;
-   }
+    public function updateMainRow($batchId) 
+    {
+        $campaign = CampaignDuplicate::where('batch_id', $batchId)->where('type', 'main')->first();
+        $campaign->main_batch_status = 'completed';
+        $campaign->save();
+        return true;
+    }
    
     public function runCampaignDuplicator()
     {
@@ -114,7 +112,7 @@ class CampaignDuplicateService
                             'keyword' => $campaignNameExtracts['keyword'],
                             'market' => $campaignNameExtracts['market'],
                             'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
-                        ];
+                        ]; 
                         $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id);
                     }
                 }
