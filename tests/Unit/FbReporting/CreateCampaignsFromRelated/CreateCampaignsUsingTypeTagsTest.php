@@ -39,26 +39,23 @@ class CreateCampaignsUsingTypeTagsTest extends TestCase
     */
     public function should_pass_if_all_correct()
     {   
-        $submissions = SubmittedKeyword::factory()->count(3)->make([
+        $submission = SubmittedKeyword::factory()->makeOne([
             'action_taken' => 'new'
         ]);
-        
-        $data = [];
-        foreach ($submissions as $submission) {
-            $obj = new stdClass;
-            $obj->batch_id = $submission->batch_id;
-            $obj->type_tag = $this->faker->city;
-            $obj->keyword = $submission->keyword;
-            $obj->id = $submission->id;
-            array_push($data, $obj);
-        }
-
+         
+        $data = [
+            'batch_id' => $submission->batch_id,
+            'type_tag' => $submission->type_tag,
+            'keyword' => $submission->keyword,
+            'id' => '2822'
+        ];
+       
         $response = $this->actingAs($this->getDefaultUser())
             ->withHeaders(['Accept' => 'application/json'])
             ->json('POST', '/nova-vendor/create-campaigns-from-related-card/create-campaign', [
-                'data' =>  json_encode($data), 
+                'data' =>  $data 
             ]); 
-            
+       
         $response->assertStatus(200); 
     }
 }
