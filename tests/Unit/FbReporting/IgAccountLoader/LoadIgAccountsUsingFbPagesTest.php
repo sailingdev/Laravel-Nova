@@ -46,7 +46,7 @@ class LoadIgAccountsUsingFbPagesTest extends TestCase
         $response = $this->actingAs($this->getDefaultUser())
             ->withHeaders(['Accept' => 'application/json'])
             ->json('POST', '/nova-vendor/ig-account-loader-card/load-ig-accounts', [
-                'fb_page_ids' =>  '1023293928921', //$this->faker->domainWord. ' ' . $this->faker->domainWord,
+                'fb_page_ids' =>  '3916735071749940', //$this->faker->domainWord. ' ' . $this->faker->domainWord,
             ]); 
             
         $response->assertStatus(200); 
