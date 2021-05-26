@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessPendingBatchesUsingTypeTagsJob implements ShouldQueue
+class ProcessPendingBatchesUsingTypeTagsJob //implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -47,7 +47,7 @@ class ProcessPendingBatchesUsingTypeTagsJob implements ShouldQueue
     public function handle()
     { 
         $sks = new SubmittedKeywordService;
-        return $sks->createCampaignFromRelatedTypeTag($this->data);
+        return $sks->createCampaignFromRelated($this->data);
     }
 
     

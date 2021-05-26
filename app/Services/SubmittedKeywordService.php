@@ -260,7 +260,7 @@ class SubmittedKeywordService
         $websiteData = $websiteService->getRowByDomain($domain);
         $sm = new StringManipulator;
 
-        if ($websiteData['supported_markets'] == null) {
+        if ($websiteData['supported_markets'] != null) {
             $supportedMarkets =  strtolower($submission['market']) == 'media' ? ['US', 'CA'] : 
                 $sm->generateArrayFromString($websiteData['supported_markets'], ',');
             
@@ -611,8 +611,7 @@ class SubmittedKeywordService
         } 
         
         // the last feed for this batch
-        if (strtolower($submission['feed']) == 'yahoo') {
-           
+        if (strtolower($submission['feed']) == 'yahoo') { 
             // update main to completed
             $cdService->updateMainRow($batchId);
         }
@@ -698,7 +697,7 @@ class SubmittedKeywordService
      * 
      * @return bool
      */
-    public function createCampaignFromRelatedTypeTag(array $keyword)
+    public function createCampaignFromRelated(array $keyword)
     { 
        
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
@@ -723,11 +722,12 @@ class SubmittedKeywordService
             $adAccount = $acs->determineTargetAccountByFeed($keyword['feed']);
            
             if ($adAccount == null) {
-                Log::info('No target was found for createCampaignFromRelatedTypeTag ::: ' . $keyword['feed'], [$keyword]);
+                Log::info('No target was found for createCampaignFromRelated ::: ' . $keyword['feed'], [$keyword]);
             }
             else {
                 
                 $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount);
+         
                 if ($process[0] == true) {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
                         'status' => 'processed'
