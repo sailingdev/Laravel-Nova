@@ -584,7 +584,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.create-campaigns-from-related-card {\n    font-family: DM Sans;\n}\n", ""]);
+exports.push([module.i, "\n.create-campaigns-from-related-card {\n    font-family: DM Sans;\n}\n.t-display-header button {\n    bottom: 25px !important;\n}\n", ""]);
 
 // exports
 
@@ -634,7 +634,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ProcessedHistory___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ProcessedHistory__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate__);
-//
 //
 //
 //
@@ -13846,12 +13845,6 @@ var render = function() {
         "div",
         { staticClass: "px-3 py-5 w-full" },
         [
-          _c(
-            "h3",
-            { staticClass: "text-center text-2xl text-80 font-dark mt-3 mb-3" },
-            [_vm._v("Create Campaigns From Related Card")]
-          ),
-          _vm._v(" "),
           _c("CreateFromRelated", {
             attrs: { card: _vm.card },
             on: { formSubmitted: _vm.formSubmitted }
@@ -14633,6 +14626,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -14770,6 +14768,24 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "batches-to-process mt-5 mb-5 w-full" }, [
+    _c("div", { staticClass: "t-display-header relative" }, [
+      _c(
+        "h3",
+        { staticClass: "text-center text-2xl text-80 font-dark px-4 py-5" },
+        [_vm._v("Create Campaigns From Related Card")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass:
+            "absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+          on: { click: _vm.loadBatchesToProcess }
+        },
+        [_vm._v("Reload")]
+      )
+    ]),
+    _vm._v(" "),
     _vm.displaySubmitSuccess
       ? _c("div", [
           _c(

@@ -40,7 +40,7 @@
                                 <td class="p-3 px-5"> {{ batch.feed }} </td>
                                  <td class="p-3 px-5">{{ batch.market }}</td>
                                 <td class="p-3 px-5 flex justify-center">
-                                    <button type="button"  class="mr-3 text-sm text-white py-2 px-2 rounded focus:outline-none focus:shadow-outline" 
+                                    <button type="button" class="mr-3 text-sm text-white py-2 px-2 rounded focus:outline-none focus:shadow-outline" 
                                      :class="batchStatusExtraClass(batch.status)">
                                        {{ batch.status }} 
                                     </button>

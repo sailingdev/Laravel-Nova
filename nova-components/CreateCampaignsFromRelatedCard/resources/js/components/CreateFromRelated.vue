@@ -1,5 +1,10 @@
 <template>
     <div class="batches-to-process mt-5 mb-5 w-full"> 
+ 
+        <div class="t-display-header relative">
+            <h3 class="text-center text-2xl text-80 font-dark px-4 py-5">Create Campaigns From Related Card</h3>
+            <button @click="loadBatchesToProcess" class="absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Reload</button>
+        </div>
 
         <div v-if="displaySubmitSuccess">
             <div class="mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success">
