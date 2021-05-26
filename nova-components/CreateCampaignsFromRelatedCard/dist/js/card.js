@@ -13647,7 +13647,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         batchStatusExtraClass: function batchStatusExtraClass(status) {
-            return 'bg-orange-500 hover:bg-orange-700';
+
             if (status === 'pending') {
                 return 'bg-grey-500 hover:bg-grey-700';
             } else if (status == 'processing') {
