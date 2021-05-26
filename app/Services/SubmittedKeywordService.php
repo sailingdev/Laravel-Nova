@@ -762,5 +762,14 @@ class SubmittedKeywordService
         ->where('action_taken', 'new')
         ->where('status', '!=', 'processed')
         ->get();
+    
+    }
+
+    public function deleteKeyword(string $id): bool
+    {
+        if (SubmittedKeyword::where('id', $id)->delete()) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\FbReporting;
-use App\Http\Requests\FbReporting\SubmitKeywordsRequest;
+use App\Http\Requests\FbReporting\SubmitKeywords\SubmitKeywordsRequest;
 use App\Labs\StringManipulator;
 use App\Services\SubmittedKeywordService;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FbReporting\SubmitKeywords\DeleteKeywordRequest;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,20 @@ class SubmitKeywordsController extends Controller
     public function loadKeywordBatches(Request $request, SubmittedKeywordService $sks)
     {
         return $this->successResponse('Data returned successfully', $sks->loadKeywordBatches());
+    }
+
+    /**
+     * @param DeleteKeywordRequest $request
+     * @param SubmittedKeywordService $sks
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function delete(DeleteKeywordRequest $request, SubmittedKeywordService $sks)
+    {
+        if (!$sks->deleteKeyword($request->id)) {
+            return $this->errorResponse('An error occured. Please try again');
+        }
+        return  $this->successResponse('Keyword deleted successfully');
     }
     
 }

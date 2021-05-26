@@ -86,6 +86,7 @@ export default {
             })
         },
         batchStatusExtraClass (status) {
+              return 'bg-orange-500 hover:bg-orange-700';
             if (status === 'pending') {
                 return 'bg-grey-500 hover:bg-grey-700'
             } 
@@ -103,5 +104,6 @@ export default {
     .header-box div, .content-box div {
         width: 25%;
     }
-    .bg-orange-600 { background-color: #dd6b20; }
+    .bg-orange-500 { background-color: #dd6b20; }
+    .bg-orange-700 { background-color: #d16218; }
 </style>

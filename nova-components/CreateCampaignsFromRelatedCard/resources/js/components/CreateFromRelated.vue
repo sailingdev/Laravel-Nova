@@ -47,7 +47,7 @@
                                     <tr class="border-b hover:bg-orange-100 bg-white" v-for="(batch, key) in batches" :key="key" >
                     
                                         <td class="p-3 px-5 flex justify-center">
-                                            <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                            <button @click="deleteKeyword(batch, key)" type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
                                                 <i class="fa fa-times-circle"></i>
                                             </button>
                                         </td>
@@ -81,7 +81,7 @@
 <script>
 import DynamicTable from '../../../../../nova/resources/js/components/RevenueDriver/DynamicTable'
 export default {
-    name: "BatchesToProcess",
+    name: "CreateFromRelated",
     data () {
         return {
             loading: false,
@@ -160,7 +160,29 @@ export default {
             .finally(() => {
                 this.mocking = false
             })
-        }
+        },
+        deleteKeyword (keyword, key) {
+            this.$confirm({
+                message: `Are you sure you wish to delete this keyword?`,
+                button: {
+                    no: 'No',
+                    yes: `Yes, I'm sure`
+                },
+                callback: confirm => {
+                    if (confirm) {
+                       this.batches.splice(key, 1)
+                        axios.delete('/nova-vendor/' + this.card.component + '/delete-keyword', {
+                            data: {
+                                id: keyword.id
+                            }
+                        }).catch(error => {   
+                            this.errorResponse = error.response.data
+                        })
+                    }
+                }
+            })
+            
+        },
     },
     computed: { 
           values() {

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\FbReporting\CreateCampaignsFromRelatedController;
+use App\Http\Controllers\FbReporting\MarketsController;
+use App\Http\Controllers\FbReporting\SubmitKeywordsController;
 use App\Services\CampaignDuplicateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +25,5 @@ Route::post('/mock-duplicator', function () {
     $cd = new CampaignDuplicateService;
     $cd->runCampaignDuplicator();
 });
+Route::get('/load-markets', [MarketsController::class, 'index']);
+Route::delete('/delete-keyword', [SubmitKeywordsController::class, 'delete']);

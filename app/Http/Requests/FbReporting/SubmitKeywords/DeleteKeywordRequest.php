@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\FbReporting;
+namespace App\Http\Requests\FbReporting\SubmitKeywords;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubmitKeywordsRequest extends FormRequest
+class DeleteKeywordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class SubmitKeywordsRequest extends FormRequest
     public function rules()
     {
         return [
-            'keywords' => ['required', 'string'],
-            'market' => ['required', 'string']
+            'id' => ['required', 'exists:submitted_keywords'],
         ];
     }
 }
