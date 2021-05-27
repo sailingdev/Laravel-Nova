@@ -19,7 +19,7 @@ class ProcessPendingBatchesUsingTypeTagsJob implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 900;
+    public $timeout = 2700;
 
     /**
      * The data to be processed.
