@@ -1,8 +1,8 @@
 <template>
     <card class="flex flex-col items-center justify-center create-campaigns-from-related-card">
         <div class="px-3 py-5 w-full">
-            <CreateFromRelated :card="card" @formSubmitted="formSubmitted" />
-            <ProcessedHistory :card="card" ref="history"/>
+            <!-- <CreateFromRelated :card="card" @formSubmitted="formSubmitted" />
+            <ProcessedHistory :card="card" ref="history"/> -->
             <CreateFromTemplate :card="card"/>
             <vue-confirm-dialog></vue-confirm-dialog>
         </div>

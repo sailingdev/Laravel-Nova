@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Jobs\FbReporting;
+ 
+use App\Services\SubmittedKeywordService;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels; 
+// 
+class CreateCampaignsFromTemplateJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * The batch instance.
+     * 
+     */
+    protected $keywords;
+
+    protected $market;
+
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 2700;
+    
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($keywords, $market)
+    { 
+        $this->keywords = $keywords;
+        $this->market = $market;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $sks = new SubmittedKeywordService;
+        return $sks->createCampaignFromTemplate($this->keywords, $this->market);
+    }
+}

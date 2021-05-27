@@ -89,7 +89,7 @@ export default {
             keywords: '',
             market: 'US',
             errorResponse: {},
-            displayForm: false,
+            displayForm: true,
             displaySubmitSuccess: false,
             batchId: '',
             markets: []

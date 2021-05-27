@@ -772,4 +772,51 @@ class SubmittedKeywordService
         }
         return false;
     }
+
+
+    public function createCampaignFromTemplate(array $submittedKeywords, string $market)
+    {  
+        $campaignId = '23846614980830456';
+        $facebookCampaign = new FacebookCampaign;
+        $template = $facebookCampaign->show($campaignId, [
+            'name', 
+            'status', 
+            'objective', 
+            'bid_strategy',
+            'buying_type',
+            'daily_budget',
+            'special_ad_categories',
+            'account_id'
+        ]); 
+
+        if ($template[0] !== false) {
+                     
+            $campaign = [
+                'id' => $template[1]->id,
+                'name' => $template[1]->name,
+                'status' => $template[1]->status,
+                'objective' => $template[1]->objective,
+                'bid_strategy' => $template[1]->bid_strategy,
+                'buying_type' => $template[1]->buying_type,
+                'daily_budget' => $template[1]->daily_budget,
+                'special_ad_categories' => $template[1]->special_ad_categories,
+                'account_id' =>  $template[1]->account_id
+            ];
+            $acs = new AdAccountService;
+
+            $feed = 'iac';
+            $adAccount = $acs->determineTargetAccountByFeed($feed);
+
+            foreach ($submittedKeywords as $submittedKeyword) {
+                $submission = [
+                    'feed' => $feed,
+                    'keyword' => $submittedKeyword,
+                    'market' => $market,
+                    'type_tag' => $facebookCampaign->generateTypeTag($submittedKeyword, $market, 'related')
+                ]; 
+                dd($this->duplicateCampaign($campaign, $submission, $adAccount));
+            }
+            
+        }
+    }
 }
