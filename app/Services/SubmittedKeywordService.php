@@ -260,6 +260,11 @@ class SubmittedKeywordService
         $websiteData = $websiteService->getRowByDomain($domain);
         $sm = new StringManipulator;
 
+        if (strtolower($submission['feed']) == 'yahoo') { 
+            // update main to completed
+            $cdService->updateMainRow($batchId);
+        }
+
         if ($websiteData['supported_markets'] != null) {
             
             $supportedMarkets =  strtolower($submission['feed']) == 'media' ? ['US', 'CA'] : 
@@ -612,11 +617,8 @@ class SubmittedKeywordService
             }
         } 
         
-        // the last feed for this batch
-        if (strtolower($submission['feed']) == 'yahoo') { 
-            // update main to completed
-            $cdService->updateMainRow($batchId);
-        }
+       
+       
     }
 
 
