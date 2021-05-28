@@ -261,10 +261,11 @@ class SubmittedKeywordService
         $sm = new StringManipulator;
 
         if ($websiteData['supported_markets'] != null) {
+            
             $supportedMarkets =  strtolower($submission['feed']) == 'media' ? ['US', 'CA'] : 
                 $sm->generateArrayFromString($websiteData['supported_markets'], ',');
-            
-            if (in_array($submission['market'], $supportedMarkets)) {
+             
+            if (in_array($submission['market'], $supportedMarkets) || strtolower($submission['feed']) == 'iac') {
                 $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
 
                 $loggedErrors = [];
