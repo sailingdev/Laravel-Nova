@@ -373,7 +373,7 @@ class SubmittedKeywordService
                     
                     $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
                     
-                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days('NL', 'media');
+                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $submission['feed']);
                     
                         
                     if (strtolower($submission['feed']) == 'iac') {
