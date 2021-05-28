@@ -363,6 +363,7 @@ abstract class Facebook
         }
         
         $groupB = ['CA', 'AU', 'UK', 'IE', 'IN', 'NZ'];
+      
         if (in_array($market, $groupB)) { 
             $suf = $market == 'UK' ? 'GB' : $market;
             return 'https://search.' . $domain . '/ar?q=' . 
