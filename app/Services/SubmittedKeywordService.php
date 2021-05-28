@@ -263,7 +263,7 @@ class SubmittedKeywordService
         if ($websiteData['supported_markets'] != null) {
             $supportedMarkets =  strtolower($submission['feed']) == 'media' ? ['US', 'CA'] : 
                 $sm->generateArrayFromString($websiteData['supported_markets'], ',');
-           
+            
             if (in_array($submission['market'], $supportedMarkets)) {
                 $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
 
@@ -286,7 +286,7 @@ class SubmittedKeywordService
                     $domain,
                     $typeTag   
                 );
-                
+               
                 $newCampaignData = [
                     'name' => $newCampaignName,
                     'objective' => $campaign['objective'],
@@ -367,8 +367,9 @@ class SubmittedKeywordService
                     
                     $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
                     
-                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $campaignNameExtracts['feed']);
+                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $submission['feed']);
                     
+                   
                     if (strtolower($submission['feed']) == 'iac') {
                         $promotedObject = [
                             'pixel_id' => '652384435238728',

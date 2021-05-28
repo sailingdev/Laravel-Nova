@@ -112,7 +112,7 @@ class CampaignDuplicateService
                             'keyword' => $campaignNameExtracts['keyword'],
                             'market' => $campaignNameExtracts['market'],
                             'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
-                        ]; 
+                        ];
                         $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id);
                     }
                 }

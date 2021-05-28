@@ -28,15 +28,14 @@ class RpcService
      * @return float
      */
     public function averageRpcOfMarketInLast7Days(string $market, string $feed)
-    {
-        $avg = Rpc::select(DB::raw('AVG(NULLIF(rpc ,0)) AS avg'))
-        ->where('market', $market)
-        ->where('feed', $feed)
-        ->where('date', '>=', Carbon::now()->subDays(7))
-        ->where('date', '<=', Carbon::now())
-        ->first();
-
-        return round($avg->avg, 2);
+    { 
+        $avg = DB::select(
+            "SELECT AVG(NULLIF(rpc ,0)) AS avg
+            FROM fb_reporting.rpc
+            WHERE feed = '$feed'
+            AND market = '$market'
+            AND date BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND NOW()");
+        $avg[0]->avg;
     }
 
 }
