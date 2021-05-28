@@ -262,7 +262,7 @@ class SubmittedKeywordService
 
         if (strtolower($submission['feed']) == 'yahoo') { 
             // update main to completed
-            // $cdService->updateMainRow($batchId);
+            $cdService->updateMainRow($batchId);
         }
 
         if ($websiteData['supported_markets'] != null) {
