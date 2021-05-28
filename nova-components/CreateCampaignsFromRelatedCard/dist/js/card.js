@@ -13845,6 +13845,13 @@ var render = function() {
         "div",
         { staticClass: "px-3 py-5 w-full" },
         [
+          _c("CreateFromRelated", {
+            attrs: { card: _vm.card },
+            on: { formSubmitted: _vm.formSubmitted }
+          }),
+          _vm._v(" "),
+          _c("ProcessedHistory", { ref: "history", attrs: { card: _vm.card } }),
+          _vm._v(" "),
           _c("CreateFromTemplate", { attrs: { card: _vm.card } }),
           _vm._v(" "),
           _c("vue-confirm-dialog")

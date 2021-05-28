@@ -261,9 +261,9 @@ class SubmittedKeywordService
         $sm = new StringManipulator;
 
         if ($websiteData['supported_markets'] != null) {
-            $supportedMarkets =  strtolower($submission['market']) == 'media' ? ['US', 'CA'] : 
+            $supportedMarkets =  strtolower($submission['feed']) == 'media' ? ['US', 'CA'] : 
                 $sm->generateArrayFromString($websiteData['supported_markets'], ',');
-            
+           
             if (in_array($submission['market'], $supportedMarkets)) {
                 $campaignNameExtracts = $this->facebookCampaign->extractDataFromCampaignName($campaign['name']);
 
@@ -814,7 +814,7 @@ class SubmittedKeywordService
                     'market' => $market,
                     'type_tag' => $facebookCampaign->generateTypeTag($submittedKeyword, $market, 'related')
                 ]; 
-                dd($this->duplicateCampaign($campaign, $submission, $adAccount));
+                $this->duplicateCampaign($campaign, $submission, $adAccount);
             }
             
         }
