@@ -35,7 +35,8 @@ class RpcService
             WHERE feed = '$feed'
             AND market = '$market'
             AND date BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND NOW()");
-        $avg[0]->avg;
+            
+        return $avg[0]->avg;
     }
 
 }

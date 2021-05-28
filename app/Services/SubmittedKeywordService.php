@@ -373,9 +373,9 @@ class SubmittedKeywordService
                     
                     $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
                     
-                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days($submission['market'], $submission['feed']);
+                    $newBidAmount = $this->rpcService->averageRpcOfMarketInLast7Days('NL', 'media');
                     
-                   
+                        
                     if (strtolower($submission['feed']) == 'iac') {
                         $promotedObject = [
                             'pixel_id' => '652384435238728',
@@ -389,7 +389,7 @@ class SubmittedKeywordService
                             'custom_event_type' => 'CONTENT_VIEW'
                         ];
                     }
-
+                   
                     $newAdsetData = [
                         'name' =>   ucfirst($submission['keyword']), 
                         'targeting' => $newAdsetTargeting,
