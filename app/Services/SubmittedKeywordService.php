@@ -262,7 +262,7 @@ class SubmittedKeywordService
 
         if (strtolower($submission['feed']) == 'yahoo') { 
             // update main to completed
-            $cdService->updateMainRow($batchId);
+            // $cdService->updateMainRow($batchId);
         }
 
         if ($websiteData['supported_markets'] != null) {
@@ -357,7 +357,7 @@ class SubmittedKeywordService
 
           
                 foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
-                
+                    // dd($existingAdSet);
                     $newAdsetTargeting = $existingAdSet->targeting;
                     $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
                     $newAdsetTargeting['device_platforms'] = $devicePlatforms;
@@ -393,7 +393,7 @@ class SubmittedKeywordService
                     $newAdsetData = [
                         'name' =>   ucfirst($submission['keyword']), 
                         'targeting' => $newAdsetTargeting,
-                        'bid_amount' => $newBidAmount > 0 ? $newBidAmount * 100 : 1,
+                        'bid_amount' =>  $newBidAmount * 100,
                         'billing_event' => $existingAdSet->billing_event,
                         'promoted_object' => $promotedObject,
                         'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),
