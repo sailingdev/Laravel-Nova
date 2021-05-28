@@ -61,7 +61,8 @@ class CampaignDuplicateService
     {
         $campaign = CampaignDuplicate::where('batch_id', $batchId)->where('type', 'main')->first();
         $campaign->main_batch_status = 'completed';
-        $campaign->save();
+        $save = $campaign->save();
+        Log::info('main row updated', [$save]);
         return true;
     }
    
