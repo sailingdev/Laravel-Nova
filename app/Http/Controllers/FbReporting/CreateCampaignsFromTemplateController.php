@@ -10,6 +10,7 @@ use App\Http\Requests\FbReporting\SubmitKeywords\DeleteKeywordRequest;
 use App\Jobs\FbReporting\CreateCampaignsFromTemplateJob;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 use Illuminate\Http\Request;
+use stdClass;
 
 class CreateCampaignsFromTemplateController extends Controller
 {
@@ -25,10 +26,17 @@ class CreateCampaignsFromTemplateController extends Controller
        
         $rawKeywords = $request->keywords; 
         $prepKeywords = $sm->generateArrayFromString(str_replace("\n", '<br />',  $rawKeywords), '<br />');
-     
-        CreateCampaignsFromTemplateJob::dispatch($prepKeywords, $request->market);
         
-        return $this->successResponse('Keywords submitted successfully. Campaign duplication in progress', $process[1]);
+        $prepArrObj = [];
+        foreach ($prepKeywords as $prepKeyword) {
+            $dt = new stdClass;
+            $dt->batch_id = null;
+            $dt->keyword = $prepKeyword;
+            $prepArrObj[] = $dt;
+        }
+        CreateCampaignsFromTemplateJob::dispatch($prepArrObj, $request->market);
+        
+        return $this->successResponse('Keywords submitted successfully. Campaign duplication in progress');
     }
 
     

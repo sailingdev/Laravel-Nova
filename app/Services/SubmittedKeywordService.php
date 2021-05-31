@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\FbReporting\CreateCampaignsFromTemplateJob;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Labs\StringManipulator;
@@ -16,6 +17,7 @@ use App\Revenuedriver\FacebookAdLocale;
 use App\Revenuedriver\FacebookAdAccount;
 use App\Models\FbReporting\SubmittedKeyword;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
+use stdClass;
 
 class SubmittedKeywordService
 {
@@ -746,9 +748,12 @@ class SubmittedKeywordService
                
         }
         else {
-            $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
-                'status' => 'pending'
-            ]);
+            $prepKeywords = [];
+            $dt = new stdClass;
+            $dt->batch_id = $keyword['batch_id'];
+            $dt->keyword = $keyword['keyword'];
+            $prepKeywords[] = $dt;
+            CreateCampaignsFromTemplateJob::dispatch($prepKeywords, $keyword['market']);
         }
         
         return true;
@@ -814,11 +819,22 @@ class SubmittedKeywordService
             foreach ($submittedKeywords as $submittedKeyword) {
                 $submission = [
                     'feed' => $feed,
-                    'keyword' => $submittedKeyword,
+                    'keyword' => $submittedKeyword->keyword,
                     'market' => $market,
                     'type_tag' => $facebookCampaign->generateTypeTag($submittedKeyword, $market, 'related')
                 ]; 
-                $this->duplicateCampaign($campaign, $submission, $adAccount);
+                $process = $this->duplicateCampaign($campaign, $submission, $adAccount); 
+            
+                if ($process[0] == true && isset($submittedKeyword->batch_id)) {
+                    $this->updateRow($submittedKeyword->batch_id, $submittedKeyword, [
+                        'status' => 'processed'
+                    ]);
+                } 
+                else {
+                    $this->updateRow($submittedKeyword->batch_id, $submittedKeyword, [
+                        'status' => 'pending'
+                    ]);
+                }
             }
             
         }
