@@ -35,19 +35,21 @@ class CreateCampaignsUsingTypeTagsTest extends TestCase
     }
 
     /**
-     * @test 
+     *   
+     * @group fromRelated
     */
     public function should_pass_if_all_correct()
     {   
         $submission = SubmittedKeyword::factory()->makeOne([
             'action_taken' => 'new'
         ]);
-         
+       
         $data = [
             'batch_id' => $submission->batch_id,
             'type_tag' => $submission->type_tag,
             'keyword' => $submission->keyword,
-            'id' => '2822'
+            'id' => '2822',
+            'market' => $submission->market
         ];
        
         $response = $this->actingAs($this->getDefaultUser())

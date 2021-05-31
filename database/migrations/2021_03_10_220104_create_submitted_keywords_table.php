@@ -18,7 +18,7 @@ class CreateSubmittedKeywordsTable extends Migration
             $table->uuid('batch_id');
             $table->string('keyword');
             $table->string('market');
-            $table->enum('status', ['pending', 'processing', 'processed'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'processed', 'template_created'])->default('pending');
             $table->enum('action_taken', ['skipped', 'new'])->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
