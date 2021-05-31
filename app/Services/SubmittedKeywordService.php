@@ -393,7 +393,7 @@ class SubmittedKeywordService
                     $newAdsetData = [
                         'name' =>   ucfirst($submission['keyword']), 
                         'targeting' => $newAdsetTargeting,
-                        'bid_amount' =>  $newBidAmount * 100,
+                        'bid_amount' =>  round($newBidAmount * 100),
                         'billing_event' => $existingAdSet->billing_event,
                         'promoted_object' => $promotedObject,
                         'start_time' => $this->facebookAdset->determineStartTime($accountTimezone),

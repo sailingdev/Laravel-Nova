@@ -30,7 +30,7 @@ class RpcService
     public function averageRpcOfMarketInLast7Days(string $market, string $feed)
     { 
         $avg = DB::select(
-            "SELECT AVG(NULLIF(rpc ,0)) AS avg
+            "SELECT AVG(NULLIF(rpc, 0)) AS avg
             FROM fb_reporting.rpc
             WHERE feed = '$feed'
             AND market = '$market'
