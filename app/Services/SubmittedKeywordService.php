@@ -832,7 +832,7 @@ class SubmittedKeywordService
             
                 if ($process[0] == true && isset($submittedKeyword->batch_id)) {
                     $this->updateRow($submittedKeyword->batch_id, $submittedKeyword, [
-                        'status' => 'processed'
+                        'status' => 'template_created'
                     ]);
                 }
             }
