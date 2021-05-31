@@ -36,7 +36,7 @@ class CreateCampaignsFromTemplateController extends Controller
         }
         CreateCampaignsFromTemplateJob::dispatch($prepArrObj, $request->market);
         
-        return $this->successResponse('Keywords submitted successfully. Campaign duplication in progress');
+        return $this->successResponse('Keywords submitted successfully. Campaign duplication in progress', null);
     }
 
     

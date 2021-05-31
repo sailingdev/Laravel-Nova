@@ -748,6 +748,11 @@ class SubmittedKeywordService
                
         }
         else {
+            // mark it back to pending until processed
+            $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
+                'status' => 'pending'
+            ]);
+
             $prepKeywords = [];
             $dt = new stdClass;
             $dt->batch_id = $keyword['batch_id'];
@@ -821,18 +826,13 @@ class SubmittedKeywordService
                     'feed' => $feed,
                     'keyword' => $submittedKeyword->keyword,
                     'market' => $market,
-                    'type_tag' => $facebookCampaign->generateTypeTag($submittedKeyword, $market, 'related')
+                    'type_tag' => $facebookCampaign->generateTypeTag($submittedKeyword->keyword, $market, 'related')
                 ]; 
                 $process = $this->duplicateCampaign($campaign, $submission, $adAccount); 
             
                 if ($process[0] == true && isset($submittedKeyword->batch_id)) {
                     $this->updateRow($submittedKeyword->batch_id, $submittedKeyword, [
                         'status' => 'processed'
-                    ]);
-                } 
-                else {
-                    $this->updateRow($submittedKeyword->batch_id, $submittedKeyword, [
-                        'status' => 'pending'
                     ]);
                 }
             }
