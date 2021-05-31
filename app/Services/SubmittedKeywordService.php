@@ -831,7 +831,7 @@ class SubmittedKeywordService
                 $process = $this->duplicateCampaign($campaign, $submission, $adAccount); 
             
                 if ($process[0] == true && isset($submittedKeyword->batch_id)) {
-                    $this->updateRow($submittedKeyword->batch_id, $submittedKeyword, [
+                    $this->updateRow($submittedKeyword->batch_id, $submittedKeyword->keyword, [
                         'status' => 'template_created'
                     ]);
                 }
