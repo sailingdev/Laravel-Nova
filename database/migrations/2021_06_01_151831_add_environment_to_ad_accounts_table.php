@@ -14,7 +14,7 @@ class AddEnvironmentToAdAccountsTable extends Migration
     public function up()
     {
         Schema::table('ad_accounts', function (Blueprint $table) {
-            $table->string('environment')->nullable();
+            $table->string('environment')->after('account_id')->nullable();
         });
     }
 

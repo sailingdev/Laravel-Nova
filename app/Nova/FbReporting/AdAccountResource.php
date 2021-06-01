@@ -5,6 +5,7 @@ namespace App\Nova\FbReporting;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -54,7 +55,7 @@ class AdAccountResource extends Resource
      * @var array
      */
     public static $search = [
-        'account_name', 'account_id', 'timezone', 'notes'
+        'account_name', 'account_id', 'timezone', 'notes', 'environment'
     ];
 
     /**
@@ -73,6 +74,11 @@ class AdAccountResource extends Resource
             Text::make('Account ID')
             ->sortable()
             ->rules('required', 'max:255'),
+            Select::make('Environment')->options([
+                'rd' => 'Revenuedriver',
+                'tt' => 'TechAds Media'
+            ])->displayUsingLabels()
+            ->rules('required'),
             Text::make('Timezone')
             ->sortable()
             ->rules('required', 'max:255'),
