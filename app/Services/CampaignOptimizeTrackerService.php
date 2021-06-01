@@ -51,90 +51,93 @@ class CampaignOptimizeTrackerService
       }
    }
 
-   protected function OptimizeDay1()
+   public function OptimizeDay1()
    {
-      
-      $campaigns = $this->getAll();
-      
+
+      $campaigns = CampaignOptimizeTracker::whereNull('already_ran_for')
+      ->where('campaign_start', '<=', Carbon::now()->subDays(1)->toDateTimeString())
+      ->get(); 
       if (count($campaigns) > 0) {
          
          $typeDailyPerfService = new TypeDailyPerfService;
          foreach ($campaigns as $campaign) {
-            if ($campaign->already_ran_for == null) {
-               $day1 = $campaign->campaign_start;
-               $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1);
-               
-               if ($opt !== null) {
-                  if ($opt->tot_clicks < 10) {
-                        // load the campaigns and increase the budget
-                     $facebookCampaign = new FacebookCampaign;
-                     $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
-                        'daily_budget'
-                     ]);
-                    
-                     if ($accountCampaigns[0] !== false) { 
-                        $oldBudget = $accountCampaigns[1]->daily_budget;
-                        $newBudget = (int) $oldBudget + 50;
+         
+            $day1 = $campaign->campaign_start;
+            $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day1);
+            
+            if ($opt !== null) {
+               if ($opt->tot_clicks < 10) {
+                     // load the campaigns and increase the budget
+                  $facebookCampaign = new FacebookCampaign;
+                  $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
+                     'daily_budget'
+                  ]);
+                  
+                  if ($accountCampaigns[0] !== false) { 
+                     $oldBudget = $accountCampaigns[1]->daily_budget;
+                     $newBudget = (int) $oldBudget + 50;
 
-                        $updateCampaign = $facebookCampaign->update($campaign->campaign_id, [], [
-                           'daily_budget' => $newBudget
-                        ]);
-                        if ($updateCampaign[0] === false ) {
-                           Log::info('Scheduler Error while running OptimizeDay1', [$updateCampaign[1]]);
-                        }
-                     }
-                     else {
-                        Log::info('Scheduler Error while running OptimizeDay1 ::: Campaign not found', [$accountCampaigns[1]]);
+                     $updateCampaign = $facebookCampaign->update($campaign->campaign_id, [], [
+                        'daily_budget' => $newBudget
+                     ]);
+                     if ($updateCampaign[0] === false ) {
+                        Log::info('Scheduler Error while running OptimizeDay1', [$updateCampaign[1]]);
                      }
                   }
-                  
+                  else {
+                     Log::info('Scheduler Error while running OptimizeDay1 ::: Campaign not found', [$accountCampaigns[1]]);
+                  }
                }
-               CampaignOptimizeTracker::where('id', $campaign->id)->update([
-                  'already_ran_for' => 1
-               ]);
+               
             }
+            CampaignOptimizeTracker::where('id', $campaign->id)->update([
+               'already_ran_for' => 1
+            ]);
+            
          }
       }
    }
 
    protected function OptimizeDay2()
    {
-      $campaigns = $this->getAll();
+      $campaigns = CampaignOptimizeTracker::where('already_ran_for', "1")
+      ->where('campaign_start', '<=', Carbon::now()->subDays(2)->toDateTimeString())
+      ->get();
       
       if (count($campaigns) > 0) {
          $typeDailyPerfService = new TypeDailyPerfService;
          foreach ($campaigns as $campaign) {
-            if ($campaign->already_ran_for == 1) {
-               $day2 =  Carbon::parse($campaign->campaign_start)->addDays(1);
-               $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day2);
-                  
-               if ($opt !== null) {
-                  if ($opt->tot_clicks < 10) {
-                     // load the campaigns and increase the budget
-                     $facebookCampaign = new FacebookCampaign;
-                     $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
-                        'daily_budget'
+            
+            $day2 =  Carbon::parse($campaign->campaign_start)->addDays(1);
+            $opt = $typeDailyPerfService->getCampaignToOptimize($campaign->feed, $campaign->type_tag, $day2);
+               
+            if ($opt !== null) {
+               if ($opt->tot_clicks < 10) {
+                  // load the campaigns and increase the budget
+                  $facebookCampaign = new FacebookCampaign;
+                  $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
+                     'daily_budget'
+                  ]);
+                  if ($accountCampaigns[0] !== false) { 
+                     $oldBudget = $accountCampaigns[1]->daily_budget;
+                     $newBudget = (int) $oldBudget + 50;
+
+                     $updateCampaign = $facebookCampaign->update($campaign->campaign_id, [], [
+                        'daily_budget' => $newBudget
                      ]);
-                     if ($accountCampaigns[0] !== false) { 
-                        $oldBudget = $accountCampaigns[1]->daily_budget;
-                        $newBudget = (int) $oldBudget + 50;
-   
-                        $updateCampaign = $facebookCampaign->update($campaign->campaign_id, [], [
-                           'daily_budget' => $newBudget
-                        ]);
-                        if ($updateCampaign[0] === false ) {
-                           Log::info('Scheduler Error while running OptimizeDay2', [$updateCampaign[1]]);
-                        } 
-                     }
-                     else {
-                        Log::info('Scheduler Error while running OptimizeDay2 ::: Campaign not found', [$accountCampaigns[1]]);
-                     }
+                     if ($updateCampaign[0] === false ) {
+                        Log::info('Scheduler Error while running OptimizeDay2', [$updateCampaign[1]]);
+                     } 
+                  }
+                  else {
+                     Log::info('Scheduler Error while running OptimizeDay2 ::: Campaign not found', [$accountCampaigns[1]]);
                   }
                }
-               CampaignOptimizeTracker::where('id', $campaign->id)->update([
-                  'already_ran_for' => 2
-               ]);
             }
+            CampaignOptimizeTracker::where('id', $campaign->id)->update([
+               'already_ran_for' => 2
+            ]);
+            
          }
       }
    }
