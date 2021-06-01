@@ -76,10 +76,10 @@
 
             </div>
 
-            <button :disabled="mocking" type="button" @click="mockDuplicator()" class="mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+            <!-- <button :disabled="mocking" type="button" @click="mockDuplicator()" class="mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
                 <span v-if="mocking"><loader class="text-60" :fillColor="'#ffffff'" /></span>
                 <span v-else><i class="fa fa-check-circle"></i> &nbsp; Mock Duplicator Scheduler</span>
-            </button>
+            </button> -->
         </div>
     </div>
 </template>

@@ -67,6 +67,115 @@
 /* 0 */
 /***/ (function(module, exports) {
 
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
@@ -146,7 +255,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -374,120 +483,11 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(4);
-module.exports = __webpack_require__(32);
+module.exports = __webpack_require__(35);
 
 
 /***/ }),
@@ -507,11 +507,11 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(6)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(9)
 /* template */
-var __vue_template__ = __webpack_require__(31)
+var __vue_template__ = __webpack_require__(34)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -560,7 +560,7 @@ var content = __webpack_require__(7);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1)("ac06e93a", content, false, {});
+var update = __webpack_require__(2)("ac06e93a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -579,7 +579,7 @@ if(false) {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -628,11 +628,11 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CreateFromRelated__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CreateFromRelated__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CreateFromRelated___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__CreateFromRelated__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ProcessedHistory__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ProcessedHistory___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ProcessedHistory__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__CreateFromTemplate__);
 //
 //
@@ -663,12 +663,361 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(11)
+  __webpack_require__(13)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(15)
+/* template */
+var __vue_template__ = __webpack_require__(25)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-dc8e45ac"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/CreateFromRelated.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-dc8e45ac", Component.options)
+  } else {
+    hotAPI.reload("data-v-dc8e45ac", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(12);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("421050da", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateFromRelated.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateFromRelated.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(14);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("bcb02448", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./CreateFromRelated.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./CreateFromRelated.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ntable tr td[data-v-dc8e45ac], table tr th[data-v-dc8e45ac] {\n    font-size: 14px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "CreateFromRelated",
+    data: function data() {
+        return {
+            loading: false,
+            processingKey: null,
+            processingKeyErr: null,
+            batches: [],
+            errorResponse: {},
+            displayForm: true,
+            displaySubmitSuccess: false,
+            mocking: false
+        };
+    },
+
+    components: {
+        DynamicTable: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default.a
+    },
+    props: {
+        card: {
+            required: true
+        }
+    },
+    mounted: function mounted() {
+        this.loadBatchesToProcess();
+    },
+
+    methods: {
+        loadBatchesToProcess: function loadBatchesToProcess() {
+            var _this = this;
+
+            this.loading = true;
+            axios.get('/nova-vendor/' + this.card.component + '/load-batches-to-process').then(function (response) {
+                var data = response.data.data;
+                _this.batches = data;
+                if (_this.displaySubmitSuccess) {
+                    _this.displaySubmitSuccess = false;
+                }
+            }).catch(function (error) {
+                _this.errorResponse = error.response.data;
+            }).finally(function () {
+                _this.loading = false;
+            });
+        },
+        prepareForDispatch: function prepareForDispatch(key) {
+            var loader = [];
+            if (this.batches[key].type_tag == null) {
+                this.processingKeyErr = key;
+                this.validateError = 'Please enter a valid type tag';
+                return false;
+            }
+            this.processingKeyErr = this.validateError = null;
+            this.processingKey = key;
+            console.log(_typeof(this.batches[key]));
+            return this.createCampaign(this.batches[key]);
+        },
+        createCampaign: function createCampaign(payload) {
+            var _this2 = this;
+
+            axios.post('/nova-vendor/' + this.card.component + '/create-campaign', {
+                data: payload
+            }).then(function (response) {
+                var data = response.data.data;
+                _this2.displaySubmitSuccess = true;
+                _this2.loadBatchesToProcess();
+                _this2.$emit('formSubmitted');
+            }).catch(function (error) {
+                _this2.errorResponse = error.response.data;
+            }).finally(function () {
+                _this2.processingKey = null;
+            });
+        },
+        mockDuplicator: function mockDuplicator() {
+            var _this3 = this;
+
+            this.mocking = true;
+            axios.post('/nova-vendor/' + this.card.component + '/mock-duplicator').then(function (response) {
+                alert('Mock scheduler ran successfully');
+            }).catch(function (error) {}).finally(function () {
+                _this3.mocking = false;
+            });
+        },
+        deleteKeyword: function deleteKeyword(keyword, key) {
+            var _this4 = this;
+
+            this.$confirm({
+                message: 'Are you sure you wish to delete this keyword?',
+                button: {
+                    no: 'No',
+                    yes: 'Yes, I\'m sure'
+                },
+                callback: function callback(confirm) {
+                    if (confirm) {
+                        _this4.batches.splice(key, 1);
+                        axios.delete('/nova-vendor/' + _this4.card.component + '/delete-keyword', {
+                            data: {
+                                id: keyword.id
+                            }
+                        }).catch(function (error) {
+                            _this4.errorResponse = error.response.data;
+                        });
+                    }
+                }
+            });
+        }
+    },
+    computed: {
+        values: function values() {
+            var values = [];
+            if (this.batches.length > 0) {
+                this.batches.forEach(function (record, index) {
+                    var row = {
+                        "Batch ID": record.batch_id,
+                        "Date": record.date,
+                        'Keywords To Create': record.to_create,
+                        'Keywords Skipped': record.skipped,
+                        'Type Tag To Duplicate': '<input type="text" class="form-control">'
+                    };
+                    values.push(row);
+                });
+            }
+            return values;
+        }
+    }
+});
+
+/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -677,7 +1026,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(17)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(22)
 /* template */
@@ -13460,7 +13809,364 @@ if (false) {
 }
 
 /***/ }),
-/* 25 */,
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "batches-to-process mt-5 mb-5 w-full" }, [
+    _c("div", { staticClass: "t-display-header relative" }, [
+      _c(
+        "h3",
+        { staticClass: "text-center text-2xl text-80 font-dark px-4 py-5" },
+        [_vm._v("Create Campaigns From Related Card")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass:
+            "absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+          on: { click: _vm.loadBatchesToProcess }
+        },
+        [_vm._v("Reload")]
+      )
+    ]),
+    _vm._v(" "),
+    _vm.displaySubmitSuccess
+      ? _c("div", [
+          _c(
+            "div",
+            {
+              staticClass:
+                "mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success"
+            },
+            [
+              _c(
+                "svg",
+                {
+                  staticStyle: {
+                    "-ms-transform": "rotate(360deg)",
+                    "-webkit-transform": "rotate(360deg)",
+                    transform: "rotate(360deg)"
+                  },
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                    "aria-hidden": "true",
+                    focusable: "false",
+                    width: "1em",
+                    height: "1em",
+                    preserveAspectRatio: "xMidYMid meet",
+                    viewBox: "0 0 24 24"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414",
+                      fill: "#3da35a"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "h4",
+                {
+                  staticClass:
+                    "text-2xl text-center text-3xl text-80 font-dark px-4 py-4"
+                },
+                [_vm._v(" Thank you! ")]
+              ),
+              _vm._v(" "),
+              _c("p", { staticClass: "mt-2 mb-2 text-center" }, [
+                _vm._v(
+                  " Batch processing in progress. Please check back in few minutes time"
+                )
+              ])
+            ]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.loading
+      ? _c(
+          "div",
+          {
+            staticClass: "rounded-lg flex items-center justify-center relative"
+          },
+          [_c("loader", { staticClass: "text-60" })],
+          1
+        )
+      : _c("div", { staticClass: "w-full mx-auto p-8" }, [
+          _vm.displayForm
+            ? _c("div", { staticClass: "shadow-md pt-6 pb-6" }, [
+                Object.entries(_vm.errorResponse).length > 0
+                  ? _c("div", [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
+                          attrs: { role: "alert" }
+                        },
+                        [
+                          _c("h4", { staticClass: "mt-2 mb-2" }, [
+                            _vm._v(
+                              " " + _vm._s(_vm.errorResponse.message) + " "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.errorResponse.errors, function(
+                            error,
+                            index
+                          ) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "text-sm" },
+                              [
+                                _vm._v(
+                                  " \n                        => " +
+                                    _vm._s(error[0]) +
+                                    " \n                    "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.batches.length < 1
+                  ? _c("div", [_vm._m(0)])
+                  : _c("div", { staticClass: "px-4 py-3" }, [
+                      _c("div", { staticClass: "batch-container" }, [
+                        _c(
+                          "div",
+                          { staticClass: "px-3 py-4 flex justify-center" },
+                          [
+                            _c(
+                              "table",
+                              {
+                                staticClass:
+                                  "w-full text-md rounded mb-4 table-striped table-bordered"
+                              },
+                              [
+                                _vm._m(1),
+                                _vm._v(" "),
+                                _c(
+                                  "tbody",
+                                  _vm._l(_vm.batches, function(batch, key) {
+                                    return _c(
+                                      "tr",
+                                      {
+                                        key: key,
+                                        staticClass:
+                                          "border-b hover:bg-orange-100 bg-white"
+                                      },
+                                      [
+                                        _c(
+                                          "td",
+                                          {
+                                            staticClass:
+                                              "p-3 px-5 flex justify-center"
+                                          },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+                                                attrs: { type: "button" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.deleteKeyword(
+                                                      batch,
+                                                      key
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fa fa-times-circle"
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "p-3 px-5" }, [
+                                          _vm._v(_vm._s(batch.keyword))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "p-3 px-5" }, [
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value:
+                                                  _vm.batches[key].type_tag,
+                                                expression:
+                                                  "batches[key].type_tag"
+                                              }
+                                            ],
+                                            staticClass: "form-control",
+                                            attrs: {
+                                              type: "text",
+                                              placeholder:
+                                                "Enter type tag to duplicate"
+                                            },
+                                            domProps: {
+                                              value: _vm.batches[key].type_tag
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.batches[key],
+                                                  "type_tag",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.processingKeyErr == key
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "ml-2 text-red-600 text-sm"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    " " +
+                                                      _vm._s(
+                                                        _vm.validateError
+                                                      ) +
+                                                      " "
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "p-3 px-5" }, [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+                                              attrs: {
+                                                disabled:
+                                                  _vm.processingKey == key,
+                                                type: "button"
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.prepareForDispatch(
+                                                    key
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm.processingKey == key
+                                                ? _c(
+                                                    "span",
+                                                    [
+                                                      _c("loader", {
+                                                        staticClass: "text-60",
+                                                        attrs: {
+                                                          fillColor: "#ffffff"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                : _c("span", [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fa fa-check-circle"
+                                                    }),
+                                                    _vm._v("   Create")
+                                                  ])
+                                            ]
+                                          )
+                                        ])
+                                      ]
+                                    )
+                                  }),
+                                  0
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+              ])
+            : _vm._e()
+        ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center",
+        attrs: { role: "alert" }
+      },
+      [_c("p", [_vm._v(" No record ")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "bg-black " }, [
+      _c("tr", {}, [
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("DELETE")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("KEYWORD")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [
+          _vm._v("TYPETAG TO DUPLICATE")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [
+          _vm._v("CREATE ACTION")
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-dc8e45ac", module.exports)
+  }
+}
+
+/***/ }),
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13469,7 +14175,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(27)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(29)
 /* template */
@@ -13522,7 +14228,7 @@ var content = __webpack_require__(28);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1)("2536261e", content, false, {});
+var update = __webpack_require__(2)("2536261e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -13541,7 +14247,7 @@ if(false) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -13830,66 +14536,12 @@ if (false) {
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "card",
-    {
-      staticClass:
-        "flex flex-col items-center justify-center create-campaigns-from-related-card"
-    },
-    [
-      _c(
-        "div",
-        { staticClass: "px-3 py-5 w-full" },
-        [
-          _c("CreateFromRelated", {
-            attrs: { card: _vm.card },
-            on: { formSubmitted: _vm.formSubmitted }
-          }),
-          _vm._v(" "),
-          _c("ProcessedHistory", { ref: "history", attrs: { card: _vm.card } }),
-          _vm._v(" "),
-          _c("CreateFromTemplate", { attrs: { card: _vm.card } }),
-          _vm._v(" "),
-          _c("vue-confirm-dialog")
-        ],
-        1
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-b9bc2c0a", module.exports)
-  }
-}
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(37)
+var __vue_script__ = __webpack_require__(32)
 /* template */
-var __vue_template__ = __webpack_require__(38)
+var __vue_template__ = __webpack_require__(33)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -13928,7 +14580,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 37 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14079,7 +14731,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 38 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -14405,748 +15057,55 @@ if (false) {
 }
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(40)
-  __webpack_require__(42)
-}
-var normalizeComponent = __webpack_require__(2)
-/* script */
-var __vue_script__ = __webpack_require__(44)
-/* template */
-var __vue_template__ = __webpack_require__(45)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-dc8e45ac"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/CreateFromRelated.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-dc8e45ac", Component.options)
-  } else {
-    hotAPI.reload("data-v-dc8e45ac", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(41);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(1)("421050da", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateFromRelated.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateFromRelated.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\ntable.vue-table thead > tr > th {\n    word-spacing: 100vw;\n    white-space: nowrap !important;\n    word-break: keep-all !important;\n}\n.header-box div, .content-box div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 100%;\n            flex: 1 1 100%;\n    word-wrap: break-word !important;\n    overflow-wrap: break-word !important;  \n    text-align: center !important;\n    -webkit-box-pack: center !important;\n        -ms-flex-pack: center !important;\n            justify-content: center !important; \n    height: auto !important;\n     border: 1px solid #ddd !important;\n     text-align: center !important; \n     color: #212529;\n}\n.header-box div { \n    background-color: #2d3748 !important;\n    color: #fff !important;\n    padding: 20px 0px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 13.5px !important; \n    font-weight: bolder;\n}\n.content-box div {\n    padding: 15px 5px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; \n    font-size: 15.5px !important;\n}\n.content-box:nth-of-type(odd) {\nbackground-color: rgba(0, 0, 0, 0.05);\n}\n.content-box:hover {\n    color: #212529;\n    background-color: rgba(0, 0, 0, 0.075);\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(43);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(1)("bcb02448", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./CreateFromRelated.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dc8e45ac\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./CreateFromRelated.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\ntable tr td[data-v-dc8e45ac], table tr th[data-v-dc8e45ac] {\n    font-size: 14px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: "CreateFromRelated",
-    data: function data() {
-        return {
-            loading: false,
-            processingKey: null,
-            processingKeyErr: null,
-            batches: [],
-            errorResponse: {},
-            displayForm: true,
-            displaySubmitSuccess: false,
-            mocking: false
-        };
-    },
-
-    components: {
-        DynamicTable: __WEBPACK_IMPORTED_MODULE_0__nova_resources_js_components_RevenueDriver_DynamicTable___default.a
-    },
-    props: {
-        card: {
-            required: true
-        }
-    },
-    mounted: function mounted() {
-        this.loadBatchesToProcess();
-    },
-
-    methods: {
-        loadBatchesToProcess: function loadBatchesToProcess() {
-            var _this = this;
-
-            this.loading = true;
-            axios.get('/nova-vendor/' + this.card.component + '/load-batches-to-process').then(function (response) {
-                var data = response.data.data;
-                _this.batches = data;
-                if (_this.displaySubmitSuccess) {
-                    _this.displaySubmitSuccess = false;
-                }
-            }).catch(function (error) {
-                _this.errorResponse = error.response.data;
-            }).finally(function () {
-                _this.loading = false;
-            });
-        },
-        prepareForDispatch: function prepareForDispatch(key) {
-            var loader = [];
-            if (this.batches[key].type_tag == null) {
-                this.processingKeyErr = key;
-                this.validateError = 'Please enter a valid type tag';
-                return false;
-            }
-            this.processingKeyErr = this.validateError = null;
-            this.processingKey = key;
-            console.log(_typeof(this.batches[key]));
-            return this.createCampaign(this.batches[key]);
-        },
-        createCampaign: function createCampaign(payload) {
-            var _this2 = this;
-
-            axios.post('/nova-vendor/' + this.card.component + '/create-campaign', {
-                data: payload
-            }).then(function (response) {
-                var data = response.data.data;
-                _this2.displaySubmitSuccess = true;
-                _this2.loadBatchesToProcess();
-                _this2.$emit('formSubmitted');
-            }).catch(function (error) {
-                _this2.errorResponse = error.response.data;
-            }).finally(function () {
-                _this2.processingKey = null;
-            });
-        },
-        mockDuplicator: function mockDuplicator() {
-            var _this3 = this;
-
-            this.mocking = true;
-            axios.post('/nova-vendor/' + this.card.component + '/mock-duplicator').then(function (response) {
-                alert('Mock scheduler ran successfully');
-            }).catch(function (error) {}).finally(function () {
-                _this3.mocking = false;
-            });
-        },
-        deleteKeyword: function deleteKeyword(keyword, key) {
-            var _this4 = this;
-
-            this.$confirm({
-                message: 'Are you sure you wish to delete this keyword?',
-                button: {
-                    no: 'No',
-                    yes: 'Yes, I\'m sure'
-                },
-                callback: function callback(confirm) {
-                    if (confirm) {
-                        _this4.batches.splice(key, 1);
-                        axios.delete('/nova-vendor/' + _this4.card.component + '/delete-keyword', {
-                            data: {
-                                id: keyword.id
-                            }
-                        }).catch(function (error) {
-                            _this4.errorResponse = error.response.data;
-                        });
-                    }
-                }
-            });
-        }
-    },
-    computed: {
-        values: function values() {
-            var values = [];
-            if (this.batches.length > 0) {
-                this.batches.forEach(function (record, index) {
-                    var row = {
-                        "Batch ID": record.batch_id,
-                        "Date": record.date,
-                        'Keywords To Create': record.to_create,
-                        'Keywords Skipped': record.skipped,
-                        'Type Tag To Duplicate': '<input type="text" class="form-control">'
-                    };
-                    values.push(row);
-                });
-            }
-            return values;
-        }
-    }
-});
-
-/***/ }),
-/* 45 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "batches-to-process mt-5 mb-5 w-full" }, [
-    _c("div", { staticClass: "t-display-header relative" }, [
+  return _c(
+    "card",
+    {
+      staticClass:
+        "flex flex-col items-center justify-center create-campaigns-from-related-card"
+    },
+    [
       _c(
-        "h3",
-        { staticClass: "text-center text-2xl text-80 font-dark px-4 py-5" },
-        [_vm._v("Create Campaigns From Related Card")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass:
-            "absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-          on: { click: _vm.loadBatchesToProcess }
-        },
-        [_vm._v("Reload")]
-      )
-    ]),
-    _vm._v(" "),
-    _vm.displaySubmitSuccess
-      ? _c("div", [
-          _c(
-            "div",
-            {
-              staticClass:
-                "mt-1 mb-5 px-10 py-5 pb-6 border-2 border-gray-300  border-dashed rounded-md notify-submit-success"
-            },
-            [
-              _c(
-                "svg",
-                {
-                  staticStyle: {
-                    "-ms-transform": "rotate(360deg)",
-                    "-webkit-transform": "rotate(360deg)",
-                    transform: "rotate(360deg)"
-                  },
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    "xmlns:xlink": "http://www.w3.org/1999/xlink",
-                    "aria-hidden": "true",
-                    focusable: "false",
-                    width: "1em",
-                    height: "1em",
-                    preserveAspectRatio: "xMidYMid meet",
-                    viewBox: "0 0 24 24"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414",
-                      fill: "#3da35a"
-                    }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "h4",
-                {
-                  staticClass:
-                    "text-2xl text-center text-3xl text-80 font-dark px-4 py-4"
-                },
-                [_vm._v(" Thank you! ")]
-              ),
-              _vm._v(" "),
-              _c("p", { staticClass: "mt-2 mb-2 text-center" }, [
-                _vm._v(
-                  " Batch processing in progress. Please check back in few minutes time"
-                )
-              ])
-            ]
-          )
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.loading
-      ? _c(
-          "div",
-          {
-            staticClass: "rounded-lg flex items-center justify-center relative"
-          },
-          [_c("loader", { staticClass: "text-60" })],
-          1
-        )
-      : _c("div", { staticClass: "w-full mx-auto p-8" }, [
-          _vm.displayForm
-            ? _c("div", { staticClass: "shadow-md pt-6 pb-6" }, [
-                Object.entries(_vm.errorResponse).length > 0
-                  ? _c("div", [
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "mt-4 mb-4 px-4 py-3 leading-normal text-red-100 bg-red-700 rounded-lg",
-                          attrs: { role: "alert" }
-                        },
-                        [
-                          _c("h4", { staticClass: "mt-2 mb-2" }, [
-                            _vm._v(
-                              " " + _vm._s(_vm.errorResponse.message) + " "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.errorResponse.errors, function(
-                            error,
-                            index
-                          ) {
-                            return _c(
-                              "p",
-                              { key: index, staticClass: "text-sm" },
-                              [
-                                _vm._v(
-                                  " \n                        => " +
-                                    _vm._s(error[0]) +
-                                    " \n                    "
-                                )
-                              ]
-                            )
-                          })
-                        ],
-                        2
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.batches.length < 1
-                  ? _c("div", [_vm._m(0)])
-                  : _c("div", { staticClass: "px-4 py-3" }, [
-                      _c("div", { staticClass: "batch-container" }, [
-                        _c(
-                          "div",
-                          { staticClass: "px-3 py-4 flex justify-center" },
-                          [
-                            _c(
-                              "table",
-                              {
-                                staticClass:
-                                  "w-full text-md rounded mb-4 table-striped table-bordered"
-                              },
-                              [
-                                _vm._m(1),
-                                _vm._v(" "),
-                                _c(
-                                  "tbody",
-                                  _vm._l(_vm.batches, function(batch, key) {
-                                    return _c(
-                                      "tr",
-                                      {
-                                        key: key,
-                                        staticClass:
-                                          "border-b hover:bg-orange-100 bg-white"
-                                      },
-                                      [
-                                        _c(
-                                          "td",
-                                          {
-                                            staticClass:
-                                              "p-3 px-5 flex justify-center"
-                                          },
-                                          [
-                                            _c(
-                                              "button",
-                                              {
-                                                staticClass:
-                                                  "text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-                                                attrs: { type: "button" },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.deleteKeyword(
-                                                      batch,
-                                                      key
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _c("i", {
-                                                  staticClass:
-                                                    "fa fa-times-circle"
-                                                })
-                                              ]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("td", { staticClass: "p-3 px-5" }, [
-                                          _vm._v(_vm._s(batch.keyword))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", { staticClass: "p-3 px-5" }, [
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value:
-                                                  _vm.batches[key].type_tag,
-                                                expression:
-                                                  "batches[key].type_tag"
-                                              }
-                                            ],
-                                            staticClass: "form-control",
-                                            attrs: {
-                                              type: "text",
-                                              placeholder:
-                                                "Enter type tag to duplicate"
-                                            },
-                                            domProps: {
-                                              value: _vm.batches[key].type_tag
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  _vm.batches[key],
-                                                  "type_tag",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _vm.processingKeyErr == key
-                                            ? _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "ml-2 text-red-600 text-sm"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(
-                                                        _vm.validateError
-                                                      ) +
-                                                      " "
-                                                  )
-                                                ]
-                                              )
-                                            : _vm._e()
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", { staticClass: "p-3 px-5" }, [
-                                          _c(
-                                            "button",
-                                            {
-                                              staticClass:
-                                                "mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-                                              attrs: {
-                                                disabled:
-                                                  _vm.processingKey == key,
-                                                type: "button"
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.prepareForDispatch(
-                                                    key
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm.processingKey == key
-                                                ? _c(
-                                                    "span",
-                                                    [
-                                                      _c("loader", {
-                                                        staticClass: "text-60",
-                                                        attrs: {
-                                                          fillColor: "#ffffff"
-                                                        }
-                                                      })
-                                                    ],
-                                                    1
-                                                  )
-                                                : _c("span", [
-                                                    _c("i", {
-                                                      staticClass:
-                                                        "fa fa-check-circle"
-                                                    }),
-                                                    _vm._v("   Create")
-                                                  ])
-                                            ]
-                                          )
-                                        ])
-                                      ]
-                                    )
-                                  }),
-                                  0
-                                )
-                              ]
-                            )
-                          ]
-                        )
-                      ])
-                    ])
-              ])
-            : _vm._e(),
+        "div",
+        { staticClass: "px-3 py-5 w-full" },
+        [
+          _c("CreateFromRelated", {
+            attrs: { card: _vm.card },
+            on: { formSubmitted: _vm.formSubmitted }
+          }),
           _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass:
-                "mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
-              attrs: { disabled: _vm.mocking, type: "button" },
-              on: {
-                click: function($event) {
-                  return _vm.mockDuplicator()
-                }
-              }
-            },
-            [
-              _vm.mocking
-                ? _c(
-                    "span",
-                    [
-                      _c("loader", {
-                        staticClass: "text-60",
-                        attrs: { fillColor: "#ffffff" }
-                      })
-                    ],
-                    1
-                  )
-                : _c("span", [
-                    _c("i", { staticClass: "fa fa-check-circle" }),
-                    _vm._v("   Mock Duplicator Scheduler")
-                  ])
-            ]
-          )
-        ])
-  ])
+          _c("ProcessedHistory", { ref: "history", attrs: { card: _vm.card } }),
+          _vm._v(" "),
+          _c("CreateFromTemplate", { attrs: { card: _vm.card } }),
+          _vm._v(" "),
+          _c("vue-confirm-dialog")
+        ],
+        1
+      )
+    ]
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "px-4 py-3 leading-normal text-gray-100 bg-gray-700 rounded-lg text-center",
-        attrs: { role: "alert" }
-      },
-      [_c("p", [_vm._v(" No record ")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "bg-black " }, [
-      _c("tr", {}, [
-        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("DELETE")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("KEYWORD")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-left p-3 px-5" }, [
-          _vm._v("TYPETAG TO DUPLICATE")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-left p-3 px-5" }, [
-          _vm._v("CREATE ACTION")
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-dc8e45ac", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-b9bc2c0a", module.exports)
   }
 }
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
