@@ -733,7 +733,7 @@ class SubmittedKeywordService
             else {
                 
                 $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount);
-         
+                
                 if ($process[0] == true) {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
                         'status' => 'processed'

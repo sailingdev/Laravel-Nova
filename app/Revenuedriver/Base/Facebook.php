@@ -84,6 +84,15 @@ abstract class Facebook
         $this->api->setLogger(new CurlLogger());
     }
 
+    public function init(string $appId, string $appSecret, string $appAccessToken)
+    {
+        App::init($appId, $appSecret, $appAccessToken, false);
+
+        // The Api object is now available through singleton
+        $this->api = Api::instance(); 
+        $this->api->setLogger(new CurlLogger());
+    }
+
 
     /**
      * @param string $campaignName
