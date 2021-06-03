@@ -48,7 +48,7 @@ class CampaignDuplicateService
         return CampaignDuplicate::where('type', 'main')
         ->where('feed', 'iac')
         ->where('main_batch_status', 'uncompleted')
-        ->where('campaign_start', '<=', Carbon::now()->subDays(1)->toDateTimeString())
+        // ->where('campaign_start', '<=', Carbon::now()->subDays(1)->toDateTimeString())
         ->get();
    }
 
@@ -60,6 +60,7 @@ class CampaignDuplicateService
     public function updateMainRow($batchId) 
     {
         $campaign = CampaignDuplicate::where('batch_id', $batchId)->where('type', 'main')->first();
+       
         $campaign->main_batch_status = 'completed';
         $save = $campaign->save();
         return true;
@@ -72,10 +73,12 @@ class CampaignDuplicateService
         $acs = new AdAccountService;
         $facebookCampaign = new FacebookCampaign;
         $feed = $adAccount = null;
+
+        
         if (count($uncompletedBatches) > 0) {
             foreach ($uncompletedBatches as $uncompletedBatch) {
-                // dd(Carbon::now()->subDays(1)->toDateTimeString(), $uncompletedBatch->campaign_start);
-              
+                
+                $facebookCampaign->initTT();
                 // load
                 $iacCampaign = $facebookCampaign->show($uncompletedBatch->campaign_id, [
                     'name', 
@@ -86,8 +89,7 @@ class CampaignDuplicateService
                     'daily_budget',
                     'special_ad_categories',
                     'account_id'
-                ]);
-                   
+                ]); 
                 if ($iacCampaign[0] !== false) {
                     
                     $campaignNameExtracts = $facebookCampaign->extractDataFromCampaignName($iacCampaign[1]->name);
@@ -102,7 +104,7 @@ class CampaignDuplicateService
                         'special_ad_categories' => $iacCampaign[1]->special_ad_categories,
                         'account_id' =>  $iacCampaign[1]->account_id
                     ];
-
+                    
                     $feedOnQueue = ['media', 'yahoo'];
                     foreach ($feedOnQueue as $fq) {
                         $feed = $fq;
@@ -113,8 +115,11 @@ class CampaignDuplicateService
                             'market' => $campaignNameExtracts['market'],
                             'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
                         ];
-                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id);
+                        Log::info('See this', [$feed, $iacCampaign[1]->name]);
+                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id, 'tt', 'rd');
                     }
+
+                       
                 }
                 
             }

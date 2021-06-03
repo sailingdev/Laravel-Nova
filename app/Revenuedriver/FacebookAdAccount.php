@@ -50,7 +50,7 @@ class FacebookAdAccount extends Facebook
                 | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
                 | \FacebookAds\Http\Exception\AuthorizationException $e) 
         { 
-            if ($this->loadAccount < 10) {
+            if ($this->loadAcccountAttempts < 10) {
                 sleep(3);
                 $this->loadAcccountAttempts++;
                 return $this->loadAccount($accountId, $fields);

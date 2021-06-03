@@ -14117,7 +14117,38 @@ var render = function() {
                       ])
                     ])
               ])
-            : _vm._e()
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline",
+              attrs: { disabled: _vm.mocking, type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.mockDuplicator()
+                }
+              }
+            },
+            [
+              _vm.mocking
+                ? _c(
+                    "span",
+                    [
+                      _c("loader", {
+                        staticClass: "text-60",
+                        attrs: { fillColor: "#ffffff" }
+                      })
+                    ],
+                    1
+                  )
+                : _c("span", [
+                    _c("i", { staticClass: "fa fa-check-circle" }),
+                    _vm._v("   Mock Duplicator Scheduler")
+                  ])
+            ]
+          )
         ])
   ])
 }

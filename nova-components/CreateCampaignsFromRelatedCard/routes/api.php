@@ -24,8 +24,8 @@ Route::get('/load-batches-to-process', [CreateCampaignsFromRelatedController::cl
 Route::get('/processed-batch-history', [CreateCampaignsFromRelatedController::class, 'history']);
 Route::post('/create-campaign', [CreateCampaignsFromRelatedController::class, 'createCampaignFromRelatedTypeTag']);
 Route::post('/mock-duplicator', function () {
-    // $cd = new CampaignDuplicateService;
-    // $cd->runCampaignDuplicator();
+    $cd = new CampaignDuplicateService;
+    $cd->runCampaignDuplicator();
     // $cot = new CampaignOptimizeTrackerService;
     // $cot->OptimizeDay1();
 });

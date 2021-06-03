@@ -17,6 +17,7 @@ use App\Revenuedriver\FacebookAdLocale;
 use App\Revenuedriver\FacebookAdAccount;
 use App\Models\FbReporting\SubmittedKeyword;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
+use App\Revenuedriver\FacebookPage;
 use stdClass;
 
 class SubmittedKeywordService
@@ -149,6 +150,7 @@ class SubmittedKeywordService
     public function processSubmittedKeywords($submittedKeywords)
     {  
         
+        $this->facebookCampaign->initRD();
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
      
@@ -187,7 +189,7 @@ class SubmittedKeywordService
                         Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $submission['feed'], [$submission]);
                     }
                     else {
-                        $process = $this->duplicateCampaign(current($matches), $submission, $adAccount);
+                        $process = $this->duplicateCampaign(current($matches), $submission, $adAccount, null, null, "rd", "tt");
                         if ($process[0] == true) {
                             $this->updateRow($submission['batch_id'], $submission['keyword'], [
                                 'action_taken' => 'skipped',
@@ -250,9 +252,8 @@ class SubmittedKeywordService
      * 
      * @return array
      */
-    public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null, $batchId=null)
-    {  
-       
+    public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null, $batchId=null, $sourceEnv="rd", $targetEnv="tt")
+    {   
         // only run if market is in the list of supported markets
         $adAccountService = new AdAccountService;
         $websiteService = new WebsiteService;
@@ -261,9 +262,12 @@ class SubmittedKeywordService
         $domain = $this->facebookCampaign->getSiteFromAdAccountConfigurations($row->configurations);
         $websiteData = $websiteService->getRowByDomain($domain);
         $sm = new StringManipulator;
-
+       
+        
+        // initialize sdk
         if (strtolower($submission['feed']) == 'yahoo') { 
             // update main to completed
+            Log::info('It is Yahoo', [$batchId]);
             $cdService->updateMainRow($batchId);
         }
 
@@ -294,7 +298,7 @@ class SubmittedKeywordService
                     $domain,
                     $typeTag   
                 );
-               
+                
                 $newCampaignData = [
                     'name' => $newCampaignName,
                     'objective' => $campaign['objective'],
@@ -305,10 +309,11 @@ class SubmittedKeywordService
                     'special_ad_categories' => $campaign['special_ad_categories']
                 ];
 
-                //   // create the campaign
-                $newCampaign = $this->facebookCampaign->createCampaign($targetAccount, $newCampaignData);
-            
+                $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
 
+                // create the campaign
+                $newCampaign = $this->facebookCampaign->createCampaign($targetAccount, $newCampaignData);
+               
                 if ($newCampaign[0] === false) {
                     Log::info('A campaign was not created', [
                         'message' => $newCampaign[1]->getMessage(),
@@ -317,9 +322,11 @@ class SubmittedKeywordService
                     ]);
                     return [false, 'Campaign not created: '.$newCampaign[1]->getMessage()];
                 }
+                 
+                $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                 
                 $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
-            
+                
                 if ($existingCampaignAdsets[0] === false) {
                     Log::info('No existing campaign adsets were loaded', [
                         'message' => $existingCampaignAdsets[1]->getMessage(),
@@ -329,7 +336,7 @@ class SubmittedKeywordService
 
                     // delete the neewly created campaign
                     $this->facebookCampaign->delete($newCampaign[1]['id']);
-                    
+                  
                     return [false, 'No existing campaign adsets were loaded: '. $existingCampaignAdsets[1]->getMessage()];
                 
                 }
@@ -340,6 +347,7 @@ class SubmittedKeywordService
                         'data' => []
                     ]);
                     
+                    $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                     // delete the neewly created campaign
                     $this->facebookCampaign->delete($newCampaign[1]['id']);
 
@@ -357,7 +365,7 @@ class SubmittedKeywordService
                     $devicePlatforms = ['desktop'];
                 }
 
-          
+            
                 foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
                     // dd($existingAdSet);
                     $newAdsetTargeting = $existingAdSet->targeting;
@@ -370,7 +378,7 @@ class SubmittedKeywordService
                         $this->facebookAdLocale->getMarketLocale($marketCode), ',');
         
                     $targetAccountData = $this->facebookAdAccount->loadAccount($targetAccount, [
-                            'timezone_name'
+                        'timezone_name'
                     ]); 
                     
                     $accountTimezone = $targetAccountData[0] === true ? $targetAccountData[1]->timezone_name : "UTC";
@@ -385,7 +393,6 @@ class SubmittedKeywordService
                         ];
                     } 
                     else {
-                        // $promotedObject = $existingAdSet->promoted_object;
                         $promotedObject = [
                             'pixel_id' => '238715230770371',
                             'custom_event_type' => 'CONTENT_VIEW'
@@ -402,7 +409,9 @@ class SubmittedKeywordService
                         'campaign_id' => $newCampaign[1]['id'],
                         'is_dynamic_creative' => true
                     ];
+
                     // create new adset
+                    $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                     $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                     
                     if ($newAdSet[0] == false) {
@@ -424,7 +433,10 @@ class SubmittedKeywordService
                     else {
                         Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
                         array_push($adsetsToRollBack, $newAdSet[1]->id);
-        
+                        
+                        // switch to rd token since existing campaign belongs to rd, hence it's ads too
+                        $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
+
                         // get ads for existing adset
                         $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
                         if ($existingAds[0] == false) {
@@ -443,7 +455,8 @@ class SubmittedKeywordService
                         }
                         else {  
                             foreach ($existingAds[1] as $existingAd) {
-                            
+                                
+                                
                                 // load adcreative for that ad
                                 $existingAdCreative = $this->facebookAdCreative->show($existingAd->creative['id'], [
                                     'account_id', 'name', 'object_story_spec', 'asset_feed_spec', 'call_to_action_type',
@@ -460,11 +473,19 @@ class SubmittedKeywordService
                                 else { 
                                     $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
                                     $newAdImages = [];
+                                   
+                                    // if ($row->environment == 'tt') {
+                                    //     $this->facebookCampaign->initTT();
+                                    // }
+                                   
                                     foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
                                         // copy from old account to new account
                                         $copyFrom = new \stdclass;
                                         $copyFrom->source_account_id = preg_replace("#[^0-9]#i", "", $campaign['account_id']);
                                         $copyFrom->hash = $existingImage['hash'];
+
+                                        $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
+
                                         $newAdImage = $this->facebookAdImage->create($targetAccount, [
                                             'copy_from' => $copyFrom
                                         ]);
@@ -495,30 +516,29 @@ class SubmittedKeywordService
                                         $submission['market'],
                                         $newCampaignName
                                     ); 
-                                    // dd($newWebsiteUrl);
+                                    
                                     $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                                 
                                 
                                     $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission['keyword']);
                                     
                                     
-                                    if (count($newBodyTexts) > 1) {
-                                        $rand = rand(1,2);
-                                        
+                                    if (count($newBodyTexts) > 1) { 
                                         $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->title1;
                                         $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->body1;
         
                                         $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->title2;
                                         $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->body2;
                                     }
+
                                     $fbPageService = new FbPageService;
-                                    $randomFbPage = $fbPageService->getRandomFbPage();
+                                    $randomFbPage = $fbPageService->getRandomFbPage($row->environment);
                                     $objectStorySpec = [];
 
                                     if ($randomFbPage != null) {
                                         $objectStorySpec = [
-                                            'page_id' => $randomFbPage->page_id,
-                                            'instagram_actor_id' => $randomFbPage->instagram_id
+                                            'page_id' =>  $randomFbPage->page_id, //'104090831801082',
+                                            'instagram_actor_id' => $randomFbPage->instagram_id  //'2750536698404494', 
                                         ];
                                     }
                                     
@@ -529,10 +549,13 @@ class SubmittedKeywordService
                                         'call_to_action_type' => $existingAdCreative[1]->call_to_action_type,
                                         'object_story_spec' => $objectStorySpec, 
                                     ]; 
-        
+                                     
+                                    $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
+
                                     $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
-                                
+                                  
                                     if ($newAdCreative[0] == false) {
+                                       
                                         array_push($loggedErrors, [
                                             'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
                                             'errors' => $newAdCreative[1],
@@ -609,7 +632,7 @@ class SubmittedKeywordService
                     // log output
                     Log::info('An error occured WITH ONE OF THE CREATIONS', [$loggedErrors]);
                     
-                    $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack);
+                    $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack, $targetEnv);
                     return [false, 'Process was not completed. Please check the log for the affected processes'];
                 }
                 else {
@@ -633,8 +656,9 @@ class SubmittedKeywordService
      * 
      * @return void
      */
-    private function rollBacks(string $campaignId, array $adsets, array $adCreatives, array $ads): void
+    private function rollBacks(string $campaignId, array $adsets, array $adCreatives, array $ads, string $targetEnv): void
     {
+        $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
         if ($campaignId !== '') {
             $this->facebookCampaign->delete($campaignId);
         }
@@ -705,7 +729,10 @@ class SubmittedKeywordService
      */
     public function createCampaignFromRelated(array $keyword)
     { 
-       
+      
+        // initialize sdk
+        $this->facebookCampaign->initRD();
+
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
         
@@ -718,6 +745,7 @@ class SubmittedKeywordService
             return $campaignTypeTag == trim($keyword['type_tag']);
         });
          
+        
         if (count($matches) > 0) {
             
             $typeTag = $this->facebookCampaign->generateTypeTag($keyword['keyword'], $keyword['market'], 'related');
@@ -732,7 +760,7 @@ class SubmittedKeywordService
             }
             else {
                 
-                $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount);
+                $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount, null, null,  "rd", "tt");
                 
                 if ($process[0] == true) {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [
@@ -790,6 +818,7 @@ class SubmittedKeywordService
 
     public function createCampaignFromTemplate(array $submittedKeywords, string $market)
     {  
+        $this->facebookCampaign->initRD();
         $campaignId = '23846614980830456';
         $facebookCampaign = new FacebookCampaign;
         $template = $facebookCampaign->show($campaignId, [
@@ -828,7 +857,7 @@ class SubmittedKeywordService
                     'market' => $market,
                     'type_tag' => $facebookCampaign->generateTypeTag($submittedKeyword->keyword, $market, 'related')
                 ]; 
-                $process = $this->duplicateCampaign($campaign, $submission, $adAccount); 
+                $process = $this->duplicateCampaign($campaign, $submission, $adAccount, null, null,  "rd", "tt"); 
             
                 if ($process[0] == true && isset($submittedKeyword->batch_id)) {
                     $this->updateRow($submittedKeyword->batch_id, $submittedKeyword->keyword, [

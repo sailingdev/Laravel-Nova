@@ -123,14 +123,16 @@ class FacebookPage extends Facebook
     /**
      * @return string 
      */
-    protected function getLongLivedUserAccessToken(): string
+    public function getLongLivedUserAccessToken(): string
     {
-        // $shortUserAccessToken = 'EAAFmyiUTy1IBADOPWrX2jBaZBHFggsJ4RhiELHg2gsPqzdCnVpLUkd0dOdFIzr8fV5k4tU3TmvZAAL8ueT4CqVrnlRDKArdHkkrBZC0VBSd2uAu16o1RFPehjYxIJJa8PiFhzgiBlQJh5ZCl2zZC1Y2yURMTczHQH6sanc1xteALP3VeCDGmqkX4RcVuarNqGuoGW1E8ACzliRXweXyX8SvVlVt23vwLfbCnDaa2yStHEZCDiqzaoz';
+        // $shortUserAccessToken = 'EAAFmyiUTy1IBAGqqIbuKTQZARFl2ZAZC0LPUdBcns5vhVl4R3KFpTzQUZCGyrW0qCpuqAOGHW2ryRx9vVKl19wcK7Shyn99mOkHfT7L7TO4K5PZCvw3SrE6whNM2eZB9uVwi52amKfRdIVDLS6CpT4qYYO2a6MN6BYGs8SrZAwURZBSMuG3ZCErxvKnMg88TmxYIDFwqkWVKZBHOkYwOgYZCRBp3sFnvFEiuM7dg3oY8NAQHNZBIgClaotPA';
         // $shortUserAccessToken = 'EAAFmyiUTy1IBADOPWrX2jBaZBHFggsJ4RhiELHg2gsPqzdCnVpLUkd0dOdFIzr8fV5k4tU3TmvZAAL8ueT4CqVrnlRDKArdHkkrBZC0VBSd2uAu16o1RFPehjYxIJJa8PiFhzgiBlQJh5ZCl2zZC1Y2yURMTczHQH6sanc1xteALP3VeCDGmqkX4RcVuarNqGuoGW1E8ACzliRXweXyX8SvVlVt23vwLfbCnDaa2yStHEZCDiqzaoz';
          
-        // Last fetched: 24 may, 2021 10:40 UTC
-        $longUserAccessToken = 'EAAFmyiUTy1IBANFLIEZCRnGlNDL9ewF8zaMP7PKr2AovMtl0ZCcXZBkiWYUzjxgYjTzpmuzOb2pSOPhUvxpVHIGiLrdM6mtqAZAPdaFxBxU4qsvpKoLcMr8kPY4bPTvNsebPYbtKqxlIyTuiYV26ymO9FS2vjYY57Mk0JZCyWIojGnKEZBJtZCf';
-       
+        // Last fetched: 01 June, 2021 10:40 UTC SYSTEM USER
+        // $longUserAccessToken = 'EAAFmyiUTy1IBANFLIEZCRnGlNDL9ewF8zaMP7PKr2AovMtl0ZCcXZBkiWYUzjxgYjTzpmuzOb2pSOPhUvxpVHIGiLrdM6mtqAZAPdaFxBxU4qsvpKoLcMr8kPY4bPTvNsebPYbtKqxlIyTuiYV26ymO9FS2vjYY57Mk0JZCyWIojGnKEZBJtZCf';
+        
+        // personal token 03 june
+        $longUserAccessToken = 'EAAFmyiUTy1IBABZCnNQUposJv6VpzeaZAIz8yKt9nFnsEQZAGZAyzt1UvB2q7Qdc4iiZCERWwGEEEeTjRwaRYhXjvVuNrWXDWJ7i8ERAuYnbRCe5HyCqZAZBvrwJK4bh72rCd2RB4FgyXZCZA1zfSI9kP5CX68ZBY8kuLzgipn7CmEZAwZDZD';
         // try {
         //     $response = Http::withHeaders([
         //         'Accept' => 'application/json',

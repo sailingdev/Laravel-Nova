@@ -75,24 +75,35 @@ abstract class Facebook
     {
         $this->appId =  config('facebook.marketing.app_id');
         $this->appSecret = config('facebook.marketing.app_secret');
-        $this->appAccessToken = config('facebook.marketing.app_access_token');
+        $this->appAccessToken = config('facebook.marketing.rd_app_access_token');
        
-        Api::init($this->appId, $this->appSecret, $this->appAccessToken, false);
+        // Api::init($this->appId, $this->appSecret, $this->appAccessToken, false);
         
-        // The Api object is now available through singleton
-        $this->api = Api::instance(); 
-        $this->api->setLogger(new CurlLogger());
+        // // The Api object is now available through singleton
+        // $this->api = Api::instance(); 
+        // $this->api->setLogger(new CurlLogger());
     }
 
-    public function init(string $appId, string $appSecret, string $appAccessToken)
+    
+    public function initRD()
     {
-        App::init($appId, $appSecret, $appAccessToken, false);
+        Api::init(config('facebook.marketing.app_id'), config('facebook.marketing.app_secret'), 
+        config('facebook.marketing.rd_app_access_token'), false);
 
         // The Api object is now available through singleton
         $this->api = Api::instance(); 
         $this->api->setLogger(new CurlLogger());
     }
 
+    public function initTT()
+    {
+        Api::init(config('facebook.marketing.app_id'), config('facebook.marketing.app_secret'), 
+        config('facebook.marketing.tt_app_access_token'), false);
+
+        // The Api object is now available through singleton
+        $this->api = Api::instance(); 
+        $this->api->setLogger(new CurlLogger());
+    }
 
     /**
      * @param string $campaignName

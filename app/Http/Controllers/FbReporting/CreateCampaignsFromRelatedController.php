@@ -37,7 +37,7 @@ class CreateCampaignsFromRelatedController extends Controller
         $data = $request->all()['data'];
        
         $sks->updateRow($data['batch_id'], $data['keyword'], [
-            // 'status' => 'processing'
+            'status' => 'processing'
         ]);  
         CreateCampaignsFromRelatedJob::dispatch($data);
         return $this->successResponse('Request was successful. Batch processing in progress');
