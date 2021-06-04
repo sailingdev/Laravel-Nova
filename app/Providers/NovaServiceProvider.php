@@ -58,7 +58,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             Auth::logout();
             return false;
         });
+        Gate::define('viewHorizon', function ($user) { 
+            if ($user != null) {
+                return true;
+            }
+            return false;
+        });
         Gate::authorize('viewNova');
+        Gate::authorize('viewHorizon');
     }
 
     /**
