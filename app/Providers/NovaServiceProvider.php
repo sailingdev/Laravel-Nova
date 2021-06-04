@@ -8,7 +8,8 @@ use App\Nova\Dashboards\FbReporting\CreateCampaignsFromRelatedDashboard;
 use App\Nova\Dashboards\FbReporting\FbPagePostsDashboard;
 use App\Nova\Dashboards\FbReporting\IgAccountLoaderDashboard;
 use App\Nova\Dashboards\FbReporting\SubmitKeywordsDashboard;
-use FbReporting\TypeDailyPerfCard\TypeDailyPerfCard; 
+use FbReporting\TypeDailyPerfCard\TypeDailyPerfCard;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
@@ -48,9 +49,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-            return in_array($user->email, [
-                'unit-tester@revenuedriver.com'
-            ]);
+            if ($user->hasPermission('Nova')) {
+                return true;
+            }
+            else if (in_array($user->email, ['unit-tester@revenuedriver.com'])) {
+                return true;
+            }
+            Auth::logout();
+            return false;
         });
     }
 
