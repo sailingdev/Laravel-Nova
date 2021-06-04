@@ -221,8 +221,9 @@ abstract class Facebook
      * @return array
      */
     public function getTargetAccounts(): array
-    { 
-        if (App::environment('production')) {
+    {  
+        Log::info('Target env is ', [config('app.env')]);
+        if (config('app.env') === 'production') {
             return [$this->accountRD17, $this->account12, $this->accountRD23];
         }
         return [$this->account30, $this->account38, $this->accountRD26];
@@ -236,7 +237,7 @@ abstract class Facebook
     public function determineStatus(string $status): string
     {
         return 'PAUSED';
-        if (App::environment('production')) {
+        if (config('app.env') === 'production') {
             return $this->status;
         }
         return 'PAUSED';
