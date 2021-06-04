@@ -21,7 +21,6 @@ class CampaignOptimizeTrackerService
       DB::beginTransaction();
       
       $cot = new CampaignOptimizeTracker;
-      // $cot->batch_id = $data['batch_id'];
       $cot->type_tag = $data['type_tag'];
       $cot->campaign_id = $data['campaign_id'];
       $cot->feed = $data['feed'];
@@ -67,7 +66,10 @@ class CampaignOptimizeTrackerService
             
             if ($opt !== null) {
                if ($opt->tot_clicks < 10) {
-                     // load the campaigns and increase the budget
+
+                  
+
+                  // load the campaigns and increase the budget
                   $facebookCampaign = new FacebookCampaign;
                   $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
                      'daily_budget'

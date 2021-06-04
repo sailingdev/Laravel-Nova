@@ -63,13 +63,20 @@ abstract class Facebook
     /**
      * @var string
     */
-    protected $accountRD22 = 'act_268825541368920';
+    protected $accountRD22 = 'act_268825541368920'; 
 
     /**
      * @var string
     */
-    protected $accountRD26 = 'act_195606425356330';
-    
+    protected $accountRD26 = 'act_195606425356330'; // test tt iac
+
+    protected $accountRD23 = 'act_534735217510143'; // prod tt iac
+
+    protected $accountRD17 = 'act_4180769961935190'; // prod tt media
+
+    protected $account12 = 'act_351184159509129'; // prod rd yahoo
+
+
     
     public function __construct()
     {
@@ -215,11 +222,10 @@ abstract class Facebook
      */
     public function getTargetAccounts(): array
     { 
-        return [$this->account30, $this->account38, $this->accountRD26];
         if (App::environment('production')) {
-            return $this->account21;
+            return [$this->accountRD17, $this->account12, $this->accountRD23];
         }
-        return $this->account30;
+        return [$this->account30, $this->account38, $this->accountRD26];
     }
 
     /**
