@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEnvironmentsToAdAccountsTable extends Migration
+class AddEnvironmentToCampaignOptimizeTrackersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddEnvironmentsToAdAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::table('ad_accounts', function (Blueprint $table) {
-            //
+        Schema::table('campaign_optimize_trackers', function (Blueprint $table) {
+            $table->string('environment')->after('feed')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddEnvironmentsToAdAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::table('ad_accounts', function (Blueprint $table) {
-            //
+        Schema::table('campaign_optimize_trackers', function (Blueprint $table) {
+            $table->dropColumn(['environment']);
         });
     }
 }

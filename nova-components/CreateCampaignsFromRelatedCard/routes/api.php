@@ -24,10 +24,10 @@ Route::get('/load-batches-to-process', [CreateCampaignsFromRelatedController::cl
 Route::get('/processed-batch-history', [CreateCampaignsFromRelatedController::class, 'history']);
 Route::post('/create-campaign', [CreateCampaignsFromRelatedController::class, 'createCampaignFromRelatedTypeTag']);
 Route::post('/mock-duplicator', function () {
-    $cd = new CampaignDuplicateService;
-    $cd->runCampaignDuplicator();
-    // $cot = new CampaignOptimizeTrackerService;
-    // $cot->OptimizeDay1();
+    // $cd = new CampaignDuplicateService;
+    // $cd->runCampaignDuplicator();
+    $cot = new CampaignOptimizeTrackerService;
+    $cot->OptimizeDay1();
 });
 Route::get('/load-markets', [MarketsController::class, 'index']);
 Route::delete('/delete-keyword', [SubmitKeywordsController::class, 'delete']);

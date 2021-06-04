@@ -608,6 +608,7 @@ class SubmittedKeywordService
                         $cotService->create([
                             'type_tag' => $data['type_tag'],
                             'feed' => $data['feed'],
+                            'environment' => $targetEnv,
                             'campaign_id' => $key,
                             'campaign_start' => $data['campaign_start']
                         ]);
