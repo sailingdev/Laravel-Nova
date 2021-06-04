@@ -35,10 +35,9 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     {
         // TODO:: change the user default back from null 
         // 
-        Gate::define('viewHorizon', function ($user = null) {
-            return in_array($user->email, [
-                //
-            ]);
+        Gate::define('viewHorizon', function ($user) {
+            return true;
         });
+        Gate::authorize('viewHorizon');
     }
 }
