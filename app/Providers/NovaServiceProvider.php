@@ -48,17 +48,17 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function gate()
     {
-        // Gate::define('viewNova', function ($user) {
-        //     if ($user->hasPermission('Nova')) {
-        //         return true;
-        //     }
-        //     else if (in_array($user->email, ['unit-tester@revenuedriver.com'])) {
-        //         return true;
-        //     }
-        //     Auth::logout();
-        //     return false;
-        // });
-        return true;
+        Gate::define('viewNova', function ($user) {
+            if (in_array($user->email, ['unit-tester@revenuedriver.com'])) {
+                return true;
+            }
+            else if ($user != null) {
+                return true;
+            }
+            Auth::logout();
+            return false;
+        });
+        Gate::authorize('viewNova');
     }
 
     /**
