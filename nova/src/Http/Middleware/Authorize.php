@@ -2,7 +2,6 @@
 
 namespace Laravel\Nova\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Laravel\Nova\Nova;
 
 class Authorize
@@ -16,11 +15,6 @@ class Authorize
      */
     public function handle($request, $next)
     {
-        if (Nova::check($request)) {
-            return $next($request);
-        }
-        Auth::logout();
-        return abort(403);
-        // return Nova::check($request) ?  : abort(403);
+        return Nova::check($request) ? $next($request) : abort(403);
     }
 }
