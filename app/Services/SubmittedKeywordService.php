@@ -367,7 +367,7 @@ class SubmittedKeywordService
 
             
                 foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
-                    // dd($existingAdSet);
+                   
                     $newAdsetTargeting = $existingAdSet->targeting;
                     $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
                     $newAdsetTargeting['device_platforms'] = $devicePlatforms;
@@ -398,7 +398,7 @@ class SubmittedKeywordService
                             'custom_event_type' => 'CONTENT_VIEW'
                         ];
                     }
-                   
+                  
                     $newAdsetData = [
                         'name' =>   ucfirst($submission['keyword']), 
                         'targeting' => $newAdsetTargeting,
@@ -415,20 +415,19 @@ class SubmittedKeywordService
                     $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                     
                     if ($newAdSet[0] == false) {
-                        
-                        if ($newAdSet[1]->getErrorUserTitle() == 'No Custom Audience Ownership') {
+                        Log::info('An error occured creating an adset', [$newAdSet[1]]);
+                        // if ($newAdSet[1]->getErrorUserTitle() == 'No Custom Audience Ownership') {
                             continue;
-                        }
-                        else {
-                            array_push($loggedErrors, [
-                                'message' => 'An adset not created',
-                                'errors' => $newAdSet[1],
-                                'data' => $newAdsetData
-                            ]); 
+                        // } 
+                            // array_push($loggedErrors, [
+                            //     'message' => 'An adset not created',
+                            //     'errors' => $newAdSet[1],
+                            //     'data' => $newAdsetData
+                            // ]); 
                             
                             // delete the newly created campaign
-                            $this->facebookCampaign->delete($newCampaign[1]['id']);
-                        }
+                            // $this->facebookCampaign->delete($newCampaign[1]['id']);
+                        
                     }
                     else {
                         Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
