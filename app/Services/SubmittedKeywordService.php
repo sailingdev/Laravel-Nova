@@ -490,11 +490,12 @@ class SubmittedKeywordService
                                         ]);
                                         
                                         if ($newAdImage[0] == false) {
-                                            array_push($loggedErrors, [
-                                                'message' => 'An error occured while duplicating an image from source to target account. Existing ad Id: ' . $existingAd->id,
-                                                'errors' => $newAdImage[1],
-                                                'data' => (array) $copyFrom
-                                            ]);
+                                            // array_push($loggedErrors, [
+                                            //     'message' => 'An error occured while duplicating an image from source to target account. Existing ad Id: ' . $existingAd->id,
+                                            //     'errors' => $newAdImage[1],
+                                            //     'data' => (array) $copyFrom
+                                            // ]);
+                                            continue;
                                         }
                                         else {
                                             
