@@ -109,6 +109,8 @@ class CampaignDuplicateService
                     foreach ($feedOnQueue as $fq) {
                         $feed = $fq;
                         $adAccount = $acs->determineTargetAccountByFeed($fq);
+
+                        $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
                         $submission = [
                             'feed' => $feed,
                             'keyword' => $campaignNameExtracts['keyword'],
@@ -116,7 +118,8 @@ class CampaignDuplicateService
                             'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
                         ];
                         Log::info('See this', [$feed, $iacCampaign[1]->name]);
-                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id, 'tt', 'rd');
+                         
+                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id, 'tt', $row->environment);
                     }
 
                        

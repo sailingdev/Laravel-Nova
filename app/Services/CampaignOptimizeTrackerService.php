@@ -116,6 +116,7 @@ class CampaignOptimizeTrackerService
                if ($opt->tot_clicks < 10) {
                   // load the campaigns and increase the budget
                   $facebookCampaign = new FacebookCampaign;
+                  $campaign->environment == 'rd' ? $facebookCampaign->initRD() : $facebookCampaign->initTT();
                   $accountCampaigns = $facebookCampaign->show($campaign->campaign_id, [
                      'daily_budget'
                   ]);
