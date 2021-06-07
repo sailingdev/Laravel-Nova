@@ -18,11 +18,12 @@ use App\Revenuedriver\FacebookAdAccount;
 use App\Models\FbReporting\SubmittedKeyword;
 use App\Jobs\FbReporting\ProcessCampaignsFromSubmittedKeywordsJob;
 use App\Revenuedriver\FacebookPage;
+use App\Traits\CampaignDuplicatorTrait;
 use stdClass;
 
 class SubmittedKeywordService
 {
-    
+    use CampaignDuplicatorTrait;
     /**
      * @var App\Services\RpcService;
      */
@@ -470,38 +471,22 @@ class SubmittedKeywordService
                                     ]);
                                 }
                                 else { 
+                                   
                                     $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
                                     $newAdImages = [];
-                                   
-                                    // if ($row->environment == 'tt') {
-                                    //     $this->facebookCampaign->initTT();
-                                    // }
+                                    
                                    
                                     foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
-                                        // copy from old account to new account
-                                        $copyFrom = new \stdclass;
-                                        $copyFrom->source_account_id = preg_replace("#[^0-9]#i", "", $campaign['account_id']);
-                                        $copyFrom->hash = $existingImage['hash'];
-
-                                        $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
-
-                                        $newAdImage = $this->facebookAdImage->create($targetAccount, [
-                                            'copy_from' => $copyFrom
-                                        ]);
+                                        $newAdImage  = $this->transportAdImages($campaign['account_id'], $existingImage, $sourceEnv, $targetAccount, $targetEnv);
                                         
                                         if ($newAdImage[0] == false) {
-                                            // array_push($loggedErrors, [
-                                            //     'message' => 'An error occured while duplicating an image from source to target account. Existing ad Id: ' . $existingAd->id,
-                                            //     'errors' => $newAdImage[1],
-                                            //     'data' => (array) $copyFrom
-                                            // ]);
                                             continue;
                                         }
                                         else {
-                                            
-                                            $arrK = array_keys($newAdImage[1]->exportAllData()['images']);
+                                            $arrK = $newAdImage[1]->exportAllData()['images'];
+                                            $imgName = array_keys($arrK)[0];
                                             array_push($newAdImages, [
-                                                'hash' => $arrK[0]
+                                                'hash' => $arrK[$imgName]['hash']
                                             ]);
                                         }
                                     }
@@ -555,12 +540,14 @@ class SubmittedKeywordService
                                     $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
                                   
                                     if ($newAdCreative[0] == false) {
-                                       
-                                        array_push($loggedErrors, [
-                                            'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
-                                            'errors' => $newAdCreative[1],
-                                            'data' => $newAdCreativeData
-                                        ]);
+                                        Log::error('An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id, [$newAdCreative[1]]);
+                                        // array_push($loggedErrors, [
+                                        //     'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
+                                        //     'errors' => $newAdCreative[1],
+                                        //     'data' => $newAdCreativeData
+                                        // ]);
+                                        dd($newAdCreative[1]);
+                                        continue;
                                     }
                                     else {
                                         array_push($adCreativesToRollBack, $newAdCreative[1]->id);
@@ -576,12 +563,8 @@ class SubmittedKeywordService
                                         $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                     
                                         if ($newAd[0] == false) {
-                                        
-                                            array_push($loggedErrors, [
-                                                'message' => 'An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id,
-                                                'errors' => $newAd[1],
-                                                'data' => $newAdData
-                                            ]);
+                                            Log::error('An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id, [$newAd[1]]);
+                                            continue;
                                         }
                                         else { 
                                             Log::info('Ad for '. $targetAccount . ' created', [$newAd[1]->id]);

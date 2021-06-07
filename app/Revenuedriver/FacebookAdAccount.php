@@ -29,6 +29,8 @@ class FacebookAdAccount extends Facebook
      */
     protected $getAdsVolumeAttempts = 0;
 
+    protected $getAdImagesAttempts = 0;
+
     private $adCreatives = [];
 
 
@@ -131,5 +133,43 @@ class FacebookAdAccount extends Facebook
         } catch(\Throwable $th) {
             return [false, $th];
         }  
+    }
+
+
+    /**
+     * @param string $accountId
+     * 
+     * @return array
+     */
+    public function getAdImages(string $accountId, $fields=[], $params=[]) 
+    {
+        $accountExtension = new AdAccountExtension($accountId);
+        $adImages = [];
+        try {
+            $cursor = $accountExtension->getAdImages($fields, $params);
+            $cursor->setUseImplicitFetch(true);
+            if ($cursor->count() > 0) {
+                do {
+                    $cursor->fetchAfter();
+                    foreach ($cursor as $adIimage) {
+                        $adImages[] = $adIimage;
+                    }
+                } while ($cursor->getNext());
+            } 
+            return [true, $adImages];
+        } catch( \FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
+                \FacebookAds\Http\Exception\ServerException | \FacebookAds\Http\Exception\RequestException
+                | \FacebookAds\Http\Exception\ThrottleException | \FacebookAds\Http\Exception\PermissionException
+                | \FacebookAds\Http\Exception\AuthorizationException $e) 
+        { 
+            if ($this->getAdImagesAttempts < 10) {
+                sleep(3);
+                $this->getAdImagesAttempts++;
+                return $this->getAdImages($accountId, $fields, $params);
+            } 
+            return [false, $e];
+        } catch(\Throwable $th) { 
+            return [false, $th];
+        }    
     }
 }

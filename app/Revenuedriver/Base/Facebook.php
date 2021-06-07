@@ -221,8 +221,8 @@ abstract class Facebook
      * @return array
      */
     public function getTargetAccounts(): array
-    {  
-        Log::info('Target env is ', [config('app.env')]);
+    {   
+        return [$this->accountRD17, $this->account12, $this->accountRD23];
         if (config('app.env') === 'production') {
             return [$this->accountRD17, $this->account12, $this->accountRD23];
         }
