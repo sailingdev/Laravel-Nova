@@ -20,6 +20,6 @@ class CreateCampaignsFromTemplateCard extends Card
      */
     public function component()
     {
-        return 'create-campaigns-from-template-card';
+    return 'fb-reporting-create-campaigns-from-template-dashboard';
     }
 }

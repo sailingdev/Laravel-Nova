@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Nova\Dashboards\FbReporting\WebsiteBreakDownDashboard;
 use App\Nova\Dashboards\FbReporting\CampaignDetailsDashboard;
 use App\Nova\Dashboards\FbReporting\CreateCampaignsFromRelatedDashboard;
+use App\Nova\Dashboards\FbReporting\CreateCampaignsFromTemplateDashboard;
 use App\Nova\Dashboards\FbReporting\FbPagePostsDashboard;
 use App\Nova\Dashboards\FbReporting\IgAccountLoaderDashboard;
 use App\Nova\Dashboards\FbReporting\SubmitKeywordsDashboard;
@@ -86,7 +87,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             new SubmitKeywordsDashboard(),
             new CreateCampaignsFromRelatedDashboard(),
             new IgAccountLoaderDashboard(),
-            new FbPagePostsDashboard()
+            new FbPagePostsDashboard(),
+            new CreateCampaignsFromTemplateDashboard()
         ];
     }
 

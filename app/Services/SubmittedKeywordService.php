@@ -154,26 +154,49 @@ class SubmittedKeywordService
             $this->facebookCampaign->getAccountRD1Id()]);
      
         $acs = new AdAccountService;
-
+        $proceedToFiltering = false; 
         foreach ($submittedKeywords as $submission) {
-        
-            $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], $submission['feed']);
             
+            $feed = $submission['feed']; // iac
+            $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], $feed); // iac feed by default
+          
             if ($countKeyword > 0) {
                 $this->updateRow($submission['batch_id'], $submission['keyword'], [
                     'action_taken' => 'skipped',
                     'note' => 'campaign is already running',
                     'status' => 'processed'
                 ]);
+                
+                // a temporary fix 
+                // check for media
+                if ($submission['market'] == 'CA' || $submission['market'] == 'US') { 
+                    $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], 'media');
+                    if ($countKeyword < 1) {
+                        $proceedToFiltering = true;
+                        $feed = 'media';
+                    }
+                }
+                else if (in_array($submission['market'], ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'])) { 
+                    $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], 'yahoo');
+                    if ($countKeyword < 1) {
+                        $proceedToFiltering = true;
+                        $feed = 'yahoo';
+                    }
+                }
             } 
             else {
+                $proceedToFiltering = true;
+                $feed = 'iac';
+            }
 
+            if ($proceedToFiltering === true) {
+                $submission['feed'] = $feed;
                 $matches = array_filter($campaignCombo, function ($campaign) use ($submission) {
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-                    return $campaignKeyword == $submission["keyword"];
-                }); 
+                    return $campaignKeyword == $this->facebookCampaign->formatKeyword($submission["keyword"], " ");
+                });
+                
                 if (count($matches) < 1) {
-                   
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
                         'action_taken' => 'new',
                         'note' => 'campaign to be created',
@@ -182,14 +205,15 @@ class SubmittedKeywordService
                 } 
                 else { 
                    
-                    $adAccount = $acs->determineTargetAccountByFeed($submission['feed']);
+                    $adAccount = $acs->determineTargetAccountByFeed($feed);
                     if ($adAccount == null) {
-                        Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $submission['feed'], [$submission]);
+                        Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $feed, [$submission]);
                     }
                     else {
                         $match = current($matches);
                         $sourceEnv = $match['environment'];
-                        $targetEnv = 'tt'; //by default into tt iac feed
+                        $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
+                        $targetEnv = $row->environment; 
                         $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null,  $sourceEnv, $targetEnv);
                         if ($process[0] == true) {
                             $this->updateRow($submission['batch_id'], $submission['keyword'], [
@@ -207,9 +231,8 @@ class SubmittedKeywordService
                         }
                     }
                     
-                }
-            }    
-           
+                }   
+            }
         } 
         return [true, 'submitted'];
     }
@@ -338,7 +361,7 @@ class SubmittedKeywordService
                 $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                 
                 $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
-                // dd('Mona', $sourceEnv, $existingCampaignAdsets);
+               
                 if ($existingCampaignAdsets[0] === false) {
                     Log::info('No existing campaign adsets were loaded', [
                         'message' => $existingCampaignAdsets[1]->getMessage(),
@@ -410,7 +433,7 @@ class SubmittedKeywordService
                             'custom_event_type' => 'CONTENT_VIEW'
                         ];
                     }
-                  
+                     
                     $newAdsetData = [
                         'name' =>   ucfirst($submission['keyword']), 
                         'targeting' => $newAdsetTargeting,
@@ -427,19 +450,8 @@ class SubmittedKeywordService
                     $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                     
                     if ($newAdSet[0] == false) {
-                        Log::info('An error occured creating an adset', [$newAdSet[1]]);
-                        // if ($newAdSet[1]->getErrorUserTitle() == 'No Custom Audience Ownership') {
-                            continue;
-                        // } 
-                            // array_push($loggedErrors, [
-                            //     'message' => 'An adset not created',
-                            //     'errors' => $newAdSet[1],
-                            //     'data' => $newAdsetData
-                            // ]); 
-                            
-                            // delete the newly created campaign
-                            // $this->facebookCampaign->delete($newCampaign[1]['id']);
-                        
+                        Log::info('An error occured creating an adset', [$newAdSet[1]]); 
+                        continue; 
                     }
                     else {
                         Log::info('Adset for '. $targetAccount . ' created', [$newAdSet[1]->id]);
