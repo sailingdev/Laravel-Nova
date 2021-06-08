@@ -150,8 +150,6 @@ class SubmittedKeywordService
      */
     public function processSubmittedKeywords($submittedKeywords)
     {  
-        
-        $this->facebookCampaign->initRD();
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
      
@@ -173,8 +171,7 @@ class SubmittedKeywordService
                 $matches = array_filter($campaignCombo, function ($campaign) use ($submission) {
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
                     return $campaignKeyword == $submission["keyword"];
-                });
-                
+                }); 
                 if (count($matches) < 1) {
                    
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
@@ -190,12 +187,22 @@ class SubmittedKeywordService
                         Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $submission['feed'], [$submission]);
                     }
                     else {
-                        $process = $this->duplicateCampaign(current($matches), $submission, $adAccount, null, null, "rd", "tt");
+                        $match = current($matches);
+                        $sourceEnv = $match['environment'];
+                        $targetEnv = 'tt'; //by default into tt iac feed
+                        $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null,  $sourceEnv, $targetEnv);
                         if ($process[0] == true) {
                             $this->updateRow($submission['batch_id'], $submission['keyword'], [
                                 'action_taken' => 'skipped',
                                 'note' => 'campaign restarted',
                                 'status' => 'processed'
+                            ]);
+                        }
+                        else {
+                            $this->updateRow($submission['batch_id'], $submission['keyword'], [
+                                'action_taken' => 'new',
+                                'note' => 'campaign to be created',
+                                'status' => 'pending'
                             ]);
                         }
                     }
@@ -218,6 +225,9 @@ class SubmittedKeywordService
     {
         $campaignCombo = [];
         foreach ($accountIds as $account) {
+            $adAccountService = new AdAccountService;
+            $row = $adAccountService->getRowByAccountId(preg_replace("#[^0-9]#i", "", $account));
+            $row->environment == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
             $accountCampaigns = $this->facebookCampaign->loadCampaign($account, [
                 'name', 
                 'status', 
@@ -226,7 +236,7 @@ class SubmittedKeywordService
                 'buying_type',
                 'daily_budget',
                 'special_ad_categories',
-                'account_id'
+                'account_id',
             ]);  
             if ($accountCampaigns[0] !== false) { 
                 foreach ($accountCampaigns[1] as $campaign) {
@@ -239,7 +249,8 @@ class SubmittedKeywordService
                         'buying_type' => $campaign->buying_type,
                         'daily_budget' => $campaign->daily_budget,
                         'special_ad_categories' => $campaign->special_ad_categories,
-                        'account_id' => $account
+                        'account_id' => $account,
+                        'environment' => $row->environment
                     ]);
                 }
             }
@@ -327,7 +338,7 @@ class SubmittedKeywordService
                 $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                 
                 $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
-                
+                // dd('Mona', $sourceEnv, $existingCampaignAdsets);
                 if ($existingCampaignAdsets[0] === false) {
                     Log::info('No existing campaign adsets were loaded', [
                         'message' => $existingCampaignAdsets[1]->getMessage(),

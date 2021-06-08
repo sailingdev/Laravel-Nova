@@ -31,7 +31,9 @@
         "build-fb-page-posts": "cd nova-components/FbPagePosts && npm run dev",
         "build-fb-page-posts-prod": "cd nova-components/FbPagePosts && npm run prod",
         "build-fb-page-posts-card": "cd nova-components/FbPagePostsCard && npm run dev",
-        "build-fb-page-posts-card-prod": "cd nova-components/FbPagePostsCard && npm run prod"
+        "build-fb-page-posts-card-prod": "cd nova-components/FbPagePostsCard && npm run prod",
+        "build-create-campaigns-from-template-card": "cd nova-components/CreateCampaignsFromTemplateCard && npm run dev",
+        "build-create-campaigns-from-template-card-prod": "cd nova-components/CreateCampaignsFromTemplateCard && npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",
