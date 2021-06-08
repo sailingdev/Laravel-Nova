@@ -198,6 +198,7 @@ class SubmittedKeywordService
                 
                 if (count($matches) < 1) {
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
+                        'feed' => $feed,
                         'action_taken' => 'new',
                         'note' => 'campaign to be created',
                         'status' => 'pending'
@@ -218,12 +219,14 @@ class SubmittedKeywordService
                         if ($process[0] == true) {
                             $this->updateRow($submission['batch_id'], $submission['keyword'], [
                                 'action_taken' => 'skipped',
+                                'feed' => $feed,
                                 'note' => 'campaign restarted',
                                 'status' => 'processed'
                             ]);
                         }
                         else {
                             $this->updateRow($submission['batch_id'], $submission['keyword'], [
+                                'feed' => $feed,
                                 'action_taken' => 'new',
                                 'note' => 'campaign to be created',
                                 'status' => 'pending'
