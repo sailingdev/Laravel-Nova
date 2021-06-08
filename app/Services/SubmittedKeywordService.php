@@ -464,18 +464,14 @@ class SubmittedKeywordService
                                 ]);
                             
                                 if ($existingAdCreative[0] == false) {
-                                    array_push($loggedErrors, [
-                                        'message' => 'An error occured while loading the adcreative for the ad with ID: ' . $existingAd->id,
-                                        'errors' => $existingAdCreative[1],
-                                        'data' => []
-                                    ]);
+                                    Log::error('An error occured while loading the adcreative for the ad with ID: ' . $existingAd->id, [$existingAdCreative[1]]);
+                                    continue;
                                 }
                                 else { 
                                    
                                     $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
                                     $newAdImages = [];
-                                    
-                                   
+                                                                      
                                     foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
                                         $newAdImage  = $this->transportAdImages($campaign['account_id'], $existingImage, $sourceEnv, $targetAccount, $targetEnv);
                                         
@@ -522,8 +518,8 @@ class SubmittedKeywordService
 
                                     if ($randomFbPage != null) {
                                         $objectStorySpec = [
-                                            'page_id' =>  $randomFbPage->page_id, //'104090831801082',
-                                            'instagram_actor_id' => $randomFbPage->instagram_id  //'2750536698404494', 
+                                            'page_id' =>  $randomFbPage->page_id,
+                                            'instagram_actor_id' => $randomFbPage->instagram_id 
                                         ];
                                     }
                                     
@@ -541,12 +537,6 @@ class SubmittedKeywordService
                                   
                                     if ($newAdCreative[0] == false) {
                                         Log::error('An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id, [$newAdCreative[1]]);
-                                        // array_push($loggedErrors, [
-                                        //     'message' => 'An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id,
-                                        //     'errors' => $newAdCreative[1],
-                                        //     'data' => $newAdCreativeData
-                                        // ]);
-                                        dd($newAdCreative[1]);
                                         continue;
                                     }
                                     else {
