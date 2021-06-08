@@ -300,7 +300,7 @@ class SubmittedKeywordService
        
         
         // initialize sdk
-        if (strtolower($submission['feed']) == 'yahoo') { 
+        if (strtolower($submission['feed']) == 'yahoo' && $batchId !== null) { 
             // update main to completed
             Log::info('It is Yahoo', [$batchId]);
             $cdService->updateMainRow($batchId);
