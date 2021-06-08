@@ -278,7 +278,9 @@ abstract class Facebook
      */
     public function formatKeyword(string $keyword, $replacer='_'): string
     {
-        return strtolower(preg_replace("#[^a-z0-9]#i", $replacer, trim($keyword)));
+        $keyword = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $keyword);
+        $keyword = strtolower(preg_replace("#[^a-z0-9]#i", $replacer, trim($keyword)));
+        return $keyword;
     }
 
   
