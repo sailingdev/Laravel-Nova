@@ -514,16 +514,16 @@ class SubmittedKeywordService
                                     }
         
                                     $existingAdSetFeedSpec['images'] = $newAdImages;
-                                
+                                    
                                     // generate new website url 
                                     $newWebsiteUrl = $this->facebookCampaign->generateAdCreativeWebsiteUrl( 
                                         $targetAccount,
                                         ucfirst($submission['keyword']),
-                                        isset($submission->type_tag) ? $submission->type_tag : $campaignNameExtracts['type_tag'],
+                                        $typeTag,
                                         $submission['market'],
                                         $newCampaignName
                                     ); 
-                                    
+                                  
                                     $existingAdSetFeedSpec['link_urls'][0]['website_url'] = $newWebsiteUrl;
                                 
                                 

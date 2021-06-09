@@ -420,7 +420,7 @@ abstract class Facebook
 
     public function makeIacAllResultsWebWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId, string $campaignName)
     { 
-        $keyword = $this->formatKeyword($keyword, '+');
+        $keyword = $this->formatKeyword(ucfirst($keyword), '+');
         $rangeId = '263';
         if ($market == 'US') {
             return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId;
