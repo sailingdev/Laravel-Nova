@@ -132,7 +132,7 @@ abstract class Facebook
             $extracts = $sm->generateArrayFromString($preped, ',');
             $data['site'] = $extracts[0];
             $data['type_tag'] = array_key_exists(1, $extracts) ? $extracts[1] : '';
-            $data['keyword'] = array_key_exists(2, $extracts) ?  $this->formatKeyword(strtolower($extracts[2], " ")) : '';
+            $data['keyword'] = array_key_exists(2, $extracts) ?  $this->formatKeyword(strtolower($extracts[2]), " ") : '';
             $data['market'] = array_key_exists(3, $extracts) ? $extracts[3] : '';
         }
 
