@@ -45,6 +45,7 @@
                                         <th class="text-left p-3 px-5">DELETE</th>
                                         <th class="text-left p-3 px-5">KEYWORD</th>
                                         <th class="text-left p-3 px-5">TYPETAG TO DUPLICATE</th>
+                                        <th class="text-left p-3 px-5">MARKET</th>
                                         <th class="text-left p-3 px-5">CREATE ACTION</th>
                                     </tr>
                                 </thead>
@@ -61,6 +62,7 @@
                                             <input type="text" v-model="batches[key].type_tag" placeholder="Enter type tag to duplicate" class="form-control">
                                             <span v-if="processingKeyErr == key" class="ml-2 text-red-600 text-sm"> {{ validateError  }} </span>
                                         </td>
+                                        <td class="p-3 px-5">{{ batch.market }}</td>
                                         <td class="p-3 px-5">
                                             <button :disabled="processingKey == key" type="button" @click="prepareForDispatch(key)" class="mr-3 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
                                                 <span v-if="processingKey == key"><loader class="text-60" :fillColor="'#ffffff'" /></span>

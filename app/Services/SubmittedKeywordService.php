@@ -149,17 +149,17 @@ class SubmittedKeywordService
      * @return mixed
      */
     public function processSubmittedKeywords($submittedKeywords)
-    {  
+    {    
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
      
         $acs = new AdAccountService;
         $proceedToFiltering = false; 
         foreach ($submittedKeywords as $submission) {
-            
+             
             $feed = $submission['feed']; // iac
-            $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], $feed); // iac feed by default
-          
+            $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], $feed); // iac feed by default
+            
             if ($countKeyword > 0) {
                 $this->updateRow($submission['batch_id'], $submission['keyword'], [
                     'action_taken' => 'skipped',
@@ -170,14 +170,14 @@ class SubmittedKeywordService
                 // a temporary fix 
                 // check for media
                 if ($submission['market'] == 'CA' || $submission['market'] == 'US') { 
-                    $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], 'media');
+                    $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'media');
                     if ($countKeyword < 1) {
                         $proceedToFiltering = true;
                         $feed = 'media';
                     }
                 }
                 else if (in_array($submission['market'], ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'])) { 
-                    $countKeyword = $this->rpcService->countKeyword($submission['keyword'], $submission['market'], 'yahoo');
+                    $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'yahoo');
                     if ($countKeyword < 1) {
                         $proceedToFiltering = true;
                         $feed = 'yahoo';
@@ -188,14 +188,14 @@ class SubmittedKeywordService
                 $proceedToFiltering = true;
                 $feed = 'iac';
             }
-
+            
             if ($proceedToFiltering === true) {
                 $submission['feed'] = $feed;
                 $matches = array_filter($campaignCombo, function ($campaign) use ($submission) {
                     $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-                    return $campaignKeyword == $this->facebookCampaign->formatKeyword($submission["keyword"], " ");
+                    return preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"]);
                 });
-                
+              
                 if (count($matches) < 1) {
                     $this->updateRow($submission['batch_id'], $submission['keyword'], [
                         'feed' => $feed,
@@ -205,7 +205,7 @@ class SubmittedKeywordService
                     ]);
                 } 
                 else { 
-                   
+                    
                     $adAccount = $acs->determineTargetAccountByFeed($feed);
                     if ($adAccount == null) {
                         Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $feed, [$submission]);
@@ -705,7 +705,9 @@ class SubmittedKeywordService
     public function loadToBeCreated()
     {
         $batches =  SubmittedKeyword::select(['id', 'batch_id', 'market', 'keyword', 'feed', 'status'])->where('status', 'pending')
-            ->where('action_taken', 'new')->where('feed', 'iac')->get();
+            ->where('action_taken', 'new')
+            ->where('feed', 'iac')
+            ->get();
         return $batches;
         
     }
@@ -745,7 +747,7 @@ class SubmittedKeywordService
             return $campaignTypeTag == trim($keyword['type_tag']);
         });
          
-        
+       
         if (count($matches) > 0) {
             
             $typeTag = $this->facebookCampaign->generateTypeTag($keyword['keyword'], $keyword['market'], 'related');
@@ -759,8 +761,11 @@ class SubmittedKeywordService
                 Log::info('No target was found for createCampaignFromRelated ::: ' . $keyword['feed'], [$keyword]);
             }
             else {
-                
-                $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount, null, null,  "rd", "tt");
+                $match = current($matches);
+                $sourceEnv = $match['environment'];
+                $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
+                $targetEnv = $row->environment; 
+                $process = $this->duplicateCampaign(current($matches), $keyword, $adAccount, null, null,  $sourceEnv, $targetEnv);
                 
                 if ($process[0] == true) {
                     $this->updateRow($keyword['batch_id'], $keyword['keyword'], [

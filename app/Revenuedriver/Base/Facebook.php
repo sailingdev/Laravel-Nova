@@ -191,7 +191,11 @@ abstract class Facebook
         $dateSPlit = $sm->generateArrayFromString($this->determineStartTime(), '-');
       
         $datePrep = $dateSPlit[2] . $dateSPlit[1] . substr($dateSPlit[0], 2, 3);
-        $keywordPrep =  $this->formatKeyword($keyword, '_');
+        // remove accent
+        $keyword = str_replace("'", '', iconv('UTF-8', 'ascii//TRANSLIT//IGNORE', $keyword));
+        $keywordPrep =  strtolower(str_replace(' ', '_', trim($keyword))); 
+
+        // $keywordPrep =  $this->formatKeyword($keyword, '_', true);
 
         if ($createType === "related") {
             $typeTag =  $keywordPrep. '_' 
@@ -276,11 +280,10 @@ abstract class Facebook
      * 
      * @return string
      */
-    public function formatKeyword(string $keyword, $replacer='_'): string
+    public function formatKeyword(string $keyword, string $replacer='_', bool $removeSpecialChars=false): string
     {
-        $keyword = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $keyword);
-        $keyword = strtolower(preg_replace("#[^a-z0-9]#i", $replacer, trim($keyword)));
-        return $keyword;
+        $keyword = strtolower(str_replace(' ', $replacer, trim($keyword))); 
+        return $keyword; 
     }
 
   

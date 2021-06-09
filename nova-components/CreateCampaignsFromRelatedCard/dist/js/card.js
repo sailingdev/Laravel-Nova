@@ -889,6 +889,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -14063,6 +14065,10 @@ var render = function() {
                                         ]),
                                         _vm._v(" "),
                                         _c("td", { staticClass: "p-3 px-5" }, [
+                                          _vm._v(_vm._s(batch.market))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "p-3 px-5" }, [
                                           _c(
                                             "button",
                                             {
@@ -14149,6 +14155,8 @@ var staticRenderFns = [
         _c("th", { staticClass: "text-left p-3 px-5" }, [
           _vm._v("TYPETAG TO DUPLICATE")
         ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left p-3 px-5" }, [_vm._v("MARKET")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-left p-3 px-5" }, [
           _vm._v("CREATE ACTION")
