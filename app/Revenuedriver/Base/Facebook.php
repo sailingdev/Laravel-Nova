@@ -367,7 +367,7 @@ abstract class Facebook
      */
     private function makeYahooFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market): string
     { 
-        return 'https://' . strtolower($market) . '.' . $domain . '/search/4/?type='.$typeTag . 
+        return 'https://' . strtolower($market) . '.' . $domain . '/search/4?type='.$typeTag . 
         '&keyword=' . $this->formatKeyword($keyword, '+') . '&source=facebook';
     }
 
@@ -418,63 +418,64 @@ abstract class Facebook
 
     public function makeIacAllResultsWebWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId, string $campaignName)
     { 
+        $keyword = $this->formatKeyword($keyword, '+');
         $rangeId = '263';
         if ($market == 'US') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId;
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId;
         }
         else if ($market == 'CA') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-CA';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=en-CA';
         }
         else if ($market == 'UK') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-UK';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=en-UK';
         }
         else if ($market == 'DE') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=de-DE';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=de-DE';
         }
         else if ($market == 'FR') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=fr-FR';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=fr-FR';
         }
         else if ($market == 'IT') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=it-IT';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=it-IT';
         }
         else if ($market == 'ES') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=es-ES';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=es-ES';
         }
         else if ($market == 'MX') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=es-MX';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=es-MX';
         }
         else if ($market == 'AU') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-AU';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=en-AU';
         }
         else if ($market == 'IE') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-IE';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=en-IE';
         }
         else if ($market == 'IN') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-IN';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=en-IN';
         }
         else if ($market == 'NL') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=nl-NL';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=nl-NL';
         }
         else if ($market == 'SE') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=sv-SE';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=sv-SE';
         }
         else if ($market == 'NO') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=nb-NO';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=nb-NO';
         }
         else if ($market == 'DK') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=da-DK';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=da-DK';
         }
         else if ($market == 'BR') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=pt-BR';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=pt-BR';
         }
         else if ($market == 'AT') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=de-AT';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=de-AT';
         }
         else if ($market == 'CH') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=de-CH';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=de-CH';
         }
         else if ($market == 'NZ') {
-            return 'https://top.allresultsweb.com/ar?src=44&q=house&campname='.strtoupper($campaignName).'&rangeId=' . $rangeId . '&mkt=en-NZ';
+            return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId . '&mkt=en-NZ';
         }
         return true;
     }
