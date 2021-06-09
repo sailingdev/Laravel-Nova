@@ -172,7 +172,7 @@ abstract class Facebook
         $name = $this->formatKeyword($keyword, '_') . " - " .
             strtoupper($market) . 
             " (".ucfirst(strtolower($feed)).")" . 
-            " {" .strtolower($site) . "," .strtolower($typeTag) . "," .$this->formatKeyword(strtolower($keyword), '+') . "," . strtoupper($market) ."}";
+            " {" .strtolower($site) . "," .$typeTag . "," .$this->formatKeyword(strtolower($keyword), '+') . "," . strtoupper($market) ."}";
         
         return $name;
     }
