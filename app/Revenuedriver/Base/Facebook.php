@@ -169,7 +169,7 @@ abstract class Facebook
      */
     public function formatCampaignName(string $keyword, string $market, string $feed, string $site, string $typeTag): string
     {
-        $name = $this->formatKeyword(strtolower($keyword, '_')) . " - " .
+        $name = $this->formatKeyword(strtolower($keyword), '_') . " - " .
             strtoupper($market) . 
             " (".ucfirst(strtolower($feed)).")" . 
             " {" .strtolower($site) . "," .$typeTag . "," .$this->formatKeyword(strtolower($keyword), '+') . "," . strtoupper($market) ."}";
