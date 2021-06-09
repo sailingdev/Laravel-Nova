@@ -132,7 +132,7 @@ abstract class Facebook
             $extracts = $sm->generateArrayFromString($preped, ',');
             $data['site'] = $extracts[0];
             $data['type_tag'] = array_key_exists(1, $extracts) ? $extracts[1] : '';
-            $data['keyword'] = array_key_exists(2, $extracts) ?  $this->formatKeyword($extracts[2], " ") : '';
+            $data['keyword'] = array_key_exists(2, $extracts) ?  $this->formatKeyword(strtolower($extracts[2], " ")) : '';
             $data['market'] = array_key_exists(3, $extracts) ? $extracts[3] : '';
         }
 
@@ -169,7 +169,7 @@ abstract class Facebook
      */
     public function formatCampaignName(string $keyword, string $market, string $feed, string $site, string $typeTag): string
     {
-        $name = $this->formatKeyword($keyword, '_') . " - " .
+        $name = $this->formatKeyword(strtolower($keyword, '_')) . " - " .
             strtoupper($market) . 
             " (".ucfirst(strtolower($feed)).")" . 
             " {" .strtolower($site) . "," .$typeTag . "," .$this->formatKeyword(strtolower($keyword), '+') . "," . strtoupper($market) ."}";
@@ -284,7 +284,7 @@ abstract class Facebook
      */
     public function formatKeyword(string $keyword, string $replacer='_', bool $removeSpecialChars=false): string
     {
-        $keyword = strtolower(str_replace(' ', $replacer, trim($keyword))); 
+        $keyword = str_replace(' ', $replacer, trim($keyword)); 
         return $keyword; 
     }
 
@@ -354,7 +354,7 @@ abstract class Facebook
     private function makeMediaFeedWebsiteUrl(string $domain, string $subdomain, string $keyword, string $typeTag, string $market): string
     {
         $sm = new StringManipulator; 
-        return 'https://' . $subdomain . '.' . $domain . '/search/?q=' . $this->formatKeyword($keyword, '+') . 
+        return 'https://' . $subdomain . '.' . $domain . '/search/?q=' . $this->formatKeyword(ucfirst($keyword), '+') . 
         '&p=5&chnm=facebook&chnm2=fb_' .$sm->generateArrayFromString($domain, '.')[0] . 
         '_' . strtolower($market) . '&chnm3=' . $typeTag;
     }
@@ -370,7 +370,7 @@ abstract class Facebook
     private function makeYahooFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market): string
     { 
         return 'https://' . strtolower($market) . '.' . $domain . '/search/4?type='.$typeTag . 
-        '&keyword=' . $this->formatKeyword($keyword, '+') . '&source=facebook';
+        '&keyword=' . $this->formatKeyword(ucfirst($keyword), '+') . '&source=facebook';
     }
 
     /**
@@ -392,7 +392,7 @@ abstract class Facebook
         $unitSuffix = $domain === 'top10answers.com' ? '&adUnitId=366911' : '';
 
         if (in_array($market, $groupA)) {
-            return 'https://search.'.$domain.'/ar?q=' . $this->formatKeyword($keyword, '+') . 
+            return 'https://search.'.$domain.'/ar?q=' . $this->formatKeyword(ucfirst($keyword), '+') . 
             '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId . $unitSuffix;
         }
         
@@ -401,19 +401,19 @@ abstract class Facebook
         if (in_array($market, $groupB)) { 
             $suf = $market == 'UK' ? 'GB' : $market;
             return 'https://search.' . $domain . '/ar?q=' . 
-            $this->formatKeyword($keyword, '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf . $unitSuffix;
+            $this->formatKeyword(ucfirst($keyword), '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf . $unitSuffix;
         } 
 
         $groupC = ['DE','FR','ES','IT','NL','SE','NO','DK','BR'];
         if (in_array($market, $groupC)) { 
-            return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword($keyword, '+') .
+            return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword(ucfirst($keyword), '+') .
             '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId . $unitSuffix;
         }
 
         $groupD = ['AT', 'CH'];
         if (in_array($market, $groupD)) { 
             return 'https://search.de.'.$domain.'/ar?q='.
-            $this->formatKeyword($keyword, '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market . $unitSuffix;
+            $this->formatKeyword(ucfirst($keyword), '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market . $unitSuffix;
         } 
         return null;
     }
@@ -495,7 +495,7 @@ abstract class Facebook
     private function makeCbsFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId): string
     {
         return 'https://' . $domain . '/'.$market.'/seek?src=3&q=' .
-            $this->formatKeyword($keyword, '+').'&qsrc=0&campname='.$typeTag.'&rangeId=' . $rangeId;
+            $this->formatKeyword(ucfirst($keyword), '+').'&qsrc=0&campname='.$typeTag.'&rangeId=' . $rangeId;
     }
 
 
