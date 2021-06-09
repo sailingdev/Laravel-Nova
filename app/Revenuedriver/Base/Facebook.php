@@ -74,6 +74,8 @@ abstract class Facebook
 
     protected $accountRD17 = 'act_4180769961935190'; // prod tt media
 
+    protected $account57 = 'act_750037932347728'; // prod rd media 
+
     protected $account12 = 'act_351184159509129'; // prod rd yahoo
 
 
@@ -226,9 +228,9 @@ abstract class Facebook
      */
     public function getTargetAccounts(): array
     {   
-        return [$this->accountRD17, $this->account12, $this->accountRD23];
+    // return [$this->account57, $this->account12, $this->accountRD23];
         if (config('app.env') === 'production') {
-            return [$this->accountRD17, $this->account12, $this->accountRD23];
+            return [$this->account57, $this->account12, $this->accountRD23];
         }
         return [$this->account30, $this->account38, $this->accountRD26];
     }
