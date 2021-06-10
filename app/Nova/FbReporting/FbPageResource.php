@@ -137,9 +137,12 @@ class FbPageResource extends Resource
      */
     public function actions(Request $request)
     {
-        return [
-            new LoadIgAccountId,
-            new LoadFbPageRunningAdsCount
-        ];
+        if (auth()->user()->email != 'fbreview@revenuedriver.com') {
+            return [
+                new LoadIgAccountId,
+                new LoadFbPageRunningAdsCount
+            ];
+        }
+        return [];
     }
 }
