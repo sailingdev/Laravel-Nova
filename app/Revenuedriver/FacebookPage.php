@@ -197,20 +197,19 @@ class FacebookPage extends Facebook
                 $response = Http::withHeaders([
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
-                ])->get('https://graph.facebook.com/'.$businessManager['id'].'/owned_pages?access_token=' . $accessToken . 
-                '&appsecret_proof='.hash_hmac('sha256', $accessToken, $this->appSecret) . '&limit=60000&fields=is_published,name');
-                    
+                ])->get('https://graph.facebook.com/'.$businessManager['id'].'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
+                '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->appSecret) . '&limit=60000&fields=is_published,name');
+               
                 $decoded = json_decode($response->body()); 
-                dd('Mona is je', $decoded);
+                dd('Mona', $decoded); 
                 if (isset($decoded->data)) {
                     if (count($decoded->data) > 0) {
                         $fbPageService = new FbPageService;
                         
                         foreach ($decoded->data as $page) {
                             
-                         
                             if ($page->id != '112005480631100') {
-                               
+               
                                 $pageRow = $fbPageService->getByPageId($page->id);
                                  
                                 if ($pageRow == null) {
@@ -239,6 +238,7 @@ class FacebookPage extends Facebook
                     }
                 } 
             } catch (\Throwable $th) {
+                dd('kjhgv', $th);
                 Log::error('An error occured while processing the loadBusinessAccountPages call', [$th]);
             }
         }
@@ -252,21 +252,25 @@ class FacebookPage extends Facebook
      * 
      * @return bool
      */
-    public function curateRunningAds(int $rowId, string $pageId): bool
+    public function curateRunningAds(int $rowId, string $pageId, string $environment): bool
     {
         $fbPageService = new FbPageService;
         $inst = new FacebookAdAccount(); 
+        
+        $environment == 'rd' ? $this->initRD() : $this->initTT();
+
         $adAccountId = $this->getAccount21Id();  
         $pull = $inst->getAdsVolume($adAccountId, [
             'ads_running_or_in_review_count'
         ], [
             'page_id' => $pageId
         ]); 
+        
         if ($pull[0] == true) { 
             if (count($pull[1]) > 0) {
                 $newCount = isset($pull[1][0]->ads_running_or_in_review_count) ? 
                     $pull[1][0]->ads_running_or_in_review_count : null;
-
+               
                 $fbPageService->updateRunningAdsCount($rowId, $newCount);
                 return true;
             } 

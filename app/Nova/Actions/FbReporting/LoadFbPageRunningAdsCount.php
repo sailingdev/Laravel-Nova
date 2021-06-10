@@ -32,7 +32,7 @@ class LoadFbPageRunningAdsCount extends Action
         try {
             $facebookPage = new FacebookPage; 
             foreach ($models as $model) {
-                $facebookPage->curateRunningAds($model->id, $model->page_id);
+                $facebookPage->curateRunningAds($model->id, $model->page_id, $model->environment);
             }
         } catch (\Throwable $th) {
             app('sentry')->captureException($th);
