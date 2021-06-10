@@ -497,7 +497,7 @@ class SubmittedKeywordService
                                    
                                     $existingAdSetFeedSpec = $existingAdCreative[1]->exportAllData()['asset_feed_spec'];
                                     $newAdImages = [];
-                                                                      
+                                                      
                                     foreach ($existingAdSetFeedSpec['images'] as $key => $existingImage) {
                                         $newAdImage  = $this->transportAdImages($campaign['account_id'], $existingImage, $sourceEnv, $targetAccount, $targetEnv);
                                         
@@ -511,8 +511,7 @@ class SubmittedKeywordService
                                                 'hash' => $arrK[$imgName]['hash']
                                             ]);
                                         }
-                                    }
-        
+                                    } 
                                     $existingAdSetFeedSpec['images'] = $newAdImages;
                                     
                                     // generate new website url 
@@ -537,7 +536,7 @@ class SubmittedKeywordService
                                         $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->title2;
                                         $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->body2;
                                     }
-
+                                     
                                     $fbPageService = new FbPageService;
                                     $randomFbPage = $fbPageService->getRandomFbPage($row->environment);
                                     $objectStorySpec = [];
@@ -561,7 +560,7 @@ class SubmittedKeywordService
 
                                     $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
                                   
-                                    if ($newAdCreative[0] == false) {
+                                    if ($newAdCreative[0] == false) { 
                                         Log::error('An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id, [$newAdCreative[1]]);
                                         continue;
                                     }
@@ -823,6 +822,8 @@ class SubmittedKeywordService
 
     public function createCampaignFromTemplate(array $submittedKeywords, string $market)
     {  
+        // $fb = new \App\Revenuedriver\FacebookPage;
+        // dd($fb->loadBusinessAccountPages());
         $this->facebookCampaign->initRD();
         $campaignId = '23846614980830456';
         $facebookCampaign = new FacebookCampaign;
@@ -836,7 +837,7 @@ class SubmittedKeywordService
             'special_ad_categories',
             'account_id'
         ]); 
-
+        dd('Good morning', $template);
         if ($template[0] !== false) {
                      
             $campaign = [
@@ -851,7 +852,7 @@ class SubmittedKeywordService
                 'account_id' =>  $template[1]->account_id
             ];
             $acs = new AdAccountService;
-
+           
             $feed = 'iac';
             $adAccount = $acs->determineTargetAccountByFeed($feed);
 

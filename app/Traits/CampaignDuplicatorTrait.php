@@ -25,14 +25,15 @@ trait CampaignDuplicatorTrait
             return $newAdImage;
         } else {
            
-            $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
+            // $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
+            $this->facebookCampaign->initRD();
            
             $adImageDetails = $this->facebookAdAccount->getAdImages($sourceAccount, [
                 'name', 'permalink_url', 'status', 'url',
             ], [
                 'hashes' => [$existingAdImage['hash']]
             ]);
-             
+            dd('dd', $adImageDetails[1]);
             if ($adImageDetails[0] === true && isset($adImageDetails[1][0]->url)) {
 
                 $destinationPath = storage_path('app/public/ad_images/');

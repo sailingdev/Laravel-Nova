@@ -189,17 +189,19 @@ class FacebookPage extends Facebook
                 'name' => 'tt'
             ]
         ];
-
+        
         foreach ($businessManagers as $businessManager) {
+            $accessToken = $businessManager['name'] == 'rd' ? config('facebook.marketing.rd_app_access_token') : config('facebook.marketing.tt_app_access_token');
+            // $this->getLongLivedUserAccessToken()
             try {
                 $response = Http::withHeaders([
                     'Accept' => 'application/json',
                     'Content-type' => 'application/json',
-                ])->get('https://graph.facebook.com/'.$businessManager['id'].'/owned_pages?access_token=' . $this->getLongLivedUserAccessToken() . 
-                '&appsecret_proof='.hash_hmac('sha256', $this->getLongLivedUserAccessToken(), $this->appSecret) . '&limit=60000&fields=is_published,name');
+                ])->get('https://graph.facebook.com/'.$businessManager['id'].'/owned_pages?access_token=' . $accessToken . 
+                '&appsecret_proof='.hash_hmac('sha256', $accessToken, $this->appSecret) . '&limit=60000&fields=is_published,name');
                     
                 $decoded = json_decode($response->body()); 
-                
+                dd('Mona is je', $decoded);
                 if (isset($decoded->data)) {
                     if (count($decoded->data) > 0) {
                         $fbPageService = new FbPageService;

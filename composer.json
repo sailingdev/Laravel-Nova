@@ -11,6 +11,7 @@
         "php": "^7.3|^8.0",
         "facebook/php-business-sdk": "^9.0",
         "fb-reporting/create-campaigns-from-related-card": "*",
+        "fb-reporting/create-campaigns-from-template-card": "*",
         "fb-reporting/fb-page-posts-card": "*",
         "fb-reporting/ig-account-loader-card": "*",
         "fb-reporting/submit-keywords-card": "*",
@@ -29,8 +30,8 @@
         "optimistdigital/nova-tailwind": "^1.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^2.4",
-        "stechstudio/laravel-ssh-tunnel": "^3.0",
-        "fb-reporting/create-campaigns-from-template-card": "*"
+        "spatie/laravel-permission": "^4.2",
+        "stechstudio/laravel-ssh-tunnel": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -69,9 +69,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function cards()
     {
-        return [
-            (new TypeDailyPerfCard())->dailyTotalsByTag(), 
-        ];
+        if (auth()->user()->email != 'fbreview@revenuedriver.com') {
+            return [
+                (new TypeDailyPerfCard())->dailyTotalsByTag(), 
+            ];
+        }
+        else {
+            return [];
+        }
     }
 
     /**
@@ -81,15 +86,18 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function dashboards()
     {
-        return [
-            new WebsiteBreakDownDashboard(),
-            new CampaignDetailsDashboard(),
-            new SubmitKeywordsDashboard(),
-            new CreateCampaignsFromRelatedDashboard(),
-            new IgAccountLoaderDashboard(),
-            new FbPagePostsDashboard(),
-            new CreateCampaignsFromTemplateDashboard()
-        ];
+        if (auth()->user()->email != 'fbreview@revenuedriver.com') {
+            return [
+                new WebsiteBreakDownDashboard(),
+                new CampaignDetailsDashboard(),
+                new SubmitKeywordsDashboard(),
+                new CreateCampaignsFromRelatedDashboard(),
+                new IgAccountLoaderDashboard(),
+                new FbPagePostsDashboard(),
+                new CreateCampaignsFromTemplateDashboard()
+            ];
+        }
+        return [];
     }
 
     /**
