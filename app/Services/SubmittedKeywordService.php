@@ -837,7 +837,7 @@ class SubmittedKeywordService
             'special_ad_categories',
             'account_id'
         ]); 
-        dd('Good morning', $template);
+         
         if ($template[0] !== false) {
                      
             $campaign = [
@@ -855,7 +855,10 @@ class SubmittedKeywordService
            
             $feed = 'iac';
             $adAccount = $acs->determineTargetAccountByFeed($feed);
-
+            
+            // $sourceEnv = $match['environment'];
+            // $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
+            // $targetEnv = $row->environment; 
             foreach ($submittedKeywords as $submittedKeyword) {
                 $submission = [
                     'feed' => $feed,
