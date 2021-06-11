@@ -822,8 +822,8 @@ class SubmittedKeywordService
 
     public function createCampaignFromTemplate(array $submittedKeywords, string $market)
     {  
-        $fb = new \App\Revenuedriver\FacebookPage;
-        dd($fb->loadBusinessAccountPages());
+        // $fb = new \App\Revenuedriver\FacebookPage;
+        // dd($fb->loadBusinessAccountPages());
         $this->facebookCampaign->initRD();
         $campaignId = '23846614980830456';
         $facebookCampaign = new FacebookCampaign;
@@ -852,7 +852,7 @@ class SubmittedKeywordService
                 'account_id' =>  $template[1]->account_id
             ];
             $acs = new AdAccountService;
-           
+            
             $feed = 'iac';
             $adAccount = $acs->determineTargetAccountByFeed($feed);
             

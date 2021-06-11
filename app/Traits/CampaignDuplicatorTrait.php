@@ -11,7 +11,7 @@ trait CampaignDuplicatorTrait
 {
     public function transportAdImages(string $sourceAccount, $existingAdImage, string $sourceEnv, string $targetAccount, string $targetEnv)
     {
-        $sourceAccount = 'act_' . $sourceAccount;
+      
         if ($targetEnv === $sourceEnv) {
             // copy from old account to new account
             $copyFrom = new \stdclass;
@@ -27,7 +27,7 @@ trait CampaignDuplicatorTrait
         } else {
            
             $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
-               
+            $sourceAccount = strpos($sourceAccount, 'act_') === false ? 'act_' . $sourceAccount : $sourceAccount;
             $adImageDetails = $this->facebookAdAccount->getAdImages($sourceAccount, [
                 'name', 'permalink_url', 'status', 'url',
             ], [

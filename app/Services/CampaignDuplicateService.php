@@ -48,7 +48,7 @@ class CampaignDuplicateService
         return CampaignDuplicate::where('type', 'main')
         ->where('feed', 'iac')
         ->where('main_batch_status', 'uncompleted')
-        ->where('campaign_start', '<=', Carbon::now()->subDays(1)->toDateTimeString())
+        ->where('campaign_start', '<=', Carbon::now())
         ->get();
    }
 

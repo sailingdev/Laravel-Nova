@@ -31,6 +31,18 @@ class AdLocalePolicy
     }
 
     /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function view(User $user)
+    { 
+        return $user->email != 'fbreview@revenuedriver.com';
+    }
+
+    
+    /**
      * Determine whether the user can create any models.
      *
      * @param  \App\Models\User  $user

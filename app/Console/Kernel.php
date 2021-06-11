@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->job(new LoadBMFacebookPagesJob)->twiceDaily();
         $schedule->job(new CampaignOptimizerJob)->dailyAt('16:00:00');
-        $schedule->job(new CampaignDuplicatorJob)->dailyAt('17:00:00');
+        $schedule->job(new CampaignDuplicatorJob)->dailyAt('19:00:00');
         
         $schedule->job(new ProcessScheduledFacebookPagePostsJob)->everyMinute()->withoutOverlapping();
     }
