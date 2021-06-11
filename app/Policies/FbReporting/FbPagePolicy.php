@@ -56,10 +56,6 @@ class FbPagePolicy
         return true;
     }
 
-    public function view($user)
-    { 
-        return true;
-    }
 
     /**
      * Determine whether the user can update the model.
