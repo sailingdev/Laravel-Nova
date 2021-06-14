@@ -26,7 +26,7 @@ class ProcessCampaignsFromSubmittedKeywordsJob implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 900;
+    public $timeout = 2700;
     
     /**
      * Create a new job instance.
