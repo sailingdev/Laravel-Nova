@@ -94,7 +94,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 new CreateCampaignsFromRelatedDashboard(),
                 new IgAccountLoaderDashboard(),
                 new FbPagePostsDashboard(),
-                new CreateCampaignsFromTemplateDashboard()
+                // new CreateCampaignsFromTemplateDashboard()
             ];
         }
         return [];

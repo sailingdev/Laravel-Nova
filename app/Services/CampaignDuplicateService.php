@@ -105,7 +105,7 @@ class CampaignDuplicateService
                         'account_id' =>  $iacCampaign[1]->account_id
                     ];
                     
-                    $feedOnQueue = ['media', 'yahoo'];
+                    $feedOnQueue = ['iac', 'media', 'yahoo'];
                     foreach ($feedOnQueue as $fq) {
                         $feed = $fq;
                         $adAccount = $acs->determineTargetAccountByFeed($fq);

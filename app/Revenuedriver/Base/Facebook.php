@@ -70,13 +70,16 @@ abstract class Facebook
     */
     protected $accountRD26 = 'act_195606425356330'; // test tt iac
 
-    protected $accountRD23 = 'act_534735217510143'; // prod tt iac
+
+    protected $accountRD27 = 'act_167517138529238'; // prod tt iac
 
     protected $accountRD17 = 'act_4180769961935190'; // prod tt media
 
     protected $account57 = 'act_750037932347728'; // prod rd media 
 
     protected $account12 = 'act_351184159509129'; // prod rd yahoo
+
+    protected $accountRD28 = 'act_3945312498910176'; //prod landing page for campaigns
 
 
     
@@ -203,13 +206,13 @@ abstract class Facebook
             $typeTag =  $keywordPrep. '_' 
             . strtoupper($market) . '_' .
             // $datePrep . '_' .
-            'r' . '_' . 
+            'cp' . '_' . 
             '009';
         }
         else if ($createType === "template") {
             $typeTag = $keywordPrep . '_' 
             . strtoupper($market) . '_' .
-            // $datePrep . '_' . 
+           'cp_' . 
             '009';
         }
         else {
@@ -217,7 +220,7 @@ abstract class Facebook
             strtoupper($market) . '_' .
             strtoupper($siteTag) . '_' .
             strtoupper($dupNo) . '_' . 
-            // $datePrep . '_' . 
+            'cp_' . 
             '009';
         } 
         return $typeTag;
@@ -230,7 +233,7 @@ abstract class Facebook
     {   
     // return [$this->account57, $this->account12, $this->accountRD23];
         if (config('app.env') === 'production') {
-            return [$this->account57, $this->account12, $this->accountRD23];
+            return [$this->account57, $this->account12, $this->accountRD27];
         }
         return [$this->account30, $this->account38, $this->accountRD26];
     }
@@ -240,11 +243,10 @@ abstract class Facebook
      * 
      * @return string
      */
-    public function determineStatus(string $status): string
+    public function determineStatus(string $status, string $targetAccount): string
     {
-        return 'PAUSED';
-        if (config('app.env') === 'production') {
-            return $this->status;
+        if (config('app.env') === 'production' && $targetAccount != $this->accountRD28) {
+            return 'ACTIVE';
         }
         return 'PAUSED';
     }

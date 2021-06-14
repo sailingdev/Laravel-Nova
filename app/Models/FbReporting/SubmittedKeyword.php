@@ -8,7 +8,9 @@ use App\Traits\Uuid;
 
 class SubmittedKeyword extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory;
+
+    protected $guarded = [];
 
     /**
      * Set the keyword.

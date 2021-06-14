@@ -6,6 +6,7 @@ use App\Labs\FileManager;
 use App\Labs\StringManipulator;
 use App\Revenuedriver\FacebookAdAccount;
 use FacebookAds\Object\AdImage;
+use Illuminate\Support\Facades\Log;
 
 trait CampaignDuplicatorTrait
 {
@@ -38,17 +39,25 @@ trait CampaignDuplicatorTrait
 
                 $destinationPath = storage_path('app/public/ad_images/');
                 $fileName = $this->cleanAdImageName($adImageDetails[1][0]->name);
-                
-                if (copy($adImageDetails[1][0]->url, $destinationPath . $fileName)) {
-                    $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
-                    $newAdImage = $this->facebookAdImage->create($targetAccount, [
-                        'filename' => $destinationPath . $fileName
-                    ]);
-                    if (file_exists($destinationPath . $fileName)) {
-                        unlink($destinationPath . $fileName);
+                try {
+                    $copy = copy($adImageDetails[1][0]->url, $destinationPath . $fileName);
+                    if ($copy === true) {
+                        Log::info('Copied for', [$adImageDetails[1][0]->name, $fileName]);
+                        $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
+                        $newAdImage = $this->facebookAdImage->create($targetAccount, [
+                            'filename' => $destinationPath . $fileName
+                        ]);
+                        Log::info('Created new ad image', [$newAdImage[0], $newAdImage[1]]);
+                        if (file_exists($destinationPath . $fileName)) {
+                            unlink($destinationPath . $fileName);
+                        }
+                        return $newAdImage;
                     }
-                    return $newAdImage;
+                } catch (\Throwable $e) {
+                    dd($e);
+                    Log::info('Not Copied for', [$adImageDetails[1][0]->name, $fileName]);
                 }
+               
             }
             return [false];
         }
@@ -66,10 +75,10 @@ trait CampaignDuplicatorTrait
             if (count($mixedExtArr) >= 2) {
                 $ext = $mixedExtArr[0];
             }
-            return $dotNot[0] . '.' . $ext;
+            return preg_replace("#[^a-z0-9]#i", "_", $dotNot[0]) . '.' . $ext;
         }
         else {
-            return $imageName . '.' . $ext; 
+            return preg_replace("#[^a-z0-9]#i", "_", $imageName) . '.' . $ext; 
         }
     }
 }
