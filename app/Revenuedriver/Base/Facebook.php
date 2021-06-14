@@ -277,6 +277,30 @@ abstract class Facebook
         return $this->accountRD1;
     }
 
+    /**
+     * @return string
+     */
+    public function getAccountRD26(): string
+    {
+        return $this->accountRD26;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountRD27(): string
+    {
+        return $this->accountRD27;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountRD28(): string
+    {
+        return $this->accountRD28;
+    }
+    
 
 
     /**

@@ -257,7 +257,7 @@ class SubmittedKeywordService
                                         'keyword' => $submission['keyword'],
                                         'market' => $submission['market'],
                                         'action_taken' => 'skipped',
-                                        'feed' => $feed,
+                                        'feed' => $cc,
                                         'note' => 'campaign restarted',
                                         'status' => 'processed',
                                         'created_at' => Carbon::now(),
@@ -881,7 +881,7 @@ class SubmittedKeywordService
             $keyword['type_tag'] = $typeTag;
             
             // by default, duplicate into iac feed RD_28 - landing feed
-            $adAccount = config('app.env') === 'production' ? $this->facebookCampaign->accountRD28 : $this->facebookCampaign->accountRD26;
+            $adAccount = config('app.env') === 'production' ? $this->facebookCampaign->getAccountRD28() : $this->facebookCampaign->getAccountRD26();
            
             if ($adAccount == null) {
                 Log::info('No target was found for createCampaignFromRelated ::: ' . $keyword['feed'], [$keyword]);

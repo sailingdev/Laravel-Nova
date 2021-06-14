@@ -49,12 +49,11 @@ trait CampaignDuplicatorTrait
                         ]);
                         Log::info('Created new ad image', [$newAdImage[0], $newAdImage[1]]);
                         if (file_exists($destinationPath . $fileName)) {
-                            unlink($destinationPath . $fileName);
+                            // unlink($destinationPath . $fileName);
                         }
                         return $newAdImage;
                     }
                 } catch (\Throwable $e) {
-                    dd($e);
                     Log::info('Not Copied for', [$adImageDetails[1][0]->name, $fileName]);
                 }
                
