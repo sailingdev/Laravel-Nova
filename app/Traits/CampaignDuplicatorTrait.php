@@ -42,19 +42,18 @@ trait CampaignDuplicatorTrait
                 try {
                     $copy = copy($adImageDetails[1][0]->url, $destinationPath . $fileName);
                     if ($copy === true) {
-                        Log::info('Copied for', [$adImageDetails[1][0]->name, $fileName]);
+                        
                         $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                         $newAdImage = $this->facebookAdImage->create($targetAccount, [
                             'filename' => $destinationPath . $fileName
                         ]);
-                        Log::info('Created new ad image', [$newAdImage[0], $newAdImage[1]]);
                         if (file_exists($destinationPath . $fileName)) {
                             // unlink($destinationPath . $fileName);
                         }
                         return $newAdImage;
                     }
                 } catch (\Throwable $e) {
-                    Log::info('Not Copied for', [$adImageDetails[1][0]->name, $fileName]);
+                    Log::info('Ad image Not Copied for', [$adImageDetails[1][0]->name, $fileName]);
                 }
                
             }

@@ -70,7 +70,6 @@ abstract class Facebook
     */
     protected $accountRD26 = 'act_195606425356330'; // test tt iac
 
-
     protected $accountRD27 = 'act_167517138529238'; // prod tt iac
 
     protected $accountRD17 = 'act_4180769961935190'; // prod tt media
@@ -82,7 +81,6 @@ abstract class Facebook
     protected $accountRD28 = 'act_3945312498910176'; //prod landing page for campaigns
 
 
-    
     public function __construct()
     {
         $this->appId =  config('facebook.marketing.app_id');

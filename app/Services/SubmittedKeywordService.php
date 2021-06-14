@@ -232,6 +232,7 @@ class SubmittedKeywordService
                  
             }
        
+            // dd($campaignExistsFor, $campaignToCreateIn, $match);
 
             // INSTRUCTION 
             // IF $campaignExistsFor IS EMPTY, push to create from related
@@ -261,13 +262,14 @@ class SubmittedKeywordService
                             $adAccount =  $acs->determineTargetAccountByFeed($cc);
                             if ($adAccount == null) {
                                 Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $feed, [$submission]);
-                            }
-                            else { 
+                            } else { 
+                                Log::info('Creating for ', [$cc]);
                                 $sourceEnv = $match['environment'];
                                 $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
-                                $targetEnv = $row->environment; 
-                                $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null,  $sourceEnv, $targetEnv, false);
-                                if ($process[0] == true) { 
+                                $targetEnv = $row->environment;
+                                $submission['feed'] = $cc;
+                                $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null, $sourceEnv, $targetEnv, false);
+                                if ($process[0] == true) {
                                     SubmittedKeyword::create([
                                         'batch_id' => $submission['batch_id'],
                                         'keyword' => $submission['keyword'],
@@ -279,8 +281,7 @@ class SubmittedKeywordService
                                         'created_at' => Carbon::now(),
                                         'updated_at' => Carbon::now()
                                     ]); 
-                                }
-                                else {
+                                } else {
                                     Log::error('An error occured. Campaign not restarted in ' . $cc . ' feed', [$process[1]]);
                                 }
                             }
@@ -435,6 +436,7 @@ class SubmittedKeywordService
      */
     public function duplicateCampaign($campaign, $submission, $targetAccount, $bidStrategy=null, $batchId=null, $sourceEnv="rd", $targetEnv="tt", bool $shouldQueueForDuplication=true)
     {   
+        
         // only run if market is in the list of supported markets
         $adAccountService = new AdAccountService;
         $websiteService = new WebsiteService;
@@ -507,7 +509,8 @@ class SubmittedKeywordService
                 $sourceEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                 
                 $existingCampaignAdsets = $this->facebookCampaign->getAdsets($campaign['id']);
-               
+                
+              
                 if ($existingCampaignAdsets[0] === false) {
                     Log::info('No existing campaign adsets were loaded', [
                         'message' => $existingCampaignAdsets[1]->getMessage(),
@@ -535,6 +538,8 @@ class SubmittedKeywordService
                     return [false, 'No existing campaign adsets available'];
                 }  
                 
+                Log::info('Total Count of Adsets are ', [$existingCampaignAdsets[1]->count()]);
+
                 $marketsArr[] = $submission['market'] == 'UK' ? 'GB' : $submission['market'];
                 if (strtolower($submission['feed']) == 'iac') {
                     $devicePlatforms = ['mobile'];
@@ -596,8 +601,7 @@ class SubmittedKeywordService
                     $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                     
                     if ($newAdSet[0] == false) {
-                        // Log::info('An error occured creating an adset', [$newAdSet[1]]); 
-                        // dd($newAdSet);
+                        Log::info('An adset error. Skipping', [$newAdSet[1]]);
                         continue; 
                     }
                     else {
@@ -609,11 +613,12 @@ class SubmittedKeywordService
 
                         // get ads for existing adset
                         $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
-                        if ($existingAds[0] == false) { 
+                        if ($existingAds[0] == false) {
+                            Log::info('Error with existing ads', [$existingAds[1]]);
                             continue;
                         }
                         else if ($existingAds[1]->count() < 1) {
-                            
+                            Log::info('No ads found', [$existingAds[1]]);
                             continue;
                         }
                         else {  
@@ -777,6 +782,7 @@ class SubmittedKeywordService
                     return [true, $newCampaign[1]['id']];
                 }
             }
+
         } 
         
        
