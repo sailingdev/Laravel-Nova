@@ -592,19 +592,12 @@ class SubmittedKeywordService
 
                         // get ads for existing adset
                         $existingAds = $this->facebookAdset->getAds($existingAdSet->id);
-                        if ($existingAds[0] == false) {
-                            array_push($loggedErrors, [
-                                'message' => 'An error occured while loading existing ads in adset with ID: ' . $existingAdSet->id,
-                                'errors' => $existingAds[1],
-                                'data' => []
-                            ]); 
+                        if ($existingAds[0] == false) { 
+                            continue;
                         }
                         else if ($existingAds[1]->count() < 1) {
-                            array_push($loggedErrors, [
-                                'message' => 'No existing ads for the adset with ID: ' . $existingAdSet->id,
-                                'errors' => [],
-                                'data' => []
-                            ]);
+                            
+                            continue;
                         }
                         else {  
                             foreach ($existingAds[1] as $existingAd) {
@@ -758,7 +751,7 @@ class SubmittedKeywordService
                     // log output
                     Log::info('An error occured WITH ONE OF THE CREATIONS', [$loggedErrors]);
                     
-                    $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack, $targetEnv);
+                    // $this->rollBacks($newCampaign[1]['id'], $adsetsToRollBack, $adCreativesToRollBack, $adsToRollBack, $targetEnv);
                     return [false, 'Process was not completed. Please check the log for the affected processes'];
                 }
                 else {
