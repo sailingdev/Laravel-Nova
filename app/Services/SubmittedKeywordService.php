@@ -824,9 +824,7 @@ class SubmittedKeywordService
         return SubmittedKeyword::where('batch_id', $batchId)->delete();
     }
     public function createCampaignFromTemplate(array $submittedKeywords, string $market)
-    {  
-        // $fb = new \App\Revenuedriver\FacebookPage;
-        // dd($fb->loadBusinessAccountPages());
+    {   
         $this->facebookCampaign->initRD();
         $campaignId = '23846614980830456';
         $facebookCampaign = new FacebookCampaign;
