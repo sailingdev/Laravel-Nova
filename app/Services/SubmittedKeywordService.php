@@ -513,9 +513,7 @@ class SubmittedKeywordService
                                         }
                                     } 
                                     $existingAdSetFeedSpec['images'] = $newAdImages;
-                                    if ($submission['feed'] === 'media') {
-                                        dd($existingAdSetFeedSpec);
-                                    }
+                                    
                                    
                                     // generate new website url 
                                     $newWebsiteUrl = $this->facebookCampaign->generateAdCreativeWebsiteUrl( 

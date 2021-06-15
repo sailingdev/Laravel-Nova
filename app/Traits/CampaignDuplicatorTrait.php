@@ -47,12 +47,11 @@ trait CampaignDuplicatorTrait
                         $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();
                         $newAdImage = $this->facebookAdImage->create($targetAccount, [
                             'filename' => $destinationPath . $fileName
-                        ]);
-                        dd('ci', $newAdImage);
+                        ]); 
                         return $newAdImage;
                     }
                 } catch (\Throwable $e) {
-                    dd('Ad image not copied', $e);
+               
                     Log::info('Ad image Not Copied for', [$adImageDetails[1][0]->name, $fileName]);
                 }
                
