@@ -228,7 +228,7 @@ abstract class Facebook
      * @return array
      */
     public function getTargetAccounts(): array
-    {   
+    {   return [$this->account30, $this->account38, $this->accountRD26];
         if (config('app.env') === 'production') {
             return [$this->account57, $this->account12, $this->accountRD27];
         }
