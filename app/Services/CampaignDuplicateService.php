@@ -119,7 +119,7 @@ class CampaignDuplicateService
                         ];
                         Log::info('See this', [$feed, $iacCampaign[1]->name]);
                          
-                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id, 'tt', $row->environment);
+                        $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id, 'tt', $row->environment, false);
                     }
 
                        

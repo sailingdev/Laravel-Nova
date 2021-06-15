@@ -856,7 +856,8 @@ class SubmittedKeywordService
             $acs = new AdAccountService;
             
             $feed = 'iac';
-            $adAccount = $acs->determineTargetAccountByFeed($feed);
+            $adAccount = config('app.env') === 'production' ? $this->facebookCampaign->getAccountRD28() : $this->facebookCampaign->getAccountRD26();
+             
             
             // $sourceEnv = $match['environment'];
             // $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
