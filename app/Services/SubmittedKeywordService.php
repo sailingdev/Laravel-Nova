@@ -489,6 +489,7 @@ class SubmittedKeywordService
                                 ]);
                             
                                 if ($existingAdCreative[0] == false) {
+                                    dd($existingAdCreative);
                                     Log::error('An error occured while loading the adcreative for the ad with ID: ' . $existingAd->id, [$existingAdCreative[1]]);
                                     continue;
                                 }
@@ -560,7 +561,7 @@ class SubmittedKeywordService
                                     $newAdCreative = $this->facebookAdCreative->create($targetAccount, $newAdCreativeData);
                                   
                                     if ($newAdCreative[0] == false) { 
-                                        // dd('New Ad Creative Error', $newAdCreative);
+                                        dd('New Ad Creative Error', $newAdCreative);
                                         Log::error('An error occured while duplicating adcreative from source into target account: Ad Id: '. $existingAd->id, [$newAdCreative[1]]);
                                         continue;
                                     }
@@ -578,6 +579,7 @@ class SubmittedKeywordService
                                         $newAd = $this->facebookAd->create($targetAccount, $newAdData);
                                     
                                         if ($newAd[0] == false) {
+                                            dd($newAd);
                                             Log::error('An error occured while creating ad for the adset with ID: ' . $newAdSet[1]->id, [$newAd[1]]);
                                             continue;
                                         }
