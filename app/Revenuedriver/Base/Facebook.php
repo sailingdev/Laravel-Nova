@@ -228,7 +228,7 @@ abstract class Facebook
      * @return array
      */
     public function getTargetAccounts(): array
-    {   return [$this->account30, $this->account38, $this->accountRD26];
+    {    return [$this->account57, $this->account12, $this->accountRD27];
         if (config('app.env') === 'production') {
             return [$this->account57, $this->account12, $this->accountRD27];
         }
@@ -242,6 +242,7 @@ abstract class Facebook
      */
     public function determineStatus(string $status, string $targetAccount): string
     { 
+        return 'PAUSED';
         if (config('app.env') === 'production' && $targetAccount != $this->accountRD28) {
             return 'ACTIVE';
         }
