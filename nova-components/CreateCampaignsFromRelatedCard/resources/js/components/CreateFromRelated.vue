@@ -2,7 +2,7 @@
     <div class="batches-to-process mt-5 mb-5 w-full"> 
  
         <div class="t-display-header relative">
-            <h3 class="text-center text-2xl text-80 font-dark px-4 py-5">Create Campaigns From Related Card</h3>
+            <h3 class="text-center text-2xl text-80 font-dark px-4 py-5">Create Campaigns From Related</h3>
             <button @click="loadBatchesToProcess" class="absolute right-0 mr-3 text-sm bg-purple-500 hover:bg-purple-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Reload</button>
         </div>
 
@@ -11,8 +11,8 @@
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M9 19.414l-6.707-6.707l1.414-1.414L9 16.586L20.293 5.293l1.414 1.414" fill="#3da35a"/></svg>
                 <h4 class="text-2xl text-center text-3xl text-80 font-dark px-4 py-4"> Thank you! </h4>
                 <p class="mt-2 mb-2 text-center"> Batch processing in progress. Please check back in few minutes time</p>
-            </div> 
-        </div>
+            </div>  
+        </div> 
 
         <div v-if="loading" class="rounded-lg flex items-center justify-center relative">
             <loader class="text-60" />
@@ -78,7 +78,7 @@
 
             </div>
 
-             <button :disabled="mocking" type="button" @click="mockDuplicator()" class="mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+            <button :disabled="mocking" type="button" @click="mockDuplicator()" class="mr-3 mt-4 text-sm bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
                 <span v-if="mocking"><loader class="text-60" :fillColor="'#ffffff'" /></span>
                 <span v-else><i class="fa fa-check-circle"></i> &nbsp; Mock Duplicator Scheduler</span>
             </button> 
