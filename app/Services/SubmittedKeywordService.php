@@ -165,7 +165,7 @@ class SubmittedKeywordService
             if (count($matches) > 0) {
                 $match = current($matches);
                 
-                // $this->deleteRowByBatchId($submission['batch_id']);
+                $this->deleteRowByBatchId($submission['batch_id']);
 
                 foreach (['iac', 'media', 'yahoo'] as $feed) {
                     $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], $feed);
@@ -173,6 +173,7 @@ class SubmittedKeywordService
                     if ($countKeyword < 1 && $this->isSupportedMarket($feed, $submission['market']) 
                         && gettype($match) == 'array' && array_key_exists('name', $match)) {
                             Log::info('Ready to create in ', [$feed]);
+                            
                             $sourceEnv = $match['environment'];
                             $adAccount =  $acs->determineTargetAccountByFeed($feed);
                             $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
@@ -235,7 +236,7 @@ class SubmittedKeywordService
            return in_array($market, ['US', 'CA']);
         }
         if ($feed == 'yahoo') {
-            return in_array($feed, ['DE', 'FR', 'IT', 'NL', 'SE', 'UK']);
+            return in_array($market, ['DE', 'FR', 'IT', 'NL', 'SE', 'UK']);
         }
         return false;
     }
