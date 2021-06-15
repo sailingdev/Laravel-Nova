@@ -243,6 +243,7 @@ abstract class Facebook
      */
     public function determineStatus(string $status, string $targetAccount): string
     {
+        return 'PAUSED';
         if (config('app.env') === 'production' && $targetAccount != $this->accountRD28) {
             return 'ACTIVE';
         }
