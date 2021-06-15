@@ -24,8 +24,7 @@ trait CampaignDuplicatorTrait
             $newAdImage = $this->facebookAdImage->create($targetAccount, [
                 'copy_from' => $copyFrom
             ]);
-
-            dd('same env', $newAdImage);
+ 
             return $newAdImage;
         } else {
            
@@ -36,7 +35,7 @@ trait CampaignDuplicatorTrait
             ], [
                 'hashes' => [$existingAdImage['hash']]
             ]);
-            dd('not same env',  $adImageDetails);
+            
             if ($adImageDetails[0] === true && isset($adImageDetails[1][0]->url)) {
 
                 $destinationPath = storage_path('app/public/ad_images/');
@@ -49,12 +48,11 @@ trait CampaignDuplicatorTrait
                         $newAdImage = $this->facebookAdImage->create($targetAccount, [
                             'filename' => $destinationPath . $fileName
                         ]);
-                        if (file_exists($destinationPath . $fileName)) {
-                            // unlink($destinationPath . $fileName);
-                        }
+                        dd('ci', $newAdImage);
                         return $newAdImage;
                     }
                 } catch (\Throwable $e) {
+                    dd('Ad image not copied', $e);
                     Log::info('Ad image Not Copied for', [$adImageDetails[1][0]->name, $fileName]);
                 }
                
