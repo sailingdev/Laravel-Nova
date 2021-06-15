@@ -443,7 +443,7 @@ class SubmittedKeywordService
                     }
                      
                     $newAdsetData = [
-                        'name' =>   ucfirst($submission['keyword']), 
+                        'name' =>  ucfirst($existingAdSet->name), 
                         'targeting' => $newAdsetTargeting,
                         'bid_amount' =>  round($newBidAmount * 100),
                         'billing_event' => $existingAdSet->billing_event,
