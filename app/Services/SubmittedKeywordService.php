@@ -153,144 +153,65 @@ class SubmittedKeywordService
         $campaignCombo = $this->loadCampaigns([$this->facebookCampaign->getAccount3Id(), $this->facebookCampaign->getAccount21Id(), 
             $this->facebookCampaign->getAccountRD1Id()]);
      
-        $acs = new AdAccountService;
-        $proceedToFiltering = false; 
-        $match = '';
-        $campaignExistsFor = $campaignToCreateIn =  [];
+        $acs = new AdAccountService; 
         foreach ($submittedKeywords as $submission) {
-             
-            foreach (['iac', 'media', 'yahoo'] as $feed) {
-                // $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], $feed); 
-                $matches = array_filter($campaignCombo, function ($campaign) use ($submission, $feed) {
-                    $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-                    $campaignFeed = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['feed'];
-                    // $campaignMarket = $campaignMarket ==
-                    return 
-                        preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"])
-                        && $campaignFeed == ucfirst($feed);
-                });
+
+            $matches = array_filter($campaignCombo, function ($campaign) use ($submission) {
+                $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
+                return 
+                    preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"]);
+            });
+           
+            if (count($matches) > 0) {
+                $match = current($matches);
                 
-                if (count($matches) > 0) {
-                    $campaignExistsFor[] = $feed;
-                    $match = current($matches);
-                }
-                else {
-                    if (!in_array($feed, $campaignToCreateIn)) {
-                        if ($feed === 'media' && in_array($submission['market'], ['CA', 'US'])) {
-                            $campaignToCreateIn[] = $feed;
-                        }
-                        else if ($feed === 'yahoo' && in_array($submission['market'], ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'])) {
-                            $campaignToCreateIn[] = $feed;
-                        }
-                        else if ($feed === 'iac') {
-                            $campaignToCreateIn[] = $feed;
-                        }
-                       
-                    }
-                } 
+                // $this->deleteRowByBatchId($submission['batch_id']);
 
-                // in the supported market
-                if ($feed != 'media' && !in_array('media', $campaignToCreateIn) && in_array($submission['market'], ['CA', 'US'])) {
-                    // $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'media'); 
-                    $matches = array_filter($campaignCombo, function ($campaign) use ($submission, $feed) {
-                        $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-                            $campaignFeed = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['feed'];
-                        return 
-                            preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"])
-                            && $campaignFeed == 'Media';
-                    });
-                    if (count($matches) < 1) {
-                        $campaignToCreateIn[] = 'media';
+                foreach (['iac', 'media', 'yahoo'] as $feed) {
+                    $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], $feed);
+                   
+                    if ($countKeyword < 1 && $this->isSupportedMarket($feed, $submission['market']) 
+                        && gettype($match) == 'array' && array_key_exists('name', $match)) {
+                            Log::info('Ready to create in ', [$feed]);
+                            $sourceEnv = $match['environment'];
+                            $adAccount =  $acs->determineTargetAccountByFeed($feed);
+                            $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
+                            $targetEnv = $row->environment;
+                            $submission['feed'] = $feed;
+                            $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null, $sourceEnv, $targetEnv, false);
+                            if ($process[0] == true) {
+                                SubmittedKeyword::create([
+                                    'batch_id' => $submission['batch_id'],
+                                    'keyword' => $submission['keyword'],
+                                    'market' => $submission['market'],
+                                    'action_taken' => 'skipped',
+                                    'feed' => $feed,
+                                    'note' => 'campaign restarted',
+                                    'status' => 'processed',
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now()
+                                ]); 
+                            } else {
+                                Log::error('An error occured. Campaign not restarted in ' . $feed . ' feed', [$process[1]]);
+                            } 
+                        
                     }
-                }
-                if ($feed != 'yahoo' && !in_array('yahoo', $campaignToCreateIn) && in_array($submission['market'], ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'])) {
-                    // $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'yahoo'); 
-                    $matches = array_filter($campaignCombo, function ($campaign) use ($submission, $feed) {
-                        $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-                        $campaignFeed = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['feed'];
-                        return 
-                            preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"])
-                                && $campaignFeed == 'Yahoo';
-                    });
-                    if (count($matches) < 1) {
-                        $campaignToCreateIn[] = 'yahoo';
-                    }
-                }
-                if ($feed != 'iac' && !in_array('iac', $campaignToCreateIn)) {
-                    // $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'iac');
-                    $matches = array_filter($campaignCombo, function ($campaign) use ($submission, $feed) {
-                        $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-                        $campaignFeed = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['feed'];
-                        return 
-                            preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"])
-                            && $campaignFeed == 'iac';
-                    });
-                    if (count($matches) < 1) {
-                        $campaignToCreateIn[] = 'iac';
-                    }
-                }
-                 
-            }
-       
-            // dd($campaignExistsFor, $campaignToCreateIn, $match);
-
-            // INSTRUCTION 
-            // IF $campaignExistsFor IS EMPTY, push to create from related
-            // if at least a campaign exists in $campaignExistsFor, then duplicate that campaign into those feeds win campaignToCreateIn
-            if (count($campaignExistsFor) > 0) { 
-
-                if (gettype($match) == 'array' && array_key_exists('name', $match)) {
-                    // delete row by batchId
-                    $this->deleteRowByBatchId($submission['batch_id']);
-
-                    foreach ($campaignExistsFor as $cf) {
+                    else if ($countKeyword > 0) {
                         SubmittedKeyword::create([
                             'batch_id' => $submission['batch_id'],
                             'keyword' => $submission['keyword'],
                             'market' => $submission['market'],
-                            'feed' => $cf,
+                            'feed' => $feed,
                             'action_taken' => 'skipped',
                             'note' => 'campaign is already running',
                             'status' => 'processed',
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now()
-                        ]);     
-                    }
-
-                    if (count($campaignToCreateIn) > 0) {
-                        foreach ($campaignToCreateIn as $cc) {
-                            $adAccount =  $acs->determineTargetAccountByFeed($cc);
-                            if ($adAccount == null) {
-                                Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $feed, [$submission]);
-                            } else { 
-                                Log::info('Creating for ', [$cc]);
-                                $sourceEnv = $match['environment'];
-                                $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
-                                $targetEnv = $row->environment;
-                                $submission['feed'] = $cc;
-                                $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null, $sourceEnv, $targetEnv, false);
-                                if ($process[0] == true) {
-                                    SubmittedKeyword::create([
-                                        'batch_id' => $submission['batch_id'],
-                                        'keyword' => $submission['keyword'],
-                                        'market' => $submission['market'],
-                                        'action_taken' => 'skipped',
-                                        'feed' => $cc,
-                                        'note' => 'campaign restarted',
-                                        'status' => 'processed',
-                                        'created_at' => Carbon::now(),
-                                        'updated_at' => Carbon::now()
-                                    ]); 
-                                } else {
-                                    Log::error('An error occured. Campaign not restarted in ' . $cc . ' feed', [$process[1]]);
-                                }
-                            }
-                        }
-                    }
-                   
+                        ]);
+                    } 
 
                 }
-                 
+           
             }
             else {
                 $this->updateRow($submission['batch_id'], $submission['keyword'], [
@@ -300,88 +221,23 @@ class SubmittedKeywordService
                     'status' => 'pending'
                 ]);
             }
-
-            // $feed = $submission['feed']; // iac
-            // $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], $feed); // iac feed by default
-            
-            // if ($countKeyword > 0) {
-            //     // means campaign already exists
-            //     $this->updateRow($submission['batch_id'], $submission['keyword'], [
-            //         'action_taken' => 'skipped',
-            //         'note' => 'campaign is already running',
-            //         'status' => 'processed'
-            //     ]);
-                 
-            //     // check for media
-            //     if ($submission['market'] == 'CA' || $submission['market'] == 'US') { 
-            //         $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'media');
-            //         if ($countKeyword < 1) {
-            //             $proceedToFiltering = true;
-            //             $feed = 'media';
-            //         }
-            //     }
-            //     else if (in_array($submission['market'], ['DE', 'FR', 'IT', 'NL', 'SE', 'UK'])) { 
-            //         $countKeyword = $this->rpcService->countKeyword($submission["keyword"], $submission['market'], 'yahoo');
-            //         if ($countKeyword < 1) {
-            //             $proceedToFiltering = true;
-            //             $feed = 'yahoo';
-            //         }
-            //     }
-            // } 
-            // else {
-            //     $proceedToFiltering = true;
-            //     $feed = 'iac';
-            // }
-            
-            // if ($proceedToFiltering === true) {
-            //     $submission['feed'] = $feed;
-            //     $matches = array_filter($campaignCombo, function ($campaign) use ($submission) {
-            //         $campaignKeyword = $this->facebookCampaign->extractDataFromCampaignName($campaign['name'])['keyword'];
-            //         return preg_replace("#[^a-z0-9]#i", '_', $campaignKeyword) == preg_replace("#[^a-z0-9]#i", '_', $submission["keyword"]);
-            //     });
-              
-            //     if (count($matches) < 1) {
-            //         $this->updateRow($submission['batch_id'], $submission['keyword'], [
-            //             'feed' => $feed,
-            //             'action_taken' => 'new',
-            //             'note' => 'campaign to be created',
-            //             'status' => 'pending'
-            //         ]);
-            //     } 
-            //     else { 
-                    
-            //         $adAccount = $feed == 'iac' ? $this->facebookCampaign->accountRD28 : $acs->determineTargetAccountByFeed($feed);
-            //         if ($adAccount == null) {
-            //             Log::info('No target was found while processPendingBatchesUsingTypeTags ::: ' . $feed, [$submission]);
-            //         }
-            //         else {
-            //             $match = current($matches);
-            //             $sourceEnv = $match['environment'];
-            //             $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
-            //             $targetEnv = $row->environment; 
-            //             $process = $this->duplicateCampaign($match, $submission, $adAccount, null, null,  $sourceEnv, $targetEnv);
-            //             if ($process[0] == true) {
-            //                 $this->updateRow($submission['batch_id'], $submission['keyword'], [
-            //                     'action_taken' => 'skipped',
-            //                     'feed' => $feed,
-            //                     'note' => 'campaign restarted',
-            //                     'status' => 'processed'
-            //                 ]);
-            //             }
-            //             else {
-            //                 $this->updateRow($submission['batch_id'], $submission['keyword'], [
-            //                     'feed' => $feed,
-            //                     'action_taken' => 'new',
-            //                     'note' => 'campaign to be created',
-            //                     'status' => 'pending'
-            //                 ]);
-            //             }
-            //         }
-                    
-            //     }   
-            // }
+             
         } 
         return [true, 'submitted'];
+    }
+
+    public function isSupportedMarket($feed, $market)
+    {
+        if ($feed == 'iac') {
+            return true;
+        }
+        if ($feed == 'media') {
+           return in_array($market, ['US', 'CA']);
+        }
+        if ($feed == 'yahoo') {
+            return in_array($feed, ['DE', 'FR', 'IT', 'NL', 'SE', 'UK']);
+        }
+        return false;
     }
 
     /**
