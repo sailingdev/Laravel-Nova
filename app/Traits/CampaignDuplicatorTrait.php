@@ -24,6 +24,8 @@ trait CampaignDuplicatorTrait
             $newAdImage = $this->facebookAdImage->create($targetAccount, [
                 'copy_from' => $copyFrom
             ]);
+
+            dd('same env', $newAdImage);
             return $newAdImage;
         } else {
            
@@ -34,7 +36,7 @@ trait CampaignDuplicatorTrait
             ], [
                 'hashes' => [$existingAdImage['hash']]
             ]);
-             
+            dd('not same env',  $adImageDetails);
             if ($adImageDetails[0] === true && isset($adImageDetails[1][0]->url)) {
 
                 $destinationPath = storage_path('app/public/ad_images/');
