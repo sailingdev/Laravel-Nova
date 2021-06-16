@@ -408,23 +408,24 @@ class SubmittedKeywordService
                     $devicePlatforms = ['desktop'];
                 }
 
-            
+                
+
                 foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
                    
                     $newAdsetTargeting = $existingAdSet->targeting;
-                    if (in_array('audience_network',  $newAdsetTargeting['publisher_platforms'])) {
-                        $k = array_search('audience_network', $newAdsetTargeting['publisher_platforms']);
-                        if ($k >= 0) {
-                            unset($newAdsetTargeting['publisher_platforms'][$k]);
-                        } 
+                    $newAdsetTargeting['age_max'] = 65;
+                    $newAdsetTargeting['age_in'] = 18;
+                    $newAdsetTargeting['publisher_platforms'] = ['facebook', 'instagram', 'messenger'];
+                   
+                    if (array_key_exists('audience_network_positions', $newAdsetTargeting)) {
+                        unset($newAdsetTargeting['audience_network_positions']);
                     }
-                    if (count($newAdsetTargeting['publisher_platforms']) < 1) {
-                        $newAdsetTargeting['publisher_platforms'][] = 'facebook';
-                    }
+                    
+                    
                     $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
                     $newAdsetTargeting['device_platforms'] = $devicePlatforms;
                       
-                    
+                  
                     $sm = new StringManipulator;
         
                     $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
@@ -451,7 +452,7 @@ class SubmittedKeywordService
                             'custom_event_type' => 'CONTENT_VIEW'
                         ];
                     }
-                     
+                      
                     $newAdsetData = [
                         'name' =>  ucfirst($existingAdSet->name), 
                         'targeting' => $newAdsetTargeting,
@@ -462,6 +463,8 @@ class SubmittedKeywordService
                         'campaign_id' => $newCampaign[1]['id'],
                         'is_dynamic_creative' => true
                     ];
+
+                    
 
                     // create new adset
                     $targetEnv == 'rd' ? $this->facebookCampaign->initRD() : $this->facebookCampaign->initTT();

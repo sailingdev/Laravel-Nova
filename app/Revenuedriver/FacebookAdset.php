@@ -38,6 +38,7 @@ class FacebookAdset extends Facebook
     { 
         $account = new AdAccount($accountId);
         try {
+           
             $adset = $account->createAdSet($fields, $params);
             return [true, $adset];
         } catch(\FacebookAds\Exception\Exception | \FacebookAds\Http\Exception\ClientException | \FacebookAds\Http\Exception\EmptyResponseException |
