@@ -228,7 +228,7 @@ abstract class Facebook
      * @return array
      */
     public function getTargetAccounts(): array
-    {    return [$this->account57, $this->account12, $this->accountRD27];
+    {     
         if (config('app.env') === 'production') {
             return [$this->account57, $this->account12, $this->accountRD27];
         }
@@ -378,7 +378,7 @@ abstract class Facebook
     private function makeMediaFeedWebsiteUrl(string $domain, string $subdomain, string $keyword, string $typeTag, string $market): string
     {
         $sm = new StringManipulator; 
-        return 'https://' . $subdomain . '.' . $domain . '/search/?q=' . $this->formatKeyword(ucfirst($keyword), '+') . 
+        return 'https://' . $subdomain . '.' . $domain . '/search/?q=' . $this->formatKeyword(ucwords($keyword), '+') . 
         '&p=5&chnm=facebook&chnm2=fb_' .$sm->generateArrayFromString($domain, '.')[0] . 
         '_' . strtolower($market) . '&chnm3=' . $typeTag;
     }
@@ -394,7 +394,7 @@ abstract class Facebook
     private function makeYahooFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market): string
     { 
         return 'https://' . strtolower($market) . '.' . $domain . '/search/4?type='.$typeTag . 
-        '&keyword=' . $this->formatKeyword(ucfirst($keyword), '+') . '&source=facebook';
+        '&keyword=' . $this->formatKeyword(ucwords($keyword), '+') . '&source=facebook';
     }
 
     /**
@@ -416,7 +416,7 @@ abstract class Facebook
         $unitSuffix = $domain === 'top10answers.com' ? '&adUnitId=366911' : '';
 
         if (in_array($market, $groupA)) {
-            return 'https://search.'.$domain.'/ar?q=' . $this->formatKeyword(ucfirst($keyword), '+') . 
+            return 'https://search.'.$domain.'/ar?q=' . $this->formatKeyword(ucwords($keyword), '+') . 
             '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId . $unitSuffix;
         }
         
@@ -425,26 +425,26 @@ abstract class Facebook
         if (in_array($market, $groupB)) { 
             $suf = $market == 'UK' ? 'GB' : $market;
             return 'https://search.' . $domain . '/ar?q=' . 
-            $this->formatKeyword(ucfirst($keyword), '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf . $unitSuffix;
+            $this->formatKeyword(ucwords($keyword), '+') . '&src=3&campname=' .$typeTag. '&rangeId='.$rangeId.'&mkt=en-' . $suf . $unitSuffix;
         } 
 
         $groupC = ['DE','FR','ES','IT','NL','SE','NO','DK','BR'];
         if (in_array($market, $groupC)) { 
-            return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword(ucfirst($keyword), '+') .
+            return 'https://search.' . $market . '.' . $domain . '/ar?q=' . $this->formatKeyword(ucwords($keyword), '+') .
             '&src=3&campname=' . $typeTag . '&rangeId=' . $rangeId . $unitSuffix;
         }
 
         $groupD = ['AT', 'CH'];
         if (in_array($market, $groupD)) { 
             return 'https://search.de.'.$domain.'/ar?q='.
-            $this->formatKeyword(ucfirst($keyword), '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market . $unitSuffix;
+            $this->formatKeyword(ucwords($keyword), '+').'&src=3&campname='.$typeTag.'&rangeId='.$rangeId.'&mkt=de-' . $market . $unitSuffix;
         } 
         return null;
     }
 
     public function makeIacAllResultsWebWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId, string $campaignName)
     { 
-        $keyword = $this->formatKeyword(ucfirst($keyword), '+');
+        $keyword = $this->formatKeyword(ucwords($keyword), '+');
         $rangeId = '263';
         if ($market == 'US') {
             return 'https://top.allresultsweb.com/ar?src=44&q='.$keyword.'&campname='.$typeTag.'&rangeId=' . $rangeId;
@@ -519,7 +519,7 @@ abstract class Facebook
     private function makeCbsFeedWebsiteUrl(string $domain, string $keyword, string $typeTag, string $market, string $rangeId): string
     {
         return 'https://' . $domain . '/'.$market.'/seek?src=3&q=' .
-            $this->formatKeyword(ucfirst($keyword), '+').'&qsrc=0&campname='.$typeTag.'&rangeId=' . $rangeId;
+            $this->formatKeyword(ucwords($keyword), '+').'&qsrc=0&campname='.$typeTag.'&rangeId=' . $rangeId;
     }
 
 
@@ -541,7 +541,7 @@ abstract class Facebook
                 $adTexts[$key]->body1 = $this->replaceKeywordPlaceHolderInText($adText->body1, $keyword);
                 $adTexts[$key]->body2 = $this->replaceKeywordPlaceHolderInText($adText->body2, $keyword);
             }
-        } 
+        }
         return $adTexts;
     }
 
@@ -560,7 +560,7 @@ abstract class Facebook
             $placeholder = substr($text, $startPos, $endPos - $startPos);
             $sm = new StringManipulator;
             $newText = preg_replace("~".preg_quote('{')."(.*?)".preg_quote('}')."~", 
-                $sm->isCapsLock($placeholder) ? strtoupper($keyword) : ucfirst($keyword), $text);
+                $sm->isCapsLock($placeholder) ? strtoupper($keyword) : ucwords($keyword), $text);
             return $newText;
         }
         return $text;

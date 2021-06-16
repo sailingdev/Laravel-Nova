@@ -412,9 +412,19 @@ class SubmittedKeywordService
                 foreach ($existingCampaignAdsets[1] as $existingAdSet) {      
                    
                     $newAdsetTargeting = $existingAdSet->targeting;
+                    if (in_array('audience_network',  $newAdsetTargeting['publisher_platforms'])) {
+                        $k = array_search('audience_network', $newAdsetTargeting['publisher_platforms']);
+                        if ($k >= 0) {
+                            unset($newAdsetTargeting['publisher_platforms'][$k]);
+                        } 
+                    }
+                    if (count($newAdsetTargeting['publisher_platforms']) < 1) {
+                        $newAdsetTargeting['publisher_platforms'][] = 'facebook';
+                    }
                     $newAdsetTargeting['geo_locations']['countries'] = $marketsArr;
                     $newAdsetTargeting['device_platforms'] = $devicePlatforms;
-    
+                      
+                    
                     $sm = new StringManipulator;
         
                     $newAdsetTargeting['locales'] = $sm->generateArrayFromString(
@@ -527,16 +537,16 @@ class SubmittedKeywordService
                                 
                                 
                                     $newBodyTexts = $this->facebookCampaign->generateNewBodyTexts($marketCode, $submission['keyword']);
-                                    
+                                     
                                     
                                     if (count($newBodyTexts) > 1) { 
-                                        $existingAdSetFeedSpec['titles'][0]['text'] = $newBodyTexts[0]->title1;
+                                        $existingAdSetFeedSpec['titles'][0]['text'] = ucfirst($newBodyTexts[0]->title1);
                                         $existingAdSetFeedSpec['bodies'][0]['text'] = $newBodyTexts[0]->body1;
         
                                         $existingAdSetFeedSpec['titles'][1]['text'] = $newBodyTexts[1]->title2;
                                         $existingAdSetFeedSpec['bodies'][1]['text'] = $newBodyTexts[1]->body2;
                                     }
-                                     
+                                    //dd($existingAdSetFeedSpec); 
                                     $fbPageService = new FbPageService;
                                     $randomFbPage = $fbPageService->getRandomFbPage($row->environment);
                                     $objectStorySpec = [];
