@@ -48,7 +48,7 @@ class CampaignDuplicateService
         return CampaignDuplicate::where('type', 'main')
         ->where('feed', 'iac')
         ->where('main_batch_status', 'uncompleted')
-        ->where('campaign_start', '<=', Carbon::now())
+        // ->where('campaign_start', '<=', Carbon::now())
         ->get();
    }
 
@@ -74,7 +74,7 @@ class CampaignDuplicateService
         $facebookCampaign = new FacebookCampaign;
         $feed = $adAccount = null;
 
-        
+       
         if (count($uncompletedBatches) > 0) {
             foreach ($uncompletedBatches as $uncompletedBatch) {
                 
@@ -89,7 +89,8 @@ class CampaignDuplicateService
                     'daily_budget',
                     'special_ad_categories',
                     'account_id'
-                ]); 
+                ]);
+                
                 if ($iacCampaign[0] !== false) {
                     
                     $campaignNameExtracts = $facebookCampaign->extractDataFromCampaignName($iacCampaign[1]->name);

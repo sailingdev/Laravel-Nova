@@ -414,7 +414,7 @@ class SubmittedKeywordService
                    
                     $newAdsetTargeting = $existingAdSet->targeting;
                     $newAdsetTargeting['age_max'] = 65;
-                    $newAdsetTargeting['age_in'] = 18;
+                    $newAdsetTargeting['age_min'] = 18;
                     $newAdsetTargeting['publisher_platforms'] = ['facebook', 'instagram', 'messenger'];
                    
                     if (array_key_exists('audience_network_positions', $newAdsetTargeting)) {
@@ -471,6 +471,7 @@ class SubmittedKeywordService
                     $newAdSet = $this->facebookAdset->create($targetAccount, $newAdsetData);
                     
                     if ($newAdSet[0] == false) {
+                        dd($newAdSet);
                         Log::info('An adset error. Skipping', [$newAdSet[1]]);
                         continue; 
                     }
