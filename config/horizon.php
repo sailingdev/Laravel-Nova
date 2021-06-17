@@ -171,7 +171,7 @@ return [
             'balance' => 'auto',
             'maxProcesses' => 6,
             'memory' => 256,
-            'tries' => 3,
+            'tries' => 5,
             'nice' => 0,
             'timeout' => 15000
         ],
@@ -184,7 +184,7 @@ return [
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'processes' => 5,
-                'tries' => 3,
+                'tries' => 5,
                 'timeout' => 15000 
             ],
         ],
