@@ -94,6 +94,7 @@ class CampaignDuplicateService
                 if ($iacCampaign[0] !== false) {
                     
                     $campaignNameExtracts = $facebookCampaign->extractDataFromCampaignName($iacCampaign[1]->name);
+                    
                     $campaign = [
                         'id' => $iacCampaign[1]->id,
                         'name' => $iacCampaign[1]->name,
@@ -114,7 +115,7 @@ class CampaignDuplicateService
                         $row = $acs->getRowByAccountId(preg_replace("#[^0-9]#i", "", $adAccount));
                         $submission = [
                             'feed' => $feed,
-                            'keyword' => $campaignNameExtracts['keyword'],
+                            'keyword' => preg_replace("#[^a-z0-9]#i", " ", $campaignNameExtracts['keyword']),
                             'market' => $campaignNameExtracts['market'],
                             'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
                         ];
