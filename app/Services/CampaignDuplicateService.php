@@ -119,7 +119,7 @@ class CampaignDuplicateService
                             'market' => $campaignNameExtracts['market'],
                             'type_tag' => $facebookCampaign->generateTypeTag($campaignNameExtracts['keyword'], $campaignNameExtracts['market'], 'related')
                         ];
-                        Log::info('See this', [$feed, $iacCampaign[1]->name]);
+                        Log::info('Attempting to duplicate into =>', [$feed, $iacCampaign[1]->name]);
                          
                         $sks->duplicateCampaign($campaign, $submission, $adAccount, null, $uncompletedBatch->batch_id, 'tt', $row->environment, false);
                     }
