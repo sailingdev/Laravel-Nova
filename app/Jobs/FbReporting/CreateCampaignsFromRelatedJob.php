@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 
 class CreateCampaignsFromRelatedJob implements ShouldQueue
@@ -48,6 +49,11 @@ class CreateCampaignsFromRelatedJob implements ShouldQueue
     { 
         $sks = new SubmittedKeywordService;
         return $sks->createCampaignFromRelated($this->data);
+    }
+
+    public function middleware()
+    {
+        return [(new WithoutOverlapping($this->data['batch_id']))->releaseAfter(120)];
     }
 
     
