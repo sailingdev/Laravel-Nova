@@ -51,10 +51,7 @@ class CreateCampaignsFromRelatedJob implements ShouldQueue
         return $sks->createCampaignFromRelated($this->data);
     }
 
-    public function middleware()
-    {
-        // return [(new WithoutOverlapping($this->data['batch_id']))->releaseAfter(30)->expireAfter(60)];
-    }
+   
 
     
 }
