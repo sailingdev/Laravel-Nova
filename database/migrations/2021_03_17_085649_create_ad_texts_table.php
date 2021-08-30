@@ -22,6 +22,7 @@ class CreateAdTextsTable extends Migration
             $table->text('body1');
             $table->text('body2');
             $table->string('version')->nullable()->default('regular');
+            $table->text('site');
             $table->timestamps();
         });
     }

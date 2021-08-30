@@ -52,12 +52,12 @@ return [
             'username' => env('DB_USERNAME', 'nova'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'charset' => 'utf8',
+            'collation' => 'utf8_general_ci',
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,
+            'engine' => "INNODB",
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
@@ -73,8 +73,8 @@ return [
             'username' => env('DB_USERNAME_TOOLS', ''),
             'password' => env('DB_PASSWORD_TOOLS', ''),
             'unix_socket' => env('DB_SOCKET_TOOLS', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'charset' => 'utf8',
+            'collation' => 'utf8_general_ci',
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
@@ -83,7 +83,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
- 
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
@@ -116,7 +116,7 @@ return [
             'driver'   => 'sqlite',
             'database' => ':memory:',
             'prefix'   => '',
-        ], 
+        ],
 
     ],
 

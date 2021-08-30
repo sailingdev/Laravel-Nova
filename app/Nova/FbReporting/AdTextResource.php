@@ -20,7 +20,7 @@ class AdTextResource extends Resource
      */
     public static $model = \App\Models\FbReporting\AdText::class;
 
-    
+
     /**
      * Get the displayable label of the resource.
      *
@@ -55,7 +55,7 @@ class AdTextResource extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'market_id', 'title1', 'title2', 'body1', 'body2', 'version'
+        'id', 'market_id', 'title1', 'title2', 'body1', 'body2', 'version', 'site'
     ];
 
     /**
@@ -90,6 +90,9 @@ class AdTextResource extends Resource
             ->showOnIndex(true)
             ->sortable()
             ->rules('required'),
+            Text::make('Site')
+                ->sortable()
+                ->rules('required', 'max:255'),
         ];
     }
 

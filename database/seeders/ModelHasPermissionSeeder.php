@@ -19,7 +19,7 @@ class ModelHasPermissionSeeder extends Seeder
         DB::table('model_has_permissions')->insert([
             'permission_id' => Permission::where('name', 'can_view_fb_page_resource')->first()['id'],
             'model_type' => 'App\Models\User',
-            'model_id' => User::where('email', 'fbreview@revenuedriver.com')->first()['id']
+            'model_id' => User::where('email', 'admin@revenuedriver.com')->first()['id']
         ]);
     }
 }

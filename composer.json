@@ -24,8 +24,8 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^8.12",
         "laravel/horizon": "^5.7",
-        "laravel/nova": "*",
         "laravel/tinker": "^2.5",
+        "laravel/nova": "*",
         "oanhnn/laravel-logzio": "^1.1",
         "optimistdigital/nova-tailwind": "^1.0",
         "predis/predis": "^1.1",
@@ -52,12 +52,16 @@
     },
     "extra": {
         "laravel": {
+            "providers": [
+                "Laravel\\Nova\\NovaCoreServiceProvider"
+            ],
             "dont-discover": []
         }
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Laravel\\Nova\\" : "nova/src",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
